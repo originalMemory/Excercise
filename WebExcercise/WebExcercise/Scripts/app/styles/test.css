@@ -1,0 +1,46 @@
+﻿body {
+  font-family: "Microsoft YaHei", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+button {
+  outline: none !important;
+}
+
+#loginhtml {
+  margin-top: 150px;
+}
+
+#testhtml .panel-heading span {
+  cursor: pointer;
+  font-size: 15px;
+  color: #555;
+}
+
+#testhtml .navbar-fixed-top ~ .container {
+  margin-top: 80px;
+}
+
+#testhtml .head_tab3 {
+  padding-top: 20px;
+  border-top: 1px solid #a7acb3;
+}
+
+#testhtml .tab-pane .head_tab3 {
+  border-top: none;
+}
+
+#testhtml .head_tab3 .form-group > div {
+  margin-bottom: 15px;
+}
+
+#testhtml .pointer {
+  cursor: pointer;
+}
+
+#testhtml .table-responsive {
+  height: 410px;
+}
+
+#testhtml .form-group {
+  min-height: 35px !important;
+}

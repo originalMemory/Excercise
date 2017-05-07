@@ -1,0 +1,57 @@
+﻿<div class="alert alert-danger alert-dismissible" style="position:fixed;top:5px;right:5px;width:350px;height:80px;"
+     ng-if="$root.alertError">
+    <button type="button" class="close" data-dismiss="alert" id="clickIt"><span>&times;</span></button>
+    <span style="font-size:26px;" class="text-center">{{$root.error}}</span>
+</div>
+<div id="loginhtml">
+    <div class="container">
+        <div class="col-md-12">
+            <h1 class="margin-bottom-15 text-center">欢迎登陆</h1>
+
+            <form class="form-horizontal templatemo-container templatemo-login-form-1 margin-bottom-30" autocomplete="on">
+                <p style="color:red;text-align:center">{{loginerror}}</p>
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="control-wrapper">
+                            <label for="username" class="control-label fa-label"><i class="fa fa-user fa-medium"></i></label>
+                            <input type="text" class="form-control" id="username" placeholder="Username" ng-change="autoPwd()"
+                                   ng-model="userName" autofocus autocomplete="on" ng-keypress="EnterPress(event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="control-wrapper">
+                            <label for="password" class="control-label fa-label"><i class="fa fa-lock fa-medium"></i></label>
+                            <input type="password" class="form-control" id="password" placeholder="Password" ng-model="password"
+                                   autocomplete="off" ng-keypress="EnterPress(event)" ng-change="clearError()">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="checkbox control-wrapper">
+                            <label style="color:gray">
+                                <input type="checkbox" ng-model="savePwd">记住密码
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="control-wrapper">
+                            <button type="button" class="form-control btn btn-info" ng-click="Login()">
+                                <span style="font-size:15px">登 陆</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="text-center">
+                    <a href="" class="templatemo-create-new">忘记密码？<i class="fa fa-arrow-circle-o-right"></i></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
