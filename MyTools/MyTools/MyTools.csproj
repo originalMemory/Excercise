@@ -65,6 +65,12 @@
     <Compile Include="CrawImg\CrawImgPanel.designer.cs">
       <DependentUpon>CrawImgPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="CrawTorrent\CrawTorrent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrawTorrent\CrawTorrent.Designer.cs">
+      <DependentUpon>CrawTorrent.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormatConvert\FormatConvertPanel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +103,7 @@
     <Compile Include="TextEdit\TextEditPanel.designer.cs">
       <DependentUpon>TextEditPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\WebApi.cs" />
     <EmbeddedResource Include="AutoCheckin\AutoCheckinPanel.resx">
       <DependentUpon>AutoCheckinPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -105,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CrawImg\CrawImgPanel.resx">
       <DependentUpon>CrawImgPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrawTorrent\CrawTorrent.resx">
+      <DependentUpon>CrawTorrent.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormatConvert\FormatConvertPanel.resx">
       <DependentUpon>FormatConvertPanel.cs</DependentUpon>

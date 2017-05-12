@@ -9,9 +9,9 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using MongoV2;
 
-using cPlusPlusTest.Model;
+using consoleTest.Model;
 
-namespace cPlusPlusTest
+namespace consoleTest.Helper
 {
     public class MongoDBHelper:MDB
     {

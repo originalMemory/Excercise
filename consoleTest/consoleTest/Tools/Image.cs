@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace cPlusPlusTest
+namespace consoleTest.Tools
 {
-    public class Others
+    public static class Image
     {
         /// <summary>
         /// 排除yande图包中的编号重复图片

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cPlusPlusTest.Model
+namespace consoleTest.Model
 {
     /// <summary>
     /// 公用关键词库类

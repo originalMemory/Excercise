@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace cPlusPlusTest
+namespace consoleTest.Helper
 {
     public class MongoDBClass<T>
     {

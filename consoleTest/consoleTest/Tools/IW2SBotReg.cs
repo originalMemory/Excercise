@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Timer = System.Timers.Timer;
-using cPlusPlusTest.Model;
+using consoleTest.Model;
+using consoleTest.Helper;
 
-namespace cPlusPlusTest
+namespace consoleTest.Tools
 {
     public class IW2SBotRegHelper
     {

@@ -11,9 +11,10 @@ using JiebaNet.Analyser;
 using JiebaNet.Segmenter;
 using JiebaNet.Segmenter.PosSeg;
 using System.Text.RegularExpressions;
-using cPlusPlusTest.Model;
+using consoleTest.Model;
+using consoleTest.Helper;
 
-namespace cPlusPlusTest
+namespace consoleTest.Tools
 {
     public class JiebaController
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cPlusPlusTest.Model
+namespace consoleTest.Model
 {
     /// <summary>
     /// 私有关键词与公有关键词映射类

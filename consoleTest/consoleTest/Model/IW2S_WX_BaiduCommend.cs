@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cPlusPlusTest.Model
+namespace consoleTest.Model
 {
     public class IW2S_WX_BaiduCommend
     {

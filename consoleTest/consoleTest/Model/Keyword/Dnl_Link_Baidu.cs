@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cPlusPlusTest.Model
+namespace consoleTest.Model
 {
     /// <summary>
     /// 公有百度链接类
