@@ -65,6 +65,14 @@ namespace cPlusPlusTest.Model
         /// 抓取时在搜索页面的排序所在位置
         /// </summary>
         public int Rank { get; set; }
+        /// <summary>
+        /// 是否为推广链接
+        /// </summary>
+        public bool IsPromotion { get; set; }
+        /// <summary>
+        /// 关键词匹配状态。0为无匹配，1为网页源码匹配，2为标题匹配，3为描述匹配，4为标题及描述匹配，5为网址匹配
+        /// </summary>
+        public int MatchAt { get; set; }
     }
     /// <summary>
     /// 私有百度链接与公有百度链接映射类，包含用户对链接的分类和设置
@@ -96,36 +104,12 @@ namespace cPlusPlusTest.Model
         /// 搜索关键词Id
         /// </summary>
         public string SearchkeywordId { get; set; }
-        /// <summary>
-        /// 域名
-        /// </summary>
-        public string Domain { get; set; }
-        /// <summary>
-        /// 主域名
-        /// </summary>
-        public string TopDomain { get; set; }
-        public string LinkUrl { get; set; }
-
         public string Title { get; set; }
-
         public string Description { get; set; }
         /// <summary>
         /// 搜索关键词
         /// </summary>
         public string Keywords { get; set; }
-        /// <summary>
-        /// 数据清洗状态：1，收藏
-        /// </summary>
-        public Nullable<byte> DataCleanStatus { get; set; }
-        /// <summary>
-        /// 创建日期
-        /// </summary>
-        public System.DateTime CreatedAt { get; set; }
-        public string Abstract { get; set; }
-        public int BaiduVStar { get; set; }
-        public string InfriLawCode { get; set; }
-        public string InfriLawCodeStr { get; set; }
-        public DateTime PublishTime { get; set; }
 
     }
 }

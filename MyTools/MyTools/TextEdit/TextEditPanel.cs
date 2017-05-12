@@ -34,21 +34,37 @@ namespace MyTools.TextEdit
             string source = txt_main.Text;
             //匹配章节名
             List<string> chapterName = new List<string>();
-            Regex regChapter = new Regex("(?<chapter>"+txt_regChapter.Text+")\r\n");
-            MatchCollection mc = regChapter.Matches(source);
-            foreach (Match x in mc)
-            {
-                string temp =x.Groups["chapter"].Value;
-                chapterName.Add(temp);
-                
-            }
-            if (chapterName.Count <= 0) MessageBox.Show("章节正则表达式错误，未匹配上章节名", "提示", MessageBoxButtons.OK);
+            //if (checkEspide.Checked)
+            //{
+            //    MatchCollection mc = regChapter.Matches(source);
+            //    foreach (Match x in mc)
+            //    {
+            //        string temp = x.Groups["chapter"].Value;
+            //        chapterName.Add(temp);
+
+            //    }
+            //    if (chapterName.Count <= 0) MessageBox.Show("章节正则表达式错误，未匹配上章节名", "提示", MessageBoxButtons.OK);
+            //}
             //将文章按行分列
             source = RemoveTarget(source).Replace("\r", "");
             var txtList = source.Split('\n').Select(x => x.Trim()).Where(x => !String.IsNullOrEmpty(x)).ToList();
             //合并异常换行
+            Regex regChapter = new Regex(txt_regChapter.Text);
+            //Regex regChapter = new Regex("(?<chapter>" + txt_regChapter.Text + ")\r\n");
             for (int i = 0; i < txtList.Count; )
             {
+                string txt = txtList[i];
+                if (txt.Contains("字数") || txt.Contains("作者"))
+                {
+                    i++;
+                    continue;
+                }
+                Match mt = regChapter.Match(txt);
+                if (mt.Success)
+                {
+                    i++;
+                    continue;
+                }
                 if (i == txtList.Count - 1) break;
                 char end = txtList[i][txtList[i].Length - 1];
                 if (end == '。' || end == '」' || end == '】' || end == '！' || end == '”' || end == '…' || end == '？')

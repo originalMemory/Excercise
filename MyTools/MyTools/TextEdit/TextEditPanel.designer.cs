@@ -41,6 +41,7 @@
             this.txt_regChapter = new System.Windows.Forms.TextBox();
             this.btn_addSpaceLine = new System.Windows.Forms.Button();
             this.checkLine = new System.Windows.Forms.CheckBox();
+            this.checkEspide = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btn_merge
@@ -177,11 +178,24 @@
             this.checkLine.Text = "分行";
             this.checkLine.UseVisualStyleBackColor = true;
             // 
+            // checkEspide
+            // 
+            this.checkEspide.AutoSize = true;
+            this.checkEspide.Checked = true;
+            this.checkEspide.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkEspide.Location = new System.Drawing.Point(966, 16);
+            this.checkEspide.Name = "checkEspide";
+            this.checkEspide.Size = new System.Drawing.Size(48, 16);
+            this.checkEspide.TabIndex = 13;
+            this.checkEspide.Text = "分章";
+            this.checkEspide.UseVisualStyleBackColor = true;
+            // 
             // TextEditPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.checkEspide);
             this.Controls.Add(this.checkLine);
             this.Controls.Add(this.btn_addSpaceLine);
             this.Controls.Add(this.txt_regChapter);
@@ -218,5 +232,6 @@
         private System.Windows.Forms.TextBox txt_regChapter;
         private System.Windows.Forms.Button btn_addSpaceLine;
         private System.Windows.Forms.CheckBox checkLine;
+        private System.Windows.Forms.CheckBox checkEspide;
     }
 }

@@ -34,6 +34,9 @@ namespace cPlusPlusTest.Model
         /// 百度搜索状态：0:未搜索,1:搜索中,2:搜索完成
         /// </summary>
         public int BotStatus_Baidu { get; set; }
+        /// <summary>
+        /// 百度有效链接数
+        /// </summary>
         public int ValLinkCount_Baidu { get; set; }
 
     }

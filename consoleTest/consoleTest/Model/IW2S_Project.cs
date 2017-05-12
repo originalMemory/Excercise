@@ -14,35 +14,9 @@ namespace cPlusPlusTest.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
-
         public bool IsDel { get; set; }
-        public int BaiduLinkCount { get; set; }
-        public int LinksCount { get; set; }
-        /// <summary>
-        /// 任务间隔小时
-        /// </summary>
-        public int BotIntervalHours { get; set; }
-        /// <summary>
-        /// 下次搜索开始时间
-        /// </summary>
-        public DateTime NextBotStartAt { get; set; }
-
-        /// <summary>
-        /// 上次搜索开始时间
-        /// </summary>
-        public DateTime LastBotEndAt { get; set; }
-
-        /// <summary>
-        /// 1:搜索中,2:搜索完成
-        /// </summary>
-        public int BotStatus { get; set; }
-        /// <summary>
-        /// IP.ProcessId
-        /// </summary>
-        public string BotTag { get; set; }
-        public string BotId { get; set; }
+        public DateTime DelAt { get; set; }
     }
-
     public class IW2S_ProjectDto
     {
         public string _id { get; set; }

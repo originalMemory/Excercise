@@ -116,7 +116,6 @@
     <Compile Include="Tools\IW2SBotReg.cs" />
     <Compile Include="Tools\JiebaController.cs" />
     <Compile Include="Tools\Others.cs" />
-    <Compile Include="Tools\ProjectLinksCountMng.cs" />
     <Compile Include="Tools\WebApiInvoke.cs" />
   </ItemGroup>
   <ItemGroup>

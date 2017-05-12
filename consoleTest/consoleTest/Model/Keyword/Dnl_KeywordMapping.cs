@@ -55,13 +55,22 @@ namespace cPlusPlusTest.Model
 
     }
 
-    public class Dnl_KeywordMappingDto
+    /// <summary>
+    /// 关键词共现类
+    /// </summary>
+    public class Dnl_MappingCoPresent
     {
-        public string _id { get; set; }
-        public string CommendCategoryId { get; set; }
-        public string ParentCategoryId { get; set; }
-        public string BaiduCommendId { get; set; }
-        public string BaiduCommend { get; set; }
+        public ObjectId _id { get; set; }
+        public int source { get; set; }
+        public int target { get; set; }
+        public int value { get; set; }
+        public ObjectId KeywordId { get; set; }
+        public ObjectId CommendCategoryId { get; set; }
+        public ObjectId ProjectId { get; set; }
+
+        public Guid Gid { get; set; }
+
+
     }
 
     /// <summary>
