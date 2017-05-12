@@ -102,6 +102,33 @@ namespace cPlusPlusTest
         {
             return base.GetCollection<test>("test");
         }
+
+        #region 独立关键词与链接库
+        public IMongoCollection<Dnl_Keyword> GetDnl_Keyword()
+        {
+            return base.GetCollection<Dnl_Keyword>("Dnl_Keyword");
+        }
+
+        public IMongoCollection<Dnl_KeywordCategory> GetDnl_KeywordCategory()
+        {
+            return base.GetCollection<Dnl_KeywordCategory>("Dnl_KeywordCategory");
+        }
+
+        public IMongoCollection<Dnl_KeywordMapping> GetDnl_KeywordMapping()
+        {
+            return base.GetCollection<Dnl_KeywordMapping>("Dnl_KeywordMapping");
+        }
+
+        public IMongoCollection<Dnl_Link_Baidu> GetDnl_Link_Baidu()
+        {
+            return base.GetCollection<Dnl_Link_Baidu>("Dnl_Link_Baidu");
+        }
+
+        public IMongoCollection<Dnl_LinkMapping_Baidu> GetDnl_LinkMapping_Baidu()
+        {
+            return base.GetCollection<Dnl_LinkMapping_Baidu>("Dnl_LinkMapping_Baidu");
+        }
+        #endregion
     }
 
     public static class MongoExtension

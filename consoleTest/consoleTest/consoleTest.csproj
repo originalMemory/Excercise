@@ -101,6 +101,9 @@
     <Compile Include="Model\IW2S_WB_level1link.cs" />
     <Compile Include="Model\IW2S_WX_BaiduCommend.cs" />
     <Compile Include="Model\IW2S_WX_level1link.cs" />
+    <Compile Include="Model\Keyword\Dnl_Keyword.cs" />
+    <Compile Include="Model\Keyword\Dnl_KeywordMapping.cs" />
+    <Compile Include="Model\Keyword\Dnl_Link_Baidu.cs" />
     <Compile Include="Model\test.cs" />
     <Compile Include="Model\TimeLinkCountDto.cs" />
     <Compile Include="MongoDBClass.cs" />
