@@ -33,7 +33,7 @@
             this.btn_TextEdit = new System.Windows.Forms.Button();
             this.btn_SelectImg = new System.Windows.Forms.Button();
             this.btn_RelistImg = new System.Windows.Forms.Button();
-            this.format = new System.Windows.Forms.Button();
+            this.btn_dmhyCraw = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_CrawImg
@@ -76,22 +76,22 @@
             this.btn_RelistImg.UseVisualStyleBackColor = true;
             this.btn_RelistImg.Click += new System.EventHandler(this.btn_RelistImg_Click);
             // 
-            // format
+            // btn_dmhyCraw
             // 
-            this.format.Location = new System.Drawing.Point(115, 170);
-            this.format.Name = "format";
-            this.format.Size = new System.Drawing.Size(105, 23);
-            this.format.TabIndex = 4;
-            this.format.Text = "类图格式转换";
-            this.format.UseVisualStyleBackColor = true;
-            this.format.Click += new System.EventHandler(this.format_Click);
+            this.btn_dmhyCraw.Location = new System.Drawing.Point(115, 166);
+            this.btn_dmhyCraw.Name = "btn_dmhyCraw";
+            this.btn_dmhyCraw.Size = new System.Drawing.Size(105, 23);
+            this.btn_dmhyCraw.TabIndex = 4;
+            this.btn_dmhyCraw.Text = "花园种子抓取";
+            this.btn_dmhyCraw.UseVisualStyleBackColor = true;
+            this.btn_dmhyCraw.Click += new System.EventHandler(this.btn_dmhyCraw_Click);
             // 
             // Mains
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 313);
-            this.Controls.Add(this.format);
+            this.Controls.Add(this.btn_dmhyCraw);
             this.Controls.Add(this.btn_RelistImg);
             this.Controls.Add(this.btn_SelectImg);
             this.Controls.Add(this.btn_TextEdit);
@@ -110,6 +110,6 @@
         private System.Windows.Forms.Button btn_TextEdit;
         private System.Windows.Forms.Button btn_SelectImg;
         private System.Windows.Forms.Button btn_RelistImg;
-        private System.Windows.Forms.Button format;
+        private System.Windows.Forms.Button btn_dmhyCraw;
     }
 }

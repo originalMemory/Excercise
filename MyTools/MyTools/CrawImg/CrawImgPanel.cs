@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.IO;
 using System.Threading;
+using MyTools.Tools;
 
 namespace MyTools.CrawImg
 {
@@ -29,6 +30,9 @@ namespace MyTools.CrawImg
         //关闭窗口指令
         public const int WM_CLOSE = 0x10;
 
+        /// <summary>
+        /// 判断是否开始下载
+        /// </summary>
         bool downStart = true;
 
         public CrawImgPanel()
@@ -39,8 +43,13 @@ namespace MyTools.CrawImg
             new Thread(DownImg).Start();
         }
 
+        /// <summary>
+        /// 网页中解析到的所有图片信息
+        /// </summary>
         ImgInfo img = new ImgInfo();
-
+        /// <summary>
+        /// 待下载的图片列表
+        /// </summary>
         List<ImgList> imgList = new List<ImgList>();        
 
         #region 获取图片链接，并显示标题和预览
@@ -104,21 +113,22 @@ namespace MyTools.CrawImg
             }
             //检查目录和文件名，将不能使用字符替换为“_”
             //正则表达式"[\\u005C/:\\u002A\\u003F\"<>\'\\u007C’‘“”：？]"还包含中文的字符（实际上中文字符是可以使用的）
-            string titleCheck = Regex.Replace(img.ACGWork, "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]", "_");
+            string fileNameCheck = "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]";
+            string titleCheck = Regex.Replace(img.ACGWork, fileNameCheck, "_");
             string pathCheck = "";
             string path = "";
             switch (img.Kind)
             {
                 case ImgKind.Cosplay:
-                    pathCheck = Regex.Replace(img.Title + " - " + img.Author, "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]", "_");
+                    pathCheck = Regex.Replace(img.Title + " - " + img.Author, fileNameCheck, "_");
                     path = @"E:\图片\Cosplay\" + titleCheck + @"\" + pathCheck;
                     break;
                 case ImgKind.Daily:
-                    pathCheck = Regex.Replace(img.Author, "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]", "_");
+                    pathCheck = Regex.Replace(img.Author, fileNameCheck, "_");
                     path = @"E:\图片\Cosplay\日常\"+ pathCheck;
                     break;
                 case ImgKind.Illustraion:
-                    pathCheck = Regex.Replace(img.Author, "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]", "_");
+                    pathCheck = Regex.Replace(img.Author, fileNameCheck, "_");
                     path = @"E:\图片\画师\" + pathCheck;
                     break;
             }
@@ -273,12 +283,6 @@ namespace MyTools.CrawImg
             //移除空白字符
             string path = txt_FloderPath.Text.Trim();
 
-            //判断文件夹是否存在，不存在则创建文件夹后继续。若路径名含有不能使用字符，返回错误信息
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
             ////定时关闭弹窗
             //Timer timer = new Timer();
             //timer.Interval = 3000;
@@ -323,9 +327,15 @@ namespace MyTools.CrawImg
         /// <param name="path">下载路径</param>
         private void DownCosplay(string path)
         {
-            string title = Regex.Match(path, ".*\\\\(?<name>.+)").Groups["name"].Value.ToString();
-            string infoPath = path + "\\" + title;
+            //保存描述
+            //string title = Regex.Match(path, ".*\\\\(?<name>.+)").Groups["name"].Value.ToString();
+            string title = Path.GetFileNameWithoutExtension(path);
+            string infoPath = Path.Combine(path, title);
             string value = img.Description;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
             FileStream fs = new FileStream(infoPath + ".txt", FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
             sw.WriteAsync(value);
@@ -381,7 +391,6 @@ namespace MyTools.CrawImg
         //}
         #endregion
 
-
         #region 打开保存文件夹事件
         private void OpenFloder_Click(object sender, EventArgs e)
         {
@@ -426,6 +435,9 @@ namespace MyTools.CrawImg
         int status = 0;
         bool isFirst = true;
 
+        /// <summary>
+        /// 下载图片线程
+        /// </summary>
         void DownImg()
         {
 
@@ -436,26 +448,26 @@ namespace MyTools.CrawImg
                 {
                     if (!isFirst&&status==2)
                     {
-                        MessageBox.Show("全部下载任务已完成！", "提示");
+                        MessageBox.Show("本次下载任务已完成！", "提示");
                         status = 0;
                         isFirst = true;
                     }
                     Thread.Sleep(3000);
                     continue;
                 }
-                string name = Regex.Match(img.url, ".*/(?<name>.+)").Groups["name"].ToString();
-                using (WebClient client = new WebClient())
+                if (!WebApi.DownloadFile(img.url, img.path))
                 {
-                    string filePath = img.path + "\\" + name;
-                    if (File.Exists(filePath))
-                    {
-                        File.Delete(filePath);
-                    }
-                    client.DownloadFile(new Uri(img.url), img.path + "\\" + name);   
-                }                
+                    string fileName = Path.GetFileName(img.url);
+                    string dirName = Path.GetFileName(img.path);
+                    MessageBox.Show(dirName + " - " + fileName + " 下载出错！", "提示");
+                }         
             }         
         }
 
+        /// <summary>
+        /// 从待下载列表中获取一个下载链接
+        /// </summary>
+        /// <returns></returns>
         ImgList GetUrl()
         {
             if (imgList.Count > 0)
@@ -486,9 +498,18 @@ namespace MyTools.CrawImg
         }
     }
 
+    /// <summary>
+    /// 图片下载信息类
+    /// </summary>
     public class ImgList
-        {
-            public string url { get; set; }
-            public string path { get; set; }
-        }
+    {
+        /// <summary>
+        /// 链接地址
+        /// </summary>
+        public string url { get; set; }
+        /// <summary>
+        /// 保存路径
+        /// </summary>
+        public string path { get; set; }
+    }
 }

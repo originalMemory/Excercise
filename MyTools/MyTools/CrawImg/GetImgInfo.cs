@@ -136,7 +136,7 @@ namespace MyTools.CrawImg
                 }
             }
             //获取正文
-            Match descriptionMatch = Regex.Match(respHtml, @"<div class=""post__content js-content-img-wrap js-fullimg js-maincontent mb20"">\s(?<info>.+?)<br/>");
+            Match descriptionMatch = Regex.Match(respHtml, @"<div class=""post__content js-content-img-wrap js-fullimg js-maincontent mb0 pl0 pr0 l-left w650"">\s(?<info>.+?)<br/>");
             string description = descriptionMatch.Groups["info"].Value;
             //获取<a>标签内链接和内容
             Regex desreg = new Regex(@"(?is)<a(?:(?!href=).)*href=(['""]?)(?<url>[^""\s>]*)\1[^>]*>(?<text>(?:(?!</?a\b).)*)</a>");

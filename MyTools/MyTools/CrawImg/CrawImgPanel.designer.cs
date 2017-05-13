@@ -79,7 +79,7 @@
             // txt_FloderPath
             // 
             this.txt_FloderPath.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.txt_FloderPath.Location = new System.Drawing.Point(335, 788);
+            this.txt_FloderPath.Location = new System.Drawing.Point(335, 590);
             this.txt_FloderPath.Name = "txt_FloderPath";
             this.txt_FloderPath.Size = new System.Drawing.Size(337, 21);
             this.txt_FloderPath.TabIndex = 5;
@@ -89,7 +89,7 @@
             // btn_SaveFolder
             // 
             this.btn_SaveFolder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_SaveFolder.Location = new System.Drawing.Point(678, 788);
+            this.btn_SaveFolder.Location = new System.Drawing.Point(678, 590);
             this.btn_SaveFolder.Name = "btn_SaveFolder";
             this.btn_SaveFolder.Size = new System.Drawing.Size(75, 23);
             this.btn_SaveFolder.TabIndex = 6;
@@ -103,7 +103,7 @@
             this.FloderPathInfo.AutoSize = true;
             this.FloderPathInfo.BackColor = System.Drawing.Color.Transparent;
             this.FloderPathInfo.Font = new System.Drawing.Font("宋体", 10F);
-            this.FloderPathInfo.Location = new System.Drawing.Point(257, 791);
+            this.FloderPathInfo.Location = new System.Drawing.Point(257, 593);
             this.FloderPathInfo.Name = "FloderPathInfo";
             this.FloderPathInfo.Size = new System.Drawing.Size(77, 14);
             this.FloderPathInfo.TabIndex = 7;
@@ -112,7 +112,7 @@
             // btn_SaveImages
             // 
             this.btn_SaveImages.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_SaveImages.Location = new System.Drawing.Point(395, 815);
+            this.btn_SaveImages.Location = new System.Drawing.Point(395, 617);
             this.btn_SaveImages.Name = "btn_SaveImages";
             this.btn_SaveImages.Size = new System.Drawing.Size(75, 23);
             this.btn_SaveImages.TabIndex = 8;
@@ -128,7 +128,7 @@
             this.Pictures.Controls.Add(this.flp_ImgPriview);
             this.Pictures.Location = new System.Drawing.Point(30, 85);
             this.Pictures.Name = "Pictures";
-            this.Pictures.Size = new System.Drawing.Size(950, 695);
+            this.Pictures.Size = new System.Drawing.Size(950, 497);
             this.Pictures.TabIndex = 12;
             this.Pictures.TabStop = false;
             this.Pictures.Text = "图片预览";
@@ -142,7 +142,7 @@
             this.flp_ImgPriview.BackColor = System.Drawing.SystemColors.Control;
             this.flp_ImgPriview.Location = new System.Drawing.Point(5, 15);
             this.flp_ImgPriview.Name = "flp_ImgPriview";
-            this.flp_ImgPriview.Size = new System.Drawing.Size(940, 675);
+            this.flp_ImgPriview.Size = new System.Drawing.Size(940, 477);
             this.flp_ImgPriview.TabIndex = 0;
             this.flp_ImgPriview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicPriview_MouseMove);
             // 
@@ -161,7 +161,7 @@
             // 
             this.btn_OpenFloder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btn_OpenFloder.Enabled = false;
-            this.btn_OpenFloder.Location = new System.Drawing.Point(530, 815);
+            this.btn_OpenFloder.Location = new System.Drawing.Point(530, 617);
             this.btn_OpenFloder.Name = "btn_OpenFloder";
             this.btn_OpenFloder.Size = new System.Drawing.Size(75, 23);
             this.btn_OpenFloder.TabIndex = 15;
@@ -180,6 +180,7 @@
             // 
             // btn_codeChange
             // 
+            this.btn_codeChange.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btn_codeChange.Location = new System.Drawing.Point(731, 8);
             this.btn_codeChange.Name = "btn_codeChange";
             this.btn_codeChange.Size = new System.Drawing.Size(75, 23);
@@ -192,7 +193,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1014, 859);
+            this.ClientSize = new System.Drawing.Size(1014, 661);
             this.Controls.Add(this.btn_codeChange);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_OpenFloder);

@@ -16,6 +16,7 @@ namespace MyTools
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new CrawTorrent.CrawTorrentPanel());
             Application.Run(new Mains());
         }
     }

@@ -53,10 +53,10 @@ namespace MyTools
             relist.Show();
         }
 
-        private void format_Click(object sender, EventArgs e)
+        private void btn_dmhyCraw_Click(object sender, EventArgs e)
         {
-            FormatConvertPanel convert = new FormatConvertPanel();
-            convert.Show();
+            MyTools.CrawTorrent.CrawTorrentPanel torrent = new CrawTorrent.CrawTorrentPanel();
+            torrent.Show();
         }
     }
 }

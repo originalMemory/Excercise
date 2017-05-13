@@ -16,9 +16,9 @@ using consoleTest.Helper;
 
 namespace consoleTest.Tools
 {
-    public static class MigrateKeyAndLink
+    public static class DnlTools
     {
-        public static void run()
+        public static void MigrateKeyLink()
         {
             string fileName = "错误项目.txt";
 
@@ -38,6 +38,17 @@ namespace consoleTest.Tools
                 //迁移关键词
                 var oldFilterKey = Builders<IW2S_BaiduCommend>.Filter.Eq(x => x.ProjectId, proObjId);
                 var oldKeys = MongoDBHelper.Instance.GetIW2S_BaiduCommends().Find(oldFilterKey).ToList();
+                int level = oldKeys.Count / 2;
+                //检测关键词是否已迁移
+                var keywords = oldKeys.Select(x => x.CommendKeyword).ToList();
+                var filterNewKey = Builders<Dnl_Keyword>.Filter.In(x => x.Keyword, keywords);
+                var queryKey = MongoDBHelper.Instance.GetDnl_Keyword().Find(filterNewKey).ToList();
+                if (queryKey.Count > level)
+                {
+                    i++;
+                    continue;
+                }
+
                 var newKeys = new List<Dnl_Keyword>();
                 var oldKeyToNew = new Dictionary<ObjectId, ObjectId>();     //原有关键词Id和新关键词Id对照词典
                 foreach (var old in oldKeys)

@@ -32,6 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>CrawTorrent\DLL\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,7 +61,6 @@
     <Compile Include="CrawImg\AddressDown.Designer.cs">
       <DependentUpon>AddressDown.cs</DependentUpon>
     </Compile>
-    <Compile Include="CrawImg\DownloadImg.cs" />
     <Compile Include="CrawImg\GetImgInfo.cs" />
     <Compile Include="CrawImg\ImgInfo.cs" />
     <Compile Include="CrawImg\CrawImgPanel.cs">
@@ -65,11 +69,11 @@
     <Compile Include="CrawImg\CrawImgPanel.designer.cs">
       <DependentUpon>CrawImgPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="CrawTorrent\CrawTorrent.cs">
+    <Compile Include="CrawTorrent\CrawTorrentPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CrawTorrent\CrawTorrent.Designer.cs">
-      <DependentUpon>CrawTorrent.cs</DependentUpon>
+    <Compile Include="CrawTorrent\CrawTorrentPanel.Designer.cs">
+      <DependentUpon>CrawTorrentPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="FormatConvert\FormatConvertPanel.cs">
       <SubType>Form</SubType>
@@ -113,8 +117,8 @@
     <EmbeddedResource Include="CrawImg\CrawImgPanel.resx">
       <DependentUpon>CrawImgPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CrawTorrent\CrawTorrent.resx">
-      <DependentUpon>CrawTorrent.cs</DependentUpon>
+    <EmbeddedResource Include="CrawTorrent\CrawTorrentPanel.resx">
+      <DependentUpon>CrawTorrentPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormatConvert\FormatConvertPanel.resx">
       <DependentUpon>FormatConvertPanel.cs</DependentUpon>
@@ -162,6 +166,9 @@
     <Content Include="CrawImg\Icon\StatusStart.png" />
     <Content Include="CrawImg\Icon\StatusWaited.png" />
     <None Include="Resources\logo.ico" />
+    <Content Include="CrawTorrent\DLL\HtmlAgilityPack.dll" />
+    <Content Include="CrawTorrent\DLL\HtmlAgilityPack.pdb" />
+    <Content Include="CrawTorrent\DLL\HtmlAgilityPack.XML" />
     <Content Include="SelectImg\Img\jiance.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

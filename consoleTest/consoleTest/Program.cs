@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using consoleTest.Model;
 using consoleTest.Tools;
+using System.IO;
+using Microsoft.VisualBasic;
 
 
 namespace consoleTest
@@ -15,9 +17,9 @@ namespace consoleTest
         
         static void Main(string[] args)
         {
-            string url = "https://dl.dmhy.org/2017/05/12/f798e55610cb7d7d6caa91d3cfc2f8187245c4de.torrent";
-            string path = "E:\\";
-            Torrent.Download(url, path);
+            string str1 = "茉語星夢&自由字幕組】[路人女主的养成方法♭/Saenai Heroine no Sodatekata Fla";
+            string str2 = Strings.StrConv(str1, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese);
+            Console.WriteLine(str2);
             Console.ReadKey();
         }
 

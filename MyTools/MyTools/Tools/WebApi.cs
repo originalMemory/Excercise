@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Net;
+using System.IO;
 
 namespace MyTools.Tools
 {
@@ -62,6 +63,44 @@ namespace MyTools.Tools
             string respHtml = sr.ReadToEnd();
             resp.Close();
             return respHtml;
+        }
+
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="urls">文件链接</param>
+        /// <param name="path">保存路径</param>
+        /// <param name="fileName">为空时从链接读取文件名</param>
+        /// <returns></returns>
+        public static bool DownloadFile(string url, string path,string fileName=null)
+        {
+            try
+            {
+                //判断文件夹是否存在，不存在则创建文件夹后继续。若路径名含有不能使用字符，返回错误信息
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                if (fileName == null)
+                    fileName = Path.GetFileName(url);             //获取文件名
+                string filePath = Path.Combine(path, fileName);             //保存文件路径
+                //如果文件已存在，删除该文件
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+
+                //下载文件
+                using (var webClient = new WebClient())   //使用完后释放对象
+                {
+                    webClient.DownloadFile(url, filePath);
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
