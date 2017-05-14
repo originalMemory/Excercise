@@ -36,11 +36,11 @@ namespace MyTools.CrawTorrent
         /// <summary>
         /// 种子类别
         /// </summary>
-        List<string> TorType = new List<string> { "生肉", "音乐", "漫画", "广播剧", "其他", "剧场版", "OVA", "OAD" };
+        List<string> TorType = new List<string> { "RAW", "音乐", "漫画", "广播剧", "其他", "剧场版", "OVA", "OAD","小说" };
         /// <summary>
         /// 种子类别枚举
         /// </summary>
-        enum EnumType { 生肉, 音乐, 漫画, 广播剧, 其他,剧场版, OVA, OAD };
+        enum EnumType { RAW, 音乐, 漫画, 广播剧, 其他, 剧场版, OVA, OAD, 小说 };
 
         string FloderPath=@"F:\普罗米修斯\2013\10月";
 
@@ -92,6 +92,7 @@ namespace MyTools.CrawTorrent
         private void btn_getInfo_Click(object sender, EventArgs e)
         {
             btn_OpenFloder.Enabled = false;
+            bar_down.Value = 0;
             TorList.Clear();
 
             txt_path.Text = Path.Combine(FloderPath, FormatFileName(txt_name.Text));
@@ -249,6 +250,9 @@ namespace MyTools.CrawTorrent
                     string drama = "广播剧";
                     switch (tor.Type)
                     {
+                        case "音乐":
+                        case "同人音乐":
+                        case "流行音乐":
                         case "动漫音乐":
                             {
                                 //判断是否是广播剧
@@ -260,17 +264,19 @@ namespace MyTools.CrawTorrent
                                 break;
                             }
                         case "ＲＡＷ":
-                            type = TorType[(int)EnumType.生肉];
+                            type = TorType[(int)EnumType.RAW];
                             break;
                         case "漫画":
-                            type = TorType[(int)EnumType.漫画];
-                            break;
                         case "日文原版":
-                            type = TorType[(int)EnumType.漫画];
-                            break;
                         case "港台原版":
-                            type = TorType[(int)EnumType.漫画];
-                            break;
+                            {
+                                //判断是否为小说
+                                if (tor.Title.Substring(0, 5).Contains("小说"))
+                                    type = TorType[(int)EnumType.小说];
+                                else
+                                    type = TorType[(int)EnumType.漫画];
+                                break;
+                            }
                         case "季度全集":
                         case "动画":
                             {
@@ -278,7 +284,7 @@ namespace MyTools.CrawTorrent
                                 Regex regRaw = new Regex("raws|reinforce");
                                 if (regRaw.IsMatch(tor.Title.ToLower()))
                                 {
-                                    type = TorType[(int)EnumType.生肉];
+                                    type = TorType[(int)EnumType.RAW];
                                     break;
                                 }
                                 //判断是否是广播剧
