@@ -65,7 +65,7 @@ namespace MyTools.SelectImg
             TargetPath = txt_TargetPath.Text;
             SourcePath = txt_SourcePath.Text;
             string str = txt_ExcludeFloder.Text;
-            var exclude = str.Split(';', '；').Where(x => !string.IsNullOrEmpty(x) && x != "undefined").ToList();
+            var exclude = str.Split(';', '；').Where(x => !string.IsNullOrEmpty(x)).ToList();
             bool horizon = false;
             switch (cmb_ImgType.Text)
             {
@@ -87,13 +87,14 @@ namespace MyTools.SelectImg
         {
             string temp = SourcePath + @"\(?<name>.+)";
             temp = temp.Replace(@"\", @"\\");
-            Regex reg = new Regex(temp);
-            Regex reg2=new Regex(@".+\\(?<info>.+)");
+            Regex regFileNovel = new Regex(temp);                        //匹配文件名及其上级目录
+            Regex regFileName = new Regex(@".+\\(?<info>.+)");           //匹配文件名
             var imgPathList = Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".jpeg") || s.EndsWith(".jpg") || s.EndsWith(".bmp") || s.EndsWith(".png") || s.EndsWith(".gif")).ToList();
             int count = imgPathList.Count;
             for (int i = 0; i < count;i++ )
             {
                 string imgPath = imgPathList[i];
+                //判断是否是排除文件夹内的图片
                 bool ex = false;
                 foreach (var x in exclude)
                 {
@@ -106,8 +107,8 @@ namespace MyTools.SelectImg
                 if (ex) continue;
                 using (Image img = Image.FromFile(imgPath))
                 {
+                    //根据图片尺寸筛选
                     if (img.Width < miniWidth) continue;
-                    //if (img.Width < img.Height && img.Height < (img.Width * 2))
                     if (horizon)
                     {
                         if (img.Width < img.Height) continue;
@@ -129,8 +130,8 @@ namespace MyTools.SelectImg
 
                     if (img.Width > img.Height && img.Width >= 600)
                     {
-                        string fileName = reg2.Match(imgPath).Groups["info"].Value;
-                        string fileNovel = reg.Match(imgPath).Groups["name"].Value;
+                        string fileName = regFileName.Match(imgPath).Groups["info"].Value;
+                        string fileNovel = regFileNovel.Match(imgPath).Groups["name"].Value;
                         CopyImg(imgPath, TargetPath, fileName, 0);
                         int percent = i * 100 / count;
                         progressBar1.Value = percent+1;
@@ -162,11 +163,20 @@ namespace MyTools.SelectImg
                 string append = "-" + no;
                 newName = TargetPath + "\\" + fileName.Insert(fileName.LastIndexOf('.'), append);
             }
+            //判断目标文件名是否已存在
             if (File.Exists(newName))
             {
+                //比对二者大小，如果不一致则改名存储
                 FileInfo comp = new FileInfo(newName);
+                if (file.Length != comp.Length)
+                {
                     no++;
                     CopyImg(imgPath, TargetPath, fileName, no);
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
