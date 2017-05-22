@@ -13,6 +13,7 @@ using JiebaNet.Segmenter.PosSeg;
 using System.Text.RegularExpressions;
 using consoleTest.Model;
 using consoleTest.Helper;
+using AISSystem;
 
 namespace consoleTest.Tools
 {
@@ -227,6 +228,198 @@ namespace consoleTest.Tools
                 fs.Close();
             }
             Log("全部迁移完毕！");
+        }
+
+        public static void RecoverMapping()
+        {
+            var errorPros = new List<IW2S_Project>();
+            #region 迁移数据
+            var filterPro = Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, false);
+            var pros = MongoDBHelper.Instance.GetIW2S_Projects().Find(filterPro).ToList();
+            int i = 0;
+            int count = pros.Count;
+
+            //获取现在所有关键词
+            var filterKey = Builders<Dnl_Keyword>.Filter.Empty;
+            var keywords = MongoDBHelper.Instance.GetDnl_Keyword().Find(filterKey).ToList();
+            foreach (var pro in pros)
+            {
+
+                var proObjId = pro._id;
+                var userObjId = pro.UsrId;
+
+                Log("当前项目[" + i + "/" + count + "] - " + pro.Name);
+                if (i < 135)
+                {
+                    i++;
+                    continue;
+                }
+
+                //获取原项目内所有关键词
+                var builderKey = Builders<IW2S_BaiduCommend>.Filter;
+                var filterBd = builderKey.Eq(x => x.ProjectId, proObjId) & builderKey.Eq(x => x.IsRemoved, false);
+                var oldKeys = MongoDBHelper.Instance.GetIW2S_BaiduCommends().Find(filterBd).ToList();
+
+                //获取原关键词词组
+                var builderCate = Builders<IW2S_KeywordCategory>.Filter;
+                var filterCate = builderCate.Eq(x => x.ProjectId, proObjId) & builderCate.Eq(x => x.IsDel, false);
+                var oldCates = MongoDBHelper.Instance.GetIW2S_KeywordCategorys().Find(filterCate).ToList();
+                if (oldKeys.Count == 0)
+                    continue;
+                var oldCateToNew = new Dictionary<ObjectId, ObjectId>();
+
+                
+                //获取新关键词词组
+                var newBuiderCate = Builders<Dnl_KeywordCategory>.Filter;
+                var newFilterCate = newBuiderCate.Eq(x => x.ProjectId, proObjId) & newBuiderCate.Eq(x => x.IsDel, false);
+                var newCates = MongoDBHelper.Instance.GetDnl_KeywordCategory().Find(newFilterCate).ToList();
+                var newCateInsert = new List<Dnl_KeywordCategory>();
+                foreach (var x in oldCates)
+                {
+                    var temp = newCates.Where(s => s.ProjectId.Equals(x.ProjectId)).ToList().Find(s => s.Name == x.Name);
+                    if (temp != null && !oldCateToNew.ContainsKey(x._id))
+                        oldCateToNew.Add(x._id, temp._id);
+                    if (temp == null && !oldCateToNew.ContainsKey(x._id))
+                    {
+                        var temp2 = new Dnl_KeywordCategory
+                        {
+                            _id = ObjectId.GenerateNewId(),
+                            Name = x.Name,
+                            InfriLawCode = x.InfriLawCode,
+                            KeywordCount = x.KeywordTotal,
+                            ValLinkCount = x.ValLinkCount,
+                            Weight = x.Weight,
+                            ProjectId = proObjId,
+                            UserId = userObjId
+                        };
+                        newCateInsert.Add(temp2);
+                        oldCateToNew.Add(x._id, temp2._id);
+                    }
+                }
+                for(int j=0;j<newCateInsert.Count;j++)
+                {
+                    var old = oldCates.Find(s => s.Name == newCateInsert[j].Name);
+                    if (old != null && oldCateToNew.ContainsKey(old.ParentId))
+                        newCateInsert[j].ParentId = oldCateToNew[old.ParentId];
+                }
+                if (newCateInsert.Count > 0)
+                    MongoDBHelper.Instance.GetDnl_KeywordCategory().InsertMany(newCateInsert);
+                oldCateToNew.Add(ObjectId.Empty,ObjectId.Empty);
+                
+
+                //迁移词组内关键词映射
+                var oldGroupObjIds = oldCates.Select(x => x._id).ToList();
+                var filterGroup = Builders<IW2S_KeywordGroup>.Filter.In(x => x.CommendCategoryId, oldGroupObjIds) & Builders<IW2S_KeywordGroup>.Filter.Eq(x => x.IsDel, false);
+                var oldGroups = MongoDBHelper.Instance.GetIW2S_KeywordGroups().Find(filterGroup).ToList();
+                var newMaps = new List<Dnl_KeywordMapping>();
+                foreach (var x in oldGroups)
+                {
+                    var map = new Dnl_KeywordMapping
+                    {
+                        CategoryId = oldCateToNew[x.CommendCategoryId],
+                        ParentCategoryId = oldCateToNew[x.ParentCategoryId],
+                        ProjectId = proObjId,
+                        UserId = userObjId,
+                        Keyword = x.BaiduCommend
+                    };
+                    var temp = keywords.Find(s => s.Keyword == map.Keyword);
+                    if (temp == null)
+                        continue;
+                    else
+                        map.KeywordId = temp._id;
+                    newMaps.Add(map);
+                }
+                if(newMaps.Count>0)
+                    MongoDBHelper.Instance.GetDnl_KeywordMapping().InsertMany(newMaps);
+
+
+                Log("关键词映射迁移结束，共迁移 " + newMaps.Count + " 个");
+
+               
+
+                //迁移所有词映射
+                var newRootKeys = new List<Dnl_KeywordMapping>();
+                foreach (var x in oldKeys)
+                {
+                    var y = new Dnl_KeywordMapping
+                    {
+                        _id = ObjectId.GenerateNewId(),
+                        Keyword = x.Keyword,
+                        ProjectId = proObjId,
+                        UserId = userObjId
+                    };
+                    var temp = keywords.Find(s => s.Keyword == y.Keyword);
+                    if (temp == null)
+                        continue;
+                    else
+                        y.KeywordId = temp._id;
+                    newRootKeys.Add(y);
+                }
+                if (newRootKeys.Count > 0)
+                    MongoDBHelper.Instance.GetDnl_KeywordMapping().InsertMany(newRootKeys);
+                Log("所有词映射迁移结束，共迁移 " + newRootKeys.Count + " 个");
+                Log(pro.Name + " 迁移完毕" + System.Environment.NewLine);
+                i++;
+            }
+
+            #endregion
+
+            Log("全部迁移完毕！");
+        }
+
+        public static void DelRepeat()
+        {
+            
+
+            //var filterPro = Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, false);
+            //var pros = MongoDBHelper.Instance.GetIW2S_Projects().Find(filterPro).ToList();
+            //int i = 0;
+            //int count = pros.Count;
+
+            ////获取现在所有关键词
+            //var filterKey = Builders<Dnl_Keyword>.Filter.Empty;
+            //var keywords = MongoDBHelper.Instance.GetDnl_Keyword().Find(filterKey).ToList();
+            //foreach (var pro in pros)
+            //{
+
+            //    var proObjId = pro._id;
+            //    var userObjId = pro.UsrId;
+
+            //    Log("当前项目[" + i + "/" + count + "] - " + pro.Name);
+            //    //if (i < 135)
+            //    //{
+            //    //    i++;
+            //    //    continue;
+            //    //}
+            //    var builder = Builders<Dnl_KeywordMapping>.Filter;
+            //    var filterFind = builder.Ne(x => x.CategoryId, ObjectId.Empty) & builder.Eq(x => x.ProjectId, proObjId);
+            //    var col = MongoDBHelper.Instance.GetDnl_KeywordMapping();
+            //    var keys = col.Find(filterFind).ToList();
+            //    var filterRoot = builder.Eq(x => x.CategoryId, ObjectId.Empty) & builder.Eq(x => x.ProjectId, proObjId);
+            //    var roots = col.Find(filterRoot).ToList();
+            //    var maps = new List<Dnl_KeywordMapping>();
+            //    foreach (var x in keys)
+            //    {
+            //        var tp = maps.Find(s => s.KeywordId == x.KeywordId);
+            //        if (tp != null)
+            //            continue;
+            //        var root = roots.Find(s => s.KeywordId == x.KeywordId);
+            //        if (root == null)
+            //        {
+            //            var map = new Dnl_KeywordMapping
+            //            {
+            //                Keyword = x.Keyword,
+            //                KeywordId = x.KeywordId,
+            //                ProjectId = x.ProjectId,
+            //                UserId = x.UserId
+            //            };
+            //            maps.Add(map);
+            //        }
+            //    }
+            //    if(maps.Count>0)
+            //        col.InsertMany(maps);
+            //    i++;
+            //}
         }
 
         /// <summary>

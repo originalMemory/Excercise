@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "actionGroupExample", "actio
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "actsColorFollowingExample", "actsColorFollowingExample\actsColorFollowingExample.vcxproj", "{A7814ADC-30A1-4C9D-BCAE-85701A87E060}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "auxSerialExample", "auxSerialExample\auxSerialExample.vcxproj", "{905DB993-F195-4C52-886D-560D79587349}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -25,6 +27,10 @@ Global
 		{A7814ADC-30A1-4C9D-BCAE-85701A87E060}.Debug|Win32.Build.0 = Debug|Win32
 		{A7814ADC-30A1-4C9D-BCAE-85701A87E060}.Release|Win32.ActiveCfg = Release|Win32
 		{A7814ADC-30A1-4C9D-BCAE-85701A87E060}.Release|Win32.Build.0 = Release|Win32
+		{905DB993-F195-4C52-886D-560D79587349}.Debug|Win32.ActiveCfg = Debug|Win32
+		{905DB993-F195-4C52-886D-560D79587349}.Debug|Win32.Build.0 = Debug|Win32
+		{905DB993-F195-4C52-886D-560D79587349}.Release|Win32.ActiveCfg = Release|Win32
+		{905DB993-F195-4C52-886D-560D79587349}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

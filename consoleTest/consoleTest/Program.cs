@@ -9,6 +9,9 @@ using consoleTest.Tools;
 using System.IO;
 using Microsoft.VisualBasic;
 
+using NReadability;
+using System.Net;
+
 
 namespace consoleTest
 {
@@ -17,9 +20,16 @@ namespace consoleTest
         
         static void Main(string[] args)
         {
-            string str1 = "茉語星夢&自由字幕組】[路人女主的养成方法♭/Saenai Heroine no Sodatekata Fla";
-            string str2 = Strings.StrConv(str1, Microsoft.VisualBasic.VbStrConv.SimplifiedChinese);
-            Console.WriteLine(str2);
+            var transcoder = new NReadabilityTranscoder();
+            string content;
+            using (var wc = new WebClient())
+            {
+                content = wc.DownloadString("http://news.163.com/17/0522/16/CL294BVU000187VE.html");
+            }
+            bool success;
+            string transcodedContent =
+              transcoder.Transcode(content, out success);
+            Console.WriteLine(transcodedContent);
             Console.ReadKey();
         }
 
