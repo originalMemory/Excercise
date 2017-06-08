@@ -40,6 +40,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>Dll\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="JiebaNet.Analyser, Version=0.37.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dll\JiebaNet.Analyser.dll</HintPath>
@@ -102,6 +105,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Media\Dnl_Keyword_Media.cs" />
+    <Compile Include="Model\Media\Dnl_Link_WeiXi.cs" />
     <Compile Include="Model\IW2S_BaiduCommend.cs" />
     <Compile Include="Model\IW2S_BotData.cs" />
     <Compile Include="Model\IW2S_BotRegister.cs" />
@@ -127,8 +132,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\GsdataApi.cs" />
     <Compile Include="Tools\IW2SBotReg.cs" />
     <Compile Include="Tools\JiebaController.cs" />
+    <Compile Include="Tools\MD5Tools.cs" />
     <Compile Include="Tools\Torrent.cs" />
     <Compile Include="Tools\DnlTools.cs" />
     <Compile Include="Tools\Image.cs" />

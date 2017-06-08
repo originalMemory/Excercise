@@ -8,10 +8,10 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System.Text.RegularExpressions;
-using consoleTest.Model;
-using consoleTest.Helper;
+using CSharpTest.Model;
+using CSharpTest.Helper;
 
-namespace consoleTest.Tools
+namespace CSharpTest.Tools
 {
     class MongoTest
     {

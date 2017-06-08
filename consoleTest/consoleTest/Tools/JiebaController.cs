@@ -11,10 +11,10 @@ using JiebaNet.Analyser;
 using JiebaNet.Segmenter;
 using JiebaNet.Segmenter.PosSeg;
 using System.Text.RegularExpressions;
-using consoleTest.Model;
-using consoleTest.Helper;
+using CSharpTest.Model;
+using CSharpTest.Helper;
 
-namespace consoleTest.Tools
+namespace CSharpTest.Tools
 {
     public class JiebaController
     {

@@ -167,7 +167,6 @@
     <Content Include="CrawImg\Icon\StatusWaited.png" />
     <None Include="Resources\logo.ico" />
     <Content Include="CrawTorrent\DLL\HtmlAgilityPack.dll" />
-    <Content Include="CrawTorrent\DLL\HtmlAgilityPack.pdb" />
     <Content Include="CrawTorrent\DLL\HtmlAgilityPack.XML" />
     <Content Include="SelectImg\Img\jiance.gif" />
   </ItemGroup>

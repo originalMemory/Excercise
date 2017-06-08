@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace consoleTest.Model
+namespace CSharpTest.Model
 {
     /// <summary>
     /// 公用关键词库类
@@ -29,7 +29,6 @@ namespace consoleTest.Model
         /// 百度上次搜索时间
         /// </summary>
         public DateTime LastBotEndAt_Baidu { get; set; }
-
         /// <summary>
         /// 百度搜索状态：0:未搜索,1:搜索中,2:搜索完成
         /// </summary>
@@ -38,7 +37,11 @@ namespace consoleTest.Model
         /// 百度有效链接数
         /// </summary>
         public int ValLinkCount_Baidu { get; set; }
-
+        /// <summary>
+        /// 百度链接数
+        /// </summary>
+        public int LinkCount_Baidu { get; set; }
+        
     }
 
     /// <summary>
@@ -46,6 +49,9 @@ namespace consoleTest.Model
     /// </summary>
     public class Dnl_KeywordDto
     {
+        /// <summary>
+        /// 关键词Id，不是映射Id
+        /// </summary>
         public string _id { get; set; }
         /// <summary>
         /// 搜索关键词
@@ -57,6 +63,10 @@ namespace consoleTest.Model
         public DateTime CreatedAt { get; set; }
         public int BotStatus { get; set; }
         public int ValLinkCount { get; set; }
+        /// <summary>
+        /// 链接数
+        /// </summary>
+        public int LinkCount { get; set; }
         public bool isselected { get; set; }
 
         public int GroupNumber { get; set; }

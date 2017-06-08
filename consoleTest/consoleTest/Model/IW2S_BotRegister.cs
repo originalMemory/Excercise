@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
-namespace consoleTest.Model
+namespace CSharpTest.Model
 {
     /// <summary>
     /// 供Bot注册使用，每分钟会注册一次，超过3分钟未注册

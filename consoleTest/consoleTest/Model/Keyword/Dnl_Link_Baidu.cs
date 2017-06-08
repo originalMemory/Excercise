@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace consoleTest.Model
+namespace CSharpTest.Model
 {
     /// <summary>
     /// 公有百度链接类
@@ -50,9 +50,9 @@ namespace consoleTest.Model
         /// </summary>
         public string Html { get; set; }
         /// <summary>
-        /// 网页摘要，从网页源代码获取
+        /// 网页正文，从网页源代码获取
         /// </summary>
-        public string Abstract { get; set; }
+        public string Content { get; set; }
         /// <summary>
         /// 百度蓝V认证
         /// </summary>
@@ -62,9 +62,9 @@ namespace consoleTest.Model
         /// </summary>
         public string PublishTime { get; set; }
         /// <summary>
-        /// 抓取时在搜索页面的排序所在位置
+        /// 域名收录量
         /// </summary>
-        public int Rank { get; set; }
+        public string DomainCollectionNum { get; set; }
         /// <summary>
         /// 是否为推广链接
         /// </summary>
@@ -91,7 +91,7 @@ namespace consoleTest.Model
         /// 数据类型Id
         /// </summary>
         public ObjectId InfriLawCode { get; set; }
-        
+
     }
 
     /// <summary>
@@ -104,12 +104,50 @@ namespace consoleTest.Model
         /// 搜索关键词Id
         /// </summary>
         public string SearchkeywordId { get; set; }
+        /// <summary>
+        /// 域名
+        /// </summary>
+        public string Domain { get; set; }
+        /// <summary>
+        /// 主域名
+        /// </summary>
+        public string TopDomain { get; set; }
+        public string LinkUrl { get; set; }
+
         public string Title { get; set; }
+
         public string Description { get; set; }
         /// <summary>
         /// 搜索关键词
         /// </summary>
         public string Keywords { get; set; }
+        /// <summary>
+        /// 数据清洗状态：1，收藏
+        /// </summary>
+        public Nullable<byte> DataCleanStatus { get; set; }
+        /// <summary>
+        /// 创建日期
+        /// </summary>
+        public System.DateTime CreatedAt { get; set; }
+        public string Abstract { get; set; }
+        public int BaiduVStar { get; set; }
+        public string InfriLawCode { get; set; }
+        public string InfriLawCodeStr { get; set; }
+        public DateTime PublishTime { get; set; }
+
+    }
+
+    public class LinkSearchData
+    {
+        public string user_id { get; set; }
+        public string projectId { get; set; }
+        public string keywordId { get; set; }
+        public string Title { get; set; }
+        public string domain { get; set; }
+        public string infriLawCode { get; set; }
+        public byte? status { get; set; }
+        public int page { get; set; }
+        public int pagesize { get; set; }
 
     }
 }

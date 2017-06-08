@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MonoTorrent;
 using System.Net;
 
-namespace consoleTest.Tools
+namespace CSharpTest.Tools
 {
     /// <summary>
     /// 种子相关类

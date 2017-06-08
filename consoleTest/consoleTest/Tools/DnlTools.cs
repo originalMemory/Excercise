@@ -11,11 +11,14 @@ using JiebaNet.Analyser;
 using JiebaNet.Segmenter;
 using JiebaNet.Segmenter.PosSeg;
 using System.Text.RegularExpressions;
-using consoleTest.Model;
-using consoleTest.Helper;
+using CSharpTest.Model;
+using CSharpTest.Helper;
 using AISSystem;
+using HtmlAgilityPack;
 
-namespace consoleTest.Tools
+using Newtonsoft.Json.Linq;
+
+namespace CSharpTest.Tools
 {
     public static class DnlTools
     {
@@ -95,7 +98,6 @@ namespace consoleTest.Tools
                                 _id = ObjectId.GenerateNewId(),
                                 Title = old.Title,
                                 Description = old.Description,
-                                Abstract = old.Abstract,
                                 Html = old.Html,
                                 Domain = old.Domain,
                                 TopDomain = old.TopDomain,
@@ -104,7 +106,6 @@ namespace consoleTest.Tools
                                 Keywords = old.Keywords,
                                 LinkUrl = old.LinkUrl,
                                 PublishTime = old.PublishTime,
-                                Rank = old.Rank,
                                 SearchkeywordId = oldKeyToNew[new ObjectId(old.SearchkeywordId)].ToString(),
                                 IsPromotion = old.IsMarket,
                                 MatchAt = Convert.ToInt32(old.MatchAt)
@@ -134,7 +135,6 @@ namespace consoleTest.Tools
                     var newCate = new Dnl_KeywordCategory
                     {
                         _id = ObjectId.GenerateNewId(),
-                        ValLinkCount = old.ValLinkCount,
                         IsDel = false,
                         GroupNumber = old.GroupNumber,
                         KeywordCount = old.KeywordTotal,
@@ -287,7 +287,6 @@ namespace consoleTest.Tools
                             Name = x.Name,
                             InfriLawCode = x.InfriLawCode,
                             KeywordCount = x.KeywordTotal,
-                            ValLinkCount = x.ValLinkCount,
                             Weight = x.Weight,
                             ProjectId = proObjId,
                             UserId = userObjId
@@ -367,59 +366,173 @@ namespace consoleTest.Tools
             Log("全部迁移完毕！");
         }
 
-        public static void DelRepeat()
+        /// <summary>
+        /// 计算链接数
+        /// </summary>
+        public static void CountLinkNum()
         {
-            
+            var colKey=MongoDBHelper.Instance.GetDnl_Keyword();
+            var keywords = colKey.Find(Builders<Dnl_Keyword>.Filter.Empty).ToList();
+            int i = 1;
+            foreach (var key in keywords)
+            {
+                Log("关键词["+i+"/+"+keywords.Count+"]：" + key.Keyword);
+                var filterLink = Builders<Dnl_Link_Baidu>.Filter.Eq(x => x.SearchkeywordId, key._id.ToString());
+                var queryLink = MongoDBHelper.Instance.GetDnl_Link_Baidu().Find(filterLink).Project(x => x._id).ToList();
+                int num = queryLink.Count;
+                var update = new UpdateDocument { { "$set", new QueryDocument { { "LinkCount_Baidu", num } } } };
+                var filterKey = Builders<Dnl_Keyword>.Filter.Eq(x => x._id, key._id);
+                colKey.UpdateOne(filterKey, update);
+                Log("链接数：" + num + "\n");
+                i++;
+            }
+        }
 
+        public static void SearchWeiXiArticle(Dnl_Keyword_Media task)
+        {
+            Log("关键词 - " + task.Keyword);
+            string url = "http://open.gsdata.cn/api/wx/opensearchapi/content_keyword_search";
+            //string url = "http://open.gsdata.cn/api/sys/sysapi/check_user";
+            Dictionary<string, object> postData = new Dictionary<string, object>();
+
+            string appid = "JVEvKn7ghegw984neooX";
+            string appkey = "n0TWOaX9gta1dpfVF07hpkKr2";
+
+            postData.Add("keyword", task.Keyword);
+            postData.Add("start", 0);
+            postData.Add("num", 10);
+            //postData.Add("startdate", "2005-01-01");
+            //postData.Add("enddate", "2017-06-01");
+            postData.Add("sortname", "likenum");
+            postData.Add("sort", "asc");
+
+            GsdataApi api = new GsdataApi(appid, appkey);
+            string str = api.Call(postData, url);
+            Console.WriteLine(str);
+            JObject json = JObject.Parse(str);
+            if (json.Property("returnCode") != null & json["returnCode"].ToString() == "1001")
+            {
+                Log("获取成功！");
+                JObject returnData = (JObject)json["returnData"];
+                task.WXArticleNumTotal = Convert.ToInt32(returnData["total"]);
+                task.WXArticleNumNow += Convert.ToInt32(returnData["num"]);
+                JArray items = (JArray)returnData["items"];
+                var articles = new List<Dnl_Link_WeiXi>();
+                for (int i = 0; i < items.Count; i++)
+                {
+                    JObject item = (JObject)items[i];
+                    var article = new Dnl_Link_WeiXi()
+                    {
+                        Keyword = task.Keyword,
+                        KeywordId = task._id.ToString(),
+                        Id = Convert.ToInt32(item["id"]),
+                        Table_name = item["table_name"].ToString(),
+                        Talbe_id = Convert.ToInt32(item["talbe_id"]),
+                        Name = item["name"].ToString(),
+                        Wx_name = item["wx_name"].ToString(),
+                        Nickname_id = Convert.ToInt32(item["nickname_id"]),
+                        Posttime = item["posttime"].ToString(),
+                        Title = item["title"].ToString(),
+                        Description = item["content"].ToString(),
+                        Url = item["url"].ToString(),
+                        Status = item["status"].ToString(),
+                        Add_time = item["add_time"].ToString(),
+                        Get_time = item["get_time"].ToString(),
+                        Readnum = Convert.ToInt32(item["readnum"]),
+                        Likenum = Convert.ToInt32(item["likenum"]),
+                        Get_time_pm = item["get_time_pm"].ToString(),
+                        Readnum_pm = Convert.ToInt32(item["readnum_pm"]),
+                        Likenum_pm = Convert.ToInt32(item["likenum_pm"]),
+                        Get_time_week = item["get_time_week"].ToString(),
+                        Readnum_week = Convert.ToInt32(item["readnum_week"]),
+                        Likenum_week = Convert.ToInt32(item["likenum_week"]),
+                        Top = Convert.ToInt32(item["top"]),
+                        Ispush = Convert.ToInt32(item["ispush"]),
+                        Picurl = item["picurl"].ToString(),
+                        Sourceurl = item["sourceurl"].ToString(),
+                        Author = item["author"].ToString(),
+                        Copyright = item["copyright"].ToString(),
+                        Index_name = item["index_name"].ToString(),
+                    };
+                    articles.Add(article);
+                }
+                MongoDBHelper.Instance.GetDnl_Keyword_Media().InsertOne(task);
+                MongoDBHelper.Instance.GetDnl_Link_WeiXi().InsertMany(articles);
+                Log("保存成功！");
+            }
+            else
+            {
+                Log("请求出错！");
+            }
+        }
+
+        public static void Temp()
+        {
             //var filterPro = Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, false);
             //var pros = MongoDBHelper.Instance.GetIW2S_Projects().Find(filterPro).ToList();
-            //int i = 0;
             //int count = pros.Count;
 
-            ////获取现在所有关键词
-            //var filterKey = Builders<Dnl_Keyword>.Filter.Empty;
-            //var keywords = MongoDBHelper.Instance.GetDnl_Keyword().Find(filterKey).ToList();
-            //foreach (var pro in pros)
-            //{
+            //获取现在所有关键词
+            var filterKey = Builders<Dnl_Keyword>.Filter.Empty;
+            var keywords = MongoDBHelper.Instance.GetDnl_Keyword().Find(filterKey).ToList();
+            for (int i = 0; i < keywords.Count; i++)
+            {
 
-            //    var proObjId = pro._id;
-            //    var userObjId = pro.UsrId;
+                //var proObjId = pro._id;
+                //var userObjId = pro.UsrId;
 
-            //    Log("当前项目[" + i + "/" + count + "] - " + pro.Name);
-            //    //if (i < 135)
-            //    //{
-            //    //    i++;
-            //    //    continue;
-            //    //}
-            //    var builder = Builders<Dnl_KeywordMapping>.Filter;
-            //    var filterFind = builder.Ne(x => x.CategoryId, ObjectId.Empty) & builder.Eq(x => x.ProjectId, proObjId);
-            //    var col = MongoDBHelper.Instance.GetDnl_KeywordMapping();
-            //    var keys = col.Find(filterFind).ToList();
-            //    var filterRoot = builder.Eq(x => x.CategoryId, ObjectId.Empty) & builder.Eq(x => x.ProjectId, proObjId);
-            //    var roots = col.Find(filterRoot).ToList();
-            //    var maps = new List<Dnl_KeywordMapping>();
-            //    foreach (var x in keys)
-            //    {
-            //        var tp = maps.Find(s => s.KeywordId == x.KeywordId);
-            //        if (tp != null)
-            //            continue;
-            //        var root = roots.Find(s => s.KeywordId == x.KeywordId);
-            //        if (root == null)
-            //        {
-            //            var map = new Dnl_KeywordMapping
-            //            {
-            //                Keyword = x.Keyword,
-            //                KeywordId = x.KeywordId,
-            //                ProjectId = x.ProjectId,
-            //                UserId = x.UserId
-            //            };
-            //            maps.Add(map);
-            //        }
-            //    }
-            //    if(maps.Count>0)
-            //        col.InsertMany(maps);
-            //    i++;
-            //}
+                Log("当前关键词[" + i + "/" + keywords.Count + "] - " + keywords[i].Keyword);
+                //获取当前项目内所有关键词Id
+                //var filterCate = Builders<Dnl_KeywordMapping>.Filter.Eq(x => x.ProjectId, proObjId);
+                //var keyIds = MongoDBHelper.Instance.GetDnl_KeywordMapping().Find(filterCate).Project(x => x.KeywordId.ToString()).ToList().Distinct();
+                var filterLink = Builders<Dnl_Link_Baidu>.Filter.Eq(x => x.SearchkeywordId, keywords[i]._id.ToString());
+                var col = MongoDBHelper.Instance.GetDnl_Link_Baidu();
+                var links = MongoDBHelper.Instance.GetDnl_Link_Baidu().Find(filterLink).Project(x => new
+                {
+                    Id = x._id,
+                    Domain = x.Domain
+                }).ToList();
+                int j = 1;
+                foreach (var x in links)
+                {
+                    string num = GetDomainCollectionNum(x.Domain);
+                    if (num.Contains("亿"))
+                    {
+                        if (num.Contains("万"))
+                        {
+                            int p1 = num.IndexOf("亿");
+                            int p2 = num.IndexOf("万");
+                            long a = Convert.ToInt32(num.SubBefore("亿"));
+                            long b = Convert.ToInt32(num.SubAfter("亿").SubBefore("万"));
+                            num = (a * 100000000 + b * 10000).ToString();
+                        }
+                        else
+                        {
+                            int p1 = num.IndexOf("亿");
+                            int p2 = num.IndexOf("万");
+                            long a = Convert.ToInt32(num.SubBefore("亿"));
+                            long b = Convert.ToInt32(num.SubAfter("亿"));
+                            num = (a * 100000000 + b).ToString();
+                        }
+                    }
+                    else if (num.Contains("万"))
+                    {
+                        int p2 = num.IndexOf("万");
+                        long a = Convert.ToInt32(num.SubBefore("万"));
+                        long b = Convert.ToInt32(num.SubAfter("万"));
+                        num = (a * 10000 + b).ToString();
+                    }
+                    var update = new UpdateDocument { { "$set", new QueryDocument { { "DomainCollectionNum", num } } } };
+                    var filterUp = Builders<Dnl_Link_Baidu>.Filter.Eq(s => s._id, x.Id);
+                    col.UpdateOne(filterUp, update);
+                    Log("当前关键词[" + i + "/" + keywords.Count + "] - " + keywords[i].Keyword + "   -   [" + j + "/" + links.Count + "]");
+                    j++;
+                }
+                Console.WriteLine("\n");
+                i++;
+            }
+
+            Log("全部迁移完毕！");
         }
 
         /// <summary>
@@ -428,7 +541,46 @@ namespace consoleTest.Tools
         /// <param name="message">日志信息</param>
         public static void Log(string message)
         {
-            Console.WriteLine(DateTime.Now + "：" + message);
+            Console.WriteLine(DateTime.Now.ToString() + "：" + message);
+        }
+
+        /// <summary>
+        /// 获取域名收录量
+        /// </summary>
+        /// <param name="domain">域名</param>
+        /// <returns></returns>
+        private static string GetDomainCollectionNum(string domain)
+        {
+            if (string.IsNullOrEmpty(domain))
+            {
+                return "0";
+            }
+            string url = "http://www.baidu.com/s?ie=utf-8&wd=site:{0}";
+            url = url.FormatStr(domain.GetUrlEncodedString("utf-8"));
+            string html = WebApiInvoke.GetHtml(url);        //获取网页源码
+            if (string.IsNullOrEmpty(html))
+            {
+                return "0";
+            }
+            //解析并获取域名收录量
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            HtmlNode collection = doc.DocumentNode.SelectSingleNode("//*[@id=\"1\"]/div/div[1]/div/p[3]/span/b");
+            if (collection != null)
+            {
+                string numStr = collection.InnerText;
+                if (!string.IsNullOrEmpty(numStr))
+                {
+                    numStr = numStr.Trim().Replace(",", "");
+                }
+                return numStr;
+            }
+            else
+            {
+                return "0";
+            }
         }
     }
+
+    
 }

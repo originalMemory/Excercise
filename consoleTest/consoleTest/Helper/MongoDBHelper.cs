@@ -9,9 +9,9 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using MongoV2;
 
-using consoleTest.Model;
+using CSharpTest.Model;
 
-namespace consoleTest.Helper
+namespace CSharpTest.Helper
 {
     public class MongoDBHelper:MDB
     {
@@ -129,6 +129,16 @@ namespace consoleTest.Helper
             return base.GetCollection<Dnl_LinkMapping_Baidu>("Dnl_LinkMapping_Baidu");
         }
         #endregion
+
+        public IMongoCollection<Dnl_Link_WeiXi> GetDnl_Link_WeiXi()
+        {
+            return base.GetCollection<Dnl_Link_WeiXi>("Dnl_Link_WeiXi");
+        }
+
+        public IMongoCollection<Dnl_Keyword_Media> GetDnl_Keyword_Media()
+        {
+            return base.GetCollection<Dnl_Keyword_Media>("Dnl_Keyword_Media");
+        }
     }
 
     public static class MongoExtension

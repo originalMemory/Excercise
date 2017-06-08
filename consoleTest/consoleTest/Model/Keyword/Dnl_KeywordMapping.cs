@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace consoleTest.Model
+namespace CSharpTest.Model
 {
     /// <summary>
     /// 私有关键词与公有关键词映射类
@@ -31,6 +31,10 @@ namespace consoleTest.Model
         /// 关键词共现图计算使用
         /// </summary>
         public int JisuanStatus { get; set; }
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedAt { get; set; }
     }
 
     /// <summary>
@@ -51,8 +55,10 @@ namespace consoleTest.Model
         /// 组内当前关键词数
         /// </summary>
         public int KeywordCount { get; set; }
-        public int ValLinkCount { get; set; }
-
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedAt { get; set; }
     }
 
     /// <summary>
@@ -64,13 +70,18 @@ namespace consoleTest.Model
         public int source { get; set; }
         public int target { get; set; }
         public int value { get; set; }
-        public ObjectId KeywordId { get; set; }
-        public ObjectId CommendCategoryId { get; set; }
+        public ObjectId KeywordMappingId { get; set; }
+        public ObjectId CategoryId { get; set; }
         public ObjectId ProjectId { get; set; }
+    }
 
-        public Guid Gid { get; set; }
-
-
+    public class Dnl_KeywordMappingDto
+    {
+        public string _id { get; set; }
+        public string CommendCategoryId { get; set; }
+        public string ParentCategoryId { get; set; }
+        public string BaiduCommendId { get; set; }
+        public string BaiduCommend { get; set; }
     }
 
     /// <summary>
@@ -87,11 +98,14 @@ namespace consoleTest.Model
         public string InfriLawCodeStr { get; set; }
         public int KeywordTotal { get; set; }
         public int BotStatus { get; set; }
-        public int ValLinkCount { get; set; }
         public bool isselected { get; set; }
         public int GroupNumber { get; set; }
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedAt { get; set; }
     }
-    
+
     /// <summary>
     /// 词组修改时关键词类
     /// </summary>

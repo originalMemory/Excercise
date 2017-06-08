@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace consoleTest.Tools
+namespace CSharpTest.Tools
 {
     public static class Image
     {
