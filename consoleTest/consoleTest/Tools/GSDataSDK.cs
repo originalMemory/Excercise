@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Net;
@@ -12,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace CSharpTest.Tools
 {
-    class GsdataApi
+    class GSDataSDK
     {
         private string Appid;
         private string Appkey;
@@ -23,7 +22,7 @@ namespace CSharpTest.Tools
         /// </summary>
         /// <param name="appid">API用户唯一标识</param>
         /// <param name="appkey">API用户签名私钥</param>
-        public GsdataApi(string appid, string appkey)
+        public GSDataSDK(string appid, string appkey)
         {
             Appid = appid;
             Appkey = appkey;

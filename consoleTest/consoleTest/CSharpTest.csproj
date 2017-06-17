@@ -40,7 +40,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack">
+    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dll\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="JiebaNet.Analyser, Version=0.37.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -84,6 +85,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI, Version=2.0.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\NPOI.dll</HintPath>
+    </Reference>
     <Reference Include="NReadability, Version=1.4.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NReadability.1.4.9\lib\NReadability.dll</HintPath>
       <Private>True</Private>
@@ -105,36 +110,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Media\Dnl_Keyword_Media.cs" />
-    <Compile Include="Model\Media\Dnl_Link_WeiXi.cs" />
-    <Compile Include="Model\IW2S_BaiduCommend.cs" />
-    <Compile Include="Model\IW2S_BotData.cs" />
-    <Compile Include="Model\IW2S_BotRegister.cs" />
-    <Compile Include="Model\IW2S_DomainCategory.cs" />
-    <Compile Include="Model\IW2S_KeywordGroup.cs" />
-    <Compile Include="Model\IW2S_level1link.cs" />
-    <Compile Include="Model\IW2S_Project.cs" />
-    <Compile Include="Model\IW2S_SG_BaiduCommend.cs" />
-    <Compile Include="Model\IW2S_SG_level1link.cs" />
-    <Compile Include="Model\IW2S_WB_BaiduCommend.cs" />
-    <Compile Include="Model\IW2S_WB_level1link.cs" />
-    <Compile Include="Model\IW2S_WX_BaiduCommend.cs" />
-    <Compile Include="Model\IW2S_WX_level1link.cs" />
-    <Compile Include="Model\Keyword\Dnl_Keyword.cs" />
-    <Compile Include="Model\Keyword\Dnl_KeywordMapping.cs" />
-    <Compile Include="Model\Keyword\Dnl_Link_Baidu.cs" />
+    <Compile Include="Helper\JiebaHelper.cs" />
+    <Compile Include="Model\ComputeClass.cs" />
+    <Compile Include="Model\OldWeiXinLink.cs" />
+    <Compile Include="Model\ReturnClass.cs" />
     <Compile Include="Model\test.cs" />
-    <Compile Include="Model\TimeLinkCountDto.cs" />
     <Compile Include="Helper\MongoDBClass.cs" />
     <Compile Include="Helper\MongoDBHelper.cs" />
+    <Compile Include="Model\WeiXinTimelinkDto.cs" />
     <Compile Include="Tools\CommonDomainCate.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\GsdataApi.cs" />
-    <Compile Include="Tools\IW2SBotReg.cs" />
-    <Compile Include="Tools\JiebaController.cs" />
+    <Compile Include="Tools\CommonTools.cs" />
+    <Compile Include="Tools\GetMainContentHelper.cs" />
+    <Compile Include="Tools\GSDataSDK.cs" />
     <Compile Include="Tools\MD5Tools.cs" />
     <Compile Include="Tools\Torrent.cs" />
     <Compile Include="Tools\DnlTools.cs" />
@@ -149,7 +140,7 @@
     <Content Include="Dll\JiebaNet.Analyser.dll" />
     <Content Include="Dll\JiebaNet.Segmenter.dll" />
     <Content Include="Dll\MonoTorrent.dll" />
-    <Content Include="Dll\Newtonsoft.Json.dll" />
+    <Content Include="Dll\NPOI.dll" />
     <Content Include="Libs\AISSystem.dll" />
     <Content Include="Libs\EntityFramework.dll" />
     <Content Include="Libs\MongoDB.Bson.dll" />
@@ -160,6 +151,12 @@
     <Content Include="Libs\MongoV2.dll" />
     <Content Include="Libs\Newtonsoft.Json.dll" />
     <Content Include="Libs\Newtonsoft.Json.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Dnl\IWSBot2\IWSData\IWSData.csproj">
+      <Project>{6969baf9-6ed1-4660-b4d4-a2403c55fdb4}</Project>
+      <Name>IWSData</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.IO;
+using AISSystem;
+using HtmlAgilityPack;
 
 namespace CSharpTest.Tools
 {
@@ -111,16 +113,16 @@ namespace CSharpTest.Tools
             req.UserAgent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; BOIE9;ZHCN)";
             //如果方法验证网页来源就加上这一句如果不验证那就可以不写了
             //req.Referer = "http://sufei.cnblogs.com";
-            //添加Cookie，用来抓取需登陆可见的网页
-            CookieContainer objcok = new CookieContainer();
-            Cookie cook1 = new Cookie();
-            //cook1.Name = "CNZZDATA1257708097";
-            //cook1.Value = "1167517418-1479817270-%7C1488717892";
-            //objcok.Add(cook1);
-            objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
-            req.CookieContainer = objcok;
+            ////添加Cookie，用来抓取需登陆可见的网页
+            //CookieContainer objcok = new CookieContainer();
+            //Cookie cook1 = new Cookie();
+            ////cook1.Name = "CNZZDATA1257708097";
+            ////cook1.Value = "1167517418-1479817270-%7C1488717892";
+            ////objcok.Add(cook1);
+            //objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
+            //req.CookieContainer = objcok;
             //设置超时
-            req.Timeout = 5000;
+            req.Timeout = 3000;
             //Http响应
             HttpWebResponse resp = null;
             int time = 0;   //服务器无响应时重试次数
@@ -133,7 +135,7 @@ namespace CSharpTest.Tools
                 }
                 catch
                 {
-                    if (time < 5)
+                    if (time < 3)
                         continue;
                     else
                         break;
@@ -152,6 +154,71 @@ namespace CSharpTest.Tools
                 resp.Close();
             }
             return respHtml;
+        }
+
+        /// <summary>
+        /// 获取域名收录量
+        /// </summary>
+        /// <param name="domain">域名</param>
+        /// <returns></returns>
+        public static long GetDomainCollectionNum(string domain)
+        {
+            if (string.IsNullOrEmpty(domain))
+            {
+                return (long)0;
+            }
+            string url = "http://www.baidu.com/s?ie=utf-8&wd=site:{0}";
+            url = url.FormatStr(domain.GetUrlEncodedString("utf-8"));
+            string html = GetHtml(url);        //获取网页源码
+            //解析并获取域名收录量
+            HtmlDocument doc = new HtmlDocument();
+
+            if (html != null)
+            {
+                doc.LoadHtml(html);
+                HtmlNode collection = doc.DocumentNode.SelectSingleNode("//*[@id=\"1\"]/div/div[1]/div/p[3]/span/b");
+                long num = 0;        //域名收录量
+                if (collection != null)
+                {
+                    string numStr = collection.InnerText;
+                    if (!string.IsNullOrEmpty(numStr))
+                    {
+                        numStr = numStr.Trim().Replace(",", "");
+                        if (numStr.Contains("亿"))
+                        {
+                            if (numStr.Contains("万"))
+                            {
+                                int p1 = numStr.IndexOf("亿");
+                                int p2 = numStr.IndexOf("万");
+                                long a = Convert.ToInt32(numStr.SubBefore("亿"));
+                                long b = Convert.ToInt32(numStr.SubAfter("亿").SubBefore("万"));
+                                num = a * 100000000 + b * 10000;
+                            }
+                            else
+                            {
+                                int p1 = numStr.IndexOf("亿");
+                                int p2 = numStr.IndexOf("万");
+                                long a = Convert.ToInt32(numStr.SubBefore("亿"));
+                                long b = Convert.ToInt32(numStr.SubAfter("亿"));
+                                num = a * 100000000 + b;
+                            }
+                        }
+                        else if (numStr.Contains("万"))
+                        {
+                            int p2 = numStr.IndexOf("万");
+                            long a = Convert.ToInt32(numStr.SubBefore("万"));
+                            long b = Convert.ToInt32(numStr.SubAfter("万"));
+                            num = a * 10000 + b;
+                        }
+                        else
+                        {
+                            num = Convert.ToInt64(numStr);
+                        }
+                    }
+                    return num;
+                }
+            }
+            return (long)0;
         }
 
         /// <summary>

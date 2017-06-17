@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using MongoV2;
+using IWSData.Model;
 
 using CSharpTest.Model;
 
@@ -28,47 +29,6 @@ namespace CSharpTest.Helper
         }
 
         public static readonly MongoDBHelper Instance = new MongoDBHelper();
-
-
-        public IMongoCollection<IW2S_level1link> GetIW2S_level1links()
-        {
-            return base.GetCollection<IW2S_level1link>("IW2S_level1link");
-        }
-
-        public IMongoCollection<IW2S_BaiduCommend> GetIW2S_BaiduCommends()
-        {
-            return base.GetCollection<IW2S_BaiduCommend>("IW2S_BaiduCommend");
-        }
-
-        public IMongoCollection<IW2S_WX_BaiduCommend> GetIW2S_WX_BaiduCommends()
-        {
-            return base.GetCollection<IW2S_WX_BaiduCommend>("IW2S_WX_BaiduCommend");
-        }
-
-        public IMongoCollection<IW2S_WX_level1link> GetIW2S_WX_level1links()
-        {
-            return base.GetCollection<IW2S_WX_level1link>("IW2S_WX_level1link");
-        }
-
-        public IMongoCollection<IW2S_WB_BaiduCommend> GetIW2S_WB_BaiduCommends()
-        {
-            return base.GetCollection<IW2S_WB_BaiduCommend>("IW2S_WB_BaiduCommend");
-        }
-
-        public IMongoCollection<IW2S_WB_level1link> GetIW2S_WB_level1links()
-        {
-            return base.GetCollection<IW2S_WB_level1link>("IW2S_WB_level1link");
-        }
-
-        public IMongoCollection<IW2S_SG_BaiduCommend> GetIW2S_SG_BaiduCommends()
-        {
-            return base.GetCollection<IW2S_SG_BaiduCommend>("IW2S_SG_BaiduCommend");
-        }
-
-        public IMongoCollection<IW2S_SG_level1link> GetIW2S_SG_level1links()
-        {
-            return base.GetCollection<IW2S_SG_level1link>("IW2S_SG_level1link");
-        }
 
         public IMongoCollection<IW2S_BotRegister> GetIW2S_BotRegister()
         {
@@ -130,14 +90,45 @@ namespace CSharpTest.Helper
         }
         #endregion
 
-        public IMongoCollection<Dnl_Link_WeiXi> GetDnl_Link_WeiXi()
+        #region 社交媒体关键词与链接库
+        public IMongoCollection<MediaKeywordMongo> GetMediaKeyword()
         {
-            return base.GetCollection<Dnl_Link_WeiXi>("Dnl_Link_WeiXi");
+            return base.GetCollection<MediaKeywordMongo>("MediaKeyword");
         }
 
-        public IMongoCollection<Dnl_Keyword_Media> GetDnl_Keyword_Media()
+        public IMongoCollection<MediaKeywordCategoryMongo> GetMediaKeywordCategory()
         {
-            return base.GetCollection<Dnl_Keyword_Media>("Dnl_Keyword_Media");
+            return base.GetCollection<MediaKeywordCategoryMongo>("MediaKeywordCategory");
+        }
+
+        public IMongoCollection<MediaKeywordMappingMongo> GetMediaKeywordMapping()
+        {
+            return base.GetCollection<MediaKeywordMappingMongo>("MediaKeywordMapping");
+        }
+
+        public IMongoCollection<WeiXinLinkMongo> GetWeiXinLink()
+        {
+            return base.GetCollection<WeiXinLinkMongo>("WeiXinLink");
+        }
+        #endregion
+        public IMongoCollection<BaiduLinkMongo> GetBaiduLink()
+        {
+            return base.GetCollection<BaiduLinkMongo>("BaiduLink");
+        }
+
+        public IMongoCollection<BaiduLinkMappingMongo> GetBaiduLinkMapping()
+        {
+            return base.GetCollection<BaiduLinkMappingMongo>("BaiduLinkMapping");
+        }
+
+        public IMongoCollection<OldWeiXinLinkMongo> GetOldWeiXinLink()
+        {
+            return base.GetCollection<OldWeiXinLinkMongo>("WeiXinLink");
+        }
+
+        public IMongoCollection<PojectChartMongo> GetPojectChart()
+        {
+            return base.GetCollection<PojectChartMongo>("PojectChart");
         }
     }
 
