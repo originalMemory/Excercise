@@ -106,9 +106,24 @@ namespace CSharpTest.Helper
             return base.GetCollection<MediaKeywordMappingMongo>("MediaKeywordMapping");
         }
 
-        public IMongoCollection<WeiXinLinkMongo> GetWeiXinLink()
+        public IMongoCollection<WXLinkMainMongo> GetWXLinkMain()
         {
-            return base.GetCollection<WeiXinLinkMongo>("WeiXinLink");
+            return base.GetCollection<WXLinkMainMongo>("WXLinkMain");
+        }
+
+        public IMongoCollection<WXLinkOtherMongo> GetWXLinkOther()
+        {
+            return base.GetCollection<WXLinkOtherMongo>("WXLinkOther");
+        }
+
+        public IMongoCollection<WXLinkContentMongo> GetWXLinkContent()
+        {
+            return base.GetCollection<WXLinkContentMongo>("WXLinkContent");
+        }
+
+        public IMongoCollection<WXNameMongo> GetWXName()
+        {
+            return base.GetCollection<WXNameMongo>("WXName");
         }
         #endregion
         public IMongoCollection<BaiduLinkMongo> GetBaiduLink()
@@ -121,10 +136,7 @@ namespace CSharpTest.Helper
             return base.GetCollection<BaiduLinkMappingMongo>("BaiduLinkMapping");
         }
 
-        public IMongoCollection<OldWeiXinLinkMongo> GetOldWeiXinLink()
-        {
-            return base.GetCollection<OldWeiXinLinkMongo>("WeiXinLink");
-        }
+        
 
         public IMongoCollection<PojectChartMongo> GetPojectChart()
         {

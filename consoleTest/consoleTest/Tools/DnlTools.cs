@@ -31,7 +31,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 计算百度链接数
         /// </summary>
-        public static void CountLinkNum()
+        public void CountLinkNum()
         {
             var colKey=MongoDBHelper.Instance.GetDnl_Keyword();
             var keywords = colKey.Find(Builders<Dnl_Keyword>.Filter.Empty).ToList();
@@ -53,7 +53,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 计算百度链接收录数
         /// </summary>
-        public static void ComputeDCNum()
+        public void ComputeDCNum()
         {
             var sw=new System.Diagnostics.Stopwatch();
             sw.Start();
@@ -117,7 +117,7 @@ namespace CSharpTest.Tools
                             {
                                 errorNum = 0;
                             }
-                            CommonTools.Log("域名收录量 - " + num);
+                            CommonTools.Log("域名 - {0}\t收录量 - {1}".FormatStr(domain, num));
                             computeNum++;
                             var update = new UpdateDocument { { "$set", new QueryDocument { { "DCNum", num } } } };
                             var filterUp = Builders<Dnl_Link_Baidu>.Filter.Eq(s => s._id, x.Id);
@@ -131,7 +131,7 @@ namespace CSharpTest.Tools
                         }
                         else
                         {
-                            CommonTools.Log("域名收录量 - " + x.DcNum);
+                            CommonTools.Log("域名 - {0}\t收录量 - {1}".FormatStr(x.Domain, x.DcNum));
                             errorNum = 0;
                         }
                         j++;
@@ -148,106 +148,21 @@ namespace CSharpTest.Tools
             CommonTools.Log("全部迁移完毕！");
         }
 
-        /// <summary>
-        /// 重计算微信链接状态
-        /// </summary>
-        public static void ArrangeLink()
-        {
-            var builder = Builders<OldWeiXinLinkMongo>.Filter;
-            var filter = builder.Empty;
-            Console.Write("从多少数据开始：");
-            string str = Console.ReadLine();
-            int page = Convert.ToInt32(str) / 100;
-            int pagesize = 100;
-            var col = MongoDBHelper.Instance.GetOldWeiXinLink();
-            var linkNum = col.Find(filter).Count();
-            int nowNum = page * 100 + 1;
-            while (true)
-            {
-                var queryLink = col.Find(filter).Project(x => new OldWeiXinLinkDto
-                {
-                    _id = x._id,
-                    Content = x.Content,
-                    GetTime = x.GetTime,
-                    GetTimeNewest = x.GetTimeNewest,
-                    GetTimePm = x.GetTimePm,
-                    LikeNum = x.LikeNum,
-                    LikeNumNewest = x.LikeNumNewest,
-                    LikeNumPM = x.LikeNumPM,
-                    LikeNumWeek = x.LikeNumWeek,
-                    ContentLen = 0,
-                    ReadNum = x.ReadNum,
-                    ReadNumNewest = x.ReadNumNewest,
-                    ReadNumPM = x.ReadNumPM,
-                    ReadNumWeek = x.ReadNumWeek,
-                    RealReadNum = x.RealReadNum,
-                    RealReadNumPM = x.RealReadNumPM,
-                    RealReadNumWeek = x.RealReadNumWeek,
-                    Title = x.Title,
-                    Url = x.Url,
-                }).Skip(page * pagesize).Limit(pagesize).ToList();
-                if (queryLink == null || queryLink.Count == 0)
-                    break;
-                foreach (var link in queryLink)
-                {
-                    CommonTools.Log("当前处理链接[{0}/{1}] - {2}".FormatStr(nowNum, linkNum, link.Title));
-                    var readNums = new List<int> { link.ReadNum, link.ReadNumPM, link.ReadNumWeek, link.ReadNumNewest, link.RealReadNum, link.RealReadNumPM, link.RealReadNumWeek };
-                    int maxReadNum = readNums.Max();
-                    var likeNums = new List<int> { link.LikeNum, link.LikeNumPM, link.LikeNumWeek, link.LikeNumNewest };
-                    int maxLikeNum = likeNums.Max();
-                    var getTimes = new List<DateTime> { link.GetTime, link.GetTimeNewest, link.GetTimePm };
-                    DateTime maxGetTime = getTimes.Max().AddHours(8);
-
-                    string content = link.Content;
-                    int length = 0;
-                    bool isDel = false;
-                    var filterUp = builder.Eq(x => x._id, link._id);
-                    if (string.IsNullOrEmpty(content))
-                    {
-                        string html = WebApiInvoke.GetHtml(link.Url);
-                        HtmlDocument doc = new HtmlDocument();
-                        doc.LoadHtml(html);
-                        HtmlNode node = doc.DocumentNode.SelectSingleNode("//div[@id=\"js_content\"]");     //定位正文位置
-
-                        if (node != null)
-                        {
-                            content = CommonTools.RemoveTextTag(node.InnerHtml);
-                            length = content.Length;
-                        }
-                        else
-                        {
-                            content = "";
-                            if (html.Contains("该内容已被发布者删除") || html.Contains("该公众号已迁移"))
-                            {
-                                isDel = true;
-                            }
-                        }
-                        var update = new UpdateDocument { { "$set", new QueryDocument { { "IsDelByAu", isDel }, { "ReadNum", maxReadNum }, { "LikeNum", maxLikeNum }, { "GetTime", maxGetTime }, { "Content", content }, { "ContentLen", length } } } };
-                       col.UpdateOne(filterUp, update);
-                    }
-                    else
-                    {
-                        length = content.Length;
-                        var update = new UpdateDocument { { "$set", new QueryDocument { { "IsDelByAu", isDel }, { "ReadNum", maxReadNum }, { "LikeNum", maxLikeNum }, { "GetTime", maxGetTime }, { "ContentLen", length } } } };
-                       col.UpdateOne(filterUp, update);
-                    }
-                    nowNum++;
-                }
-                page++;
-            }
-        }
         
         /// <summary>
         /// 微信数据分析
         /// </summary>
-        public static void AnalysizeWeiXinLink()
+        public void AnalysizeWeiXinLink()
         {
             string baseUrl = System.AppDomain.CurrentDomain.BaseDirectory;
 
             var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
             var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
-            var builderLink = Builders<WeiXinLinkMongo>.Filter;
-            var WXlinks = new List<WeiXinLinkMongo>();
+            var builderLink = Builders<WXLinkMainMongo>.Filter;
+            var WXlinks = new List<WXLinkMainMongo>();
+
+            string filename = "微信5月数据.xls";
+            string path = baseUrl + @"ExportFiles\" + filename;
 
             HSSFWorkbook linkExcel = new HSSFWorkbook();     //Excel表格
             ISheet linkSheet = linkExcel.CreateSheet("5月链接数据");
@@ -259,33 +174,62 @@ namespace CSharpTest.Tools
             RowHead0.CreateCell(4).SetCellValue("公众号Id");
             RowHead0.CreateCell(5).SetCellValue("发布时间");
             RowHead0.CreateCell(6).SetCellValue("标题");
-            RowHead0.CreateCell(7).SetCellValue("正文");
+            RowHead0.CreateCell(7).SetCellValue("摘要");
             RowHead0.CreateCell(8).SetCellValue("正文长度");
             RowHead0.CreateCell(9).SetCellValue("链接地址");
             RowHead0.CreateCell(10).SetCellValue("阅读量");
             RowHead0.CreateCell(11).SetCellValue("点赞量");
             RowHead0.CreateCell(12).SetCellValue("是否已被删除");
+            int j = 1;
+
+            ////导入已保存链接
+            //FileStream stream = new FileStream(path, FileMode.Open);
+            //HSSFWorkbook sourceExcel = new HSSFWorkbook(stream);
+            //HSSFSheet sourceSheet = sourceExcel.GetSheetAt(0) as HSSFSheet;
+            //for (; j <= sourceSheet.LastRowNum; j++)
+            //{
+            //    HSSFRow oldrow = sourceSheet.GetRow(j) as HSSFRow;
+            //    IRow row = linkSheet.CreateRow(j);
+            //    row.CreateCell(0).SetCellValue(oldrow.GetCell(0).StringCellValue);
+            //    row.CreateCell(1).SetCellValue(oldrow.GetCell(1).StringCellValue);
+            //    row.CreateCell(2).SetCellValue(oldrow.GetCell(2).StringCellValue);
+            //    row.CreateCell(3).SetCellValue(oldrow.GetCell(3).StringCellValue);
+            //    row.CreateCell(4).SetCellValue(oldrow.GetCell(4).StringCellValue);
+            //    row.CreateCell(5).SetCellValue(oldrow.GetCell(5).StringCellValue);
+            //    row.CreateCell(6).SetCellValue(oldrow.GetCell(6).StringCellValue);
+            //    row.CreateCell(7).SetCellValue(oldrow.GetCell(7).StringCellValue);
+            //    row.CreateCell(8).SetCellValue(oldrow.GetCell(8).NumericCellValue);
+            //    row.CreateCell(9).SetCellValue(oldrow.GetCell(9).StringCellValue);
+            //    row.CreateCell(10).SetCellValue(oldrow.GetCell(10).NumericCellValue);
+            //    row.CreateCell(11).SetCellValue(oldrow.GetCell(11).NumericCellValue);
+            //    row.CreateCell(12).SetCellValue(oldrow.GetCell(12).BooleanCellValue);
+            //}
+            //stream.Close();
+
             int i = 1;
-            string filename = "微信5月数据.xls";
-            string path = baseUrl + @"\ExportFiles\" + filename;
             try
             {
                 foreach (var key in queryKey)
                 {
                     CommonTools.Log("当前获取关键词[{0}/{1}] - {2}".FormatStr(i, queryKey.Count, key.Keyword));
-                    int page = 0, pagesize = 500;
+                    if (key.Keyword == "国度")
+                    {
+                        i++;
+                        continue;
+                    }
+                    int page = 0, pagesize = 5000;
                     var filterLink = builderLink.Eq(x => x.KeywordId, key._id.ToString());
                     DateTime startDate = new DateTime(2017, 5, 1);
                     DateTime endDate = new DateTime(2017, 6, 1);
-                    filterLink &= builderLink.Gte(x => x.PostTime, startDate.AddHours(8));
-                    var queryLink = MongoDBHelper.Instance.GetWeiXinLink().Find(filterLink);
+                    //filterLink &= builderLink.Gte(x => x.PostTime, startDate.AddHours(8));
+                    var queryLink = MongoDBHelper.Instance.GetWXLinkMain().Find(filterLink);
                     int topLinkNum = (int)queryLink.Count();
                     int nowLinkNum = 0;
                     while (true)
                     {
                         var sw = new System.Diagnostics.Stopwatch();
                         sw.Start();
-                        var tempLinks = MongoDBHelper.Instance.GetWeiXinLink().Find(filterLink).Skip(page * pagesize).Limit(pagesize).ToList();
+                        var tempLinks = queryLink.Skip(page * pagesize).Limit(pagesize).ToList();
                         sw.Stop();
                         WXlinks.AddRange(tempLinks);
                         nowLinkNum += tempLinks.Count;
@@ -293,6 +237,7 @@ namespace CSharpTest.Tools
                         if (nowLinkNum >= topLinkNum)
                             break;
                         page++;
+                        
                     }
                     i++;
                 }
@@ -301,35 +246,31 @@ namespace CSharpTest.Tools
             {
                 CommonTools.Log(ex.Message);
             }
-            int k = 1;
+
             foreach (var link in WXlinks)
             {
-                IRow row = linkSheet.CreateRow(k);
+                IRow row = linkSheet.CreateRow(j);
                 row.CreateCell(0).SetCellValue(link._id.ToString());
                 row.CreateCell(1).SetCellValue(link.Keyword);
                 row.CreateCell(2).SetCellValue(link.KeywordId);
-                row.CreateCell(3).SetCellValue(link.Name);
-                row.CreateCell(4).SetCellValue(link.WXName);
+                row.CreateCell(3).SetCellValue(link.Nickname);
+                row.CreateCell(4).SetCellValue(link.Name);
                 row.CreateCell(5).SetCellValue(link.PostTime.ToString());
                 row.CreateCell(6).SetCellValue(link.Title);
-                row.CreateCell(7).SetCellValue(link.Content);
+                row.CreateCell(7).SetCellValue(link.Description);
                 row.CreateCell(8).SetCellValue(link.ContentLen);
                 row.CreateCell(9).SetCellValue(link.Url);
                 row.CreateCell(10).SetCellValue(link.ReadNum);
                 row.CreateCell(11).SetCellValue(link.LikeNum);
-                bool isDel = link.IsDelByAu;
-                if (link.ContentLen < 50)
-                    isDel = true;
-                row.CreateCell(12).SetCellValue(isDel);
-                k++;
+                row.CreateCell(12).SetCellValue(link.IsDelByAu);
+                j++;
             }
-            using (FileStream fileAna = new FileStream(path, FileMode.OpenOrCreate))
+            string path3 = @"F:\微信半年数据.xls";
+            using (FileStream fileAna = new FileStream(path3, FileMode.Create))
             {
                 linkExcel.Write(fileAna);　　//创建Excel文件。
             }
-            //linkExcel.Write(file);　　//创建Excel文件。
-
-            int delNum = WXlinks.RemoveAll(x => x.ContentLen < 50 || x.IsDelByAu == true);
+            
 
             HSSFWorkbook workBook = new HSSFWorkbook();     //Excel表格
 
@@ -344,11 +285,11 @@ namespace CSharpTest.Tools
             RowHead1.CreateCell(3).SetCellValue("阅读量");
             RowHead1.CreateCell(4).SetCellValue("点赞量");
 
-            int count = 0;
+            int count = 1;
             foreach (var key in queryKey)
             {
                 var links = WXlinks.FindAll(x => x.KeywordId == key._id.ToString());
-                IRow row = sheet1.CreateRow(count + 1);
+                IRow row = sheet1.CreateRow(count);
                 row.CreateCell(0).SetCellValue(key.Keyword);
                 var names = links.Select(x => x.Name).Distinct();
                 row.CreateCell(1).SetCellValue(names.Count());
@@ -370,7 +311,7 @@ namespace CSharpTest.Tools
             RowHead2.CreateCell(4).SetCellValue("点赞量");
             var allName = WXlinks.Select(x => x.Name).ToList();
             allName = allName.Distinct().ToList();
-            count = 0;
+            count = 1;
             foreach (var name in allName)
             {
                 //导出所有分组信息
@@ -378,7 +319,7 @@ namespace CSharpTest.Tools
                 int readNum = 0, likeNum = 0;
                 var links = WXlinks.FindAll(x => x.Name == name);
                 keys = links.Select(x => x.Keyword).Distinct().ToList();
-                IRow row = sheet2.CreateRow(count + 1);
+                IRow row = sheet2.CreateRow(count);
                 row.CreateCell(0).SetCellValue(name);
                 row.CreateCell(1).SetCellValue(keys.Count);
                 links = links.DistinctBy(x => x.Url);
@@ -390,8 +331,8 @@ namespace CSharpTest.Tools
                 count = count + 1;
             }
 
-            string filename2 = "微信5月数据分析" + DateTime.Now.ToString("yyyyMMddhhmmssfff") + ".xls";
-            string path2 = baseUrl + @"\ExportFiles\" + filename2;
+            string filename2 = "微信半年数据分析" + DateTime.Now.ToString("yyyyMMddhhmmssfff") + ".xls";
+            string path2 = @"F:\" + filename2;
             using (FileStream fileAna = new FileStream(path2, FileMode.Create))
             {
                 workBook.Write(fileAna);　　//创建Excel文件。
@@ -399,799 +340,471 @@ namespace CSharpTest.Tools
             }
         }
 
-        public static void CreateWXLinkIndex()
-        {
-            string keyId = "593fa6c91037d43f1038a5c6";
-            var builderLink = Builders<WeiXinLinkMongo>.Filter;
-            var filterLink = builderLink.Eq(x => x.KeywordId, keyId);
-            var col = MongoDBHelper.Instance.GetWeiXinLink();
-            var num = col.Find(filterLink).Count();
-            CommonTools.Log("本关键词对应链接数 - " + num);
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            var queryLink = col.Find(filterLink).Project(x => new WeiXinTimelinkDto
-            {
-                Id = x._id.ToString(),
-                PublishTime = x.PostTime,
-                Title = x.Title,
-                //Content=x.Description,
-                LinkUrl = x.Url,
-                Name = x.Name,
-                Keywords = x.Keyword
-            }).ToList();
-            sw.Stop();
-            CommonTools.Log("第一种计算方法耗时 - {0}s".FormatStr(sw.Elapsed));
-            var linkObjIds = queryLink.Select(x => new ObjectId(x.Id)).ToList();
-            sw.Restart();
-            var filterLink2 = builderLink.In(x => x._id, linkObjIds);
-            var queryLink2 = col.Find(filterLink2).Project(x => new WeiXinTimelinkDto
-            {
-                Id = x._id.ToString(),
-                PublishTime = x.PostTime,
-                Title = x.Title,
-                Content = x.Content,
-                LinkUrl = x.Url,
-                Name = x.Name,
-                Keywords = x.Keyword
-            }).ToList();
-            sw.Stop();
-            CommonTools.Log("第二种计算方法耗时 - {0}s".FormatStr(sw.Elapsed));
-        }
-
-        #region 微信图表计算
         /// <summary>
-        /// 微信图表计算
+        /// 计算微信正文
         /// </summary>
-        public void WeiXinChart()
+        public void GetWeiXinLinkContent()
         {
-            //获取所有项目
-            var filterPro = Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, false);
-            var queryPro = MongoDBHelper.Instance.GetIW2S_Projects().Find(filterPro).ToList();
-            int i = 1;
-            foreach (var pro in queryPro)
+            string baseUrl = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
+            var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
+            var builderMainLink = Builders<WXLinkMainMongo>.Filter;
+            var colMainLink = MongoDBHelper.Instance.GetWXLinkMain();
+            var colOtherLink = MongoDBHelper.Instance.GetWXLinkOther();
+            var colConLink = MongoDBHelper.Instance.GetWXLinkContent();
+            try
             {
-                CommonTools.Log("当前计算项目[{0}/{1}] - {2}".FormatStr(i, queryPro.Count, pro.Name));
-                if (pro.Name != "二次元音乐")
+                int i = 1;
+                foreach (var key in queryKey)
                 {
-                    i++;
-                    continue;
-                }
-                i++;
-
-                JavaScriptSerializer serializer = new JavaScriptSerializer();       //Json序列化与反序列化
-
-                //获取图表数据
-                var builderChart = Builders<PojectChartMongo>.Filter;
-                var filterChart = builderChart.Eq(x => x.ProjectId, pro._id) & builderChart.Eq(x => x.Source, SourceType.Media);
-                filterChart &= builderChart.Eq(x => x.Name, "默认");
-                var colChart = MongoDBHelper.Instance.GetPojectChart();
-                var queryChart = colChart.Find(filterChart).ToList();
-
-                //获取项目内所有关键词组信息
-                var cateInfos = WeiXinGetAllFenZhu(pro.UsrId.ToString(), pro._id.ToString());
-
-                #region 折线图及饼图计算
-                //获取项目内前8关键词组
-                var cate8Ids = cateInfos.Take(8).Select(x => x.id).ToList();
-                
-
-                var lineData = WeiXinGetTimeLinkCount(string.Join(";", cate8Ids), pro._id.ToString(), null, null, 0, 10, 25, 1);
-                string lineDataStr = serializer.Serialize(lineData).ToString();       //数据Json字符串
-
-                cate8Ids.Remove(ObjectId.Empty.ToString());
-                cate8Ids.Sort();
-
-                //生成参数Json
-                JObject lineFactorJson = new JObject();
-                lineFactorJson.Add(new JProperty("categoryIds", string.Join(";", cate8Ids)));
-                lineFactorJson.Add(new JProperty("startTime", null));
-                lineFactorJson.Add(new JProperty("endTime", null));
-                lineFactorJson.Add(new JProperty("percent", 0));
-                lineFactorJson.Add(new JProperty("topNum", 10));
-                lineFactorJson.Add(new JProperty("sumNum", 25));
-                lineFactorJson.Add(new JProperty("timeInterval", 1));
-
-                var lineChart = queryChart.Find(x => x.Type == ChartType.Line);
-                if (lineChart != null) //判断保存方式
-                {
-                    var filterUp = builderChart.Eq(x => x._id, lineChart._id);
-                    //更新数据
-                    var update = new UpdateDocument { { "$set", new QueryDocument { { "DataJson", lineDataStr }, { "FactorJson", lineFactorJson.ToString() }, { "CreatedAt", DateTime.Now.AddHours(8) } } } };
-                    colChart.UpdateOne(filterUp, update);
-                }
-                else
-                {
-                    //创建数据
-                    var chart = new PojectChartMongo
+                    CommonTools.Log("当前处理关键词[{0}/{1}] - {2}".FormatStr(i, queryKey.Count, key.Keyword));
+                    int page = 0, pagesize = 100;
+                    //var filterLink = builderMainLink.Eq(x => x.KeywordId, key._id.ToString());
+                    var filterLink = builderMainLink.In(x => x.KeywordId, queryKey.Select(x=>x._id.ToString()).ToList());
+                    var queryLink = colMainLink.Find(filterLink);
+                    int topLinkNum = (int)queryLink.Count();
+                    int nowLinkNum = 0;
+                    int computeNum = 1;
+                    if (i < 10)
                     {
-                        CreatedAt = DateTime.Now.AddHours(8),
-                        DataJson = lineDataStr,
-                        FactorJson = lineFactorJson.ToString(),
-                        Name = "默认",
-                        ProjectId = pro._id,
-                        Type = ChartType.Line,
-                        Source=SourceType.Media
-                    };
-                    colChart.InsertOne(chart);
-                }
-                CommonTools.Log("折线图计算完毕！");
-                #endregion
-
-                #region 气泡图计算
-                //获取所有关键词分组Id
-                var cateIds = cateInfos.Select(x => x.id).ToList();
-
-                var bubbleData = WeiXinGetDomainStatis(string.Join(";", cateIds), pro._id.ToString());
-                string bubbleDataStr = serializer.Serialize(bubbleData).ToString();       //数据Json字符串
-
-                cateIds.Remove(ObjectId.Empty.ToString());
-                cateIds.Sort();
-                //生成参数Json
-                JObject bubbleFactorJson = new JObject();
-                bubbleFactorJson.Add(new JProperty("categoryIds", string.Join(";", cateIds)));
-
-                var bubbleChart = queryChart.Find(x => x.Type == ChartType.Bubble);
-                if (bubbleChart != null) //判断保存方式
-                {
-                    var filterUp = builderChart.Eq(x => x._id, bubbleChart._id);
-                    //更新数据
-                    var update = new UpdateDocument { { "$set", new QueryDocument { { "DataJson", bubbleDataStr }, { "FactorJson", bubbleFactorJson.ToString() }, { "CreatedAt", DateTime.Now.AddHours(8) } } } };
-                    colChart.UpdateOne(filterUp, update);
-                }
-                else
-                {
-                    //创建数据
-                    var chart = new PojectChartMongo
+                        i++;
+                        continue;
+                    }
+                    if (i == 5)
                     {
-                        CreatedAt = DateTime.Now.AddHours(8),
-                        DataJson = bubbleDataStr,
-                        FactorJson = bubbleFactorJson.ToString(),
-                        Name = "默认",
-                        ProjectId = pro._id,
-                        Type = ChartType.Bubble,
-                        Source = SourceType.Media
-                    };
-                    colChart.InsertOne(chart);
-                }
-                CommonTools.Log("气泡图计算完毕！");
-                #endregion
-
-
-            }
-
-            CommonTools.Log("本次计算完毕！\n");
-        }
-
-        /// <summary>
-        /// 获取该项目下所有分组(词组文件夹列表)
-        /// </summary>
-        /// <param name="usr_id">用户ID</param>
-        /// <param name="projectId">项目ID</param>
-        /// <returns>关键词数组</returns>
-        private List<GroupTree2Dto> WeiXinGetAllFenZhu(string usr_id, string projectId)
-        {
-
-            List<GroupTree2Dto> list = new List<GroupTree2Dto>();
-
-            GroupTree2Dto result = new GroupTree2Dto();
-            result.name = "所有词";
-            //根目录ID默认为"000000000000000000000000"
-            result.id = "000000000000000000000000";
-            result.pId = "0";
-            list.Add(result);
-
-
-            var listGT = WeiXinGetCategoryTree2(usr_id, projectId, new ObjectId("000000000000000000000000"), list);
-            if (listGT == null)
-                listGT = list;
-
-            return listGT;
-
-        }
-
-        /// <summary>
-        /// 获取关键词数组
-        /// </summary>
-        /// <param name="usr_id">用户ID</param>
-        /// <param name="projectId">项目ID</param>
-        /// <param name="parentId">父ID</param>
-        /// <param name="list">关键词数组</param>
-        /// <returns>关键词数组</returns>
-        private List<GroupTree2Dto> WeiXinGetCategoryTree2(string usr_id, string projectId, ObjectId parentId, List<GroupTree2Dto> list)
-        {
-            //获取次级词组名
-            var builder = Builders<MediaKeywordCategoryMongo>.Filter;
-            var filter = builder.Eq(x => x.ProjectId, new ObjectId(projectId));
-            filter &= builder.Eq(x => x.IsDel, false);
-            filter &= builder.Eq(x => x.ParentId, parentId);
-            var TaskList = MongoDBHelper.Instance.GetMediaKeywordCategory().Find(filter).Project(x => new GroupTree2Dto
-            {
-                id = x._id.ToString(),
-                pId = x.ParentId.ToString(),
-                name = x.Name
-            }).ToList();
-
-            //若次级词组不存在，返回null，中断递归
-            if (TaskList.Count == 0)
-                return null;
-
-            //递归调用GetCategoryTree2()，获取次级词组名和当前组内关键词
-            foreach (var treedata in TaskList)
-            {
-                WeiXinGetCategoryTree2(usr_id, projectId, new ObjectId(treedata.id), list);
-                // parent.children.Add(treedata);
-                GroupTree2Dto gt = new GroupTree2Dto();
-                gt.id = treedata.id;
-                gt.pId = treedata.pId;
-                gt.name = treedata.name;
-                list.Add(gt);
-            }
-
-            return list;
-        }
-
-        //命中关键词域名分布图
-        private List<WXDomainStatisDto> WeiXinGetDomainStatis(string categoryIds, string projectId)
-        {
-            var result = new List<WXDomainStatisDto>();
-            if (string.IsNullOrEmpty(categoryIds) || string.IsNullOrEmpty(projectId))
-            {
-                return result;
-            }
-
-            ObjectId proObjId = new ObjectId(projectId);
-            JavaScriptSerializer serializer = new JavaScriptSerializer();       //Json序列化与反序列化
-
-            var cateIds = new List<string>();
-            if (!string.IsNullOrEmpty(categoryIds))
-            {
-                cateIds = CommonTools.GetIdListFromStr(categoryIds);
-                cateIds.Remove(ObjectId.Empty.ToString());
-                cateIds.Sort();
-            }
-            /* 计算图表数据 */
-            //获取项目内所有关键词Id
-            var keyIds = new List<string>();
-            var usrId = ObjectId.Empty;
-            var groupBuilder = Builders<MediaKeywordMappingMongo>.Filter;
-            var groupFilter = groupBuilder.Eq(x => x.ProjectId, new ObjectId(projectId)) & groupBuilder.Eq(x => x.IsDel, false);
-
-            if (!string.IsNullOrEmpty(categoryIds))
-            {
-                var cateObjIds = categoryIds.Split(';').Select(x => new ObjectId(x)).ToList();
-                //判断是否有分组
-                if (cateObjIds.Count == 1 && cateObjIds[0].Equals(ObjectId.Empty))
-                {
-                    //无分组时获取所有关键词
-                    groupFilter &= groupBuilder.Eq(x => x.CategoryId, ObjectId.Empty);
-                }
-                else
-                {
-                    //有分组时仅获取选定分组内关键词
-                    cateObjIds.Remove(ObjectId.Empty);      //去除根结点
-                    groupFilter &= groupBuilder.In(x => x.CategoryId, cateObjIds);
-
-                }
-                var groupCol = MongoDBHelper.Instance.GetMediaKeywordMapping();
-                keyIds = groupCol.Find(groupFilter).Project(x => x.KeywordId).ToList().Select(x => x.ToString()).ToList();      //关键词Id组
-                usrId = groupCol.Find(groupBuilder.Eq(x => x.ProjectId, proObjId)).Project(x => x.UserId).FirstOrDefault();      //用户Id
-            }
-            //获取项目内已删除的链接Id
-            var builderLinkMap = Builders<Dnl_LinkMapping_Baidu>.Filter;
-            var filterLinkMap = builderLinkMap.Eq(x => x.ProjectId, proObjId) & builderLinkMap.Eq(x => x.DataCleanStatus, (byte)2);
-            var exLinkObjIds = MongoDBHelper.Instance.GetDnl_LinkMapping_Baidu().Find(filterLinkMap).Project(x => x.LinkId).ToList();       //项目中已删除的链接ID列表
-            //获取项目内所有符合条件的链接
-            var buiderLink = Builders<WeiXinLinkMongo>.Filter;
-            var filterLink = buiderLink.In(x => x.KeywordId, keyIds) & buiderLink.Nin(x => x._id, exLinkObjIds);
-            var querylink = MongoDBHelper.Instance.GetWeiXinLink().Find(filterLink).Project(x => new WeiXinLinkDto
-            {
-                _id = x._id.ToString(),
-                KeywordId = x.KeywordId,
-                PostTime = x.PostTime,
-                ReadNum = x.ReadNum,
-                LikeNum = x.LikeNum,
-                Title = x.Title,
-                ContentLen = x.ContentLen,
-                Name = x.Name
-            }).ToList();
-
-            //如果关键词大于30个，去除只有一个关键词且文本长度小于50的链接
-            if (keyIds.Count > 30)
-            {
-                var filterKey = Builders<MediaKeywordMongo>.Filter.In(x => x._id, keyIds.Select(x => new ObjectId(x)));
-                var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).Project(x => new
-                {
-                    Id = x._id.ToString(),
-                    Keyword = x.Keyword
-                }).ToList();
-                for (int i = 0; i < querylink.Count; i++)
-                {
-                    foreach (var key in queryKey)
+                        page = 145;
+                        nowLinkNum = page * pagesize;
+                        computeNum = nowLinkNum + 1;
+                    }
+                    while (true)
                     {
-                        if (querylink[i].Title.Contains(key.Keyword))
+                        var sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
+                        var tempLinks = queryLink.Project(x => new WeiXinLinkDto
                         {
-                            querylink[i].Keywords.Add(key.Keyword);
-                        }
+                            PublishTime = x.PostTime,
+                            KeywordId = x.KeywordId,
+                            Title = x.Title,
+                            ContentLen = x.ContentLen,
+                            Description = x.Description
+                        }).ToList();
+                        //var tempLinks = queryLink.Skip(page * pagesize).Limit(pagesize).ToList();
+                        sw.Stop();
+                        nowLinkNum += tempLinks.Count;
+                        CommonTools.Log("当前获取链接[{0}/{1}]\t耗时 - {2}s".FormatStr(nowLinkNum, topLinkNum, sw.Elapsed));
+
+                        //sw.Restart();
+                        //var contentLinks = new List<WXLinkContentMongo>();
+                        //foreach (var x in tempLinks)
+                        //{
+                        //    CommonTools.Log("当前计算链接[{0}/{1}]\t标题 - {2}".FormatStr(computeNum, topLinkNum, x.Title));
+                        //    //获取原来保存的网页源码和正文
+                        //    var filterHtml = builderLink.Eq(s => s.KeywordId, x.KeywordId) & builderLink.Eq(s => s.Url, x.Url);
+                        //    var sw2 = new System.Diagnostics.Stopwatch();
+                        //    sw2.Start();
+                        //    string html = colLink.Find(filterHtml).Project(s => s.Html).FirstOrDefault();
+                        //    sw2.Stop();
+                        //    var temp = new WXLinkContentMongo
+                        //    {
+                        //        LinkId = x._id,
+                        //        KeywordId = x.KeywordId,
+                        //    };
+                        //    if (html == null)
+                        //    {
+                        //        html = WebApiInvoke.GetHtml(x.Url);
+                        //        if (html == null)
+                        //        {
+                        //            CommonTools.Log("网页源码获取出错！");
+                        //            Console.ReadLine();
+                        //        }
+                        //    }
+                        //    //提取正文
+                        //    temp.Html = html;
+                        //    HtmlDocument doc = new HtmlDocument();
+                        //    doc.LoadHtml(html);
+                        //    HtmlNode node = doc.DocumentNode.SelectSingleNode("//div[@id=\"js_content\"]");     //定位正文位置
+                        //    var filterUp = builderMainLink.Eq(s => s._id, x._id);
+                        //    if (node != null)
+                        //    {
+                        //        string content = CommonTools.RemoveTextTag(node.InnerHtml);
+                        //        temp.Content = content;
+                        //        //将正文按行拆分
+                        //        string text =content.Replace("\r", "");
+                        //        var listStr = text.Split('\n').ToList();
+                        //        string desc = "";
+                        //        for (int j = 0; j < listStr.Count; j++)
+                        //        {
+                        //            string str = listStr[j];
+                        //            //跳过公众号统一的关注话语
+                        //            if (j == 0 && str.Contains("关注"))
+                        //            {
+                        //                continue;
+                        //            }
+                        //            //限制摘要不超过50个词
+                        //            desc += str;
+                        //            if (desc.Length >= 50)
+                        //            {
+                        //                if (desc.Length > 100)
+                        //                    desc = desc.Substring(0, 97)+"...";
+                        //                break;
+                        //            }
+                        //        }
+                        //        var update = new UpdateDocument { { "$set", new QueryDocument { { "Description", desc } } } };
+                        //        colMainLink.UpdateOne(filterUp, update);
+                        //    }
+                        //    else
+                        //    {
+                        //        temp.Content = "";
+                        //        //if (html.Contains("该内容已被发布者删除") || html.Contains("该公众号已迁移") || html.Contains("此内容因违规无法查看"))
+                        //        if (html != null)
+                        //        {
+                        //            var update = new UpdateDocument { { "$set", new QueryDocument { { "IsDelByAu", true } } } };
+                        //            colMainLink.UpdateOne(filterUp, update);
+                        //        }
+                        //        else
+                        //        {
+                        //            CommonTools.Log("正文提取获取出错！");
+                        //            Console.ReadLine();
+                        //        }
+                        //    }
+                        //    contentLinks.Add(temp);
+                        //    computeNum++;
+                        //}
+                        //if (contentLinks.Count > 0)
+                        //    colConLink.InsertMany(contentLinks);
+                        //sw.Stop();
+                        //CommonTools.Log("当前拆分链接[{0}/{1}]\t耗时 - {2}s".FormatStr(nowLinkNum, topLinkNum, sw.Elapsed));
+                        //if (nowLinkNum >= topLinkNum)
+                        //    break;
+                        page++;
                     }
-                }
-                querylink.RemoveAll(x => x.Keywords.Count <= 1 && x.ContentLen < 50);
-            }
-
-            //按公众号分组
-            var linkByName = querylink.GroupBy(x => x.Name);
-            foreach (var links in linkByName)
-            {
-                var stastic = new WXDomainStatisDto
-                {
-                    Name = links.Key,
-                    Count = links.Count(),
-                };
-                int hotNum = 0;
-                var tempLinks = links.ToList();
-                stastic.KeywordTotal = tempLinks.Select(x => x.KeywordId).Distinct().Count();     //获取公众号涉及到的所有关键词数
-                tempLinks = tempLinks.DistinctBy(x => x.LinkUrl);
-                foreach (var link in tempLinks)
-                {
-                    hotNum += link.LikeNum * 12 + link.ReadNum;
-                }
-                stastic.HotNum = hotNum;
-                stastic.PublishRatio = 100;
-                result.Add(stastic);
-            }
-
-            if (result == null || result.Count == 0)
-            {
-                return result;
-            }
-            List<string> domainNameList = result.Select(x => x.Name).Distinct().ToList();
-
-            var domainCatBuilder = Builders<IW2S_DomainCategoryData>.Filter;
-            var domainCatFilter = domainCatBuilder.Eq(x => x.UsrId, usrId) & domainCatBuilder.In(x => x.DomainName, domainNameList);
-            var domainCategoryDatas = MongoDBHelper.Instance.GetIW2S_DomainCategoryDatas().Find(domainCatFilter).Project(x => new { DomainCategoryId = x.DomainCategoryId, DomainName = x.DomainName }).ToList().DistinctBy(x => x.DomainName);
-            //判断是否有私有公众号分组
-            if (domainCategoryDatas.Count == 0)
-            {
-                usrId = ObjectId.Empty;
-                domainCatFilter = domainCatBuilder.Eq(x => x.UsrId, usrId) & domainCatBuilder.In(x => x.DomainName, domainNameList);
-                domainCategoryDatas = MongoDBHelper.Instance.GetIW2S_DomainCategoryDatas().Find(domainCatFilter).Project(x => new { DomainCategoryId = x.DomainCategoryId, DomainName = x.DomainName }).ToList().DistinctBy(x => x.DomainName);
-            }
-            DomainCategoryInfo dicdomainCategoryData = new DomainCategoryInfo();
-            dicdomainCategoryData.Domain = new List<string>();
-            dicdomainCategoryData.DomainCategoryId = new List<string>();
-            dicdomainCategoryData.DomainCategoryName = new List<string>();
-            foreach (var domainCategoryData in domainCategoryDatas)
-            {
-                if (!dicdomainCategoryData.Domain.Contains(domainCategoryData.DomainName))
-                {
-                    dicdomainCategoryData.Domain.Add(domainCategoryData.DomainName);
-                    dicdomainCategoryData.DomainCategoryId.Add(domainCategoryData.DomainCategoryId.ToString());
-                    var filter2 = Builders<IW2S_DomainCategory>.Filter.Eq(x => x._id, domainCategoryData.DomainCategoryId);
-                    string v = MongoDBHelper.Instance.GetIW2S_DomainCategorys().Find(filter2).Project(x => x.Name).FirstOrDefault();
-                    dicdomainCategoryData.DomainCategoryName.Add(v);
+                    i++;
                 }
             }
-            foreach (var r in result)
+            catch (Exception ex)
             {
-                if (dicdomainCategoryData.Domain.Contains(r.Name))
-                {
-                    int index = dicdomainCategoryData.Domain.IndexOf(r.Name);
-                    r.DomainCategoryId = dicdomainCategoryData.DomainCategoryId[index];
-                    r.DomainCategoryName = dicdomainCategoryData.DomainCategoryName[index];
-
-                }
-                else
-                {
-                    r.DomainCategoryId = null;
-                    r.DomainCategoryName = "未分组";
-                }
+                CommonTools.Log(ex.Message);
+                Console.ReadLine();
             }
-            return result;
         }
 
         /// <summary>
-        /// 有效链接统计图
+        /// 计算微信公众号信息
         /// </summary>
-        /// <param name="categoryIds">关键词分组ID,多个用;相连</param>
-        /// <param name="prjId">项目ID,多个用;相连</param>
-        /// <param name="startTime">开始时间</param>
-        /// <param name="endTime">结束时间</param>
-        /// <param name="percent">显示百分比以上的节点</param>
-        /// <param name="topNum">标记前多少位</param>
-        /// <param name="sumNum">饼图统计Top数/param>
-        /// <param name="timeInterval">坐标点时间间隔</param>
-        /// <returns></returns>
-        private TimeLinkCountDto WeiXinGetTimeLinkCount(string categoryIds, string prjId, string startTime, string endTime, int percent, int topNum, int sumNum, int timeInterval)
+        public void ComputeWeiXinName()
         {
-            DateTime tpStart = new DateTime();
-            DateTime tpEnd = new DateTime();
-            DateTime.TryParse(startTime, out tpStart);
-            DateTime.TryParse(endTime, out tpEnd);
+            try
+            {
+                string baseUrl = "http://open.gsdata.cn/";
+                string nameUrl = baseUrl + "api/wx/wxapi/nickname_one";       //公众号信息接口
+                string appid = "JVEvKn7ghegw984neooX";
+                string appkey = "n0TWOaX9gta1dpfVF07hpkKr2";
+                GSDataSDK api = new GSDataSDK(appid, appkey);           //接口函数
 
-            TimeLinkCountDto result = new TimeLinkCountDto();
-
-            List<ObjectId> cateObjIds = new List<ObjectId>();
-            var cateIds = new List<string>();
-            //拆分categoryId，转为ObjectId数组
-            if (!string.IsNullOrEmpty(categoryIds))
-            {
-                cateObjIds = categoryIds.Split(';').Select(x => new ObjectId(x)).ToList();
-                cateIds = cateObjIds.Select(x => x.ToString()).ToList();
-                cateIds.Remove(ObjectId.Empty.ToString());
-                cateIds.Sort();
-            }
-
-            if (string.IsNullOrEmpty(prjId))
-            {
-                return null;
-            }
-            var proObjId = new ObjectId(prjId);
-
-            //判断是否为根分组
-            bool cateIsRoot = false;
-            if (cateObjIds.Count == 1 && cateObjIds[0].Equals(ObjectId.Empty))
-            {
-                cateIsRoot = true;
-            }
-            //多个分组时剔除根分组
-            cateObjIds.Remove(ObjectId.Empty);
-
-            int years = 3;      //图表时间范围，按天的数据截止时间，按周和按月是5年
-            switch (timeInterval)
-            {
-                case 1:
-                    years = 0;
-                    break;
-                case 7:
-                    years = 5;
-                    break;
-                case 30:
-                    years = 5;
-                    break;
-                default:
-                    break;
-            }
-
-            var groupBuilder = Builders<MediaKeywordMappingMongo>.Filter;
-            var builder = Builders<WeiXinLinkMongo>.Filter;
-
-            //获取关键词列表
-            var keyIds = new List<string>();      //关键词列表
-            var groupFilter = groupBuilder.Eq(x => x.ProjectId, proObjId) & groupBuilder.Eq(x => x.IsDel, false);
-            var groupCol = MongoDBHelper.Instance.GetMediaKeywordMapping();
-            var keyToCate = new Dictionary<string, string>();
-            /* 判断是否有分组
-             * 有则使用原有分组信息
-             * 无则仅建立所有词一组数据 */
-            if (cateIsRoot)
-            {
-                groupFilter &= groupBuilder.Eq(x => x.CategoryId, ObjectId.Empty);
-            }
-            else
-            {
-                //从分组中获取所有关键词Id
-                groupFilter &= groupBuilder.In(x => x.CategoryId, cateObjIds);
-            }
-            var TaskList = groupCol.Find(groupFilter).Project(x => new
-            {
-                KeywordId = x.KeywordId.ToString(),
-                CategoryId = x.CategoryId.ToString()
-            }).ToList();
-            foreach (var x in TaskList)
-            {
-                if (!keyIds.Contains(x.KeywordId) && !keyToCate.ContainsKey(x.KeywordId))
+                var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
+                var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
+                var builderMainLink = Builders<WXLinkMainMongo>.Filter;
+                var colMainLink = MongoDBHelper.Instance.GetWXLinkMain();
+                var builderName = Builders<WXNameMongo>.Filter;
+                var colName = MongoDBHelper.Instance.GetWXName();
+                int i = 1;
+                foreach (var key in queryKey)
                 {
-                    keyIds.Add(x.KeywordId);
-                    keyToCate.Add(x.KeywordId, x.CategoryId);
-                }
-            }
-
-            //获取项目内已删除的链接Id
-            var builderLinkMap = Builders<Dnl_LinkMapping_Baidu>.Filter;
-            var filterLinkMap = builderLinkMap.Eq(x => x.ProjectId, proObjId) & builderLinkMap.Eq(x => x.DataCleanStatus, (byte)2);
-            var exLinkObjIds = MongoDBHelper.Instance.GetDnl_LinkMapping_Baidu().Find(filterLinkMap).Project(x => x.LinkId).ToList();       //项目中已删除的链接ID列表
-
-            //获取发表时间
-            var filterLink = builder.In(x => x.KeywordId, keyIds) & builder.Ne(x => x.PostTime, DateTime.MinValue);
-            filterLink &= builder.Nin(x => x._id, exLinkObjIds);
-            var queryDatas = MongoDBHelper.Instance.GetWeiXinLink().Find(filterLink).Project(x => new WeiXinLinkDto
-            {
-                PublishTime = x.PostTime,
-                KeywordId = x.KeywordId,
-                Title = x.Title,
-                //Content = x.Content,
-                Description = x.Description
-            }).ToList();
-
-            ////如果关键词大于30个，去除只有一个关键词且文本长度小于50的链接
-            //if (keyIds.Count > 30)
-            //{
-            //    var filterKey = Builders<MediaKeywordMongo>.Filter.In(x => x._id, keyIds.Select(x => new ObjectId(x)));
-            //    var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).Project(x => new
-            //    {
-            //        Id = x._id.ToString(),
-            //        Keyword = x.Keyword
-            //    }).ToList();
-            //    for (int i = 0; i < queryDatas.Count; i++)
-            //    {
-            //        foreach (var key in queryKey)
-            //        {
-            //            if (queryDatas[i].Title.Contains(key.Keyword) || queryDatas[i].Content.Contains(key.Keyword))
-            //            {
-            //                queryDatas[i].Keywords.Add(key.Keyword);
-            //            }
-            //        }
-            //    }
-            //    queryDatas.RemoveAll(x => x.Keywords.Count <= 1 && x.Content.Length < 50);
-            //}
-
-            //获取包含分组ID的发布时间信息
-            List<LinkStatus> linkList = new List<LinkStatus>();
-            foreach (var x in queryDatas)
-            {
-
-                //DateTime tmpDt = new DateTime();
-                //DateTime.TryParse(x.PublishTime, out tmpDt);
-                int i = keyIds.IndexOf(x.KeywordId);
-                while (i != -1)
-                {
-                    LinkStatus v = new LinkStatus();
-                    //v.PublishTime = tmpDt;
-                    if (!cateIsRoot)
+                    CommonTools.Log("当前处理关键词[{0}/{1}] - {2}".FormatStr(i, queryKey.Count, key.Keyword));
+                    var filterLink = builderMainLink.Eq(x => x.KeywordId, key._id.ToString());
+                    filterLink &= builderMainLink.Eq(x => x.NameId, ObjectId.Empty);
+                    var queryLink = colMainLink.Find(filterLink);
+                    int topLinkNum = (int)queryLink.Count();
+                    int computeNum = 1;
+                    if (key.Keyword == "国度")
                     {
-                        v.CategoryId = keyToCate[x.KeywordId];
+                        i++;
+                        continue;
                     }
-                    else
+                    //if (i < 2)
+                    //{
+                    //    i++;
+                    //    continue;
+                    //}
+                    //if (i == 5)
+                    //{
+                    //    page = 145;
+                    //    nowLinkNum = page * pagesize;
+                    //    computeNum = nowLinkNum + 1;
+                    //}
+                    var sw = new System.Diagnostics.Stopwatch();
+                    sw.Start();
+                    var tempLinks = queryLink.Project(x => new
                     {
-                        //无分组以空定义为所有分组
-                        v.CategoryId = "000000000000000000000000";
-                    }
-                    v.Title = x.Title;
-                    v.Description = x.Description;
-                    v.PublishTime = x.PublishTime;
-                    linkList.Add(v);
-                    i = keyIds.IndexOf(x.KeywordId, i + 1);
-                }
-            }
-
-            //删除异常时间 如0001-01-01与2063-23-12等时间，并排序
-            linkList = linkList.Where(x => x.PublishTime > new DateTime(1753, 1, 09)).Where(x => x.PublishTime <= DateTime.Now).OrderByDescending(x => x.PublishTime).ToList();
-
-            //建立时间坐标
-            List<DateTime> xCoordinate = new List<DateTime>();
-            //int i = 1;
-            if (linkList.Count > 0)
-            {
-                DateTime now = linkList[0].PublishTime;
-                DateTime end = new DateTime();
-                if (years == 0)
-                {
-                    end = linkList.Last().PublishTime;
-                }
-                else
-                {
-                    end = now.AddYears(-years);
-                }
-                while (now >= end)
-                {
-                    xCoordinate.Add(now);
-                    now = now.AddDays(-timeInterval);
-                }
-            }
-            xCoordinate.Reverse();
-            result.Times = xCoordinate;
-
-            //获取起止时间位置
-            int xStart;
-            int xEnd;
-            if (string.IsNullOrEmpty(startTime) && string.IsNullOrEmpty(endTime))
-            {
-                for (int i = 0; i < xCoordinate.Count; i++)
-                {
-                    if (xCoordinate[i] <= tpStart) { xStart = i; }
-                    if (xCoordinate[i] <= tpEnd) { xEnd = i; }
-                }
-            }
-
-            //将发布时间依分组拆分
-            List<CategoryList> categoryList = new List<CategoryList>();
-            if (!cateIsRoot)
-            {
-                foreach (var x in cateObjIds)
-                {
-                    CategoryList v = new CategoryList();
-                    v.PublishTime = new List<DateTime>();
-                    v.CategoryId = x.ToString();
-                    categoryList.Add(v);
-                }
-
-                //获取分组名并分配到数据中去
-                var namefilter = Builders<MediaKeywordCategoryMongo>.Filter.In(x => x._id, cateObjIds);
-                var nameList = MongoDBHelper.Instance.GetMediaKeywordCategory().Find(namefilter).Project(x => new
-                {
-                    Name = x.Name,
-                    CategoryId = x._id.ToString()
-                }).ToList();
-                foreach (var x in nameList)
-                {
-                    CategoryList cat = categoryList.Find(s => s.CategoryId.Equals(x.CategoryId));
-                    cat.CategoryName = x.Name;
-                }
-            }
-            else
-            {
-                var cat = new CategoryList
-                {
-                    CategoryId = "000000000000000000000000",
-                    CategoryName = "所有词",
-                    PublishTime = new List<DateTime>()
-                };
-                categoryList.Add(cat);
-            }
-
-            //获取各分组内数据的发布时间
-            foreach (var x in linkList)
-            {
-                CategoryList cat = categoryList.Find(s => s.CategoryId.Equals(x.CategoryId));
-                cat.PublishTime.Add(x.PublishTime);
-            }
-
-            List<LineData> lineData = new List<LineData>();
-
-            //top数据
-            List<TopData> topData = new List<TopData>();
-
-            //遍历数组，获取不同分组的数据
-            foreach (var categoryData in categoryList)
-            {
-                LineData link = new LineData();
-                link.name = categoryData.CategoryName;
-
-                List<int> linkCounts = new List<int>();
-                if (categoryData.PublishTime.Count > 0)
-                {
-                    DateTime now = linkList[0].PublishTime;
-                    DateTime end = new DateTime();
-                    if (years == 0)
+                        Id = x._id,
+                        Name = x.Name,
+                        NickName = x.Nickname
+                    }).ToList();
+                    sw.Stop();
+                    var linkByName = tempLinks.GroupBy(x => x.Name).ToList();
+                    foreach (var x in linkByName)
                     {
-                        end = linkList.Last().PublishTime;
+                        CommonTools.Log("当前处理公众号[{0}/{1}] - {2}".FormatStr(computeNum, linkByName.Count(), x.Key));
+                        //检查本公众号是否已查询过
+                        var filterName = builderName.Eq(s => s.Name, x.Key);
+                        var queryName = colName.Find(filterName).FirstOrDefault();
+                        ObjectId nameObjId;
+                        if (queryName == null)
+                        {
+                            Dictionary<string, object> postData = new Dictionary<string, object>();                 //post参数
+                            postData.Add("wx_name", x.Key);
+                            string NameStr = api.Call(postData, nameUrl);       //调用接口，获取返回数据
+                            int testNum = 0;
+                            //如果返回值为空，重试3次
+                            while (NameStr == null)
+                            {
+                                if (testNum == 3)
+                                    break;
+                                NameStr = api.Call(postData, nameUrl);
+                                testNum++;
+                            }
+
+                            //解析Json字符串
+                            JObject nameJson = new JObject();
+                            try
+                            {
+                                nameJson = JObject.Parse(NameStr);
+                            }
+                            catch (Exception ex)
+                            {
+                                CommonTools.Log("微信搜索出错：" + ex.Message);
+                                CommonTools.Log("是否继续重试？（Y/N）");
+                                string code = Console.ReadLine().ToUpper();
+                                if (code != "Y" && code != "N")
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    if (code == "Y")
+                                        continue;
+                                    else
+                                        break;
+                                }
+                            }
+                            if (nameJson.Property("returnCode") != null && nameJson.Property("returnCode").Value.ToString() == "1001")
+                            {
+                                CommonTools.Log("公众号信息" + nameJson.Property("returnMsg").Value);
+                                JObject nameReturn = (JObject)nameJson["returnData"];
+                                //获取常用链接信息
+                                if (nameReturn == null)
+                                {
+                                    computeNum++;
+                                    continue;
+                                }
+                                var nameInfo = new WXNameMongo()
+                                {
+                                    _id = ObjectId.GenerateNewId(),
+                                    CreatedAt = DateTime.Now.AddHours(8),
+                                };
+                                nameObjId = nameInfo._id;
+                                if (nameReturn.Property("id") != null)
+                                    nameInfo.GsId = Convert.ToInt32(nameReturn.Property("id").Value);
+                                if (nameReturn.Property("wx_name") != null)
+                                    nameInfo.Name = nameReturn.Property("wx_name").Value.ToString();
+                                if (nameReturn.Property("wx_nickname") != null)
+                                    nameInfo.Nickname = nameReturn.Property("wx_nickname").Value.ToString();
+                                if (nameReturn.Property("wx_type") != null)
+                                    nameInfo.Type = nameReturn.Property("wx_type").Value.ToString();
+                                if (nameReturn.Property("wx_biz") != null)
+                                    nameInfo.Biz = nameReturn.Property("wx_biz").Value.ToString();
+                                if (nameReturn.Property("wx_qrcode") != null)
+                                    nameInfo.Qrcode = nameReturn.Property("wx_qrcode").Value.ToString();
+                                if (nameReturn.Property("wx_note") != null)
+                                    nameInfo.Description = nameReturn.Property("wx_note").Value.ToString();
+                                if (nameReturn.Property("wx_vip") != null)
+                                    nameInfo.Vip = nameReturn.Property("wx_vip").Value.ToString();
+                                if (nameReturn.Property("wx_vip_note") != null)
+                                    nameInfo.VipNote = nameReturn.Property("wx_vip_note").Value.ToString();
+                                if (nameReturn.Property("wx_country") != null)
+                                    nameInfo.Country = nameReturn.Property("wx_country").Value.ToString();
+                                if (nameReturn.Property("wx_province") != null)
+                                    nameInfo.Province = nameReturn.Property("wx_province").Value.ToString();
+                                if (nameReturn.Property("wx_city") != null)
+                                    nameInfo.City = nameReturn.Property("wx_city").Value.ToString();
+                                if (nameReturn.Property("status") != null)
+                                    nameInfo.Status = Convert.ToInt32(nameReturn.Property("status").Value);
+                                if (nameReturn.Property("isenable") != null)
+                                    nameInfo.IsEnable = Convert.ToInt32(nameReturn.Property("isenable").Value);
+                                if (nameReturn.Property("category_id") != null)
+                                    nameInfo.CategoryId = nameReturn.Property("category_id").Value.ToString();
+                                if (nameReturn.Property("update_status") != null)
+                                    nameInfo.UpdateStatus = Convert.ToInt32(nameReturn.Property("update_status").Value);
+                                if (nameReturn.Property("wx_district") != null)
+                                    nameInfo.District = nameReturn.Property("wx_district").Value.ToString();
+                                if (nameReturn.Property("overseas") != null)
+                                    nameInfo.Overseas = nameReturn.Property("overseas").Value.ToString();
+                                if (nameReturn.Property("link_name") != null)
+                                    nameInfo.LinkName = nameReturn.Property("link_name").Value.ToString();
+                                if (nameReturn.Property("link_unit") != null)
+                                    nameInfo.LinkUnit = nameReturn.Property("link_unit").Value.ToString();
+                                if (nameReturn.Property("link_position") != null)
+                                    nameInfo.LinkPostion = nameReturn.Property("link_position").Value.ToString();
+                                if (nameReturn.Property("link_tel") != null)
+                                    nameInfo.LinkTel = nameReturn.Property("link_tel").Value.ToString();
+                                if (nameReturn.Property("link_wx") != null)
+                                    nameInfo.LinkWX = nameReturn.Property("link_wx").Value.ToString();
+                                if (nameReturn.Property("link_qq") != null)
+                                    nameInfo.LinkQQ = nameReturn.Property("link_qq").Value.ToString();
+                                if (nameReturn.Property("link_email") != null)
+                                    nameInfo.LinkEmail = nameReturn.Property("link_email").Value.ToString();
+
+                                try
+                                {
+                                    colName.InsertOne(nameInfo);
+                                    filterLink = builderMainLink.Eq(s => s.Name, x.Key);
+                                    var update = new UpdateDocument { { "$set", new QueryDocument { { "NameId", nameObjId } } } };
+                                    colMainLink.UpdateMany(filterLink, update);
+                                    CommonTools.Log("成功计算公众号 - " + nameInfo.Nickname);
+                                }
+                                catch (Exception ex)
+                                {
+                                    CommonTools.Log(ex.Message);
+                                    Console.ReadLine();
+                                }
+
+                            }
+                            else if (nameJson.Property("errcode") != null)
+                            {
+                                CommonTools.Log("错误信息 - " + nameJson.Property("errmsg").ToString());
+                                CommonTools.Log("错误代码 - " + nameJson.Property("errmsg").ToString());
+                                while (true)
+                                {
+                                    CommonTools.Log("是否继续？（Y/N）");
+                                    string code = Console.ReadLine().ToUpper();
+                                    if (code != "Y" && code != "N")
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        if (code == "Y")
+                                            break;
+                                        else
+                                            Environment.Exit(0);
+                                    }
+                                }
+                            }
+                        }
+                        computeNum++;
                     }
-                    else
-                    {
-                        end = now.AddYears(-years);
-                    }
-                    while (now >= end)
-                    {
-                        linkCounts.Add(categoryData.PublishTime.Where(x => x <= now && x > now.AddDays(-timeInterval)).Count());
-                        now = now.AddDays(-timeInterval);
-                    }
+                    i++;
                 }
-                else
-                {
-                    continue;
-                }
-                //将链接数倒序
-                linkCounts.Reverse();
-
-                link.LinkCount = linkCounts;
-                lineData.Add(link);
-
-                //将坐标添加到临时数据列表中
-                List<DateTime> temp = new List<DateTime>();
-                for (int i = 0; i < xCoordinate.Count; i++)
-                {
-                    TopData v = new TopData();
-                    v.name = categoryData.CategoryName;
-                    v.CategoryId = categoryData.CategoryId;
-                    v.X = xCoordinate[i];
-                    v.Y = linkCounts[i];
-                    topData.Add(v);
-                }
-
             }
-
-            //获取top数据及自动摘要节点
-
-            if (string.IsNullOrEmpty(startTime) && string.IsNullOrEmpty(endTime))
+            catch (Exception ex)
             {
-                topData = topData.Where(x => x.X > linkList[0].PublishTime.AddYears(-1)).ToList().OrderByDescending(x => x.Y).ToList<TopData>();
-
+                Console.WriteLine(ex.Message);
             }
-            else
-            {
-                topData = topData.Where(x => x.X > tpStart).Where(x => x.X < tpEnd).OrderByDescending(x => x.Y).ToList<TopData>();
-            }
-            //获取限定数量的摘要时间节点
-            List<TopData> tempSum = new List<TopData>();
-            if (sumNum > 0)
-            {
-                tempSum = topData.Take(sumNum).ToList();
-            }
-            else
-            {
-                tempSum = topData.Take(1).ToList();
-            }
-            topData = topData.Take(topNum).ToList();
-
-            List<SumData> sumData = new List<SumData>();        //摘要
-            //获取摘要节点
-            for (var i = 0; i < tempSum.Count; i++)
-            {
-                SumData sum = new SumData();
-                sum.Y = tempSum[i].Y;
-                sum.X = tempSum[i].X;
-                sum.CategoryName = tempSum[i].name;
-                sum.CategoryId = tempSum[i].CategoryId;
-                sumData.Add(sum);
-            }
-            //依节点查询数据库，生成摘要
-            var jieba = new JiebaHelper();
-            for (var i = 0; i < sumData.Count; i++)
-            {
-                DateTime time = sumData[i].X;     //当前时间节点
-                string source = "";
-                foreach (var x in linkList)
-                {
-                    if (x.PublishTime <= time && x.PublishTime > time.AddDays(-timeInterval))
-                        if (x.CategoryId.Equals(sumData[i].CategoryId))
-                            source += x.Title + "。" + System.Environment.NewLine + x.Description + "。" + System.Environment.NewLine;
-                }
-                var tempStr = jieba.GetSummary(sumData[i].CategoryName, time.ToString(), prjId, source);
-                if (tempStr.Count > 0 && tempStr[0].Length > 40)
-                {
-                    tempStr[0] = tempStr[0].Substring(0, 39);
-                    tempStr[0] += "…";
-                }
-                if (tempStr.Count > 0)
-                    sumData[i].Summary = tempStr[0];
-            }
-            result.Sum = sumData;
-
-            //在percent大于0时，获取最大值，将不高于最大值percent百分比的值设为0,topData值删除
-            List<TopData> delList = new List<TopData>();
-            if (percent > 0)
-            {
-                int maxCount = topData[0].Y;
-                int limit = maxCount * percent / 100;
-                for (int i = 0; i < lineData.Count; i++)
-                {
-                    for (int j = 0; j < lineData[i].LinkCount.Count; j++)
-                    {
-                        if (lineData[i].LinkCount[j] < limit) lineData[i].LinkCount[j] = 0;
-                    }
-                }
-                foreach (var x in topData)
-                {
-                    if (x.Y < limit) delList.Add(x);
-                }
-                foreach (var x in delList)
-                {
-                    topData.Remove(x);
-                }
-                //for (int i = 0; i < topData.Count; i++)
-                //{
-                //    if (topData[i].Y < limit) topData[i].Y = 0;
-                //}
-            }
-
-            //将top数据分配到各组中去
-            for (int i = 0; i < lineData.Count; i++)
-            {
-                lineData[i].topData = new List<TopData>();
-                foreach (var x in topData)
-                {
-                    if (lineData[i].name.Equals(x.name))
-                    {
-                        lineData[i].topData.Add(x);
-                    }
-                }
-            }
-
-            result.LineDataList = lineData;
-            return result;
         }
 
-        #endregion
+        /// <summary>
+        /// 计算微信公众号信息
+        /// </summary>
+        public void ResetWeiXinSearchRange()
+        {
+            var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
+            var colKey = MongoDBHelper.Instance.GetMediaKeyword();
+            var queryKey = colKey.Find(filterKey).ToList();
+            DateTime startTime = new DateTime(2016, 11, 1);
+            DateTime endTime = new DateTime(2017, 5, 1);
+            var update = new UpdateDocument { { "$set", new QueryDocument { { "WXStartTime", startTime.AddHours(8) }, { "WXEndTime", endTime.AddHours(8) } } } };
+            colKey.UpdateMany(filterKey, update);
+        }
 
+        public void GetWXTop200NameComment()
+        {
+            var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
+            var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
+            var builderMainLink = Builders<WXLinkMainMongo>.Filter;
+            var colMainLink = MongoDBHelper.Instance.GetWXLinkMain();
+            try
+            {
+                int i = 1;
+                var nameInfos = new List<NameStatisticDto>();
+                foreach (var key in queryKey)
+                {
+                    CommonTools.Log("当前处理关键词[{0}/{1}] - {2}".FormatStr(i, queryKey.Count, key.Keyword));
+                    int page = 0, pagesize = 1000;
+                    var filterLink = builderMainLink.Eq(x => x.KeywordId, key._id.ToString());
+                    //var filterLink = builderMainLink.In(x => x.KeywordId, queryKey.Select(x => x._id.ToString()).ToList());
+                    var queryLink = colMainLink.Find(filterLink);
+                    int topLinkNum = (int)queryLink.Count();
+                    int nowLinkNum = 0;
+                    //if (i < 10)
+                    //{
+                    //    i++;
+                    //    continue;
+                    //}
+                    //if (i == 5)
+                    //{
+                    //    page = 145;
+                    //    nowLinkNum = page * pagesize;
+                    //    computeNum = nowLinkNum + 1;
+                    //}
+                    while (true)
+                    {
+                        //获取Top200公众号的信息
+                        var sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
+                        var tempLink = colMainLink.Find(filterLink).Skip(page * pagesize).Limit(pagesize).Project(x => new
+                        {
+                            _id = x._id.ToString(),
+                            Url = x.Url,
+                            Name = x.Nickname,
+                            Keyword = x.Keyword,
+                            KeywordId = x.KeywordId,
+                            ReadNum = x.ReadNum,
+                            LikeNum = x.LikeNum,
+                            CommentNum = 0,
+                            NameId = x.NameId.ToString()
+                        }).ToList();
+                        sw.Stop();
+                        nowLinkNum += tempLink.Count;
+                        CommonTools.Log("当前获取链接[{0}/{1}]\t耗时 - {2}s".FormatStr(nowLinkNum, topLinkNum, sw.Elapsed));
+
+                        var linkByName = tempLink.GroupBy(x => x.Name);        //按公众号分组
+                        foreach (var name in linkByName)
+                        {
+                            var nameInfo = new NameStatisticDto();
+                            nameInfo.Name = name.Key;
+                            var allLinks = name.ToList();                       //公众号所有文章
+                            nameInfo.NameId = allLinks[0].NameId;
+                            nameInfo.KeywordNum = allLinks.Select(x => x.Keyword).Distinct().Count();
+                            var trueLinks = allLinks.DistinctBy(x => x.Url);
+                            nameInfo.LinkNum = trueLinks.Count;
+                            nameInfo.LikeNum = trueLinks.Sum(x => x.LikeNum);
+                            nameInfo.ReadNum = trueLinks.Sum(x => x.ReadNum);
+                            nameInfo.InfluenceNum = nameInfo.ReadNum + nameInfo.LikeNum * 11 + nameInfo.CommentNum * 99;
+                            nameInfos.Add(nameInfo);
+                        }
+                        page++;
+                        if (nowLinkNum >= topLinkNum)
+                            break;
+                    }
+                    i++;
+                }
+                nameInfos = nameInfos.OrderByDescending(x => x.InfluenceNum).ToList();
+                var top200Name = nameInfos.Take(200).ToList();
+
+                //获取Top200公众号内的链接信息
+                var nameObjIds = top200Name.Select(x => new ObjectId(x.NameId)).ToList();
+                var filterMainLink = builderMainLink.In(x => x.NameId, nameObjIds);
+                var num = colMainLink.Find(filterMainLink).Count();
+                Console.Write(num);
+            }
+            catch (Exception ex)
+            {
+                CommonTools.Log(ex.Message);
+                Console.ReadLine();
+            }
+            
+        }
     }
 
     
