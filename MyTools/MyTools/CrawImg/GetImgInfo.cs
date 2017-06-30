@@ -28,7 +28,7 @@ namespace MyTools.CrawImg
                 //获取网页
                 string respHtml = WebApi.GetHtml(url);
                 //对网页进行分类
-                Regex kindReg = new Regex(@"http://bcy.net/(?<info>.+?)/");
+                Regex kindReg = new Regex(@"bcy.net/(?<info>.+?)/");
                 Match kindMat = kindReg.Match(url);
                 string kind = kindMat.Groups["info"].Value;
                 switch (kind)
@@ -63,9 +63,9 @@ namespace MyTools.CrawImg
 
                 return img;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                img.Error = "网页连接出错！";
+                img.Error = ex.Message;
                 return img;
             }
         }

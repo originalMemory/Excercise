@@ -29,7 +29,7 @@ namespace CSharpTest
         static void Main(string[] args)
         {
             DnlTools tools = new DnlTools();
-            tools.GetWXTop200NameComment();
+            tools.AnalysizeWeiXinLink();
             Console.ReadKey();
         }
 

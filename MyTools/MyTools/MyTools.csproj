@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -168,6 +171,7 @@
     <None Include="Resources\logo.ico" />
     <Content Include="CrawTorrent\DLL\HtmlAgilityPack.dll" />
     <Content Include="CrawTorrent\DLL\HtmlAgilityPack.XML" />
+    <Content Include="logo.ico" />
     <Content Include="SelectImg\Img\jiance.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

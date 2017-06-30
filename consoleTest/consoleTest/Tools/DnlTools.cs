@@ -156,8 +156,21 @@ namespace CSharpTest.Tools
         {
             string baseUrl = System.AppDomain.CurrentDomain.BaseDirectory;
 
-            var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
+            //获取项目
+            var builderPro = Builders<IW2S_Project>.Filter;
+            string proName = "普世佳音-主内微信影响力评测";
+            var filterPro = builderPro.Eq(x => x.Name, proName);
+            var queryPro = MongoDBHelper.Instance.GetIW2S_Projects().Find(filterPro).FirstOrDefault();
+            //获取项目内所有关键词
+            var builderMap = Builders<MediaKeywordMappingMongo>.Filter;
+            var filterMap = builderMap.Eq(x => x.ProjectId, queryPro._id);
+            filterMap &= builderMap.Eq(x => x.IsDel, false);
+            var keyObjIds = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(filterMap).Project(x => x.KeywordId).ToList();
+
+            var builderKey = Builders<MediaKeywordMongo>.Filter;
+            var filterKey = builderKey.In(x => x._id, keyObjIds);
             var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
+
             var builderLink = Builders<WXLinkMainMongo>.Filter;
             var WXlinks = new List<WXLinkMainMongo>();
 
@@ -180,31 +193,6 @@ namespace CSharpTest.Tools
             RowHead0.CreateCell(10).SetCellValue("阅读量");
             RowHead0.CreateCell(11).SetCellValue("点赞量");
             RowHead0.CreateCell(12).SetCellValue("是否已被删除");
-            int j = 1;
-
-            ////导入已保存链接
-            //FileStream stream = new FileStream(path, FileMode.Open);
-            //HSSFWorkbook sourceExcel = new HSSFWorkbook(stream);
-            //HSSFSheet sourceSheet = sourceExcel.GetSheetAt(0) as HSSFSheet;
-            //for (; j <= sourceSheet.LastRowNum; j++)
-            //{
-            //    HSSFRow oldrow = sourceSheet.GetRow(j) as HSSFRow;
-            //    IRow row = linkSheet.CreateRow(j);
-            //    row.CreateCell(0).SetCellValue(oldrow.GetCell(0).StringCellValue);
-            //    row.CreateCell(1).SetCellValue(oldrow.GetCell(1).StringCellValue);
-            //    row.CreateCell(2).SetCellValue(oldrow.GetCell(2).StringCellValue);
-            //    row.CreateCell(3).SetCellValue(oldrow.GetCell(3).StringCellValue);
-            //    row.CreateCell(4).SetCellValue(oldrow.GetCell(4).StringCellValue);
-            //    row.CreateCell(5).SetCellValue(oldrow.GetCell(5).StringCellValue);
-            //    row.CreateCell(6).SetCellValue(oldrow.GetCell(6).StringCellValue);
-            //    row.CreateCell(7).SetCellValue(oldrow.GetCell(7).StringCellValue);
-            //    row.CreateCell(8).SetCellValue(oldrow.GetCell(8).NumericCellValue);
-            //    row.CreateCell(9).SetCellValue(oldrow.GetCell(9).StringCellValue);
-            //    row.CreateCell(10).SetCellValue(oldrow.GetCell(10).NumericCellValue);
-            //    row.CreateCell(11).SetCellValue(oldrow.GetCell(11).NumericCellValue);
-            //    row.CreateCell(12).SetCellValue(oldrow.GetCell(12).BooleanCellValue);
-            //}
-            //stream.Close();
 
             int i = 1;
             try
@@ -247,6 +235,7 @@ namespace CSharpTest.Tools
                 CommonTools.Log(ex.Message);
             }
 
+            int j = 1;
             foreach (var link in WXlinks)
             {
                 IRow row = linkSheet.CreateRow(j);
@@ -309,7 +298,7 @@ namespace CSharpTest.Tools
             RowHead2.CreateCell(2).SetCellValue("文章数");
             RowHead2.CreateCell(3).SetCellValue("阅读量");
             RowHead2.CreateCell(4).SetCellValue("点赞量");
-            var allName = WXlinks.Select(x => x.Name).ToList();
+            var allName = WXlinks.Select(x => x.Nickname).ToList();
             allName = allName.Distinct().ToList();
             count = 1;
             foreach (var name in allName)
@@ -317,7 +306,7 @@ namespace CSharpTest.Tools
                 //导出所有分组信息
                 var keys = new List<string>();
                 int readNum = 0, likeNum = 0;
-                var links = WXlinks.FindAll(x => x.Name == name);
+                var links = WXlinks.FindAll(x => x.Nickname == name);
                 keys = links.Select(x => x.Keyword).Distinct().ToList();
                 IRow row = sheet2.CreateRow(count);
                 row.CreateCell(0).SetCellValue(name);
@@ -338,6 +327,7 @@ namespace CSharpTest.Tools
                 workBook.Write(fileAna);　　//创建Excel文件。
                 fileAna.Close();
             }
+            CommonTools.Log("计算完毕！");
         }
 
         /// <summary>
