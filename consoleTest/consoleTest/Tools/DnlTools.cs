@@ -705,6 +705,7 @@ namespace CSharpTest.Tools
             DateTime endTime = new DateTime(2017, 5, 1);
             var update = new UpdateDocument { { "$set", new QueryDocument { { "WXStartTime", startTime.AddHours(8) }, { "WXEndTime", endTime.AddHours(8) } } } };
             colKey.UpdateMany(filterKey, update);
+
         }
 
         public void GetWXTop200NameComment()
@@ -794,6 +795,27 @@ namespace CSharpTest.Tools
                 Console.ReadLine();
             }
             
+        }
+
+        /// <summary>
+        /// 测试清博关键词搜索接口
+        /// </summary>
+        /// <param name="keyword">关键词</param>
+        public void TestGSSearch(string keyword)
+        {
+            //搜索关键词
+            string baseUrl = "http://open.gsdata.cn/";
+            string linkUrl = baseUrl + "api/wx/opensearchapi/content_keyword_search";       //关键词获取文章接口地址
+            string appid = "JVEvKn7ghegw984neooX";
+            string appkey = "n0TWOaX9gta1dpfVF07hpkKr2";
+            GSDataSDK api = new GSDataSDK(appid, appkey);           //接口函数
+            Dictionary<string, object> postData = new Dictionary<string, object>();                 //post参数
+            postData.Add("keyword", keyword);
+            postData.Add("sortname", "likenum");
+            postData.Add("sort", "desc");
+
+            string LinkStr = api.Call(postData, linkUrl);       //调用接口，获取返回数据
+            Console.WriteLine(LinkStr);
         }
     }
 
