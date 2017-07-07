@@ -28,20 +28,8 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            var builder = Builders<MediaKeywordMappingMongo>.Filter;
-            var filter = builder.Eq(x => x.ProjectId, new ObjectId("595afd02237cbe063c4f0b08"));
-            filter &= builder.Eq(x => x.CategoryId, ObjectId.Empty);
-            var col = MongoDBHelper.Instance.GetMediaKeywordMapping();
-            var query = col.Find(filter).ToList();
-            query.RemoveAll(x => x.Keyword == "真爱梦想");
-            var keyObjIds = query.Select(x => x.KeywordId);
-            var filterKey = Builders<MediaKeywordMongo>.Filter.In(x => x._id, keyObjIds);
-            var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var update = new UpdateDocument { { "$set", new QueryDocument { { "WXBotStatus", 0 } } } };
-            colKey.UpdateMany(filterKey, update);
-            
             DnlTools tools = new DnlTools();
-            //tools.AnalysizeWeiXinLink();
+            tools.TestGSSearch("耶稣", "2016-11-01", "2016-11-17");
             Console.ReadKey();
         }
 

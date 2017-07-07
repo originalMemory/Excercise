@@ -801,7 +801,10 @@ namespace CSharpTest.Tools
         /// 测试清博关键词搜索接口
         /// </summary>
         /// <param name="keyword">关键词</param>
-        public void TestGSSearch(string keyword)
+        /// <param name="startTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <param name="startNum">搜索起始位置</param>
+        public void TestGSSearch(string keyword, string startTime = "2016-11-1", string endTime = "2017-7-1",int startNum=0)
         {
             //搜索关键词
             string baseUrl = "http://open.gsdata.cn/";
@@ -813,7 +816,9 @@ namespace CSharpTest.Tools
             postData.Add("keyword", keyword);
             postData.Add("sortname", "likenum");
             postData.Add("sort", "desc");
-
+            postData.Add("start", startNum);
+            postData.Add("startdate", startTime);
+            postData.Add("enddate", endTime);
             string LinkStr = api.Call(postData, linkUrl);       //调用接口，获取返回数据
             Console.WriteLine(LinkStr);
         }
