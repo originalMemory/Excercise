@@ -28,8 +28,8 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            DnlTools tools = new DnlTools();
-            tools.TestGSSearch("耶稣", "2016-11-01", "2016-11-17");
+            DnlTools dnl = new DnlTools();
+            dnl.TestGSSearch("耶稣", "2016-12-25", "2016-12-26");
             Console.ReadKey();
         }
 

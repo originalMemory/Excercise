@@ -142,6 +142,16 @@ namespace CSharpTest.Helper
         {
             return base.GetCollection<PojectChartMongo>("PojectChart");
         }
+
+        public IMongoCollection<ProductMongo> GetProduct()
+        {
+            return base.GetCollection<ProductMongo>("Product");
+        }
+
+        public IMongoCollection<OrderMongo> GetOrder()
+        {
+            return base.GetCollection<OrderMongo>("Order");
+        }
     }
 
     public static class MongoExtension

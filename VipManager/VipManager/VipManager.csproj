@@ -67,6 +67,8 @@
       <DependentUpon>VipAdd.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\Config.cs" />
+    <Compile Include="Helper\StringExtension.cs" />
+    <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="UControl\UClient.cs">
       <SubType>UserControl</SubType>
@@ -108,7 +110,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="DLL\CSkin.dll" />

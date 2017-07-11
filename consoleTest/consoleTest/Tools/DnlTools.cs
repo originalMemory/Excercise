@@ -804,7 +804,7 @@ namespace CSharpTest.Tools
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
         /// <param name="startNum">搜索起始位置</param>
-        public void TestGSSearch(string keyword, string startTime = "2016-11-1", string endTime = "2017-7-1",int startNum=0)
+        public void TestGSSearch(string keyword, string startTime = "2016-11-01", string endTime = "2017-07-01",int startNum=0)
         {
             //搜索关键词
             string baseUrl = "http://open.gsdata.cn/";

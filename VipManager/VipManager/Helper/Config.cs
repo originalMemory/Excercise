@@ -19,7 +19,8 @@ namespace VipManager.Helper
         /// <summary>
         /// 数据库连接
         /// </summary>
-        public static OleDbConnection con = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;User ID=admin;Jet OleDb:Database Password=sinofaith; Data Source= " + Application.StartupPath + "\\Database\\database.db;");
+        public static OleDbConnection con = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0; Data Source= " + Application.StartupPath + "\\Database\\database.mdb;");
+        //public static OleDbConnection con = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;User ID=admin;Jet OleDb:Database Password=sinofaith; Data Source= " + Application.StartupPath + "\\Database\\database.db;");
 
         /// <summary>
         /// 系统静态环境初始化

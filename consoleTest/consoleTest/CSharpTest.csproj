@@ -113,6 +113,7 @@
     <Compile Include="Helper\JiebaHelper.cs" />
     <Compile Include="Model\ComputeClass.cs" />
     <Compile Include="Model\OldWeiXinLink.cs" />
+    <Compile Include="Model\PostClass.cs" />
     <Compile Include="Model\ReturnClass.cs" />
     <Compile Include="Model\test.cs" />
     <Compile Include="Helper\MongoDBClass.cs" />
