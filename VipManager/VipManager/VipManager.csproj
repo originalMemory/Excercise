@@ -60,6 +60,12 @@
     <Compile Include="FormControl\Mains.Designer.cs">
       <DependentUpon>Mains.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormControl\ProAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormControl\ProAdd.Designer.cs">
+      <DependentUpon>ProAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormControl\VipAdd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormControl\Mains.resx">
       <DependentUpon>Mains.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormControl\ProAdd.resx">
+      <DependentUpon>ProAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormControl\VipAdd.resx">
       <DependentUpon>VipAdd.cs</DependentUpon>

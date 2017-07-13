@@ -26,7 +26,7 @@ namespace VipManager.FormControl
         {
             InitializeComponent();
             //获取原有会员编号，计算新会员编号
-            string sqlVip = "select top 1 [No] from [Vip] order by [No] desc";
+            string sqlVip = "select top 1 [No] from [Vip] where [IsDel]=false order by [No] desc";
             OleDbCommand comVip = new OleDbCommand(sqlVip, Config.con);
             OleDbDataReader reader = comVip.ExecuteReader();
             int maxNo = 0;
@@ -38,6 +38,16 @@ namespace VipManager.FormControl
             txtNo.Text = No.ToString();
             dtpStart.Value = DateTime.Now;
             dtpEnd.Value = DateTime.Now;
+
+            //初始化为次数型
+            labDetail.Text = "次数：";
+            txtDetail.Enabled = true;
+            dtpStart.Enabled = false;
+            dtpEnd.Enabled = false;
+            labDiscount.Visible = false;
+            txtBalance.Enabled = false;
+            txtBalance.Text = "0";
+            txtDetail.Text = "0";
         }
 
         //根据会员类型激活或禁用不同选项
@@ -96,7 +106,7 @@ namespace VipManager.FormControl
             int remainNum = 0;                            //次数
             DateTime startTime = DateTime.Now;          //开始时间
             DateTime endTime = DateTime.Now;            //结束时间
-            VipType type = VipType.Num;
+            //VipType type = VipType.Num;
             switch (cbType.Text)
             {
                 case "次数型":
@@ -109,7 +119,7 @@ namespace VipManager.FormControl
                         MessageBoxEx.Show("次数只能为数字！", "提示");
                         return;
                     }
-                    type = VipType.Num;
+                    //type = VipType.Num;
                     break;
                 case "折扣型":
                     try
@@ -130,7 +140,7 @@ namespace VipManager.FormControl
                         MessageBoxEx.Show("余额只能为数字！", "提示");
                         return;
                     }
-                    type = VipType.Discount;
+                   // type = VipType.Discount;
                     break;
                 case "时间型":
                     startTime = dtpStart.Value;
@@ -145,13 +155,13 @@ namespace VipManager.FormControl
                         MessageBoxEx.Show("开始时间不能小于当前时间", "提示");
                         return;
                     }
-                    type = VipType.Time;
+                    //type = VipType.Time;
                     break;
             }
 
             //插入会员信息
-            string sqlAddVip = @"insert into [Vip]([No],[VipName],[Phone],[Type],[Balance],[RemainNum],[Discount],[CreatedAt],[DelAt],[IsDel],[Note],[LastPayAt],[Gender],[StartTime],[EndTime],[PayNum],[UserId]) values(
-{0},'{1}','{2}',{3},{4},{5},{6},#{7}#,#{8}#,{9},'{10}',#{11}#,{12},#{13}#,#{14}#,{15},'{16}')".FormatStr(txtNo.Text, txtName.Text, txtPhone.Text, type, balance, remainNum, discount, DateTime.Now,
+            string sqlAddVip = @"insert into [Vip]([No],[VipName],[Phone],[Type],[Balance],[RemainNum],[Discount],[CreateAt],[DelAt],[IsDel],[Note],[LastPayAt],[Gender],[StartAt],[EndAt],[PayNum],[UserId]) values(
+{0},'{1}','{2}','{3}',{4},{5},{6},#{7}#,#{8}#,{9},'{10}',#{11}#,'{12}',#{13}#,#{14}#,{15},'{16}')".FormatStr(txtNo.Text, txtName.Text, txtPhone.Text, cbType.Text, balance, remainNum, discount, DateTime.Now,
                                                                             DateTime.MinValue, false, null, DateTime.MinValue, cbGender.Text, startTime, endTime, 0, "1");
             OleDbCommand com = new OleDbCommand(sqlAddVip, Config.con);
             com.ExecuteNonQuery();

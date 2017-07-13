@@ -498,7 +498,7 @@
             this.MaximizeBox = false;
             this.Name = "VipAdd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "VipAdd";
+            this.Text = "添加会员";
             this.ResumeLayout(false);
             this.PerformLayout();
 
