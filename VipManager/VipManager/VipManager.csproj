@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormControl\CombAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormControl\CombAdd.Designer.cs">
+      <DependentUpon>CombAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormControl\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,12 +72,6 @@
     <Compile Include="FormControl\ProAdd.Designer.cs">
       <DependentUpon>ProAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormControl\CombAdd.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormControl\CombAdd.Designer.cs">
-      <DependentUpon>CombAdd.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormControl\VipAdd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,10 +79,12 @@
       <DependentUpon>VipAdd.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\Config.cs" />
+    <Compile Include="Helper\ControlEvent.cs" />
     <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\ProInfo.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="Model\VipAbout.cs" />
     <Compile Include="UControl\UClient.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -91,6 +93,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormControl\CombAdd.resx">
+      <DependentUpon>CombAdd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormControl\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -99,9 +104,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormControl\ProAdd.resx">
       <DependentUpon>ProAdd.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormControl\CombAdd.resx">
-      <DependentUpon>CombAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormControl\VipAdd.resx">
       <DependentUpon>VipAdd.cs</DependentUpon>

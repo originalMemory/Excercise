@@ -12,15 +12,17 @@ using CCWin;
 using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
+using System.Text.RegularExpressions;
 
 namespace VipManager.FormControl
 {
-    public partial class VipAdd : Skin_Color
+    public partial class VipAdd : Form
     {
         /// <summary>
-        /// 新会员编号
+        /// 套餐下拉框数据源
         /// </summary>
-        int No;
+        List<ComboDB> CbList = new List<ComboDB>();
+
 
         public VipAdd()
         {
@@ -34,58 +36,20 @@ namespace VipManager.FormControl
             {
                 maxNo = reader.GetInt32(0);
             }
-            No = maxNo + 1;
-            txtNo.Text = No.ToString();
-            dtpStart.Value = DateTime.Now;
-            dtpEnd.Value = DateTime.Now;
+            maxNo++;
+            txtNo.Text = maxNo.ToString();
 
-            //初始化为次数型
-            labDetail.Text = "次数：";
-            txtDetail.Enabled = true;
-            dtpStart.Enabled = false;
-            dtpEnd.Enabled = false;
-            labDiscount.Visible = false;
-            txtBalance.Enabled = false;
-            txtBalance.Text = "0";
-            txtDetail.Text = "0";
+            //绑定年龄段下拉框
+            cbAge.DataSource = Config.AgeList;
+            cbAge.DisplayMember = "Display";
+            cbAge.ValueMember = "Value";
         }
 
         //根据会员类型激活或禁用不同选项
         private void cbType_TextChanged(object sender, EventArgs e)
         {
             ComboBox type = (ComboBox)sender;
-            switch (type.Text)
-            {
-                case "次数型":
-                    labDetail.Text = "次数：";
-                    txtDetail.Enabled = true;
-                    dtpStart.Enabled = false;
-                    dtpEnd.Enabled = false;
-                    labDiscount.Visible = false;
-                    txtBalance.Enabled = false;
-                    txtBalance.Text = "0";
-                    txtDetail.Text = "0";
-                    break;
-                case "折扣型":
-                    labDetail.Text = "折扣：";
-                    txtDetail.Enabled = true;
-                    dtpStart.Enabled = false;
-                    dtpEnd.Enabled = false;
-                    labDiscount.Visible = true;
-                    txtBalance.Enabled = true;
-                    txtBalance.Text = "0";
-                    txtDetail.Text = "0";
-                    break;
-                case "时间型":
-                    txtDetail.Enabled = false;
-                    dtpStart.Enabled = true;
-                    dtpEnd.Enabled = true;
-                    labDiscount.Visible = false;
-                    txtBalance.Enabled = false;
-                    txtBalance.Text = "0";
-                    txtDetail.Text = "0";
-                    break;
-            }
+
         }
 
         private void btnAddVip_Click(object sender, EventArgs e)
@@ -104,71 +68,17 @@ namespace VipManager.FormControl
             double balance = 0.0;                         //余额
             double discount = 0.0;                      //折扣
             int remainNum = 0;                            //次数
-            DateTime startTime = DateTime.Now;          //开始时间
-            DateTime endTime = DateTime.Now;            //结束时间
-            //VipType type = VipType.Num;
-            switch (cbType.Text)
-            {
-                case "次数型":
-                    try
-                    {
-                        remainNum = Convert.ToInt32(txtDetail.Text);
-                    }
-                    catch
-                    {
-                        MessageBoxEx.Show("次数只能为数字！", "提示");
-                        return;
-                    }
-                    //type = VipType.Num;
-                    break;
-                case "折扣型":
-                    try
-                    {
-                        discount = Convert.ToDouble(txtDetail.Text);
-                    }
-                    catch
-                    {
-                        MessageBoxEx.Show("折扣只能为数字！", "提示");
-                        return;
-                    }
-                    try
-                    {
-                        balance = Convert.ToDouble(txtBalance.Text);
-                    }
-                    catch
-                    {
-                        MessageBoxEx.Show("余额只能为数字！", "提示");
-                        return;
-                    }
-                   // type = VipType.Discount;
-                    break;
-                case "时间型":
-                    startTime = dtpStart.Value;
-                    endTime = dtpEnd.Value;
-                    if (startTime >= endTime)
-                    {
-                        MessageBoxEx.Show("开始时间必须小于结束时间", "提示");
-                        return;
-                    }
-                    if (startTime < DateTime.Now.Date)
-                    {
-                        MessageBoxEx.Show("开始时间不能小于当前时间", "提示");
-                        return;
-                    }
-                    //type = VipType.Time;
-                    break;
-            }
 
-            //插入会员信息
-            string sqlAddVip = @"insert into [Vip]([No],[VipName],[Phone],[Type],[Balance],[RemainNum],[Discount],[CreateAt],[DelAt],[IsDel],[Note],[LastPayAt],[Gender],[StartAt],[EndAt],[PayNum],[UserId]) values(
-{0},'{1}','{2}','{3}',{4},{5},{6},#{7}#,#{8}#,{9},'{10}',#{11}#,'{12}',#{13}#,#{14}#,{15},'{16}')".FormatStr(txtNo.Text, txtName.Text, txtPhone.Text, cbType.Text, balance, remainNum, discount, DateTime.Now,
-                                                                            DateTime.MinValue, false, null, DateTime.MinValue, cbGender.Text, startTime, endTime, 0, "1");
-            OleDbCommand com = new OleDbCommand(sqlAddVip, Config.con);
-            com.ExecuteNonQuery();
-            MessageBoxEx.Show("会员添加成功！", "提示");
+
+//            //插入会员信息
+//            string sqlAddVip = @"insert into [Vip]([No],[VipName],[Phone],[Type],[Balance],[RemainNum],[Discount],[CreateAt],[DelAt],[IsDel],[Note],[LastPayAt],[Gender],[StartAt],[EndAt],[PayNum],[UserId]) values(
+//{0},'{1}','{2}','{3}',{4},{5},{6},#{7}#,#{8}#,{9},'{10}',#{11}#,'{12}',#{13}#,#{14}#,{15},'{16}')".FormatStr(txtNo.Text, txtName.Text, txtPhone.Text, cbType.Text, balance, remainNum, discount, DateTime.Now,
+//                                                                            DateTime.MinValue, false, null, DateTime.MinValue, cbGender.Text, startTime, endTime, 0, "1");
+//            OleDbCommand com = new OleDbCommand(sqlAddVip, Config.con);
+//            com.ExecuteNonQuery();
+//            MessageBoxEx.Show("会员添加成功！", "提示");
             this.Close();
         }
-
 
     }
 }

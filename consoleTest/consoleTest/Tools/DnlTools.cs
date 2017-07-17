@@ -827,7 +827,76 @@ namespace CSharpTest.Tools
         {
             string url = "http://www.5118.com/seo/words/{0}".FormatStr(keyword);
             string html = WebApiInvoke.GetHtml(url);
-            
+            //string keyword = "真爱梦想";
+            //string url = "http://www.5118.com/seo/words/真爱梦想";
+            //string html = WebApiInvoke.GetHtml(url);
+            //HtmlDocument doc = new HtmlDocument();
+            //doc.LoadHtml(html);
+            //HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//span[@class=\"hoverToHide\"]");
+            //foreach (var node in nodes)
+            //{
+            //    Console.WriteLine(node.InnerText);
+            //}
+            string pw = "123456";
+            byte[] bytes = Encoding.UTF8.GetBytes(pw);
+            string base64 = Convert.ToBase64String(bytes);
+            Console.WriteLine(base64);
+        }
+
+        public void repairImg()
+        {
+            string sourceServer = "211.154.6.166:9999";
+            string nowServer = "43.240.138.233:9999";
+            //更新用户头像
+            var builerUser = Builders<IW2SUser>.Filter;
+            var filterUser = builerUser.Empty;
+            var colUser = MongoDBHelper.Instance.Get_IW2SUser();
+            var queryUser = colUser.Find(filterUser).ToList();
+            foreach (var user in queryUser)
+            {
+                if (!string.IsNullOrEmpty(user.PictureSrc) && user.PictureSrc.Contains(sourceServer))
+                {
+                    string newImg = user.PictureSrc.Replace(sourceServer, nowServer);
+                    var update = new UpdateDocument { { "$set", new QueryDocument { { "PictureSrc", newImg } } } };
+                    filterUser = builerUser.Eq(x => x._id, user._id);
+                    colUser.UpdateOne(filterUser, update);
+                    Console.WriteLine(newImg);
+                }
+            }
+            //更新简报图片
+            var builerReport = Builders<Dnl_Report>.Filter;
+            var filterReport = builerReport.Empty;
+            var colReport = MongoDBHelper.Instance.GetDnl_Report();
+            var queryReport = colReport.Find(filterReport).ToList();
+            foreach (var Report in queryReport)
+            {
+                if (!string.IsNullOrEmpty(Report.IconUrl) && Report.IconUrl.Contains(sourceServer))
+                {
+                    string newImg = Report.IconUrl.Replace(sourceServer, nowServer);
+                    var update = new UpdateDocument { { "$set", new QueryDocument { { "IconUrl", newImg } } } };
+                    filterReport = builerReport.Eq(x => x._id, Report._id);
+                    colReport.UpdateOne(filterReport, update);
+                    Console.WriteLine(newImg);
+                }
+            }
+
+            //更新命名实体图片
+            var builerEntityTree = Builders<Dnl_EntityTree>.Filter;
+            var filterEntityTree = builerEntityTree.Empty;
+            var colEntityTree = MongoDBHelper.Instance.GetDnl_EntityTree();
+            var queryEntityTree = colEntityTree.Find(filterEntityTree).ToList();
+            foreach (var EntityTree in queryEntityTree)
+            {
+                if (!string.IsNullOrEmpty(EntityTree.PicUrl) && EntityTree.PicUrl.Contains(sourceServer))
+                {
+                    string newImg = EntityTree.PicUrl.Replace(sourceServer, nowServer);
+                    var update = new UpdateDocument { { "$set", new QueryDocument { { "PicUrl", newImg } } } };
+                    filterEntityTree = builerEntityTree.Eq(x => x._id, EntityTree._id);
+                    colEntityTree.UpdateOne(filterEntityTree, update);
+                    Console.WriteLine(newImg);
+                }
+            }
+            Console.WriteLine("更新完毕！");
         }
     }
 

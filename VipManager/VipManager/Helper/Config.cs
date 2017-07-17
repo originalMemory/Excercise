@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data.OleDb;
 using VipManager.Model;
 using System.Windows.Forms;
+using System.Data;
 
 namespace VipManager.Helper
 {
@@ -23,13 +24,40 @@ namespace VipManager.Helper
         //public static OleDbConnection con = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;User ID=admin;Jet OleDb:Database Password=sinofaith; Data Source= " + Application.StartupPath + "\\Database\\database.db;");
 
         /// <summary>
+        /// 年龄段下拉框数据源
+        /// </summary>
+        public static DataTable AgeList = new DataTable();
+
+        /// <summary>
         /// 系统静态环境初始化
         /// </summary>
         public static void Init()
         {
             try
             {
+                //连接数据库
                 con.Open();
+
+                //生成年龄段数据源
+                AgeList.Columns.Add("Display",System.Type.GetType("System.String"));
+                AgeList.Columns.Add("Value",System.Type.GetType("System.Object"));
+
+                DataRow child = AgeList.NewRow();
+                child["Display"] = "儿童";
+                child["Value"] = AgeRange.Child;
+                AgeList.Rows.Add(child);
+                DataRow youth = AgeList.NewRow();
+                youth["Display"] = "青年";
+                youth["Value"] = AgeRange.Youth;
+                AgeList.Rows.Add(youth);
+                DataRow middle = AgeList.NewRow();
+                middle["Display"] = "中年";
+                middle["Value"] = AgeRange.Middle;
+                AgeList.Rows.Add(middle);
+                DataRow retire = AgeList.NewRow();
+                retire["Display"] = "青年";
+                retire["Value"] = AgeRange.Retire;
+                AgeList.Rows.Add(retire);
             }
             catch (Exception ex)
             {

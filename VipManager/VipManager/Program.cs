@@ -23,7 +23,7 @@ namespace VipManager
             //定义系统退出事件, 并启动登录界面.
             Application.ApplicationExit += new EventHandler(Program.Application_ApplicationExit);
 
-            Application.Run(new Login());
+            Application.Run(new Mains());
         }
 
         //当程序退出时

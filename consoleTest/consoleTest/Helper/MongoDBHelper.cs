@@ -35,6 +35,11 @@ namespace CSharpTest.Helper
             return GetCollection<IW2S_BotRegister>("IW2S_BotRegister");
         }
 
+        public IMongoCollection<IW2SUser> Get_IW2SUser()
+        {
+            return base.GetCollection<IW2SUser>("IW2SUser");
+        }
+
         public IMongoCollection<IW2S_Project> GetIW2S_Projects()
         {
             return base.GetCollection<IW2S_Project>("IW2S_Project");
@@ -61,6 +66,77 @@ namespace CSharpTest.Helper
         public IMongoCollection<test> GetTest()
         {
             return base.GetCollection<test>("test");
+        }
+        #region 数据简报
+        public IMongoCollection<Dnl_Report> GetDnl_Report()
+        {
+            return base.GetCollection<Dnl_Report>("Dnl_Report");
+        }
+
+        public IMongoCollection<Dnl_ReportShare> GetDnl_ReportShare()
+        {
+            return base.GetCollection<Dnl_ReportShare>("Dnl_ReportShare");
+        }
+
+        public IMongoCollection<Dnl_Report_Keyword> GetDnl_Report_Keyword()
+        {
+            return base.GetCollection<Dnl_Report_Keyword>("Dnl_Report_Keyword");
+        }
+
+        public IMongoCollection<Dnl_Report_KeywordCategory> GetDnl_Report_KeywordCategory()
+        {
+            return base.GetCollection<Dnl_Report_KeywordCategory>("Dnl_Report_KeywordCategory");
+        }
+
+        public IMongoCollection<Dnl_Report_Statistics> GetDnl_Report_Statistics()
+        {
+            return base.GetCollection<Dnl_Report_Statistics>("Dnl_Report_Statistics");
+        }
+
+        public IMongoCollection<Dnl_Report_keywordChart> GetDnl_Report_keywordChart()
+        {
+            return base.GetCollection<Dnl_Report_keywordChart>("Dnl_Report_keywordChart");
+        }
+
+        public IMongoCollection<Dnl_Report_LinkChart> GetDnl_Report_LinkChart()
+        {
+            return base.GetCollection<Dnl_Report_LinkChart>("Dnl_Report_LinkChart");
+        }
+
+        public IMongoCollection<Dnl_Report_LinkChartCategory> GetDnl_Report_LinkChartCategory()
+        {
+            return base.GetCollection<Dnl_Report_LinkChartCategory>("Dnl_Report_LinkChartCategory");
+        }
+
+        public IMongoCollection<Dnl_Report_Description> GetDnl_Report_Description()
+        {
+            return base.GetCollection<Dnl_Report_Description>("Dnl_Report_Description");
+        }
+
+        public IMongoCollection<Dnl_Report_DomainChart> GetDnl_Report_DomainChart()
+        {
+            return base.GetCollection<Dnl_Report_DomainChart>("Dnl_Report_DomainChart");
+        }
+
+        public IMongoCollection<Dnl_WordTree> GetDnl_WordTree()
+        {
+            return base.GetCollection<Dnl_WordTree>("Dnl_WordTree");
+        }
+
+        public IMongoCollection<Dnl_Report_WordTree> GetDnl_Report_WordTree()
+        {
+            return base.GetCollection<Dnl_Report_WordTree>("Dnl_Report_WordTree");
+        }
+
+        public IMongoCollection<Dnl_Report_TimeLink> GetDnl_Report_TimeLink()
+        {
+            return base.GetCollection<Dnl_Report_TimeLink>("Dnl_Report_TimeLink");
+        }
+        #endregion
+
+        public IMongoCollection<Dnl_EntityTree> GetDnl_EntityTree()
+        {
+            return base.GetCollection<Dnl_EntityTree>("Dnl_EntityTree");
         }
 
         #region 独立关键词与链接库

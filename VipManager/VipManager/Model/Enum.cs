@@ -24,4 +24,27 @@ namespace VipManager.Model
         /// </summary>
         Time
     }
+
+    /// <summary>
+    /// 会员年龄段
+    /// </summary>
+    public enum AgeRange
+    {
+        /// <summary>
+        /// 儿童
+        /// </summary>
+        Child,
+        /// <summary>
+        /// 青年
+        /// </summary>
+        Youth,
+        /// <summary>
+        /// 中年
+        /// </summary>
+        Middle,
+        /// <summary>
+        /// 退休
+        /// </summary>
+        Retire
+    }
 }
