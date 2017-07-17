@@ -822,6 +822,13 @@ namespace CSharpTest.Tools
             string LinkStr = api.Call(postData, linkUrl);       //调用接口，获取返回数据
             Console.WriteLine(LinkStr);
         }
+
+        public void Craw5118(string keyword)
+        {
+            string url = "http://www.5118.com/seo/words/{0}".FormatStr(keyword);
+            string html = WebApiInvoke.GetHtml(url);
+            
+        }
     }
 
     

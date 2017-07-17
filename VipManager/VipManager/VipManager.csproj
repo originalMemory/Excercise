@@ -66,6 +66,12 @@
     <Compile Include="FormControl\ProAdd.Designer.cs">
       <DependentUpon>ProAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormControl\CombAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormControl\CombAdd.Designer.cs">
+      <DependentUpon>CombAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormControl\VipAdd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +81,7 @@
     <Compile Include="Helper\Config.cs" />
     <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Model\Enum.cs" />
+    <Compile Include="Model\ProInfo.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="UControl\UClient.cs">
       <SubType>UserControl</SubType>
@@ -92,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormControl\ProAdd.resx">
       <DependentUpon>ProAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormControl\CombAdd.resx">
+      <DependentUpon>CombAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormControl\VipAdd.resx">
       <DependentUpon>VipAdd.cs</DependentUpon>

@@ -15,7 +15,7 @@ using VipManager.Model;
 
 namespace VipManager.FormControl
 {
-    public partial class Mains : Skin_Color
+    public partial class Mains : Form
     {
         public Mains()
         {
@@ -32,6 +32,7 @@ namespace VipManager.FormControl
         {
             InitDgvVip();
             InitFirstVip();
+            IsInitVip = true;
         }
 
         #region 会员管理
@@ -332,25 +333,39 @@ namespace VipManager.FormControl
         private void btnSearchVip_Click(object sender, EventArgs e)
         {
             string factor = txtSearchVip.Text;
-            //依次搜索卡号，姓名和联系方式
-            string sql = "select top 1 * from [Vip] where [IsDel]=false and [No]={0}".FormatStr(factor);
-            OleDbCommand com = new OleDbCommand(sql, Config.con);
-            OleDbDataReader reader = com.ExecuteReader();
-            if (!LoadVipInfo(reader))
+            if (!string.IsNullOrEmpty(factor))
             {
-                sql = "select top 1 * from [Vip] where [IsDel]=false and [VipName]='{0}'".FormatStr(factor);
-                com = new OleDbCommand(sql, Config.con);
-                reader = com.ExecuteReader();
-                if (!LoadVipInfo(reader))
+                //判断是搜索编号还是姓名或联系方式
+                if (factor.IsNum())
                 {
-                    sql = "select top 1 * from [Vip] where [IsDel]=false and [Phone]='{0}'".FormatStr(factor);
-                    com = new OleDbCommand(sql, Config.con);
-                    reader = com.ExecuteReader();
-                    if (!LoadVipInfo(reader))
+                    string sql = "select top 1 * from [Vip] where [IsDel]=false and [No]={0}".FormatStr(factor);
+                    OleDbCommand com = new OleDbCommand(sql, Config.con);
+                    OleDbDataReader reader = com.ExecuteReader();
+                    if (!LoadProInfo(reader))
                     {
                         MessageBoxEx.Show("无符合条件会员！", "提示");
                     }
                 }
+                else
+                {
+                    string sql = "select top 1 * from [Vip] where [IsDel]=false and [VipName]='{0}'".FormatStr(factor);
+                    OleDbCommand com = new OleDbCommand(sql, Config.con);
+                    OleDbDataReader reader = com.ExecuteReader();
+                    if (!LoadVipInfo(reader))
+                    {
+                        sql = "select top 1 * from [Vip] where [IsDel]=false and [Phone]='{0}'".FormatStr(factor);
+                        com = new OleDbCommand(sql, Config.con);
+                        reader = com.ExecuteReader();
+                        if (!LoadVipInfo(reader))
+                        {
+                            MessageBoxEx.Show("无符合条件会员！", "提示");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBoxEx.Show("搜索条件不能为空！", "提示");
             }
         }
 
@@ -368,6 +383,7 @@ namespace VipManager.FormControl
         {
             ProAdd add = new ProAdd();
             add.ShowDialog();
+            InitDgvPro();
         }
 
         /// <summary>
@@ -410,7 +426,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitDgvPro()
         {
-            string sql = "select * from [Pro] where [IsDel]=false";
+            string sql = "select * from [Product] where [IsDel]=false";
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DataTable dt = new DataTable();
@@ -482,19 +498,33 @@ namespace VipManager.FormControl
         private void btnSearchPro_Click(object sender, EventArgs e)
         {
             string factor = txtSearchPro.Text;
-            //依次搜索卡号，姓名和联系方式
-            string sql = "select top 1 * from [Product] where [IsDel]=false and [No]={0}".FormatStr(factor);
-            OleDbCommand com = new OleDbCommand(sql, Config.con);
-            OleDbDataReader reader = com.ExecuteReader();
-            if (!LoadProInfo(reader))
+            if (!string.IsNullOrEmpty(factor))
             {
-                sql = "select top 1 * from [Product] where [IsDel]=false and [ProName]='{0}'".FormatStr(factor);
-                com = new OleDbCommand(sql, Config.con);
-                reader = com.ExecuteReader();
-                if (!LoadProInfo(reader))
+                //判断是搜索编号还是名称
+                if (factor.IsNum())
                 {
-                    MessageBoxEx.Show("无符合条件会员！", "提示");
+                    string sql = "select top 1 * from [Product] where [IsDel]=false and [No]={0}".FormatStr(factor);
+                    OleDbCommand com = new OleDbCommand(sql, Config.con);
+                    OleDbDataReader reader = com.ExecuteReader();
+                    if (!LoadProInfo(reader))
+                    {
+                        MessageBoxEx.Show("无符合条件产品！", "提示");
+                    }
                 }
+                else
+                {
+                    string sql = "select top 1 * from [Product] where [IsDel]=false and [ProName]='{0}'".FormatStr(factor);
+                    OleDbCommand com = new OleDbCommand(sql, Config.con);
+                    OleDbDataReader reader = com.ExecuteReader();
+                    if (!LoadProInfo(reader))
+                    {
+                        MessageBoxEx.Show("无符合条件产品！", "提示");
+                    }
+                }
+            }
+            else
+            {
+                MessageBoxEx.Show("搜索条件不能为空！", "提示");
             }
         }
 
@@ -506,6 +536,46 @@ namespace VipManager.FormControl
             }
         }
         #endregion
+
+        //标签页切换时加载
+        bool IsInitVip = false;
+        bool IsInitPro = false;
+        private void tabMain_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage == tabVip&&!IsInitVip)
+            {
+                InitDgvVip();
+                InitFirstVip();
+                return;
+            }
+            if (e.TabPage == tabPro&&!IsInitPro)
+            {
+                InitDgvPro();
+                InitFirstPro();
+                IsInitPro = true;
+                return;
+            }
+        }
+
+        private void dgvPro_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //根据选中行刷新上方数据
+            DataGridView dgt = (DataGridView)sender;
+            DataGridViewRow dr = dgt.CurrentRow;
+            txtProNo.Text = dr.Cells["No"].Value.ToString();
+            txtProName.Text = dr.Cells["ProName"].Value.ToString();
+            txtProPrice.Text = dr.Cells["Price"].Value.ToString();
+            txtProDesc.Text = dr.Cells["ProDesc"].Value.ToString();
+            txtProPayNum.Text = dr.Cells["PayNum"].Value.ToString();
+            dtpProCreate.Value = (DateTime)dr.Cells["CreateAt"].Value;
+            dtpProLastPay.Value = (DateTime)dr.Cells["LastPayAt"].Value;
+        }
+
+        private void btnAddComb_Click(object sender, EventArgs e)
+        {
+            CombAdd add = new CombAdd();
+            add.ShowDialog();
+        }
 
     }
 }
