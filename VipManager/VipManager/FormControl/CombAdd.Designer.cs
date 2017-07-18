@@ -31,28 +31,20 @@
             this.components = new System.ComponentModel.Container();
             this.skinLabel1 = new CCWin.SkinControl.SkinLabel();
             this.skinLabel4 = new CCWin.SkinControl.SkinLabel();
-            this.labDetail = new CCWin.SkinControl.SkinLabel();
-            this.labDetail2 = new CCWin.SkinControl.SkinLabel();
             this.btnAddComb = new CCWin.SkinControl.SkinButton();
-            this.skinLabel7 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel8 = new CCWin.SkinControl.SkinLabel();
             this.skinLabel9 = new CCWin.SkinControl.SkinLabel();
             this.txtNo = new CCWin.SkinControl.SkinTextBox();
             this.txtName = new CCWin.SkinControl.SkinTextBox();
             this.cbType = new CCWin.SkinControl.SkinComboBox();
-            this.txtDetail = new CCWin.SkinControl.SkinTextBox();
-            this.txtSPrice = new CCWin.SkinControl.SkinTextBox();
             this.txtDesc = new CCWin.SkinControl.SkinTextBox();
             this.skinLabel3 = new CCWin.SkinControl.SkinLabel();
             this.lbComb = new System.Windows.Forms.ListBox();
             this.skinLabel2 = new CCWin.SkinControl.SkinLabel();
             this.btnAddProInComb = new CCWin.SkinControl.SkinButton();
-            this.txtTPrice = new CCWin.SkinControl.SkinTextBox();
-            this.skinLabel5 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel6 = new CCWin.SkinControl.SkinLabel();
             this.btnDelProInComb = new CCWin.SkinControl.SkinButton();
             this.cbPro = new CCWin.SkinControl.SkinComboBox();
             this.skinLabel10 = new CCWin.SkinControl.SkinLabel();
+            this.panelType = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // skinLabel1
@@ -81,33 +73,6 @@
             this.skinLabel4.TabIndex = 9;
             this.skinLabel4.Text = "类型：";
             // 
-            // labDetail
-            // 
-            this.labDetail.AutoSize = true;
-            this.labDetail.BackColor = System.Drawing.Color.Transparent;
-            this.labDetail.BorderColor = System.Drawing.Color.White;
-            this.labDetail.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labDetail.Location = new System.Drawing.Point(56, 229);
-            this.labDetail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labDetail.Name = "labDetail";
-            this.labDetail.Size = new System.Drawing.Size(58, 21);
-            this.labDetail.TabIndex = 11;
-            this.labDetail.Text = "减价：";
-            // 
-            // labDetail2
-            // 
-            this.labDetail2.AutoSize = true;
-            this.labDetail2.BackColor = System.Drawing.Color.Transparent;
-            this.labDetail2.BorderColor = System.Drawing.Color.White;
-            this.labDetail2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labDetail2.Location = new System.Drawing.Point(207, 229);
-            this.labDetail2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labDetail2.Name = "labDetail2";
-            this.labDetail2.Size = new System.Drawing.Size(26, 21);
-            this.labDetail2.TabIndex = 19;
-            this.labDetail2.Text = "元";
-            this.labDetail2.Visible = false;
-            // 
             // btnAddComb
             // 
             this.btnAddComb.BackColor = System.Drawing.Color.Transparent;
@@ -123,32 +88,6 @@
             this.btnAddComb.Text = "添加套餐";
             this.btnAddComb.UseVisualStyleBackColor = false;
             this.btnAddComb.Click += new System.EventHandler(this.btnAddVip_Click);
-            // 
-            // skinLabel7
-            // 
-            this.skinLabel7.AutoSize = true;
-            this.skinLabel7.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel7.BorderColor = System.Drawing.Color.White;
-            this.skinLabel7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel7.Location = new System.Drawing.Point(56, 268);
-            this.skinLabel7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.skinLabel7.Name = "skinLabel7";
-            this.skinLabel7.Size = new System.Drawing.Size(58, 21);
-            this.skinLabel7.TabIndex = 21;
-            this.skinLabel7.Text = "原价：";
-            // 
-            // skinLabel8
-            // 
-            this.skinLabel8.AutoSize = true;
-            this.skinLabel8.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel8.BorderColor = System.Drawing.Color.White;
-            this.skinLabel8.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel8.Location = new System.Drawing.Point(208, 270);
-            this.skinLabel8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.skinLabel8.Name = "skinLabel8";
-            this.skinLabel8.Size = new System.Drawing.Size(26, 21);
-            this.skinLabel8.TabIndex = 23;
-            this.skinLabel8.Text = "元";
             // 
             // skinLabel9
             // 
@@ -263,89 +202,6 @@
             this.cbType.WaterText = "";
             this.cbType.TextChanged += new System.EventHandler(this.cbType_TextChanged);
             // 
-            // txtDetail
-            // 
-            this.txtDetail.BackColor = System.Drawing.Color.Transparent;
-            this.txtDetail.DownBack = null;
-            this.txtDetail.Icon = null;
-            this.txtDetail.IconIsButton = false;
-            this.txtDetail.IconMouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtDetail.IsPasswordChat = '\0';
-            this.txtDetail.IsSystemPasswordChar = false;
-            this.txtDetail.Lines = new string[0];
-            this.txtDetail.Location = new System.Drawing.Point(114, 226);
-            this.txtDetail.Margin = new System.Windows.Forms.Padding(0);
-            this.txtDetail.MaxLength = 32767;
-            this.txtDetail.MinimumSize = new System.Drawing.Size(28, 28);
-            this.txtDetail.MouseBack = null;
-            this.txtDetail.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtDetail.Multiline = false;
-            this.txtDetail.Name = "txtDetail";
-            this.txtDetail.NormlBack = null;
-            this.txtDetail.Padding = new System.Windows.Forms.Padding(5);
-            this.txtDetail.ReadOnly = false;
-            this.txtDetail.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtDetail.Size = new System.Drawing.Size(90, 28);
-            // 
-            // 
-            // 
-            this.txtDetail.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtDetail.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDetail.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtDetail.SkinTxt.Location = new System.Drawing.Point(5, 5);
-            this.txtDetail.SkinTxt.Name = "BaseText";
-            this.txtDetail.SkinTxt.Size = new System.Drawing.Size(80, 18);
-            this.txtDetail.SkinTxt.TabIndex = 0;
-            this.txtDetail.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtDetail.SkinTxt.WaterText = "";
-            this.txtDetail.TabIndex = 28;
-            this.txtDetail.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.txtDetail.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtDetail.WaterText = "";
-            this.txtDetail.WordWrap = true;
-            this.txtDetail.Leave += new System.EventHandler(this.txtDetail_Leave);
-            // 
-            // txtSPrice
-            // 
-            this.txtSPrice.BackColor = System.Drawing.Color.Transparent;
-            this.txtSPrice.DownBack = null;
-            this.txtSPrice.Icon = null;
-            this.txtSPrice.IconIsButton = false;
-            this.txtSPrice.IconMouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtSPrice.IsPasswordChat = '\0';
-            this.txtSPrice.IsSystemPasswordChar = false;
-            this.txtSPrice.Lines = new string[0];
-            this.txtSPrice.Location = new System.Drawing.Point(114, 267);
-            this.txtSPrice.Margin = new System.Windows.Forms.Padding(0);
-            this.txtSPrice.MaxLength = 32767;
-            this.txtSPrice.MinimumSize = new System.Drawing.Size(28, 28);
-            this.txtSPrice.MouseBack = null;
-            this.txtSPrice.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtSPrice.Multiline = false;
-            this.txtSPrice.Name = "txtSPrice";
-            this.txtSPrice.NormlBack = null;
-            this.txtSPrice.Padding = new System.Windows.Forms.Padding(5);
-            this.txtSPrice.ReadOnly = true;
-            this.txtSPrice.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtSPrice.Size = new System.Drawing.Size(90, 28);
-            // 
-            // 
-            // 
-            this.txtSPrice.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtSPrice.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSPrice.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtSPrice.SkinTxt.Location = new System.Drawing.Point(5, 5);
-            this.txtSPrice.SkinTxt.Name = "BaseText";
-            this.txtSPrice.SkinTxt.Size = new System.Drawing.Size(80, 18);
-            this.txtSPrice.SkinTxt.TabIndex = 0;
-            this.txtSPrice.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtSPrice.SkinTxt.WaterText = "";
-            this.txtSPrice.TabIndex = 29;
-            this.txtSPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.txtSPrice.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtSPrice.WaterText = "";
-            this.txtSPrice.WordWrap = true;
-            // 
             // txtDesc
             // 
             this.txtDesc.AutoScroll = true;
@@ -442,73 +298,6 @@
             this.btnAddProInComb.UseVisualStyleBackColor = false;
             this.btnAddProInComb.Click += new System.EventHandler(this.btnAddPro_Click);
             // 
-            // txtTPrice
-            // 
-            this.txtTPrice.BackColor = System.Drawing.Color.Transparent;
-            this.txtTPrice.DownBack = null;
-            this.txtTPrice.Icon = null;
-            this.txtTPrice.IconIsButton = false;
-            this.txtTPrice.IconMouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtTPrice.IsPasswordChat = '\0';
-            this.txtTPrice.IsSystemPasswordChar = false;
-            this.txtTPrice.Lines = new string[0];
-            this.txtTPrice.Location = new System.Drawing.Point(114, 308);
-            this.txtTPrice.Margin = new System.Windows.Forms.Padding(0);
-            this.txtTPrice.MaxLength = 32767;
-            this.txtTPrice.MinimumSize = new System.Drawing.Size(28, 28);
-            this.txtTPrice.MouseBack = null;
-            this.txtTPrice.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtTPrice.Multiline = false;
-            this.txtTPrice.Name = "txtTPrice";
-            this.txtTPrice.NormlBack = null;
-            this.txtTPrice.Padding = new System.Windows.Forms.Padding(5);
-            this.txtTPrice.ReadOnly = true;
-            this.txtTPrice.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtTPrice.Size = new System.Drawing.Size(90, 28);
-            // 
-            // 
-            // 
-            this.txtTPrice.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtTPrice.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtTPrice.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtTPrice.SkinTxt.Location = new System.Drawing.Point(5, 5);
-            this.txtTPrice.SkinTxt.Name = "BaseText";
-            this.txtTPrice.SkinTxt.Size = new System.Drawing.Size(80, 18);
-            this.txtTPrice.SkinTxt.TabIndex = 0;
-            this.txtTPrice.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtTPrice.SkinTxt.WaterText = "";
-            this.txtTPrice.TabIndex = 32;
-            this.txtTPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.txtTPrice.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtTPrice.WaterText = "";
-            this.txtTPrice.WordWrap = true;
-            // 
-            // skinLabel5
-            // 
-            this.skinLabel5.AutoSize = true;
-            this.skinLabel5.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel5.BorderColor = System.Drawing.Color.White;
-            this.skinLabel5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel5.Location = new System.Drawing.Point(208, 311);
-            this.skinLabel5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.skinLabel5.Name = "skinLabel5";
-            this.skinLabel5.Size = new System.Drawing.Size(26, 21);
-            this.skinLabel5.TabIndex = 31;
-            this.skinLabel5.Text = "元";
-            // 
-            // skinLabel6
-            // 
-            this.skinLabel6.AutoSize = true;
-            this.skinLabel6.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel6.BorderColor = System.Drawing.Color.White;
-            this.skinLabel6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel6.Location = new System.Drawing.Point(56, 309);
-            this.skinLabel6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.skinLabel6.Name = "skinLabel6";
-            this.skinLabel6.Size = new System.Drawing.Size(58, 21);
-            this.skinLabel6.TabIndex = 30;
-            this.skinLabel6.Text = "现价：";
-            // 
             // btnDelProInComb
             // 
             this.btnDelProInComb.BackColor = System.Drawing.Color.Transparent;
@@ -549,33 +338,32 @@
             this.skinLabel10.TabIndex = 37;
             this.skinLabel10.Text = "产品列表：";
             // 
+            // panelType
+            // 
+            this.panelType.Location = new System.Drawing.Point(39, 217);
+            this.panelType.Name = "panelType";
+            this.panelType.Size = new System.Drawing.Size(200, 150);
+            this.panelType.TabIndex = 38;
+            // 
             // CombAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(687, 472);
+            this.Controls.Add(this.panelType);
             this.Controls.Add(this.skinLabel10);
             this.Controls.Add(this.cbPro);
             this.Controls.Add(this.btnDelProInComb);
-            this.Controls.Add(this.txtTPrice);
-            this.Controls.Add(this.skinLabel5);
-            this.Controls.Add(this.skinLabel6);
             this.Controls.Add(this.btnAddProInComb);
             this.Controls.Add(this.skinLabel2);
             this.Controls.Add(this.lbComb);
             this.Controls.Add(this.txtDesc);
             this.Controls.Add(this.skinLabel3);
-            this.Controls.Add(this.txtSPrice);
-            this.Controls.Add(this.txtDetail);
             this.Controls.Add(this.cbType);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.txtNo);
             this.Controls.Add(this.skinLabel9);
-            this.Controls.Add(this.skinLabel8);
-            this.Controls.Add(this.skinLabel7);
             this.Controls.Add(this.btnAddComb);
-            this.Controls.Add(this.labDetail2);
-            this.Controls.Add(this.labDetail);
             this.Controls.Add(this.skinLabel4);
             this.Controls.Add(this.skinLabel1);
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -592,27 +380,19 @@
 
         private CCWin.SkinControl.SkinLabel skinLabel1;
         private CCWin.SkinControl.SkinLabel skinLabel4;
-        private CCWin.SkinControl.SkinLabel labDetail;
-        private CCWin.SkinControl.SkinLabel labDetail2;
         private CCWin.SkinControl.SkinButton btnAddComb;
-        private CCWin.SkinControl.SkinLabel skinLabel7;
-        private CCWin.SkinControl.SkinLabel skinLabel8;
         private CCWin.SkinControl.SkinLabel skinLabel9;
         private CCWin.SkinControl.SkinTextBox txtNo;
         private CCWin.SkinControl.SkinTextBox txtName;
         private CCWin.SkinControl.SkinComboBox cbType;
-        private CCWin.SkinControl.SkinTextBox txtDetail;
-        private CCWin.SkinControl.SkinTextBox txtSPrice;
         private CCWin.SkinControl.SkinTextBox txtDesc;
         private CCWin.SkinControl.SkinLabel skinLabel3;
         private System.Windows.Forms.ListBox lbComb;
         private CCWin.SkinControl.SkinLabel skinLabel2;
         private CCWin.SkinControl.SkinButton btnAddProInComb;
-        private CCWin.SkinControl.SkinTextBox txtTPrice;
-        private CCWin.SkinControl.SkinLabel skinLabel5;
-        private CCWin.SkinControl.SkinLabel skinLabel6;
         private CCWin.SkinControl.SkinButton btnDelProInComb;
         private CCWin.SkinControl.SkinComboBox cbPro;
         private CCWin.SkinControl.SkinLabel skinLabel10;
+        private System.Windows.Forms.Panel panelType;
     }
 }

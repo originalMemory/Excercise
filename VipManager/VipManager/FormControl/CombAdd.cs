@@ -12,6 +12,7 @@ using CCWin;
 using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
+using VipManager.UControl;
 
 namespace VipManager.FormControl
 {
@@ -50,11 +51,8 @@ namespace VipManager.FormControl
             InitCbPro();
 
             //初始化为减价型
-            labDetail.Text = "减价：";
-            txtDetail.Text = "0";
-            labDetail2.Text = "元";
-            txtSPrice.Text = "0";
-            txtDetail.Text = "0";
+            UCombNum uNum = new UCombNum();
+            panelType.Controls.Add(uNum);
             
         }
 
@@ -75,19 +73,19 @@ namespace VipManager.FormControl
         private void cbType_TextChanged(object sender, EventArgs e)
         {
             ComboBox type = (ComboBox)sender;
-            switch (type.Text)
+            switch ((CombType)type.SelectedValue)
             {
-                case "减价型":
-                    labDetail.Text = "减价：";
-                    txtDetail.Text = "0";
-                    labDetail2.Text = "元";
-                    txtTPrice.Text = txtSPrice.Text;
+                case CombType.Num:
+                    {
+                        panelType.Controls.Clear();
+                        UCombNum uNum = new UCombNum();
+                        panelType.Controls.Add(uNum);
+                    }
                     break;
-                case "折扣型":
-                    labDetail.Text = "折扣：";
-                    txtDetail.Text = "0.0";
-                    labDetail2.Text = "%";
-                    txtTPrice.Text = txtSPrice.Text;
+                case CombType.Discount:
+                    {
+
+                    }
                     break;
             }
         }

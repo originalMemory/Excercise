@@ -84,12 +84,11 @@
     <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\ProInfo.cs" />
     <Compile Include="Model\User.cs" />
-    <Compile Include="Model\VipAbout.cs" />
-    <Compile Include="UControl\UClient.cs">
+    <Compile Include="UControl\UCombNum.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UControl\UClient.Designer.cs">
-      <DependentUpon>UClient.cs</DependentUpon>
+    <Compile Include="UControl\UCombNum.Designer.cs">
+      <DependentUpon>UCombNum.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,8 +107,8 @@
     <EmbeddedResource Include="FormControl\VipAdd.resx">
       <DependentUpon>VipAdd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UControl\UClient.resx">
-      <DependentUpon>UClient.cs</DependentUpon>
+    <EmbeddedResource Include="UControl\UCombNum.resx">
+      <DependentUpon>UCombNum.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -9,7 +9,7 @@ namespace VipManager.Model
     /// <summary>
     /// 会员类型
     /// </summary>
-    public enum VipType
+    public enum CombType
     {
         /// <summary>
         /// 次数型
