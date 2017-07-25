@@ -24,9 +24,9 @@ namespace VipManager.FormControl
         int No;
 
         /// <summary>
-        /// 套餐内产品信息列表
+        /// 套餐内产品列表
         /// </summary>
-        List<ProInfo> ProInComb = new List<ProInfo>();
+        DataTable ProInComb = new DataTable();
 
         /// <summary>
         /// 所有产品数据表
@@ -36,7 +36,7 @@ namespace VipManager.FormControl
         public CombAdd()
         {
             InitializeComponent();
-            //获取原有会员编号，计算新会员编号
+            //获取原有套餐编号，计算新会员编号
             string sqlVip = "select top 1 [No] from [Combination] where [IsDel]=false order by [No] desc";
             OleDbCommand comVip = new OleDbCommand(sqlVip, Config.con);
             OleDbDataReader reader = comVip.ExecuteReader();
@@ -50,10 +50,11 @@ namespace VipManager.FormControl
 
             InitCbPro();
 
-            //初始化为减价型
-            UCombNum uNum = new UCombNum();
-            panelType.Controls.Add(uNum);
-            
+            //初始化产品列表
+            ProInComb = dtPro.Clone();
+            lbPro.DataSource = ProInComb;
+            lbPro.DisplayMember = "ProName";
+            lbPro.ValueMember = "No";
         }
 
         /// <summary>
@@ -73,21 +74,64 @@ namespace VipManager.FormControl
         private void cbType_TextChanged(object sender, EventArgs e)
         {
             ComboBox type = (ComboBox)sender;
-            switch ((CombType)type.SelectedValue)
+            switch (type.Text)
             {
-                case CombType.Num:
-                    {
-                        panelType.Controls.Clear();
-                        UCombNum uNum = new UCombNum();
-                        panelType.Controls.Add(uNum);
-                    }
+                case "次数型":
+                    SetCombNum();
                     break;
-                case CombType.Discount:
-                    {
-
-                    }
+                case "折扣型":
+                    SetCombDiscount();
+                    break;
+                case "时间型":
+                    SetCombTime();
+                    break;
+                default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// 切换为次数型展示
+        /// </summary>
+        private void SetCombNum()
+        {
+            labCombDetail.Text = "价格：";
+            labCombUnit.Text = "元";
+            txtCombDetail.Text = "0.0";
+            txtCombNum.Text = "0";
+            cbCombTime.Visible = false;
+            labCombNum.Visible = true;
+            labCombUnit.Visible = true;
+            txtCombDetail.Visible = true;
+            txtCombNum.Visible = true;
+        }
+
+        /// <summary>
+        /// 切换为折扣型展示
+        /// </summary>
+        private void SetCombDiscount()
+        {
+            labCombDetail.Text = "折扣：";
+            labCombUnit.Text = "%";
+            txtCombDetail.Text = "0.0";
+            cbCombTime.Visible = false;
+            labCombNum.Visible = false;
+            labCombUnit.Visible = true;
+            txtCombDetail.Visible = true;
+            txtCombNum.Visible = false;
+        }
+
+        /// <summary>
+        /// 切换为时间型展示
+        /// </summary>
+        private void SetCombTime()
+        {
+            labCombDetail.Text = "时间：";
+            cbCombTime.Visible = true;
+            labCombNum.Visible = false;
+            txtCombNum.Visible = false;
+            labCombUnit.Visible = false;
+            txtCombDetail.Visible = false;
         }
 
         private void btnAddVip_Click(object sender, EventArgs e)
@@ -104,27 +148,66 @@ namespace VipManager.FormControl
                 MessageBoxEx.Show("描述未填写！", "提示");
                 return;
             }
-            if (lbComb.Items.Count == 0)
+            if (lbPro.Items.Count == 0)
             {
-                MessageBoxEx.Show("套餐不能为空！", "提示");
+                MessageBoxEx.Show("产品不能为空！", "提示");
                 return;
             }
-            double sourcePrice = Convert.ToDouble(txtSPrice.Text);
-            //计算折扣
-            double discount = 0.0;                      //折扣
-            if (cbType.Text=="折扣型")
+
+            string proNos = "";
+
+            foreach (DataRow row in ProInComb.Rows)
             {
-                discount = Convert.ToDouble(txtDetail.Text);
+                proNos += row["No"].ToString()+",";
+            }
+            if (proNos.Length > 0)
+                proNos = proNos.Substring(0, proNos.Length - 1);
+
+            double price = 0.0;
+            int num = 0;
+            double discount = 0.0;
+            CombType type = new CombType();
+            int timeRange = 0;
+            switch (cbType.Text)
+            {
+                case "次数型":
+                    type = CombType.Num;
+                    price = Convert.ToDouble(txtCombDetail.Text);
+                    num = Convert.ToInt32(txtCombDetail.Text);
+                    break;
+                case "折扣型":
+                    type = CombType.Discount;
+                    discount = Convert.ToDouble(txtCombDetail.Text);
+                    break;
+                case "时间型":
+                    {
+                        switch (cbCombTime.Text)
+                        {
+                            case "月卡":
+                                timeRange = 1;
+                                break;
+                            case "季卡":
+                                timeRange = 3;
+                                break;
+                            case "半年卡":
+                                timeRange = 6;
+                                break;
+                            case "年卡":
+                                timeRange = 12;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    type = CombType.Time;
+                    break;
             }
 
-            string proNos = string.Join(";", ProInComb.Select(x=>x.No));
-            string proNames = string.Join(";", ProInComb.Select(x=>x.Name));
-
-            //插入会员信息
-            string sqlAddVip = @"insert into [Combination]([No],[CombName],[Description],[ProNos],[ProNames],[CreateAt],[UserId],[IsDel],[DelAt],[LastPayAt],[PayNum],[Type],[SourcePrice],[TruePrice],[Discout]) values(
-{0},'{1}','{2}','{3}','{4}',#{5}#,'{6}',{7},#{8}#,#{9}#,{10},'{11}',{12},{13},{14}"
-                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, proNos, proNames, DateTime.Now, userId, false, DateTime.MinValue, DateTime.MinValue, 0, cbType.Text, txtSPrice.Text, txtTPrice, Text, discount);
-            OleDbCommand com = new OleDbCommand(sqlAddVip, Config.con);
+            //插入套餐信息
+            string sqlAddComb = @"insert into [Combination]([No],[CombName],[Description],[ProNos],[CreateAt],[UserId],[IsDel],[DelAt],[LastPayAt],[PayNum],[Type],[Price],[Num],[Discount],[TimeRange]) values(
+{0},'{1}','{2}','{3}',#{4}#,'{5}',{6},#{7}#,#{8}#,{9},{10},{11},{12},{13},{14})"
+                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, proNos, DateTime.Now, userId, false, DateTime.MinValue, DateTime.MinValue, 0, (int)type,price,num,discount,timeRange);
+            OleDbCommand com = new OleDbCommand(sqlAddComb, Config.con);
             com.ExecuteNonQuery();
             MessageBoxEx.Show("套餐添加成功！", "提示");
             this.Close();
@@ -135,152 +218,34 @@ namespace VipManager.FormControl
         private void btnAddPro_Click(object sender, EventArgs e)
         {
             int no = Convert.ToInt32(cbPro.SelectedValue);
-            string name = cbPro.SelectedText;
-
-            //获取产品的价格
-            double price = 0.0;
-            DataColumn col = dtPro.Columns["No"];
-            foreach (DataGridViewRow row in dtPro.Rows)
-            {
-                if (Convert.ToInt32(row.Cells["No"].Value) == no)
-                {
-                    price = Convert.ToDouble(row.Cells["Price"].Value);
-                    break;
-                }
-            }
-
-            name += "/" + price;
 
             //检查该产品是否已添加
-            if (ProInComb.Find(x=>x.No==no)==null)
-            {
-                ProInfo pro = new ProInfo
-                {
-                    No = no,
-                    Name = name,
-                    Price = price
-                };
-                ProInComb.Add(pro);
-                //重计算原总价
-                double sourcePrice = ProInComb.Sum(x => x.Price);
-                txtSPrice.Text = sourcePrice.ToString();
-
-                //重计算真实价格
-                double reduce = 0.0;                         //减价
-                double discount = 0.0;                      //折扣
-                double truePrice = 0.0;                     //真实价格
-                switch (cbType.Text)
-                {
-                    case "减价型":
-                        reduce = Convert.ToInt32(txtDetail.Text);
-                        truePrice = sourcePrice - reduce;
-                        break;
-                    case "折扣型":
-                        discount = Convert.ToDouble(txtDetail.Text);
-                        truePrice = sourcePrice * (1 - discount / 100);
-                        break;
-                }
-                txtTPrice.Text = truePrice.ToString();
-            }
-            else
+            DataRow[] rows = ProInComb.Select("No='{0}'".FormatStr(no));
+            if (rows.Count() > 0)
             {
                 MessageBoxEx.Show("该产品已添加！", "提示");
             }
-
-            //初始化下拉菜单
-            lbComb.DataSource = ProInComb;
-            lbComb.DisplayMember = "Name";
-            lbComb.ValueMember = "No";
+            else
+            {
+                rows = dtPro.Select("No='{0}'".FormatStr(no));
+                if (rows.Count() > 0)
+                {
+                    ProInComb.ImportRow(rows[0]);
+                }
+            }
         }
 
         //删除产品
         private void btnDelProInComb_Click(object sender, EventArgs e)
         {
-            int no = Convert.ToInt32(cbPro.SelectedValue);
-            ProInComb.RemoveAll(x => x.No == no);
-        }
-
-        //在输入折扣或减免参数后验证是否为数字并重计算真实价格
-        private void txtDetail_Leave(object sender, EventArgs e)
-        {
-            if (txtDetail.Text.IsNum())
+            int no = Convert.ToInt32(lbPro.SelectedValue);
+            DataRow[] rows = ProInComb.Select("No='{0}'".FormatStr(no));
+            if (rows.Count() > 0)
             {
-                double sourcePrice = ProInComb.Sum(x => x.Price);
-
-                //重计算真实价格
-                double reduce = 0.0;                         //减价
-                double discount = 0.0;                      //折扣
-                double truePrice = 0.0;                     //真实价格
-                switch (cbType.Text)
-                {
-                    case "减价型":
-                        reduce = Convert.ToInt32(txtDetail.Text);
-                        truePrice = sourcePrice - reduce;
-                        break;
-                    case "折扣型":
-                        discount = Convert.ToDouble(txtDetail.Text);
-                        truePrice = sourcePrice * (1 - discount / 100);
-                        break;
-                }
-                txtTPrice.Text = truePrice.ToString();
-            }
-            else
-            {
-                switch (cbType.Text)
-                {
-                    case "减价型":
-                        MessageBoxEx.Show("减价只能为数字！", "提示");
-                        txtDetail.Focus();
-                        break;
-                    case "折扣型":
-
-                        MessageBoxEx.Show("折扣只能为数字！", "提示");
-                        txtDetail.Focus();
-                        break;
-                }
-            }
-            
-        }
-
-        private void lbComb_Leave(object sender, EventArgs e)
-        {
-            if (txtDetail.Text.IsNum())
-            {
-                double sourcePrice = ProInComb.Sum(x => x.Price);
-
-                //重计算真实价格
-                double reduce = 0.0;                         //减价
-                double discount = 0.0;                      //折扣
-                double truePrice = 0.0;                     //真实价格
-                switch (cbType.Text)
-                {
-                    case "减价型":
-                        reduce = Convert.ToInt32(txtDetail.Text);
-                        truePrice = sourcePrice - reduce;
-                        break;
-                    case "折扣型":
-                        discount = Convert.ToDouble(txtDetail.Text);
-                        truePrice = sourcePrice * (1 - discount / 100);
-                        break;
-                }
-                txtTPrice.Text = truePrice.ToString();
-            }
-            else
-            {
-                switch (cbType.Text)
-                {
-                    case "减价型":
-                        MessageBoxEx.Show("减价只能为数字！", "提示");
-                        txtDetail.Focus();
-                        break;
-                    case "折扣型":
-
-                        MessageBoxEx.Show("折扣只能为数字！", "提示");
-                        txtDetail.Focus();
-                        break;
-                }
+                ProInComb.Rows.Remove(rows[0]);
             }
         }
+
 
 
     }

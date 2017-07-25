@@ -47,4 +47,27 @@ namespace VipManager.Model
         /// </summary>
         Retire
     }
+
+    /// <summary>
+    /// 套餐有效时间
+    /// </summary>
+    public enum CombTimeType
+    {
+        /// <summary>
+        /// 月卡
+        /// </summary>
+        Month,
+        /// <summary>
+        /// 季卡
+        /// </summary>
+        Season,
+        /// <summary>
+        /// 半年卡
+        /// </summary>
+        HalfYear,
+        /// <summary>
+        /// 年卡
+        /// </summary>
+        Year,
+    }
 }

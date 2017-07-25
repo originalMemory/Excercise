@@ -12,6 +12,7 @@ using CCWin;
 using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
+using VipManager.UControl;
 
 namespace VipManager.FormControl
 {
@@ -30,9 +31,17 @@ namespace VipManager.FormControl
 
         private void Mains_Load(object sender, EventArgs e)
         {
+            UTabVip vip = new UTabVip();
             InitDgvVip();
             InitFirstVip();
             IsInitVip = true;
+
+            ProInComb.Columns.Add("No", System.Type.GetType("System.Int32"));
+            ProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
+            ProInComb.Columns.Add("Price", System.Type.GetType("System.Double"));
+            lbPro.DataSource = ProInComb;
+            lbPro.DisplayMember = "ProName";
+            lbPro.ValueMember = "No";
         }
 
         #region 会员管理
@@ -90,16 +99,16 @@ namespace VipManager.FormControl
                 switch (type)
                 {
                     case "次数型":
-                        SetNum();
+                        SetVipNum();
                         txtDetail.Text = reader["RemainNum"].ToString();
                         break;
                     case "折扣型":
-                        SetDiscount();
+                        SetVipDiscount();
                         txtDetail.Text = reader["Discount"].ToString();
                         txtBalance.Text = reader["Balance"].ToString();
                         break;
                     case "时间型":
-                        SetTime();
+                        SetVipTime();
                         dtpStart.Value = (DateTime)reader["StartAt"];
                         dtpEnd.Value = (DateTime)reader["EndAt"];
                         break;
@@ -118,7 +127,7 @@ namespace VipManager.FormControl
         /// <summary>
         /// 显示次数型数据
         /// </summary>
-        private void SetNum()
+        private void SetVipNum()
         {
             labDetail.Text = "次数：";
             labDetail.Visible = true;
@@ -135,7 +144,7 @@ namespace VipManager.FormControl
         /// <summary>
         /// 显示折扣型数据
         /// </summary>
-        private void SetDiscount()
+        private void SetVipDiscount()
         {
             labDetail.Text = "折扣：";
             labDetail.Visible = true;
@@ -152,7 +161,7 @@ namespace VipManager.FormControl
         /// <summary>
         /// 显示时间型数据
         /// </summary>
-        private void SetTime()
+        private void SetVipTime()
         {
             labDetail.Visible = false;
             txtDetail.Visible = false;
@@ -183,16 +192,16 @@ namespace VipManager.FormControl
             switch (type)
             {
                 case "次数型":
-                    SetNum();
+                    SetVipNum();
                     txtDetail.Text = dr.Cells["VipRemainNum"].Value.ToString();
                     break;
                 case "折扣型":
-                    SetDiscount();
+                    SetVipDiscount();
                     txtDetail.Text = dr.Cells["VipDiscount"].Value.ToString();
                     txtBalance.Text = dr.Cells["VipBalance"].Value.ToString();
                     break;
                 case "时间型":
-                    SetTime();
+                    SetVipTime();
                     dtpStart.Value = (DateTime)dr.Cells["VipStartAt"].Value;
                     dtpEnd.Value = (DateTime)dr.Cells["VipEndAt"].Value;
                     break;
@@ -297,17 +306,17 @@ namespace VipManager.FormControl
             switch (cbType.Text)
             {
                 case "次数型":
-                    SetNum();
+                    SetVipNum();
                     txtBalance.Text = "0";
                     txtDetail.Text = "0";
                     break;
                 case "折扣型":
-                    SetDiscount();
+                    SetVipDiscount();
                     txtBalance.Text = "0";
                     txtDetail.Text = "0";
                     break;
                 case "时间型":
-                    SetTime();
+                    SetVipTime();
                     txtBalance.Text = "0";
                     txtDetail.Text = "0";
                     dtpStart.Value = DateTime.Now;
@@ -341,7 +350,7 @@ namespace VipManager.FormControl
                     string sql = "select top 1 * from [Vip] where [IsDel]=false and [No]={0}".FormatStr(factor);
                     OleDbCommand com = new OleDbCommand(sql, Config.con);
                     OleDbDataReader reader = com.ExecuteReader();
-                    if (!LoadProInfo(reader))
+                    if (!LoadVipInfo(reader))
                     {
                         MessageBoxEx.Show("无符合条件会员！", "提示");
                     }
@@ -373,7 +382,7 @@ namespace VipManager.FormControl
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                btnSearchVip_Click(sender,e);
+                btnSearchVip_Click(sender, e);
             }
         }
         #endregion
@@ -494,6 +503,21 @@ namespace VipManager.FormControl
             MessageBoxEx.Show("删除成功！", "提示");
         }
 
+
+        private void dgvPro_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //根据选中行刷新上方数据
+            DataGridView dgt = (DataGridView)sender;
+            DataGridViewRow dr = dgt.CurrentRow;
+            txtProNo.Text = dr.Cells["No"].Value.ToString();
+            txtProName.Text = dr.Cells["ProName"].Value.ToString();
+            txtProPrice.Text = dr.Cells["Price"].Value.ToString();
+            txtProDesc.Text = dr.Cells["ProDesc"].Value.ToString();
+            txtProPayNum.Text = dr.Cells["PayNum"].Value.ToString();
+            dtpProCreate.Value = (DateTime)dr.Cells["CreateAt"].Value;
+            dtpProLastPay.Value = (DateTime)dr.Cells["LastPayAt"].Value;
+        }
+
         //搜索产品信息
         private void btnSearchPro_Click(object sender, EventArgs e)
         {
@@ -532,20 +556,318 @@ namespace VipManager.FormControl
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                btnSearchVip_Click(sender, e);
+                //btnSearchVip_Click(sender, e);
             }
+        }
+        #endregion
+
+        #region 套餐管理
+
+        /// <summary>
+        /// 已有套餐信息
+        /// </summary>
+        DataTable DtComb = new DataTable();
+        /// <summary>
+        /// 加载最近一次支付的会员的信息
+        /// </summary>
+        private void InitFirstComb()
+        {
+            string sqlLast = "select top 1 * from [Combination] where [IsDel]=false order by [LastPayAt] desc";
+            OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
+            OleDbDataReader reader = com.ExecuteReader();
+            LoadCombInfo(reader);
+        }
+
+        /// <summary>
+        /// 初始化数据表
+        /// </summary>
+        private void InitDgvComb()
+        {
+            //第一次时设置数据表结构
+            DataTable dt = new DataTable();
+            if (!IsInitComb)
+            {
+                dt.Columns.Add("No", System.Type.GetType("System.Int32"));
+                dt.Columns.Add("CombName", System.Type.GetType("System.String"));
+                dt.Columns.Add("Description", System.Type.GetType("System.String"));
+                dt.Columns.Add("CreateAt", System.Type.GetType("System.DateTime"));
+                dt.Columns.Add("LastPayAt", System.Type.GetType("System.String"));
+                dt.Columns.Add("PayNum", System.Type.GetType("System.Int32"));
+                dt.Columns.Add("Type", System.Type.GetType("System.String"));
+            }
+
+            //获取源数据
+            string sql = "select * from [Combination] where [IsDel]=false";
+            OleDbCommand com = new OleDbCommand(sql, Config.con);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(com);
+            DtComb.Clear();
+            adapter.Fill(DtComb);
+            foreach (DataRow oldRow in DtComb.Rows)
+            {
+                DataRow row = dt.NewRow();
+                row["No"] = Convert.ToInt32(oldRow["No"]);
+                row["CombName"] = oldRow["CombName"].ToString();
+                row["Description"] = oldRow["Description"].ToString();
+                row["CreateAt"] = (System.DateTime)oldRow["CreateAt"];
+                row["LastPayAt"] = (System.DateTime)oldRow["LastPayAt"];
+                row["PayNum"] = Convert.ToInt32(oldRow["PayNum"]);
+                row["Type"] = oldRow["Type"].ToString();
+                dt.Rows.Add(row);
+            }
+            dgvComb.DataSource = dt;
+        }
+
+        /// <summary>
+        /// 将获取的数据显示到界面
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        private bool LoadCombInfo(OleDbDataReader reader)
+        {
+            if (reader.Read())
+            {
+                txtCombNo.Text = reader["No"].ToString();
+                txtCombName.Text = reader["CombName"].ToString();
+                txtCombDesc.Text = reader["Description"].ToString();
+                txtCombPayNum.Text = reader["PayNum"].ToString();
+                dtpCombCreate.Value = (DateTime)reader["CreateAt"];
+                dtpCombLastPay.Value = (DateTime)reader["LastPayAt"];
+                CombType type = (CombType)reader["Type"];
+                switch (type)
+                {
+                    case CombType.Num:
+                        {
+                            cbCombType.Text = "次数型";
+                            SetCombNum();
+                            double price = (double)reader["Price"];
+                            int num = (int)reader["Num"];
+                            txtCombDetail.Text = price.ToString();
+                            txtCombNum.Text = num.ToString();
+                        }
+                        break;
+                    case CombType.Discount:
+                        {
+                            cbCombType.Text = "折扣型";
+                            SetCombDiscount();
+                            double discount = Convert.ToDouble(reader["Discount"]);
+                            txtCombDetail.Text = discount.ToString();
+                        }
+                        break;
+                    case CombType.Time:
+                        {
+                            cbCombType.Text = "时间型";
+                            SetCombTime();
+                            CombTimeType timeType = (CombTimeType)reader["Type"];
+                            switch (timeType)
+                            {
+                                case CombTimeType.Month:
+                                    cbCombTime.Text = "月卡";
+                                    break;
+                                case CombTimeType.Season:
+                                    cbCombTime.Text = "季卡";
+                                    break;
+                                case CombTimeType.HalfYear:
+                                    cbCombTime.Text = "半年卡";
+                                    break;
+                                case CombTimeType.Year:
+                                    cbCombTime.Text = "年卡";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+                }
+                //获取套餐内产品信息
+                string proNos = reader["ProNos"].ToString();
+                string sqlPro = "select [No],[ProName],[Price] from [Product] where [IsDel]=false";
+                OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
+                adapter.Fill(ProInComb);
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 套餐内产品信息列表
+        /// </summary>
+        DataTable ProInComb = new DataTable();
+
+        private void cbCombType_TextChanged(object sender, EventArgs e)
+        {
+            switch (cbCombType.Text)
+            {
+                case "次数型":
+                    SetCombNum();
+                    break;
+                case "折扣型":
+                    SetCombDiscount();
+                    break;
+                case "时间型":
+                    SetCombTime();
+                    break;
+                default:
+                    break;
+            }
+        }
+        # region 套餐类型展示变更
+        /// <summary>
+        /// 切换为次数型展示
+        /// </summary>
+        private void SetCombNum()
+        {
+            labCombDetail.Text = "价格：";
+            labCombUnit.Text = "元";
+            txtCombDetail.Text = "0.0";
+            txtCombNum.Text = "0";
+            cbCombTime.Visible = false;
+            labCombNum.Visible = true;
+            labCombUnit.Visible = true;
+            txtCombDetail.Visible = true;
+            txtCombNum.Visible = true;
+        }
+
+        /// <summary>
+        /// 切换为折扣型展示
+        /// </summary>
+        private void SetCombDiscount()
+        {
+            labCombDetail.Text = "折扣：";
+            labCombUnit.Text = "%";
+            txtCombDetail.Text = "0.0";
+            cbCombTime.Visible = false;
+            labCombNum.Visible = false;
+            labCombUnit.Visible = true;
+            txtCombDetail.Visible = true;
+            txtCombNum.Visible = false;
+        }
+
+        /// <summary>
+        /// 切换为时间型展示
+        /// </summary>
+        private void SetCombTime()
+        {
+            labCombDetail.Text = "时间：";
+            cbCombTime.Visible = true;
+            labCombNum.Visible = false;
+            txtCombNum.Visible = false;
+            labCombUnit.Visible = false;
+            txtCombDetail.Visible = false;
+        }
+        #endregion
+
+        //添加套餐
+        private void btnAddComb_Click(object sender, EventArgs e)
+        {
+            CombAdd add = new CombAdd();
+            add.ShowDialog();
+        }
+
+        //根据选中行刷新上方数据
+        private void dgvComb_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //获取选中套餐编号
+            DataGridView dgt = (DataGridView)sender;
+            DataGridViewRow dr = dgt.CurrentRow;
+            int no = Convert.ToInt32(dr.Cells["CombNo"].Value);
+
+            //获取详细套餐信息
+            var rows = DtComb.Select("No=" + no);
+
+
+            txtCombNo.Text = rows[0]["No"].ToString();
+            txtCombName.Text = rows[0]["CombName"].ToString();
+            txtCombDesc.Text = rows[0]["Description"].ToString();
+            txtCombPayNum.Text = rows[0]["PayNum"].ToString();
+            dtpCombCreate.Value = (DateTime)rows[0]["CreateAt"];
+            dtpCombLastPay.Value = (DateTime)rows[0]["LastPayAt"];
+            CombType type = (CombType)rows[0]["Type"];
+            switch (type)
+            {
+                case CombType.Num:
+                    {
+                        cbCombType.Text = "次数型";
+                        SetCombNum();
+                        double price = Convert.ToDouble(rows[0]["Price"]);
+                        int num = Convert.ToInt32(rows[0]["Num"]);
+                        txtCombDetail.Text = price.ToString();
+                        txtCombNum.Text = num.ToString();
+                    }
+                    break;
+                case CombType.Discount:
+                    {
+                        cbCombType.Text = "折扣型";
+                        SetCombDiscount();
+                        double discount = Convert.ToDouble(rows[0]["Discount"]);
+                        txtCombDetail.Text = discount.ToString();
+                    }
+                    break;
+                case CombType.Time:
+                    {
+                        cbCombType.Text = "时间型";
+                        SetCombTime();
+                        CombTimeType timeType = (CombTimeType)rows[0]["Type"];
+                        switch (timeType)
+                        {
+                            case CombTimeType.Month:
+                                cbCombTime.Text = "月卡";
+                                break;
+                            case CombTimeType.Season:
+                                cbCombTime.Text = "季卡";
+                                break;
+                            case CombTimeType.HalfYear:
+                                cbCombTime.Text = "半年卡";
+                                break;
+                            case CombTimeType.Year:
+                                cbCombTime.Text = "年卡";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+            }
+            //获取套餐内产品信息
+            string proNos = rows[0]["ProNos"].ToString();
+            string sqlPro = "select [No],[ProName],[Price] from [Product] where [IsDel]=false and [No] in({0}) ".FormatStr(proNos);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
+            ProInComb.Clear();
+            adapter.Fill(ProInComb);
+        }
+
+
+        private void btnEditProInComb_Click(object sender, EventArgs e)
+        {
+            EditProInComb edit = new EditProInComb(ProInComb);
+            edit.ReturnProList += this.SetProInCmob;
+            edit.ShowDialog();
+        }
+
+        /// <summary>
+        /// 重设套餐内产品列表
+        /// </summary>
+        /// <param name="dt"></param>
+        public void SetProInCmob(DataTable dt)
+        {
+            ProInComb = dt.Copy();
+            lbPro.DataSource = ProInComb;
+            lbPro.DisplayMember = "ProName";
+            lbPro.ValueMember = "No";
         }
         #endregion
 
         //标签页切换时加载
         bool IsInitVip = false;
         bool IsInitPro = false;
+        bool IsInitComb = false;
         private void tabMain_Selected(object sender, TabControlEventArgs e)
         {
             if (e.TabPage == tabVip&&!IsInitVip)
             {
-                InitDgvVip();
-                InitFirstVip();
                 return;
             }
             if (e.TabPage == tabPro&&!IsInitPro)
@@ -555,27 +877,105 @@ namespace VipManager.FormControl
                 IsInitPro = true;
                 return;
             }
+            if (e.TabPage == tabComb && !IsInitComb)
+            {
+                InitDgvComb();
+                InitFirstComb();
+                IsInitComb = true;
+                return;
+            }
         }
 
-        private void dgvPro_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        //删除套餐
+        private void btnDelComb_Click(object sender, EventArgs e)
         {
-            //根据选中行刷新上方数据
-            DataGridView dgt = (DataGridView)sender;
-            DataGridViewRow dr = dgt.CurrentRow;
-            txtProNo.Text = dr.Cells["No"].Value.ToString();
-            txtProName.Text = dr.Cells["ProName"].Value.ToString();
-            txtProPrice.Text = dr.Cells["Price"].Value.ToString();
-            txtProDesc.Text = dr.Cells["ProDesc"].Value.ToString();
-            txtProPayNum.Text = dr.Cells["PayNum"].Value.ToString();
-            dtpProCreate.Value = (DateTime)dr.Cells["CreateAt"].Value;
-            dtpProLastPay.Value = (DateTime)dr.Cells["LastPayAt"].Value;
+            string sqlDelComb = "delete from [Combination] where [No]={0}".FormatStr(txtCombNo.Text);
+            OleDbCommand com = new OleDbCommand(sqlDelComb, Config.con);
+            com.ExecuteNonQuery();
+            InitDgvComb();
+            InitFirstComb();
+            MessageBoxEx.Show("删除成功！", "提示");
         }
 
-        private void btnAddComb_Click(object sender, EventArgs e)
+        //修改套餐
+        private void btnEditComb_Click(object sender, EventArgs e)
         {
-            CombAdd add = new CombAdd();
-            add.ShowDialog();
+            //验证数据是否填写完整
+            if (string.IsNullOrEmpty(txtCombName.Text))
+            {
+                MessageBoxEx.Show("名称未填写！", "提示");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtCombDesc.Text))
+            {
+                MessageBoxEx.Show("描述未填写！", "提示");
+                return;
+            }
+            if (lbPro.Items.Count == 0)
+            {
+                MessageBoxEx.Show("产品不能为空！", "提示");
+                return;
+            }
+
+            string proNos = "";
+
+            foreach (DataRow row in ProInComb.Rows)
+            {
+                proNos += row["No"].ToString()+",";
+            }
+            if (proNos.Length > 0)
+                proNos = proNos.Substring(0, proNos.Length - 1);
+
+            double price = 0.0;
+            int num = 0;
+            double discount = 0.0;
+            CombType type = new CombType();
+            int timeRange = 0;
+            switch (cbCombType.Text)
+            {
+                case "次数型":
+                    type = CombType.Num;
+                    price = Convert.ToDouble(txtCombDetail.Text);
+                    num = Convert.ToInt32(txtCombDetail.Text);
+                    break;
+                case "折扣型":
+                    type = CombType.Discount;
+                    discount = Convert.ToDouble(txtCombDetail.Text);
+                    break;
+                case "时间型":
+                    {
+                        switch (cbCombTime.Text)
+                        {
+                            case "月卡":
+                                timeRange = 1;
+                                break;
+                            case "季卡":
+                                timeRange = 3;
+                                break;
+                            case "半年卡":
+                                timeRange = 6;
+                                break;
+                            case "年卡":
+                                timeRange = 12;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    type = CombType.Time;
+                    break;
+            }
+
+            string sqlEditComb = @"update [Combination] set [CombName]='{0}',[Description]='{1}',[ProNos]='{2}',[Type]='{3}',[Price]={4},[Num]={5},[Discount]={6},[TimeRange]={7} where [No]={8}"
+                .FormatStr(txtCombName.Text, txtCombDesc.Text, proNos, (int)type, price, num, discount, timeRange, txtCombNo.Text);
+            OleDbCommand com = new OleDbCommand(sqlEditComb, Config.con);
+            com.ExecuteNonQuery();
+            InitDgvComb();
+            MessageBoxEx.Show("修改成功！", "提示");
         }
+
+
+        
 
     }
 }

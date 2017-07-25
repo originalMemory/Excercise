@@ -54,6 +54,12 @@
     <Compile Include="FormControl\CombAdd.Designer.cs">
       <DependentUpon>CombAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormControl\EditProInComb.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormControl\EditProInComb.Designer.cs">
+      <DependentUpon>EditProInComb.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormControl\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +78,12 @@
     <Compile Include="FormControl\ProAdd.Designer.cs">
       <DependentUpon>ProAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormControl\Temp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormControl\Temp.Designer.cs">
+      <DependentUpon>Temp.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormControl\VipAdd.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,16 +96,13 @@
     <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\ProInfo.cs" />
     <Compile Include="Model\User.cs" />
-    <Compile Include="UControl\UCombNum.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UControl\UCombNum.Designer.cs">
-      <DependentUpon>UCombNum.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormControl\CombAdd.resx">
       <DependentUpon>CombAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormControl\EditProInComb.resx">
+      <DependentUpon>EditProInComb.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormControl\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -104,11 +113,11 @@
     <EmbeddedResource Include="FormControl\ProAdd.resx">
       <DependentUpon>ProAdd.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormControl\Temp.resx">
+      <DependentUpon>Temp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormControl\VipAdd.resx">
       <DependentUpon>VipAdd.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UControl\UCombNum.resx">
-      <DependentUpon>UCombNum.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -138,7 +147,9 @@
     <Content Include="DLL\CSkin.dll" />
     <Content Include="DLL\CSkin.XML" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UControl\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

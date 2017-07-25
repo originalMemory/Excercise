@@ -18,10 +18,6 @@ namespace VipManager.FormControl
 {
     public partial class VipAdd : Form
     {
-        /// <summary>
-        /// 套餐下拉框数据源
-        /// </summary>
-        List<ComboDB> CbList = new List<ComboDB>();
 
 
         public VipAdd()

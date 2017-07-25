@@ -28,8 +28,7 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            DnlTools tools = new DnlTools();
-            tools.repairImg();
+            Console.WriteLine(CommonTools.GetRandomString(10, null));
             Console.ReadKey();
         }
 
