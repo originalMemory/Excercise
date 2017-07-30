@@ -12,7 +12,6 @@ using CCWin;
 using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
-using VipManager.UControl;
 
 namespace VipManager.FormControl
 {
@@ -37,7 +36,7 @@ namespace VipManager.FormControl
         {
             InitializeComponent();
             //获取原有套餐编号，计算新会员编号
-            string sqlVip = "select top 1 [No] from [Combination] where [IsDel]=false order by [No] desc";
+            string sqlVip = "select top 1 [No] from [Combination] order by [No] desc";
             OleDbCommand comVip = new OleDbCommand(sqlVip, Config.con);
             OleDbDataReader reader = comVip.ExecuteReader();
             int maxNo = 0;
@@ -62,7 +61,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitCbPro()
         {
-            string sqlPro = "select [No],[ProName],[Price] from [Product] where [IsDel]=false";
+            string sqlPro = "select [No],[ProName],[Price] from [Product]";
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
             adapter.Fill(dtPro);
             cbPro.DataSource = dtPro;
@@ -204,9 +203,9 @@ namespace VipManager.FormControl
             }
 
             //插入套餐信息
-            string sqlAddComb = @"insert into [Combination]([No],[CombName],[Description],[ProNos],[CreateAt],[UserId],[IsDel],[DelAt],[LastPayAt],[PayNum],[Type],[Price],[Num],[Discount],[TimeRange]) values(
-{0},'{1}','{2}','{3}',#{4}#,'{5}',{6},#{7}#,#{8}#,{9},{10},{11},{12},{13},{14})"
-                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, proNos, DateTime.Now, userId, false, DateTime.MinValue, DateTime.MinValue, 0, (int)type,price,num,discount,timeRange);
+            string sqlAddComb = @"insert into [Combination]([No],[CombName],[Description],[ProNos],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],[Num],[Discount],[TimeRange]) values(
+{0},'{1}','{2}','{3}',#{4}#,'{5}',#{6}#,{7},{8},{9},{10},{11},{12})"
+                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, proNos, DateTime.Now, userId, DateTime.MinValue, 0, (int)type,price,num,discount,timeRange);
             OleDbCommand com = new OleDbCommand(sqlAddComb, Config.con);
             com.ExecuteNonQuery();
             MessageBoxEx.Show("套餐添加成功！", "提示");

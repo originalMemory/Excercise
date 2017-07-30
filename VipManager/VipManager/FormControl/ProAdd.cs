@@ -26,7 +26,7 @@ namespace VipManager.FormControl
         {
             InitializeComponent();
             //获取原有会员编号，计算新会员编号
-            string sqlVip = "select top 1 [No] from [Product] where [IsDel]=false order by [No] desc";
+            string sqlVip = "select top 1 [No] from [Product] order by [No] desc";
             OleDbCommand comVip = new OleDbCommand(sqlVip, Config.con);
             OleDbDataReader reader = comVip.ExecuteReader();
             int maxNo = 0;
@@ -71,9 +71,9 @@ namespace VipManager.FormControl
                 }
             }
             //插入会员信息
-            string sqlAddPro = @"insert into [Product]([No],[ProName],[ProDesc],[Price],[CreateAt],[IsDel],[DelAt],[LastPayAt],[UserId],[PayNum]) values(
-{0},'{1}','{2}',{3},#{4}#,{5},#{6}#,#{7}#,'{8}',{9})"
-                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, price, DateTime.Now,false,DateTime.MinValue,DateTime.MinValue,"1",0);
+            string sqlAddPro = @"insert into [Product]([No],[ProName],[ProDesc],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum]) values(
+{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7})"
+                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, price, DateTime.Now,DateTime.MinValue,"1",0);
             OleDbCommand com = new OleDbCommand(sqlAddPro, Config.con);
             com.ExecuteNonQuery();
             MessageBoxEx.Show("产品添加成功！", "提示");

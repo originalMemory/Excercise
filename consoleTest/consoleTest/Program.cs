@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using JiebaNet.Segmenter;
 using AISSystem;
+using System.Web;
 
 namespace CSharpTest
 {
@@ -28,7 +29,9 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            Console.WriteLine(CommonTools.GetRandomString(10, null));
+            string str = "http://www.2dhgame.org/s.asp?k=%CE%D2%B5%C4%CA%D5%B2%D8%BC%D0&f=&c=&paixu=2&page=4";
+            string str2 = HttpUtility.UrlDecode(str, Encoding.GetEncoding("gbk"));
+            Console.WriteLine(str2);
             Console.ReadKey();
         }
 
