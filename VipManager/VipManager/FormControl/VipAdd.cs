@@ -18,8 +18,7 @@ namespace VipManager.FormControl
 {
     public partial class VipAdd : Form
     {
-        int[] MonthAr = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-        int[] DayLimitAr = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        
 
         /// <summary>
         /// 套餐表
@@ -46,53 +45,45 @@ namespace VipManager.FormControl
             OleDbCommand comComb = new OleDbCommand(sqlComb, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(comComb);
             adapter.Fill(DtComb);
-            cbComb.DataSource = DtComb;
-            cbComb.DisplayMember = "CombName";
-            cbComb.ValueMember = "No";
+            cbVipComb.DataSource = DtComb;
+            cbVipComb.DisplayMember = "CombName";
+            cbVipComb.ValueMember = "No";
 
             //绑定生日下拉框
-            cbMonth.DataSource = MonthAr;
-            InitCbDay(MonthAr[0]);
-
+            cbMonth.DataSource = Config.MonthAr;
+            InitCbDay(Config.MonthAr[0]);
             //绑定年龄段下拉框
-            List<string> ageRangeList = new List<string> { "儿童", "青年", "中年", "退休" };
-            cbAge.DataSource = ageRangeList;
+            cbAge.DataSource = Config.AgeRangeList;
             //绑定脸型下拉框
-            List<string> faceTypeList = new List<string> { "未知", "圆型", "长方形", "正方型", "三角型", "瓜子脸" };
-            cbFaceType.DataSource = faceTypeList;
+            cbFaceType.DataSource = Config.FaceTypeList;
             //绑定发色下拉框
-            List<string> hairColorList = new List<string> { "未知", "偏黑", "偏黄", "黑白混杂", "白发" };
-            cbHairColor.DataSource = hairColorList;
+            cbHairColor.DataSource = Config.HairColorList;
             //绑定发质下拉框
-            List<string> hairQualityList = new List<string> { "未知", "柔细", "自然卷", "偏硬" };
-            cbHairQuality.DataSource = hairQualityList;
+            cbHairQuality.DataSource = Config.HairQualityList;
             //绑定浓密度下拉框
-            List<string> hairDensityList = new List<string> { "未知", "稀疏", "中等", "浓密" };
-            cbHairDensity.DataSource = hairDensityList;
+            cbHairDensity.DataSource = Config.HairDensityList;
             //绑定脱发倾向下拉框
-            List<string> hairLossTrendList = new List<string> { "未知", "无", "有", "严重" };
-            cbHairLossTrend.DataSource = hairLossTrendList;
+            cbHairLossTrend.DataSource = Config.HairLossTrendList;
             //绑定肤色下拉框
-            List<string> skinColorList = new List<string> { "未知", "白皙", "中等", "较黑" };
-            cbSkinColor.DataSource = skinColorList;
+            cbSkinColor.DataSource = Config.SkinColorList;
             //绑定身高下拉框
-            List<string> heightList = new List<string> { "未知", "165以下", "165~175", "175以上" };
-            cbHeight.DataSource = heightList;
+            cbHeight.DataSource = Config.HeightList;
             //绑定体型下拉框
-            List<string> bodySizeList = new List<string> { "未知", "偏瘦", "中等", "偏胖", "较胖" };
-            cbBodySize.DataSource = bodySizeList;
+            cbBodySize.DataSource = Config.BodySizeList;
             //绑定性别打扮下拉框
-            List<string> sexDressList = new List<string> { "未知", "男", "中性", "女" };
-            cbSexDress.DataSource = sexDressList;
+            cbSexDress.DataSource = Config.SexDressList;
             //绑定职业下拉框
-            List<string> professionList = new List<string> { "未知", "公务员", "企业主", "职员", "学生", "其他" };
-            cbProfession.DataSource = professionList;
+            cbProfession.DataSource = Config.ProfessionList;
         }
 
+        /// <summary>
+        /// 初始化天数下拉框
+        /// </summary>
+        /// <param name="month"></param>
         private void InitCbDay(int month)
         {
             var dayList=new List<int>();
-            for (int i = 0; i < DayLimitAr[month - 1]; i++)
+            for (int i = 0; i < Config.DayLimitAr[month - 1]; i++)
             {
                 dayList.Add(i + 1);
             }
@@ -126,24 +117,24 @@ namespace VipManager.FormControl
             string sqlAddVip = @"insert into [Vip]([No],[VipName],[Gender],[Phone],[Birth],[Balance],[CreateAt],[LastPayAt],[PayNum],[UserId]
 ,[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress]) values(
 {0},'{1}','{2}','{3}','{4}',{5},#{6}#,#{7}#,{8},'{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}')"
-                .FormatStr(txtNo.Text, txtName.Text, cbGender.Text, txtPhone.Text, birth, 0, DateTime.MinValue, DateTime.MinValue, 0, userId,
+                .FormatStr(txtNo.Text, txtName.Text, cbGender.Text, txtPhone.Text, birth, 0, DateTime.Now, DateTime.MinValue, 0, userId,
                 cbAge.Text, cbFaceType.Text, cbHairColor.Text, cbHairQuality.Text, cbHairDensity.Text, cbHairLossTrend.Text, cbHeight.Text, cbBodySize.Text,
                 cbSkinColor.Text, cbProfession.Text, cbSexDress.Text);
             OleDbCommand comAddVip = new OleDbCommand(sqlAddVip, Config.con);
             comAddVip.ExecuteNonQuery();
 
             //插入套餐映射
-            int combNo = Convert.ToInt32(cbComb.SelectedValue);
+            int combNo = Convert.ToInt32(cbVipComb.SelectedValue);
             var combRows = DtComb.Select("No=" + combNo);
             DataRow combRow = combRows[0];
             int payNum = Convert.ToInt32(combRow["PayNum"]) + 1;
             DateTime startAt = DateTime.Now;
             int timeRange = Convert.ToInt32(combRow["TimeRange"]);
             DateTime endAt = startAt.AddMonths(timeRange);
-            string sqlAddCombSnap = @"insert into [CombSnap]([No],[CombName],[Description],[ProNos],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],
+            string sqlAddCombSnap = @"insert into [CombSnap]([No],[CombName],[Description],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],
 [Num],[Discount],[IsDel],[StartAt],[EndAt],[VipNo]) values(
-{0},'{1}','{2}','{3}',#{4}#,'{5}',#{6}#,{7},{8},{9},{10},{11},{12},#{13}#,#{14}#,{15})"
-                .FormatStr(combRow["No"], combRow["CombName"], combRow["Description"], combRow["ProNos"], DateTime.Now, combRow["UserId"], combRow["LastPayAt"], payNum
+{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14})"
+                .FormatStr(combRow["No"], combRow["CombName"], combRow["Description"], DateTime.Now, combRow["UserId"], combRow["LastPayAt"], payNum
                 , combRow["Type"], combRow["Price"], combRow["Num"], combRow["Discount"],false,startAt,endAt,txtNo.Text);
             OleDbCommand comAddCombSnap = new OleDbCommand(sqlAddCombSnap, Config.con);
             comAddCombSnap.ExecuteNonQuery();
@@ -164,7 +155,7 @@ namespace VipManager.FormControl
                 //插入产品映射
                 string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[ProDesc],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipNo],[CombSnapNo]) values(
 {0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10})"
-                    .FormatStr(row["No"], row["ProName"], row["ProDesc"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]) + 1, false, txtNo.Text, combNo);
+                    .FormatStr(row["No"], row["ProName"], row["ProDesc"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, txtNo.Text, combNo);
                 OleDbCommand comAddPro = new OleDbCommand(sqlAddPro, Config.con);
                 comAddPro.ExecuteNonQuery();
             }

@@ -12,7 +12,6 @@ using CCWin;
 using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
-using VipManager.UControl;
 
 namespace VipManager.FormControl
 {
@@ -31,10 +30,7 @@ namespace VipManager.FormControl
 
         private void Mains_Load(object sender, EventArgs e)
         {
-            UTabVip vip = new UTabVip();
-            InitDgvVip();
-            InitFirstVip();
-            IsInitVip = true;
+            InitTabVip();
 
             ProInComb.Columns.Add("No", System.Type.GetType("System.Int32"));
             ProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
@@ -45,6 +41,63 @@ namespace VipManager.FormControl
         }
 
         #region 会员管理
+        /// <summary>
+        /// 初始化会员管理页
+        /// </summary>
+        private void InitTabVip()
+        {
+            //绑定生日下拉框
+            cbMonth.DataSource = Config.MonthAr;
+            InitCbDay(Config.MonthAr[0]);
+            //绑定年龄段下拉框
+            cbAgeRange.DataSource = Config.AgeRangeList;
+            //绑定脸型下拉框
+            cbFaceType.DataSource = Config.FaceTypeList;
+            //绑定发色下拉框
+            cbHairColor.DataSource = Config.HairColorList;
+            //绑定发质下拉框
+            cbHairQuality.DataSource = Config.HairQualityList;
+            //绑定浓密度下拉框
+            cbHairDensity.DataSource = Config.HairDensityList;
+            //绑定脱发倾向下拉框
+            cbHairLossTrend.DataSource = Config.HairLossTrendList;
+            //绑定肤色下拉框
+            cbSkinColor.DataSource = Config.SkinColorList;
+            //绑定身高下拉框
+            cbHeight.DataSource = Config.HeightList;
+            //绑定体型下拉框
+            cbBodySize.DataSource = Config.BodySizeList;
+            //绑定性别打扮下拉框
+            cbSexDress.DataSource = Config.SexDressList;
+            //绑定职业下拉框
+            cbProfession.DataSource = Config.ProfessionList;
+            //获取当前套餐列表
+            IntVipComb();
+
+            InitDgvVip();
+            InitFirstVip();
+            IsInitVip = true;
+        }
+
+        /// <summary>
+        /// 会员套餐
+        /// </summary>
+        DataTable DtVipComb = new DataTable();
+
+        /// <summary>
+        /// 初始化会员管理员套餐
+        /// </summary>
+        private void IntVipComb()
+        {
+            string sql = "select [No],[CombName] from [Combination]";
+            OleDbCommand com = new OleDbCommand(sql, Config.con);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(com);
+            adapter.Fill(DtVipComb);
+            cbVipComb.DataSource = DtVipComb;
+            cbVipComb.DisplayMember = "CombName";
+            cbVipComb.ValueMember = "No";
+        }
+
         //添加会员
         private void btnAddVip_Click(object sender, EventArgs e)
         {
@@ -59,155 +112,121 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitFirstVip()
         {
-            string sqlLast = "select top 1 * from [Vip] where [IsDel]=false order by [LastPayAt] desc";
+            DataTable dt = new DataTable();
+            string sqlLast = @"select a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
+            b.[No] as [CombNo],[CombName] from [Vip] as a , [CombSnap] as b where a.[No]=b.[VipNo] order by a.[LastPayAt] desc";
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
-            OleDbDataReader reader = com.ExecuteReader();
-            LoadVipInfo(reader);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(com);
+            adapter.Fill(dt);
+            LoadVipSelectedRow(dt.Rows[0]);
         }
+
+        DataTable DtVip = new DataTable();
 
         /// <summary>
         /// 初始化数据表
         /// </summary>
         private void InitDgvVip()
         {
-            string sql = "select * from [Vip] where [IsDel]=false";
+            //第一次时设置数据表结构
+            DataTable dt = new DataTable();
+            dt.Columns.Add("VipNo", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("VipName", System.Type.GetType("System.String"));
+            dt.Columns.Add("CombName", System.Type.GetType("System.String"));
+            dt.Columns.Add("CreateAt", System.Type.GetType("System.DateTime"));
+            dt.Columns.Add("LastPayAt", System.Type.GetType("System.String"));
+            dt.Columns.Add("PayNum", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("Birth", System.Type.GetType("System.String"));
+            dt.Columns.Add("Phone", System.Type.GetType("System.String"));
+            dt.Columns.Add("Gender", System.Type.GetType("System.String"));
+            dt.Columns.Add("CombNo", System.Type.GetType("System.Int32"));
+
+            //获取数据
+            string sql = @"select a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
+            b.[No] as [CombNo],[CombName] from [Vip] as a , [CombSnap] as b where a.[No]=b.[VipNo]";
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
+            DtVip.Clear();
+            adapter.Fill(DtVip);
+            foreach (DataRow oldRow in DtVip.Rows)
+            {
+                DataRow row = dt.NewRow();
+                int no = Convert.ToInt32(oldRow["VipNo"]);
+                row["VipNo"] = Convert.ToInt32(oldRow["VipNo"]);
+                row["VipName"] = oldRow["VipName"].ToString();
+                row["CombName"] = oldRow["CombName"].ToString();
+                row["CreateAt"] = (System.DateTime)oldRow["CreateAt"];
+                row["LastPayAt"] = (System.DateTime)oldRow["LastPayAt"];
+                row["PayNum"] = Convert.ToInt32(oldRow["PayNum"]);
+                row["Birth"] = oldRow["Birth"].ToString();
+                row["Phone"] = oldRow["Phone"].ToString();
+                row["Gender"] = oldRow["Gender"].ToString();
+                row["CombNo"] = Convert.ToInt32(oldRow["CombNo"]);
+                dt.Rows.Add(row);
+            }
             dgvVip.DataSource = dt;
         }
 
         /// <summary>
-        /// 将获取的数据显示到界面
+        /// 加载选定行的会员数据
         /// </summary>
-        /// <param name="reader"></param>
-        /// <returns></returns>
-        private bool LoadVipInfo(OleDbDataReader reader)
+        /// <param name="row">选定的会员表内某行</param>
+        private void LoadVipSelectedRow(DataRow row)
         {
-            if (reader.Read())
+            txtVipNo.Text = row["VipNo"].ToString();
+            txtVipName.Text = row["VipName"].ToString();
+            txtPhone.Text = row["Phone"].ToString();
+            txtVipPayNum.Text = row["PayNum"].ToString();
+            dtpVipReg.Value = (DateTime)row["CreateAt"];
+            dtpVipLastPay.Value = (DateTime)row["LastPayAt"];
+            cbGender.Text = row["Gender"].ToString();
+            string[] birth = row["Birth"].ToString().Split('/');
+            cbMonth.Text = birth[0];
+            cbDay.Text = birth[1];
+
+            cbAgeRange.Text = row["AgeRange"].ToString();
+            cbFaceType.Text = row["FaceType"].ToString();
+            cbHairColor.Text = row["HairColor"].ToString();
+            cbHairQuality.Text = row["HairQuality"].ToString();
+            cbHairDensity.Text = row["HairDensity"].ToString();
+            cbHairLossTrend.Text = row["HairLossTrend"].ToString();
+            cbSkinColor.Text = row["SkinColor"].ToString();
+            cbHeight.Text = row["Height"].ToString();
+            cbBodySize.Text = row["BodySize"].ToString();
+            cbSexDress.Text = row["SexDress"].ToString();
+            cbProfession.Text = row["Profession"].ToString();
+
+            //加载当前套餐
+            int combNo = Convert.ToInt32(row["CombNo"]);
+            DataRow[] rows = DtVipComb.Select("No=" + combNo);
+            if (rows.Length > 0)
             {
-                txtVipNo.Text = reader["No"].ToString();
-                txtVipName.Text = reader["VipName"].ToString();
-                txtPhone.Text = reader["Phone"].ToString();
-                txtVipPayNum.Text = reader["PayNum"].ToString();
-                dtpVipReg.Value = (DateTime)reader["CreateAt"];
-                dtpVipLastPay.Value = (DateTime)reader["LastPayAt"];
-                cbGender.Text = reader["Gender"].ToString();
-                string type = reader["Type"].ToString();
-                cbType.Text = type;
-                switch (type)
-                {
-                    case "次数型":
-                        SetVipNum();
-                        txtDetail.Text = reader["RemainNum"].ToString();
-                        break;
-                    case "折扣型":
-                        SetVipDiscount();
-                        txtDetail.Text = reader["Discount"].ToString();
-                        txtBalance.Text = reader["Balance"].ToString();
-                        break;
-                    case "时间型":
-                        SetVipTime();
-                        dtpStart.Value = (DateTime)reader["StartAt"];
-                        dtpEnd.Value = (DateTime)reader["EndAt"];
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            }
-            else
-            {
-                return false;
+                cbVipComb.Text = rows[0]["CombName"].ToString();
             }
         }
 
-        #region 控件显示状态
         /// <summary>
-        /// 显示次数型数据
+        /// 初始化天数下拉框
         /// </summary>
-        private void SetVipNum()
+        /// <param name="month"></param>
+        private void InitCbDay(int month)
         {
-            labDetail.Text = "次数：";
-            labDetail.Visible = true;
-            txtDetail.Visible = true;
-            labDiscount.Visible = false;
-            labBalance.Visible = false;
-            txtBalance.Visible = false;
-            labYuan.Visible = false;
-            labStart.Visible = false;
-            labEnd.Visible = false;
-            dtpEnd.Visible = false;
-            dtpStart.Visible = false;
+            var dayList = new List<int>();
+            for (int i = 0; i < Config.DayLimitAr[month - 1]; i++)
+            {
+                dayList.Add(i + 1);
+            }
+            cbDay.DataSource = dayList;
         }
-        /// <summary>
-        /// 显示折扣型数据
-        /// </summary>
-        private void SetVipDiscount()
-        {
-            labDetail.Text = "折扣：";
-            labDetail.Visible = true;
-            txtDetail.Visible = true;
-            labDiscount.Visible = true;
-            labBalance.Visible = true;
-            txtBalance.Visible = true;
-            labYuan.Visible = true;
-            labStart.Visible = false;
-            labEnd.Visible = false;
-            dtpEnd.Visible = false;
-            dtpStart.Visible = false;
-        }
-        /// <summary>
-        /// 显示时间型数据
-        /// </summary>
-        private void SetVipTime()
-        {
-            labDetail.Visible = false;
-            txtDetail.Visible = false;
-            labDiscount.Visible = false;
-            labBalance.Visible = false;
-            txtBalance.Visible = false;
-            labYuan.Visible = false;
-            labStart.Visible = true;
-            labEnd.Visible = true;
-            dtpEnd.Visible = true;
-            dtpStart.Visible = true;
-        }
-        #endregion
 
+        //根据选中行刷新上方数据
         private void dgvVip_Click(object sender, EventArgs e)
         {
-            //根据选中行刷新上方数据
             DataGridView dgt = (DataGridView)sender;
             DataGridViewRow dr = dgt.CurrentRow;
-            txtVipNo.Text = dr.Cells["VipNo"].Value.ToString();
-            txtVipName.Text = dr.Cells["VipName"].Value.ToString();
-            txtPhone.Text = dr.Cells["VipPhone"].Value.ToString();
-            txtVipPayNum.Text = dr.Cells["VipPayNum"].ToString();
-            dtpVipReg.Value = (DateTime)dr.Cells["VipCreateAt"].Value;
-            cbGender.Text = dr.Cells["VipGender"].Value.ToString();
-            string type = dr.Cells["VipType"].Value.ToString();
-            cbType.Text = type;
-            switch (type)
-            {
-                case "次数型":
-                    SetVipNum();
-                    txtDetail.Text = dr.Cells["VipRemainNum"].Value.ToString();
-                    break;
-                case "折扣型":
-                    SetVipDiscount();
-                    txtDetail.Text = dr.Cells["VipDiscount"].Value.ToString();
-                    txtBalance.Text = dr.Cells["VipBalance"].Value.ToString();
-                    break;
-                case "时间型":
-                    SetVipTime();
-                    dtpStart.Value = (DateTime)dr.Cells["VipStartAt"].Value;
-                    dtpEnd.Value = (DateTime)dr.Cells["VipEndAt"].Value;
-                    break;
-                default:
-                    break;
-            }
+            int combNo = Convert.ToInt32(dr.Cells["VipNo"].Value);
+            DataRow[] rows = DtVip.Select("VipNo=" + combNo);
+            LoadVipSelectedRow(rows[0]);
         }
 
         //修改会员信息
@@ -229,102 +248,16 @@ namespace VipManager.FormControl
             int remainNum = 0;                            //次数
             DateTime startTime = DateTime.Now;          //开始时间
             DateTime endTime = DateTime.Now;            //结束时间
-            switch (cbType.Text)
-            {
-                case "次数型":
-                    try
-                    {
-                        remainNum = Convert.ToInt32(txtDetail.Text);
-                    }
-                    catch
-                    {
-                        MessageBoxEx.Show("次数只能为数字！", "提示");
-                        return;
-                    }
-                    break;
-                case "折扣型":
-                    try
-                    {
-                        discount = Convert.ToDouble(txtDetail.Text);
-                    }
-                    catch
-                    {
-                        MessageBoxEx.Show("折扣只能为数字！", "提示");
-                        return;
-                    }
-                    try
-                    {
-                        balance = Convert.ToDouble(txtBalance.Text);
-                    }
-                    catch
-                    {
-                        MessageBoxEx.Show("余额只能为数字！", "提示");
-                        return;
-                    }
-                    break;
-                case "时间型":
-                    startTime = dtpStart.Value;
-                    endTime = dtpEnd.Value;
-                    if (startTime >= endTime)
-                    {
-                        MessageBoxEx.Show("开始时间必须小于结束时间", "提示");
-                        return;
-                    }
-                    if (startTime < DateTime.Now.Date)
-                    {
-                        MessageBoxEx.Show("开始时间不能小于当前时间", "提示");
-                        return;
-                    }
-                    break;
-            }
+           
 
             //修改会员信息
             string sqlModVip = @"update [Vip] set [VipName]='{0}',[Phone]='{1}',[Gender]='{2}'".FormatStr(txtVipName.Text, txtPhone.Text, cbGender.Text);
-            switch (cbType.Text)
-            {
-                case "次数型":
-                    sqlModVip += ",[Type]='{0}',[RemainNum]={1}".FormatStr(cbType.Text, txtDetail.Text);
-                    break;
-                case "折扣型":
-                    sqlModVip += ",[Type]='{0}',[Discount]={1},[Balance]={2}".FormatStr(cbType.Text, txtDetail.Text, txtBalance.Text);
-                    break;
-                case "时间型":
-                    sqlModVip += ",[Type]='{0}',[StartAt]={1},[EndAt]={2}".FormatStr(cbType.Text, startTime, endTime);
-                    break;
-            }
             sqlModVip += " where [No]={0}".FormatStr(txtVipNo.Text);
 
             OleDbCommand com = new OleDbCommand(sqlModVip, Config.con);
             com.ExecuteNonQuery();
             InitDgvVip();
             MessageBoxEx.Show("修改成功！", "提示");
-        }
-
-        //类型状态修改
-        private void cbType_TextChanged(object sender, EventArgs e)
-        {
-            switch (cbType.Text)
-            {
-                case "次数型":
-                    SetVipNum();
-                    txtBalance.Text = "0";
-                    txtDetail.Text = "0";
-                    break;
-                case "折扣型":
-                    SetVipDiscount();
-                    txtBalance.Text = "0";
-                    txtDetail.Text = "0";
-                    break;
-                case "时间型":
-                    SetVipTime();
-                    txtBalance.Text = "0";
-                    txtDetail.Text = "0";
-                    dtpStart.Value = DateTime.Now;
-                    dtpEnd.Value = DateTime.Now;
-                    break;
-                default:
-                    break;
-            }
         }
 
         //删除会员
@@ -347,29 +280,12 @@ namespace VipManager.FormControl
                 //判断是搜索编号还是姓名或联系方式
                 if (factor.IsNum())
                 {
-                    string sql = "select top 1 * from [Vip] where [IsDel]=false and [No]={0}".FormatStr(factor);
-                    OleDbCommand com = new OleDbCommand(sql, Config.con);
-                    OleDbDataReader reader = com.ExecuteReader();
-                    if (!LoadVipInfo(reader))
-                    {
-                        MessageBoxEx.Show("无符合条件会员！", "提示");
-                    }
+                    
                 }
                 else
                 {
-                    string sql = "select top 1 * from [Vip] where [IsDel]=false and [VipName]='{0}'".FormatStr(factor);
-                    OleDbCommand com = new OleDbCommand(sql, Config.con);
-                    OleDbDataReader reader = com.ExecuteReader();
-                    if (!LoadVipInfo(reader))
-                    {
-                        sql = "select top 1 * from [Vip] where [IsDel]=false and [Phone]='{0}'".FormatStr(factor);
-                        com = new OleDbCommand(sql, Config.con);
-                        reader = com.ExecuteReader();
-                        if (!LoadVipInfo(reader))
-                        {
-                            MessageBoxEx.Show("无符合条件会员！", "提示");
-                        }
-                    }
+                    
+                    
                 }
             }
             else
@@ -400,7 +316,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitFirstPro()
         {
-            string sqlLast = "select top 1 * from [Product] where [IsDel]=false order by [LastPayAt] desc";
+            string sqlLast = "select top 1 * from [Product] order by [LastPayAt] desc";
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
             OleDbDataReader reader = com.ExecuteReader();
             LoadProInfo(reader);
@@ -430,25 +346,42 @@ namespace VipManager.FormControl
             }
         }
 
+        DataTable DtPro = new DataTable();
+
         /// <summary>
         /// 初始化产品数据表
         /// </summary>
         private void InitDgvPro()
         {
-            string sql = "select * from [Product] where [IsDel]=false";
+            //第一次时设置数据表结构
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("VipName", System.Type.GetType("System.String"));
+            dt.Columns.Add("CombName", System.Type.GetType("System.String"));
+            dt.Columns.Add("CreateAt", System.Type.GetType("System.DateTime"));
+            dt.Columns.Add("LastPayAt", System.Type.GetType("System.String"));
+            dt.Columns.Add("PayNum", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("Birth", System.Type.GetType("System.String"));
+            dt.Columns.Add("Phone", System.Type.GetType("System.String"));
+            dt.Columns.Add("Gender", System.Type.GetType("System.String"));
+
+            string sql = "select * from [Vip]";
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
+            adapter.Fill(DtPro);
+            foreach (DataRow oldRow in DtPro.Rows)
+            {
+                DataRow row = dt.NewRow();
+                row["No"] = Convert.ToInt32(oldRow["No"]);
+                row["ProName"] = oldRow["ProName"].ToString();
+                row["Description"] = oldRow["Description"].ToString();
+                row["CreateAt"] = (System.DateTime)oldRow["CreateAt"];
+                row["LastPayAt"] = (System.DateTime)oldRow["LastPayAt"];
+                row["PayNum"] = Convert.ToInt32(oldRow["PayNum"]);
+                row["Type"] = oldRow["Type"].ToString();
+                dt.Rows.Add(row);
+            }
             dgvPro.DataSource = dt;
-        }
-
-        private void tabPro_Enter(object sender, EventArgs e)
-        {
-            string sqlLast = "select top 1 * from [Product] where [IsDel]=false order by [LastPayAt] desc";
-            OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
-            OleDbDataReader reader = com.ExecuteReader();
-            LoadProInfo(reader);
         }
 
         //修改产品信息
@@ -503,53 +436,25 @@ namespace VipManager.FormControl
             MessageBoxEx.Show("删除成功！", "提示");
         }
 
-
-        private void dgvPro_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvPro_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             //根据选中行刷新上方数据
             DataGridView dgt = (DataGridView)sender;
             DataGridViewRow dr = dgt.CurrentRow;
-            txtProNo.Text = dr.Cells["No"].Value.ToString();
+            txtProNo.Text = dr.Cells["ProNo"].Value.ToString();
             txtProName.Text = dr.Cells["ProName"].Value.ToString();
-            txtProPrice.Text = dr.Cells["Price"].Value.ToString();
+            txtProPrice.Text = dr.Cells["ProPrice"].Value.ToString();
             txtProDesc.Text = dr.Cells["ProDesc"].Value.ToString();
-            txtProPayNum.Text = dr.Cells["PayNum"].Value.ToString();
-            dtpProCreate.Value = (DateTime)dr.Cells["CreateAt"].Value;
-            dtpProLastPay.Value = (DateTime)dr.Cells["LastPayAt"].Value;
+            txtProPayNum.Text = dr.Cells["ProPayNum"].Value.ToString();
+            dtpProCreate.Value = (DateTime)dr.Cells["ProCreateAt"].Value;
+            dtpProLastPay.Value = (DateTime)dr.Cells["ProLastPayAt"].Value;
         }
 
         //搜索产品信息
         private void btnSearchPro_Click(object sender, EventArgs e)
         {
             string factor = txtSearchPro.Text;
-            if (!string.IsNullOrEmpty(factor))
-            {
-                //判断是搜索编号还是名称
-                if (factor.IsNum())
-                {
-                    string sql = "select top 1 * from [Product] where [IsDel]=false and [No]={0}".FormatStr(factor);
-                    OleDbCommand com = new OleDbCommand(sql, Config.con);
-                    OleDbDataReader reader = com.ExecuteReader();
-                    if (!LoadProInfo(reader))
-                    {
-                        MessageBoxEx.Show("无符合条件产品！", "提示");
-                    }
-                }
-                else
-                {
-                    string sql = "select top 1 * from [Product] where [IsDel]=false and [ProName]='{0}'".FormatStr(factor);
-                    OleDbCommand com = new OleDbCommand(sql, Config.con);
-                    OleDbDataReader reader = com.ExecuteReader();
-                    if (!LoadProInfo(reader))
-                    {
-                        MessageBoxEx.Show("无符合条件产品！", "提示");
-                    }
-                }
-            }
-            else
-            {
-                MessageBoxEx.Show("搜索条件不能为空！", "提示");
-            }
+
         }
 
         private void txtSearchPro_KeyPress(object sender, KeyPressEventArgs e)
@@ -572,7 +477,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitFirstComb()
         {
-            string sqlLast = "select top 1 * from [Combination] where [IsDel]=false order by [LastPayAt] desc";
+            string sqlLast = "select top 1 * from [Combination] order by [LastPayAt] desc";
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
             OleDbDataReader reader = com.ExecuteReader();
             LoadCombInfo(reader);
@@ -585,19 +490,16 @@ namespace VipManager.FormControl
         {
             //第一次时设置数据表结构
             DataTable dt = new DataTable();
-            if (!IsInitComb)
-            {
-                dt.Columns.Add("No", System.Type.GetType("System.Int32"));
-                dt.Columns.Add("CombName", System.Type.GetType("System.String"));
-                dt.Columns.Add("Description", System.Type.GetType("System.String"));
-                dt.Columns.Add("CreateAt", System.Type.GetType("System.DateTime"));
-                dt.Columns.Add("LastPayAt", System.Type.GetType("System.String"));
-                dt.Columns.Add("PayNum", System.Type.GetType("System.Int32"));
-                dt.Columns.Add("Type", System.Type.GetType("System.String"));
-            }
+            dt.Columns.Add("No", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("CombName", System.Type.GetType("System.String"));
+            dt.Columns.Add("Description", System.Type.GetType("System.String"));
+            dt.Columns.Add("CreateAt", System.Type.GetType("System.DateTime"));
+            dt.Columns.Add("LastPayAt", System.Type.GetType("System.String"));
+            dt.Columns.Add("PayNum", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("Type", System.Type.GetType("System.String"));
 
             //获取源数据
-            string sql = "select * from [Combination] where [IsDel]=false";
+            string sql = "select * from [Combination]";
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DtComb.Clear();
@@ -611,7 +513,21 @@ namespace VipManager.FormControl
                 row["CreateAt"] = (System.DateTime)oldRow["CreateAt"];
                 row["LastPayAt"] = (System.DateTime)oldRow["LastPayAt"];
                 row["PayNum"] = Convert.ToInt32(oldRow["PayNum"]);
-                row["Type"] = oldRow["Type"].ToString();
+                CombType type = (CombType)oldRow["Type"];
+                switch (type)
+                {
+                    case CombType.Num:
+                        row["Type"] = "次数型";
+                        break;
+                    case CombType.Discount:
+                        row["Type"] = "折扣型";
+                        break;
+                    case CombType.Time:
+                        row["Type"] = "时间型";
+                        break;
+                    default:
+                        break;
+                }
                 dt.Rows.Add(row);
             }
             dgvComb.DataSource = dt;
@@ -639,8 +555,8 @@ namespace VipManager.FormControl
                         {
                             cbCombType.Text = "次数型";
                             SetCombNum();
-                            double price = (double)reader["Price"];
-                            int num = (int)reader["Num"];
+                            double price = Convert.ToDouble(reader["Price"]);
+                            int num = Convert.ToInt32(reader["Num"]);
                             txtCombDetail.Text = price.ToString();
                             txtCombNum.Text = num.ToString();
                         }
@@ -680,10 +596,10 @@ namespace VipManager.FormControl
                 }
                 //获取套餐内产品信息
                 string proNos = reader["ProNos"].ToString();
-                string sqlPro = "select [No],[ProName],[Price] from [Product] where [IsDel]=false";
+                string sqlPro = "select [No],[ProName],[Price] from [Product] where [No] in({0})".FormatStr(proNos);
                 OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
                 adapter.Fill(ProInComb);
-                
+
                 return true;
             }
             else
@@ -765,6 +681,7 @@ namespace VipManager.FormControl
         {
             CombAdd add = new CombAdd();
             add.ShowDialog();
+            InitDgvComb();
         }
 
         //根据选中行刷新上方数据
@@ -778,22 +695,31 @@ namespace VipManager.FormControl
             //获取详细套餐信息
             var rows = DtComb.Select("No=" + no);
 
+            LoadCombSelectedRow(rows[0]);
 
-            txtCombNo.Text = rows[0]["No"].ToString();
-            txtCombName.Text = rows[0]["CombName"].ToString();
-            txtCombDesc.Text = rows[0]["Description"].ToString();
-            txtCombPayNum.Text = rows[0]["PayNum"].ToString();
-            dtpCombCreate.Value = (DateTime)rows[0]["CreateAt"];
-            dtpCombLastPay.Value = (DateTime)rows[0]["LastPayAt"];
-            CombType type = (CombType)rows[0]["Type"];
+        }
+
+        /// <summary>
+        /// 加载套餐表中选定行
+        /// </summary>
+        /// <param name="row"></param>
+        private void LoadCombSelectedRow(DataRow row)
+        {
+            txtCombNo.Text = row["No"].ToString();
+            txtCombName.Text = row["CombName"].ToString();
+            txtCombDesc.Text = row["Description"].ToString();
+            txtCombPayNum.Text = row["PayNum"].ToString();
+            dtpCombCreate.Value = (DateTime)row["CreateAt"];
+            dtpCombLastPay.Value = (DateTime)row["LastPayAt"];
+            CombType type = (CombType)row["Type"];
             switch (type)
             {
                 case CombType.Num:
                     {
                         cbCombType.Text = "次数型";
                         SetCombNum();
-                        double price = Convert.ToDouble(rows[0]["Price"]);
-                        int num = Convert.ToInt32(rows[0]["Num"]);
+                        double price = Convert.ToDouble(row["Price"]);
+                        int num = Convert.ToInt32(row["Num"]);
                         txtCombDetail.Text = price.ToString();
                         txtCombNum.Text = num.ToString();
                     }
@@ -802,7 +728,7 @@ namespace VipManager.FormControl
                     {
                         cbCombType.Text = "折扣型";
                         SetCombDiscount();
-                        double discount = Convert.ToDouble(rows[0]["Discount"]);
+                        double discount = Convert.ToDouble(row["Discount"]);
                         txtCombDetail.Text = discount.ToString();
                     }
                     break;
@@ -810,7 +736,7 @@ namespace VipManager.FormControl
                     {
                         cbCombType.Text = "时间型";
                         SetCombTime();
-                        CombTimeType timeType = (CombTimeType)rows[0]["Type"];
+                        CombTimeType timeType = (CombTimeType)row["Type"];
                         switch (timeType)
                         {
                             case CombTimeType.Month:
@@ -832,14 +758,14 @@ namespace VipManager.FormControl
                     break;
             }
             //获取套餐内产品信息
-            string proNos = rows[0]["ProNos"].ToString();
-            string sqlPro = "select [No],[ProName],[Price] from [Product] where [IsDel]=false and [No] in({0}) ".FormatStr(proNos);
+            string proNos = row["ProNos"].ToString();
+            string sqlPro = "select [No],[ProName],[Price] from [Product] where [No] in({0}) ".FormatStr(proNos);
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
             ProInComb.Clear();
             adapter.Fill(ProInComb);
         }
 
-
+        //修改套餐内产品信息
         private void btnEditProInComb_Click(object sender, EventArgs e)
         {
             EditProInComb edit = new EditProInComb(ProInComb);
@@ -857,33 +783,6 @@ namespace VipManager.FormControl
             lbPro.DataSource = ProInComb;
             lbPro.DisplayMember = "ProName";
             lbPro.ValueMember = "No";
-        }
-        #endregion
-
-        //标签页切换时加载
-        bool IsInitVip = false;
-        bool IsInitPro = false;
-        bool IsInitComb = false;
-        private void tabMain_Selected(object sender, TabControlEventArgs e)
-        {
-            if (e.TabPage == tabVip&&!IsInitVip)
-            {
-                return;
-            }
-            if (e.TabPage == tabPro&&!IsInitPro)
-            {
-                InitDgvPro();
-                InitFirstPro();
-                IsInitPro = true;
-                return;
-            }
-            if (e.TabPage == tabComb && !IsInitComb)
-            {
-                InitDgvComb();
-                InitFirstComb();
-                IsInitComb = true;
-                return;
-            }
         }
 
         //删除套餐
@@ -921,7 +820,7 @@ namespace VipManager.FormControl
 
             foreach (DataRow row in ProInComb.Rows)
             {
-                proNos += row["No"].ToString()+",";
+                proNos += row["No"].ToString() + ",";
             }
             if (proNos.Length > 0)
                 proNos = proNos.Substring(0, proNos.Length - 1);
@@ -972,6 +871,62 @@ namespace VipManager.FormControl
             com.ExecuteNonQuery();
             InitDgvComb();
             MessageBoxEx.Show("修改成功！", "提示");
+        }
+
+        //搜索套餐
+        private void btnSearchComb_Click(object sender, EventArgs e)
+        {
+            string factor = txtSearchComb.Text;
+            DataRow[] rowAr = null;
+            if (string.IsNullOrEmpty(factor))
+            {
+                MessageBoxEx.Show("搜索条件不能为空！", "提示");
+            }
+            else if (factor.IsNum())
+            {
+                rowAr = DtComb.Select("No=" + factor);
+            }
+            else
+            {
+                rowAr = DtComb.Select("CombName like '%{0}%'".FormatStr(factor));
+            }
+
+            //判断是否加载数据
+            if (rowAr.Length > 0)
+            {
+                LoadCombSelectedRow(rowAr[0]);
+            }
+            else
+            {
+                MessageBoxEx.Show("无搜索结果！", "提示");
+            }
+        }
+        #endregion
+
+        //标签页切换时加载
+        bool IsInitVip = false;
+        bool IsInitPro = false;
+        bool IsInitComb = false;
+        private void tabMain_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage == tabVip&&!IsInitVip)
+            {
+                return;
+            }
+            if (e.TabPage == tabPro&&!IsInitPro)
+            {
+                InitDgvPro();
+                InitFirstPro();
+                IsInitPro = true;
+                return;
+            }
+            if (e.TabPage == tabComb && !IsInitComb)
+            {
+                InitDgvComb();
+                InitFirstComb();
+                IsInitComb = true;
+                return;
+            }
         }
 
 

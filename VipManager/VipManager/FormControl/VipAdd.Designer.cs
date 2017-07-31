@@ -40,7 +40,7 @@
             this.txtName = new CCWin.SkinControl.SkinTextBox();
             this.txtPhone = new CCWin.SkinControl.SkinTextBox();
             this.cbGender = new CCWin.SkinControl.SkinComboBox();
-            this.cbComb = new CCWin.SkinControl.SkinComboBox();
+            this.cbVipComb = new CCWin.SkinControl.SkinComboBox();
             this.cbAge = new CCWin.SkinControl.SkinComboBox();
             this.skinLabel5 = new CCWin.SkinControl.SkinLabel();
             this.cbMonth = new CCWin.SkinControl.SkinComboBox();
@@ -291,6 +291,7 @@
             // cbGender
             // 
             this.cbGender.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbGender.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGender.Font = new System.Drawing.Font("宋体", 10F);
             this.cbGender.FormattingEnabled = true;
             this.cbGender.Items.AddRange(new object[] {
@@ -301,25 +302,26 @@
             this.cbGender.Name = "cbGender";
             this.cbGender.Size = new System.Drawing.Size(119, 28);
             this.cbGender.TabIndex = 28;
-            this.cbGender.Text = "男";
             this.cbGender.WaterText = "";
             // 
-            // cbComb
+            // cbVipComb
             // 
-            this.cbComb.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbComb.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbComb.FormattingEnabled = true;
-            this.cbComb.Location = new System.Drawing.Point(155, 346);
-            this.cbComb.Margin = new System.Windows.Forms.Padding(4);
-            this.cbComb.Name = "cbComb";
-            this.cbComb.Size = new System.Drawing.Size(119, 28);
-            this.cbComb.TabIndex = 29;
-            this.cbComb.WaterText = "";
-            this.cbComb.TextChanged += new System.EventHandler(this.cbType_TextChanged);
+            this.cbVipComb.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbVipComb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbVipComb.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbVipComb.FormattingEnabled = true;
+            this.cbVipComb.Location = new System.Drawing.Point(155, 346);
+            this.cbVipComb.Margin = new System.Windows.Forms.Padding(4);
+            this.cbVipComb.Name = "cbVipComb";
+            this.cbVipComb.Size = new System.Drawing.Size(119, 28);
+            this.cbVipComb.TabIndex = 29;
+            this.cbVipComb.WaterText = "";
+            this.cbVipComb.TextChanged += new System.EventHandler(this.cbType_TextChanged);
             // 
             // cbAge
             // 
             this.cbAge.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbAge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAge.Font = new System.Drawing.Font("宋体", 10F);
             this.cbAge.FormattingEnabled = true;
             this.cbAge.Location = new System.Drawing.Point(158, 244);
@@ -344,6 +346,7 @@
             // cbMonth
             // 
             this.cbMonth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMonth.Font = new System.Drawing.Font("宋体", 10F);
             this.cbMonth.FormattingEnabled = true;
             this.cbMonth.Location = new System.Drawing.Point(158, 205);
@@ -381,6 +384,7 @@
             // cbDay
             // 
             this.cbDay.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbDay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDay.Font = new System.Drawing.Font("宋体", 10F);
             this.cbDay.FormattingEnabled = true;
             this.cbDay.Location = new System.Drawing.Point(258, 205);
@@ -393,6 +397,7 @@
             // cbFaceType
             // 
             this.cbFaceType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbFaceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFaceType.Font = new System.Drawing.Font("宋体", 10F);
             this.cbFaceType.FormattingEnabled = true;
             this.cbFaceType.Location = new System.Drawing.Point(520, 77);
@@ -417,6 +422,7 @@
             // cbHairColor
             // 
             this.cbHairColor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairColor.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairColor.FormattingEnabled = true;
             this.cbHairColor.Location = new System.Drawing.Point(520, 123);
@@ -441,6 +447,7 @@
             // cbHairQuality
             // 
             this.cbHairQuality.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairQuality.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairQuality.FormattingEnabled = true;
             this.cbHairQuality.Location = new System.Drawing.Point(520, 164);
@@ -465,6 +472,7 @@
             // cbHeight
             // 
             this.cbHeight.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHeight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHeight.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHeight.FormattingEnabled = true;
             this.cbHeight.Location = new System.Drawing.Point(520, 208);
@@ -477,6 +485,7 @@
             // cbBodySize
             // 
             this.cbBodySize.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbBodySize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBodySize.Font = new System.Drawing.Font("宋体", 10F);
             this.cbBodySize.FormattingEnabled = true;
             this.cbBodySize.Location = new System.Drawing.Point(520, 249);
@@ -489,6 +498,7 @@
             // cbSkinColor
             // 
             this.cbSkinColor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbSkinColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSkinColor.Font = new System.Drawing.Font("宋体", 10F);
             this.cbSkinColor.FormattingEnabled = true;
             this.cbSkinColor.Location = new System.Drawing.Point(520, 296);
@@ -513,6 +523,7 @@
             // cbProfession
             // 
             this.cbProfession.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbProfession.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfession.Font = new System.Drawing.Font("宋体", 10F);
             this.cbProfession.FormattingEnabled = true;
             this.cbProfession.Location = new System.Drawing.Point(520, 342);
@@ -537,6 +548,7 @@
             // cbHairDensity
             // 
             this.cbHairDensity.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairDensity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairDensity.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairDensity.FormattingEnabled = true;
             this.cbHairDensity.Location = new System.Drawing.Point(800, 76);
@@ -549,6 +561,7 @@
             // cbHairLossTrend
             // 
             this.cbHairLossTrend.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairLossTrend.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairLossTrend.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairLossTrend.FormattingEnabled = true;
             this.cbHairLossTrend.Location = new System.Drawing.Point(800, 124);
@@ -561,6 +574,7 @@
             // cbSexDress
             // 
             this.cbSexDress.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbSexDress.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSexDress.Font = new System.Drawing.Font("宋体", 10F);
             this.cbSexDress.FormattingEnabled = true;
             this.cbSexDress.Location = new System.Drawing.Point(800, 169);
@@ -661,7 +675,7 @@
             this.Controls.Add(this.cbMonth);
             this.Controls.Add(this.cbAge);
             this.Controls.Add(this.skinLabel5);
-            this.Controls.Add(this.cbComb);
+            this.Controls.Add(this.cbVipComb);
             this.Controls.Add(this.cbGender);
             this.Controls.Add(this.txtPhone);
             this.Controls.Add(this.txtName);
@@ -696,7 +710,7 @@
         private CCWin.SkinControl.SkinTextBox txtName;
         private CCWin.SkinControl.SkinTextBox txtPhone;
         private CCWin.SkinControl.SkinComboBox cbGender;
-        private CCWin.SkinControl.SkinComboBox cbComb;
+        private CCWin.SkinControl.SkinComboBox cbVipComb;
         private CCWin.SkinControl.SkinComboBox cbAge;
         private CCWin.SkinControl.SkinLabel skinLabel5;
         private CCWin.SkinControl.SkinComboBox cbMonth;
