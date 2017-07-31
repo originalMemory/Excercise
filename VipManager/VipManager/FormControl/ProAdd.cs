@@ -36,7 +36,8 @@ namespace VipManager.FormControl
             }
             No = maxNo + 1;
             txtNo.Text = No.ToString();
-            txtPrice.Text = "0";
+            //txtPrice.Text = "0";
+            txtPrice.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
         }
 
         private void btnAddVip_Click(object sender, EventArgs e)
@@ -71,7 +72,7 @@ namespace VipManager.FormControl
                 }
             }
             //插入会员信息
-            string sqlAddPro = @"insert into [Product]([No],[ProName],[ProDesc],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum]) values(
+            string sqlAddPro = @"insert into [Product]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum]) values(
 {0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7})"
                 .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, price, DateTime.Now,DateTime.MinValue,"1",0);
             OleDbCommand com = new OleDbCommand(sqlAddPro, Config.con);

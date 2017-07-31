@@ -45,7 +45,7 @@ namespace VipManager.FormControl
             this.ProInComb = proInComb.Copy();
             this.lbEditPro.DataSource = this.ProInComb;
             this.lbEditPro.DisplayMember = "ProName";
-            this.lbEditPro.ValueMember = "No";
+            this.lbEditPro.ValueMember = "ID";
         }
 
         /// <summary>
@@ -53,12 +53,12 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitCbPro()
         {
-            string sqlPro = "select [No],[ProName],[Price] from [Product] where [IsDel]=false";
+            string sqlPro = "select [ID],[ProName] from [Product]";
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
             adapter.Fill(this.DtPro);
             this.cbPro.DataSource = this.DtPro;
             this.cbPro.DisplayMember = "ProName";
-            this.cbPro.ValueMember = "No";
+            this.cbPro.ValueMember = "ID";
         }
 
         //添加产品
@@ -67,14 +67,14 @@ namespace VipManager.FormControl
             int no = Convert.ToInt32(this.cbPro.SelectedValue);
 
             //检查该产品是否已添加
-            DataRow[] rows = this.ProInComb.Select("No='{0}'".FormatStr(no));
+            DataRow[] rows = this.ProInComb.Select("ID='{0}'".FormatStr(no));
             if (rows.Count() > 0)
             {
                 MessageBoxEx.Show("该产品已添加！", "提示");
             }
             else
             {
-                rows = this.DtPro.Select("No='{0}'".FormatStr(no));
+                rows = this.DtPro.Select("ID='{0}'".FormatStr(no));
                 if (rows.Count() > 0)
                 {
                     this.ProInComb.ImportRow(rows[0]);
@@ -85,8 +85,8 @@ namespace VipManager.FormControl
         //删除产品
         private void btnDelProInComb_Click(object sender, EventArgs e)
         {
-            int no = Convert.ToInt32(lbEditPro.SelectedValue);
-            DataRow[] rows = this.ProInComb.Select("No='{0}'".FormatStr(no));
+            int id = Convert.ToInt32(lbEditPro.SelectedValue);
+            DataRow[] rows = this.ProInComb.Select("ID='{0}'".FormatStr(id));
             if (rows.Count() > 0)
             {
                 this.ProInComb.Rows.Remove(rows[0]);

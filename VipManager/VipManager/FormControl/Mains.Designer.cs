@@ -43,13 +43,45 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabVip = new System.Windows.Forms.TabPage();
+            this.btnEditVipComb = new CCWin.SkinControl.SkinButton();
+            this.txtVipComb = new CCWin.SkinControl.SkinTextBox();
+            this.skinLabel12 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel30 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel31 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel32 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel33 = new CCWin.SkinControl.SkinLabel();
+            this.cbSexDress = new CCWin.SkinControl.SkinComboBox();
+            this.cbHairLossTrend = new CCWin.SkinControl.SkinComboBox();
+            this.cbHairDensity = new CCWin.SkinControl.SkinComboBox();
+            this.cbProfession = new CCWin.SkinControl.SkinComboBox();
+            this.skinLabel34 = new CCWin.SkinControl.SkinLabel();
+            this.cbSkinColor = new CCWin.SkinControl.SkinComboBox();
+            this.skinLabel35 = new CCWin.SkinControl.SkinLabel();
+            this.cbBodySize = new CCWin.SkinControl.SkinComboBox();
+            this.cbHeight = new CCWin.SkinControl.SkinComboBox();
+            this.cbHairQuality = new CCWin.SkinControl.SkinComboBox();
+            this.skinLabel36 = new CCWin.SkinControl.SkinLabel();
+            this.cbHairColor = new CCWin.SkinControl.SkinComboBox();
+            this.skinLabel37 = new CCWin.SkinControl.SkinLabel();
+            this.cbFaceType = new CCWin.SkinControl.SkinComboBox();
+            this.skinLabel38 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel13 = new CCWin.SkinControl.SkinLabel();
             this.txtVipPayNum = new CCWin.SkinControl.SkinTextBox();
+            this.cbDay = new CCWin.SkinControl.SkinComboBox();
             this.skinLabel11 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel25 = new CCWin.SkinControl.SkinLabel();
             this.skinLabel4 = new CCWin.SkinControl.SkinLabel();
+            this.cbMonth = new CCWin.SkinControl.SkinComboBox();
             this.dtpVipLastPay = new System.Windows.Forms.DateTimePicker();
+            this.cbAgeRange = new CCWin.SkinControl.SkinComboBox();
             this.btnSearchVip = new CCWin.SkinControl.SkinButton();
+            this.skinLabel26 = new CCWin.SkinControl.SkinLabel();
             this.btnModVip = new CCWin.SkinControl.SkinButton();
             this.btnDelVip = new CCWin.SkinControl.SkinButton();
+            this.txtPhone = new CCWin.SkinControl.SkinTextBox();
+            this.skinLabel27 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel28 = new CCWin.SkinControl.SkinLabel();
+            this.skinLabel29 = new CCWin.SkinControl.SkinLabel();
             this.cbGender = new CCWin.SkinControl.SkinComboBox();
             this.txtVipName = new CCWin.SkinControl.SkinTextBox();
             this.txtVipNo = new CCWin.SkinControl.SkinTextBox();
@@ -60,6 +92,16 @@
             this.skinLabel10 = new CCWin.SkinControl.SkinLabel();
             this.dtpVipReg = new System.Windows.Forms.DateTimePicker();
             this.dgvVip = new CCWin.SkinControl.SkinDataGridView();
+            this.VipNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipGender = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipPhone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipBirth = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipCreateAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipCombName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipLastPayAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VipPayNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAddVip = new CCWin.SkinControl.SkinButton();
             this.tabPro = new System.Windows.Forms.TabPage();
             this.dgvPro = new CCWin.SkinControl.SkinDataGridView();
@@ -119,6 +161,7 @@
             this.skinLabel22 = new CCWin.SkinControl.SkinLabel();
             this.dgvComb = new CCWin.SkinControl.SkinDataGridView();
             this.CombNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CombID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CombName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CombDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CombInType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -130,47 +173,6 @@
             this.btnDelComb = new CCWin.SkinControl.SkinButton();
             this.txtSearchComb = new CCWin.SkinControl.SkinTextBox();
             this.btnAddComb = new CCWin.SkinControl.SkinButton();
-            this.skinLabel13 = new CCWin.SkinControl.SkinLabel();
-            this.cbDay = new CCWin.SkinControl.SkinComboBox();
-            this.skinLabel25 = new CCWin.SkinControl.SkinLabel();
-            this.cbMonth = new CCWin.SkinControl.SkinComboBox();
-            this.cbAgeRange = new CCWin.SkinControl.SkinComboBox();
-            this.skinLabel26 = new CCWin.SkinControl.SkinLabel();
-            this.cbVipComb = new CCWin.SkinControl.SkinComboBox();
-            this.txtPhone = new CCWin.SkinControl.SkinTextBox();
-            this.skinLabel27 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel28 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel29 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel12 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel30 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel31 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel32 = new CCWin.SkinControl.SkinLabel();
-            this.skinLabel33 = new CCWin.SkinControl.SkinLabel();
-            this.cbSexDress = new CCWin.SkinControl.SkinComboBox();
-            this.cbHairLossTrend = new CCWin.SkinControl.SkinComboBox();
-            this.cbHairDensity = new CCWin.SkinControl.SkinComboBox();
-            this.cbProfession = new CCWin.SkinControl.SkinComboBox();
-            this.skinLabel34 = new CCWin.SkinControl.SkinLabel();
-            this.cbSkinColor = new CCWin.SkinControl.SkinComboBox();
-            this.skinLabel35 = new CCWin.SkinControl.SkinLabel();
-            this.cbBodySize = new CCWin.SkinControl.SkinComboBox();
-            this.cbHeight = new CCWin.SkinControl.SkinComboBox();
-            this.cbHairQuality = new CCWin.SkinControl.SkinComboBox();
-            this.skinLabel36 = new CCWin.SkinControl.SkinLabel();
-            this.cbHairColor = new CCWin.SkinControl.SkinComboBox();
-            this.skinLabel37 = new CCWin.SkinControl.SkinLabel();
-            this.cbFaceType = new CCWin.SkinControl.SkinComboBox();
-            this.skinLabel38 = new CCWin.SkinControl.SkinLabel();
-            this.VipNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipGender = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipPhone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipBirth = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipCreateAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipCombName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipLastPayAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipPayNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.VipCombNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabMain.SuspendLayout();
             this.tabVip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvVip)).BeginInit();
@@ -198,6 +200,8 @@
             // tabVip
             // 
             this.tabVip.AutoScroll = true;
+            this.tabVip.Controls.Add(this.btnEditVipComb);
+            this.tabVip.Controls.Add(this.txtVipComb);
             this.tabVip.Controls.Add(this.skinLabel12);
             this.tabVip.Controls.Add(this.skinLabel30);
             this.tabVip.Controls.Add(this.skinLabel31);
@@ -230,7 +234,6 @@
             this.tabVip.Controls.Add(this.btnSearchVip);
             this.tabVip.Controls.Add(this.skinLabel26);
             this.tabVip.Controls.Add(this.btnModVip);
-            this.tabVip.Controls.Add(this.cbVipComb);
             this.tabVip.Controls.Add(this.btnDelVip);
             this.tabVip.Controls.Add(this.txtPhone);
             this.tabVip.Controls.Add(this.skinLabel27);
@@ -255,6 +258,329 @@
             this.tabVip.TabIndex = 0;
             this.tabVip.Text = "会员管理";
             this.tabVip.UseVisualStyleBackColor = true;
+            // 
+            // btnEditVipComb
+            // 
+            this.btnEditVipComb.BackColor = System.Drawing.Color.Transparent;
+            this.btnEditVipComb.ControlState = CCWin.SkinClass.ControlState.Normal;
+            this.btnEditVipComb.DownBack = null;
+            this.btnEditVipComb.Font = new System.Drawing.Font("宋体", 11F);
+            this.btnEditVipComb.Location = new System.Drawing.Point(1150, 347);
+            this.btnEditVipComb.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEditVipComb.MouseBack = null;
+            this.btnEditVipComb.Name = "btnEditVipComb";
+            this.btnEditVipComb.NormlBack = null;
+            this.btnEditVipComb.Size = new System.Drawing.Size(128, 35);
+            this.btnEditVipComb.TabIndex = 157;
+            this.btnEditVipComb.Text = "修改套餐";
+            this.btnEditVipComb.UseVisualStyleBackColor = false;
+            this.btnEditVipComb.Click += new System.EventHandler(this.btnEditVipComb_Click);
+            // 
+            // txtVipComb
+            // 
+            this.txtVipComb.BackColor = System.Drawing.Color.Transparent;
+            this.txtVipComb.DownBack = null;
+            this.txtVipComb.Icon = null;
+            this.txtVipComb.IconIsButton = false;
+            this.txtVipComb.IconMouseState = CCWin.SkinClass.ControlState.Normal;
+            this.txtVipComb.IsPasswordChat = '\0';
+            this.txtVipComb.IsSystemPasswordChar = false;
+            this.txtVipComb.Lines = new string[0];
+            this.txtVipComb.Location = new System.Drawing.Point(177, 395);
+            this.txtVipComb.Margin = new System.Windows.Forms.Padding(0);
+            this.txtVipComb.MaxLength = 32767;
+            this.txtVipComb.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtVipComb.MouseBack = null;
+            this.txtVipComb.MouseState = CCWin.SkinClass.ControlState.Normal;
+            this.txtVipComb.Multiline = true;
+            this.txtVipComb.Name = "txtVipComb";
+            this.txtVipComb.NormlBack = null;
+            this.txtVipComb.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtVipComb.ReadOnly = true;
+            this.txtVipComb.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtVipComb.Size = new System.Drawing.Size(175, 35);
+            // 
+            // 
+            // 
+            this.txtVipComb.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtVipComb.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtVipComb.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
+            this.txtVipComb.SkinTxt.Location = new System.Drawing.Point(7, 6);
+            this.txtVipComb.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
+            this.txtVipComb.SkinTxt.Multiline = true;
+            this.txtVipComb.SkinTxt.Name = "BaseText";
+            this.txtVipComb.SkinTxt.ReadOnly = true;
+            this.txtVipComb.SkinTxt.Size = new System.Drawing.Size(161, 23);
+            this.txtVipComb.SkinTxt.TabIndex = 0;
+            this.txtVipComb.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
+            this.txtVipComb.SkinTxt.WaterText = "";
+            this.txtVipComb.TabIndex = 156;
+            this.txtVipComb.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtVipComb.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
+            this.txtVipComb.WaterText = "";
+            this.txtVipComb.WordWrap = true;
+            // 
+            // skinLabel12
+            // 
+            this.skinLabel12.AutoSize = true;
+            this.skinLabel12.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel12.BorderColor = System.Drawing.Color.White;
+            this.skinLabel12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel12.Location = new System.Drawing.Point(443, 332);
+            this.skinLabel12.Name = "skinLabel12";
+            this.skinLabel12.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel12.TabIndex = 155;
+            this.skinLabel12.Text = "性别打扮：";
+            // 
+            // skinLabel30
+            // 
+            this.skinLabel30.AutoSize = true;
+            this.skinLabel30.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel30.BorderColor = System.Drawing.Color.White;
+            this.skinLabel30.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel30.Location = new System.Drawing.Point(443, 291);
+            this.skinLabel30.Name = "skinLabel30";
+            this.skinLabel30.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel30.TabIndex = 154;
+            this.skinLabel30.Text = "脱发趋势：";
+            // 
+            // skinLabel31
+            // 
+            this.skinLabel31.AutoSize = true;
+            this.skinLabel31.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel31.BorderColor = System.Drawing.Color.White;
+            this.skinLabel31.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel31.Location = new System.Drawing.Point(463, 250);
+            this.skinLabel31.Name = "skinLabel31";
+            this.skinLabel31.Size = new System.Drawing.Size(92, 27);
+            this.skinLabel31.TabIndex = 153;
+            this.skinLabel31.Text = "浓密度：";
+            // 
+            // skinLabel32
+            // 
+            this.skinLabel32.AutoSize = true;
+            this.skinLabel32.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel32.BorderColor = System.Drawing.Color.White;
+            this.skinLabel32.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel32.Location = new System.Drawing.Point(835, 114);
+            this.skinLabel32.Name = "skinLabel32";
+            this.skinLabel32.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel32.TabIndex = 152;
+            this.skinLabel32.Text = "体型：";
+            // 
+            // skinLabel33
+            // 
+            this.skinLabel33.AutoSize = true;
+            this.skinLabel33.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel33.BorderColor = System.Drawing.Color.White;
+            this.skinLabel33.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel33.Location = new System.Drawing.Point(483, 377);
+            this.skinLabel33.Name = "skinLabel33";
+            this.skinLabel33.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel33.TabIndex = 151;
+            this.skinLabel33.Text = "身高：";
+            // 
+            // cbSexDress
+            // 
+            this.cbSexDress.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbSexDress.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSexDress.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbSexDress.FormattingEnabled = true;
+            this.cbSexDress.Location = new System.Drawing.Point(562, 333);
+            this.cbSexDress.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSexDress.Name = "cbSexDress";
+            this.cbSexDress.Size = new System.Drawing.Size(119, 28);
+            this.cbSexDress.TabIndex = 150;
+            this.cbSexDress.WaterText = "";
+            // 
+            // cbHairLossTrend
+            // 
+            this.cbHairLossTrend.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairLossTrend.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbHairLossTrend.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbHairLossTrend.FormattingEnabled = true;
+            this.cbHairLossTrend.Location = new System.Drawing.Point(562, 290);
+            this.cbHairLossTrend.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairLossTrend.Name = "cbHairLossTrend";
+            this.cbHairLossTrend.Size = new System.Drawing.Size(119, 28);
+            this.cbHairLossTrend.TabIndex = 149;
+            this.cbHairLossTrend.WaterText = "";
+            // 
+            // cbHairDensity
+            // 
+            this.cbHairDensity.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairDensity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbHairDensity.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbHairDensity.FormattingEnabled = true;
+            this.cbHairDensity.Location = new System.Drawing.Point(562, 249);
+            this.cbHairDensity.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairDensity.Name = "cbHairDensity";
+            this.cbHairDensity.Size = new System.Drawing.Size(119, 28);
+            this.cbHairDensity.TabIndex = 148;
+            this.cbHairDensity.WaterText = "";
+            // 
+            // cbProfession
+            // 
+            this.cbProfession.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbProfession.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbProfession.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbProfession.FormattingEnabled = true;
+            this.cbProfession.Location = new System.Drawing.Point(914, 206);
+            this.cbProfession.Margin = new System.Windows.Forms.Padding(4);
+            this.cbProfession.Name = "cbProfession";
+            this.cbProfession.Size = new System.Drawing.Size(119, 28);
+            this.cbProfession.TabIndex = 147;
+            this.cbProfession.WaterText = "";
+            // 
+            // skinLabel34
+            // 
+            this.skinLabel34.AutoSize = true;
+            this.skinLabel34.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel34.BorderColor = System.Drawing.Color.White;
+            this.skinLabel34.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel34.Location = new System.Drawing.Point(835, 206);
+            this.skinLabel34.Name = "skinLabel34";
+            this.skinLabel34.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel34.TabIndex = 146;
+            this.skinLabel34.Text = "职业：";
+            // 
+            // cbSkinColor
+            // 
+            this.cbSkinColor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbSkinColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSkinColor.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbSkinColor.FormattingEnabled = true;
+            this.cbSkinColor.Location = new System.Drawing.Point(914, 160);
+            this.cbSkinColor.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSkinColor.Name = "cbSkinColor";
+            this.cbSkinColor.Size = new System.Drawing.Size(119, 28);
+            this.cbSkinColor.TabIndex = 145;
+            this.cbSkinColor.WaterText = "";
+            // 
+            // skinLabel35
+            // 
+            this.skinLabel35.AutoSize = true;
+            this.skinLabel35.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel35.BorderColor = System.Drawing.Color.White;
+            this.skinLabel35.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel35.Location = new System.Drawing.Point(835, 160);
+            this.skinLabel35.Name = "skinLabel35";
+            this.skinLabel35.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel35.TabIndex = 144;
+            this.skinLabel35.Text = "肤色：";
+            // 
+            // cbBodySize
+            // 
+            this.cbBodySize.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbBodySize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBodySize.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbBodySize.FormattingEnabled = true;
+            this.cbBodySize.Location = new System.Drawing.Point(914, 113);
+            this.cbBodySize.Margin = new System.Windows.Forms.Padding(4);
+            this.cbBodySize.Name = "cbBodySize";
+            this.cbBodySize.Size = new System.Drawing.Size(119, 28);
+            this.cbBodySize.TabIndex = 143;
+            this.cbBodySize.WaterText = "";
+            // 
+            // cbHeight
+            // 
+            this.cbHeight.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHeight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbHeight.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbHeight.FormattingEnabled = true;
+            this.cbHeight.Location = new System.Drawing.Point(562, 376);
+            this.cbHeight.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHeight.Name = "cbHeight";
+            this.cbHeight.Size = new System.Drawing.Size(119, 28);
+            this.cbHeight.TabIndex = 142;
+            this.cbHeight.WaterText = "";
+            // 
+            // cbHairQuality
+            // 
+            this.cbHairQuality.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbHairQuality.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbHairQuality.FormattingEnabled = true;
+            this.cbHairQuality.Location = new System.Drawing.Point(562, 203);
+            this.cbHairQuality.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairQuality.Name = "cbHairQuality";
+            this.cbHairQuality.Size = new System.Drawing.Size(119, 28);
+            this.cbHairQuality.TabIndex = 141;
+            this.cbHairQuality.WaterText = "";
+            // 
+            // skinLabel36
+            // 
+            this.skinLabel36.AutoSize = true;
+            this.skinLabel36.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel36.BorderColor = System.Drawing.Color.White;
+            this.skinLabel36.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel36.Location = new System.Drawing.Point(483, 203);
+            this.skinLabel36.Name = "skinLabel36";
+            this.skinLabel36.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel36.TabIndex = 140;
+            this.skinLabel36.Text = "发质：";
+            // 
+            // cbHairColor
+            // 
+            this.cbHairColor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbHairColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbHairColor.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbHairColor.FormattingEnabled = true;
+            this.cbHairColor.Location = new System.Drawing.Point(562, 162);
+            this.cbHairColor.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairColor.Name = "cbHairColor";
+            this.cbHairColor.Size = new System.Drawing.Size(119, 28);
+            this.cbHairColor.TabIndex = 139;
+            this.cbHairColor.WaterText = "";
+            // 
+            // skinLabel37
+            // 
+            this.skinLabel37.AutoSize = true;
+            this.skinLabel37.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel37.BorderColor = System.Drawing.Color.White;
+            this.skinLabel37.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel37.Location = new System.Drawing.Point(483, 162);
+            this.skinLabel37.Name = "skinLabel37";
+            this.skinLabel37.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel37.TabIndex = 138;
+            this.skinLabel37.Text = "发色：";
+            // 
+            // cbFaceType
+            // 
+            this.cbFaceType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbFaceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFaceType.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbFaceType.FormattingEnabled = true;
+            this.cbFaceType.Location = new System.Drawing.Point(562, 116);
+            this.cbFaceType.Margin = new System.Windows.Forms.Padding(4);
+            this.cbFaceType.Name = "cbFaceType";
+            this.cbFaceType.Size = new System.Drawing.Size(119, 28);
+            this.cbFaceType.TabIndex = 137;
+            this.cbFaceType.WaterText = "";
+            // 
+            // skinLabel38
+            // 
+            this.skinLabel38.AutoSize = true;
+            this.skinLabel38.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel38.BorderColor = System.Drawing.Color.White;
+            this.skinLabel38.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel38.Location = new System.Drawing.Point(483, 116);
+            this.skinLabel38.Name = "skinLabel38";
+            this.skinLabel38.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel38.TabIndex = 136;
+            this.skinLabel38.Text = "脸型：";
+            // 
+            // skinLabel13
+            // 
+            this.skinLabel13.AutoSize = true;
+            this.skinLabel13.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel13.BorderColor = System.Drawing.Color.White;
+            this.skinLabel13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel13.Location = new System.Drawing.Point(346, 257);
+            this.skinLabel13.Name = "skinLabel13";
+            this.skinLabel13.Size = new System.Drawing.Size(32, 27);
+            this.skinLabel13.TabIndex = 48;
+            this.skinLabel13.Text = "日";
             // 
             // txtVipPayNum
             // 
@@ -300,6 +626,19 @@
             this.txtVipPayNum.WaterText = "";
             this.txtVipPayNum.WordWrap = true;
             // 
+            // cbDay
+            // 
+            this.cbDay.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbDay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDay.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbDay.FormattingEnabled = true;
+            this.cbDay.Location = new System.Drawing.Point(277, 257);
+            this.cbDay.Margin = new System.Windows.Forms.Padding(4);
+            this.cbDay.Name = "cbDay";
+            this.cbDay.Size = new System.Drawing.Size(64, 28);
+            this.cbDay.TabIndex = 47;
+            this.cbDay.WaterText = "";
+            // 
             // skinLabel11
             // 
             this.skinLabel11.AutoSize = true;
@@ -311,6 +650,18 @@
             this.skinLabel11.Size = new System.Drawing.Size(152, 27);
             this.skinLabel11.TabIndex = 134;
             this.skinLabel11.Text = "累计消费次数：";
+            // 
+            // skinLabel25
+            // 
+            this.skinLabel25.AutoSize = true;
+            this.skinLabel25.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel25.BorderColor = System.Drawing.Color.White;
+            this.skinLabel25.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel25.Location = new System.Drawing.Point(246, 257);
+            this.skinLabel25.Name = "skinLabel25";
+            this.skinLabel25.Size = new System.Drawing.Size(32, 27);
+            this.skinLabel25.TabIndex = 46;
+            this.skinLabel25.Text = "月";
             // 
             // skinLabel4
             // 
@@ -324,6 +675,19 @@
             this.skinLabel4.TabIndex = 133;
             this.skinLabel4.Text = "最近消费时间：";
             // 
+            // cbMonth
+            // 
+            this.cbMonth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMonth.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbMonth.FormattingEnabled = true;
+            this.cbMonth.Location = new System.Drawing.Point(177, 257);
+            this.cbMonth.Margin = new System.Windows.Forms.Padding(4);
+            this.cbMonth.Name = "cbMonth";
+            this.cbMonth.Size = new System.Drawing.Size(64, 28);
+            this.cbMonth.TabIndex = 45;
+            this.cbMonth.WaterText = "";
+            // 
             // dtpVipLastPay
             // 
             this.dtpVipLastPay.CalendarFont = new System.Drawing.Font("宋体", 11F);
@@ -334,6 +698,19 @@
             this.dtpVipLastPay.Name = "dtpVipLastPay";
             this.dtpVipLastPay.Size = new System.Drawing.Size(179, 28);
             this.dtpVipLastPay.TabIndex = 132;
+            // 
+            // cbAgeRange
+            // 
+            this.cbAgeRange.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbAgeRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAgeRange.Font = new System.Drawing.Font("宋体", 10F);
+            this.cbAgeRange.FormattingEnabled = true;
+            this.cbAgeRange.Location = new System.Drawing.Point(177, 296);
+            this.cbAgeRange.Margin = new System.Windows.Forms.Padding(4);
+            this.cbAgeRange.Name = "cbAgeRange";
+            this.cbAgeRange.Size = new System.Drawing.Size(119, 28);
+            this.cbAgeRange.TabIndex = 44;
+            this.cbAgeRange.WaterText = "";
             // 
             // btnSearchVip
             // 
@@ -351,6 +728,18 @@
             this.btnSearchVip.Text = "搜索";
             this.btnSearchVip.UseVisualStyleBackColor = false;
             this.btnSearchVip.Click += new System.EventHandler(this.btnSearchVip_Click);
+            // 
+            // skinLabel26
+            // 
+            this.skinLabel26.AutoSize = true;
+            this.skinLabel26.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel26.BorderColor = System.Drawing.Color.White;
+            this.skinLabel26.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel26.Location = new System.Drawing.Point(75, 296);
+            this.skinLabel26.Name = "skinLabel26";
+            this.skinLabel26.Size = new System.Drawing.Size(92, 27);
+            this.skinLabel26.TabIndex = 43;
+            this.skinLabel26.Text = "年龄段：";
             // 
             // btnModVip
             // 
@@ -385,6 +774,85 @@
             this.btnDelVip.Text = "删除";
             this.btnDelVip.UseVisualStyleBackColor = false;
             this.btnDelVip.Click += new System.EventHandler(this.btnDelVip_Click);
+            // 
+            // txtPhone
+            // 
+            this.txtPhone.BackColor = System.Drawing.Color.Transparent;
+            this.txtPhone.DownBack = null;
+            this.txtPhone.Icon = null;
+            this.txtPhone.IconIsButton = false;
+            this.txtPhone.IconMouseState = CCWin.SkinClass.ControlState.Normal;
+            this.txtPhone.IsPasswordChat = '\0';
+            this.txtPhone.IsSystemPasswordChar = false;
+            this.txtPhone.Lines = new string[0];
+            this.txtPhone.Location = new System.Drawing.Point(177, 346);
+            this.txtPhone.Margin = new System.Windows.Forms.Padding(0);
+            this.txtPhone.MaxLength = 32767;
+            this.txtPhone.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtPhone.MouseBack = null;
+            this.txtPhone.MouseState = CCWin.SkinClass.ControlState.Normal;
+            this.txtPhone.Multiline = true;
+            this.txtPhone.Name = "txtPhone";
+            this.txtPhone.NormlBack = null;
+            this.txtPhone.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtPhone.ReadOnly = false;
+            this.txtPhone.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtPhone.Size = new System.Drawing.Size(175, 35);
+            // 
+            // 
+            // 
+            this.txtPhone.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtPhone.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPhone.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
+            this.txtPhone.SkinTxt.Location = new System.Drawing.Point(7, 6);
+            this.txtPhone.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
+            this.txtPhone.SkinTxt.Multiline = true;
+            this.txtPhone.SkinTxt.Name = "BaseText";
+            this.txtPhone.SkinTxt.Size = new System.Drawing.Size(161, 23);
+            this.txtPhone.SkinTxt.TabIndex = 0;
+            this.txtPhone.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
+            this.txtPhone.SkinTxt.WaterText = "";
+            this.txtPhone.TabIndex = 41;
+            this.txtPhone.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtPhone.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
+            this.txtPhone.WaterText = "";
+            this.txtPhone.WordWrap = true;
+            // 
+            // skinLabel27
+            // 
+            this.skinLabel27.AutoSize = true;
+            this.skinLabel27.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel27.BorderColor = System.Drawing.Color.White;
+            this.skinLabel27.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel27.Location = new System.Drawing.Point(99, 257);
+            this.skinLabel27.Name = "skinLabel27";
+            this.skinLabel27.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel27.TabIndex = 40;
+            this.skinLabel27.Text = "生日：";
+            // 
+            // skinLabel28
+            // 
+            this.skinLabel28.AutoSize = true;
+            this.skinLabel28.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel28.BorderColor = System.Drawing.Color.White;
+            this.skinLabel28.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel28.Location = new System.Drawing.Point(100, 399);
+            this.skinLabel28.Name = "skinLabel28";
+            this.skinLabel28.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel28.TabIndex = 39;
+            this.skinLabel28.Text = "套餐：";
+            // 
+            // skinLabel29
+            // 
+            this.skinLabel29.AutoSize = true;
+            this.skinLabel29.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel29.BorderColor = System.Drawing.Color.White;
+            this.skinLabel29.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel29.Location = new System.Drawing.Point(55, 347);
+            this.skinLabel29.Name = "skinLabel29";
+            this.skinLabel29.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel29.TabIndex = 38;
+            this.skinLabel29.Text = "联系方式：";
             // 
             // cbGender
             // 
@@ -615,6 +1083,7 @@
             this.dgvVip.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvVip.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.VipNo,
+            this.VipID,
             this.VipName,
             this.VipGender,
             this.VipPhone,
@@ -622,8 +1091,7 @@
             this.VipCreateAt,
             this.VipCombName,
             this.VipLastPayAt,
-            this.VipPayNum,
-            this.VipCombNo});
+            this.VipPayNum});
             this.dgvVip.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
@@ -657,6 +1125,77 @@
             this.dgvVip.TitleBackColorBegin = System.Drawing.Color.White;
             this.dgvVip.TitleBackColorEnd = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(196)))), ((int)(((byte)(242)))));
             this.dgvVip.Click += new System.EventHandler(this.dgvVip_Click);
+            // 
+            // VipNo
+            // 
+            this.VipNo.DataPropertyName = "VipNo";
+            this.VipNo.HeaderText = "编号";
+            this.VipNo.Name = "VipNo";
+            this.VipNo.ReadOnly = true;
+            // 
+            // VipID
+            // 
+            this.VipID.DataPropertyName = "VipID";
+            this.VipID.HeaderText = "ID";
+            this.VipID.Name = "VipID";
+            this.VipID.ReadOnly = true;
+            this.VipID.Visible = false;
+            // 
+            // VipName
+            // 
+            this.VipName.DataPropertyName = "VipName";
+            this.VipName.HeaderText = "姓名";
+            this.VipName.Name = "VipName";
+            this.VipName.ReadOnly = true;
+            // 
+            // VipGender
+            // 
+            this.VipGender.DataPropertyName = "Gender";
+            this.VipGender.HeaderText = "性别";
+            this.VipGender.Name = "VipGender";
+            this.VipGender.ReadOnly = true;
+            // 
+            // VipPhone
+            // 
+            this.VipPhone.DataPropertyName = "Phone";
+            this.VipPhone.HeaderText = "联系方式";
+            this.VipPhone.Name = "VipPhone";
+            this.VipPhone.ReadOnly = true;
+            // 
+            // VipBirth
+            // 
+            this.VipBirth.DataPropertyName = "Birth";
+            this.VipBirth.HeaderText = "生日";
+            this.VipBirth.Name = "VipBirth";
+            this.VipBirth.ReadOnly = true;
+            // 
+            // VipCreateAt
+            // 
+            this.VipCreateAt.DataPropertyName = "CreateAt";
+            this.VipCreateAt.HeaderText = "加入时间";
+            this.VipCreateAt.Name = "VipCreateAt";
+            this.VipCreateAt.ReadOnly = true;
+            // 
+            // VipCombName
+            // 
+            this.VipCombName.DataPropertyName = "CombName";
+            this.VipCombName.HeaderText = "套餐";
+            this.VipCombName.Name = "VipCombName";
+            this.VipCombName.ReadOnly = true;
+            // 
+            // VipLastPayAt
+            // 
+            this.VipLastPayAt.DataPropertyName = "LastPayAt";
+            this.VipLastPayAt.HeaderText = "最近支付时间";
+            this.VipLastPayAt.Name = "VipLastPayAt";
+            this.VipLastPayAt.ReadOnly = true;
+            // 
+            // VipPayNum
+            // 
+            this.VipPayNum.DataPropertyName = "PayNum";
+            this.VipPayNum.HeaderText = "累计消费次数";
+            this.VipPayNum.Name = "VipPayNum";
+            this.VipPayNum.ReadOnly = true;
             // 
             // btnAddVip
             // 
@@ -704,7 +1243,7 @@
             this.tabPro.Padding = new System.Windows.Forms.Padding(4);
             this.tabPro.Size = new System.Drawing.Size(1527, 888);
             this.tabPro.TabIndex = 1;
-            this.tabPro.Text = "产品管理";
+            this.tabPro.Text = "服务管理";
             this.tabPro.UseVisualStyleBackColor = true;
             // 
             // dgvPro
@@ -1838,6 +2377,7 @@
             this.dgvComb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvComb.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CombNo,
+            this.CombID,
             this.CombName,
             this.CombDesc,
             this.CombInType,
@@ -1884,6 +2424,14 @@
             this.CombNo.HeaderText = "编号";
             this.CombNo.Name = "CombNo";
             this.CombNo.ReadOnly = true;
+            // 
+            // CombID
+            // 
+            this.CombID.DataPropertyName = "ID";
+            this.CombID.HeaderText = "ID";
+            this.CombID.Name = "CombID";
+            this.CombID.ReadOnly = true;
+            this.CombID.Visible = false;
             // 
             // CombName
             // 
@@ -2037,494 +2585,6 @@
             this.btnAddComb.UseVisualStyleBackColor = false;
             this.btnAddComb.Click += new System.EventHandler(this.btnAddComb_Click);
             // 
-            // skinLabel13
-            // 
-            this.skinLabel13.AutoSize = true;
-            this.skinLabel13.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel13.BorderColor = System.Drawing.Color.White;
-            this.skinLabel13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel13.Location = new System.Drawing.Point(346, 257);
-            this.skinLabel13.Name = "skinLabel13";
-            this.skinLabel13.Size = new System.Drawing.Size(32, 27);
-            this.skinLabel13.TabIndex = 48;
-            this.skinLabel13.Text = "日";
-            // 
-            // cbDay
-            // 
-            this.cbDay.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbDay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDay.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbDay.FormattingEnabled = true;
-            this.cbDay.Location = new System.Drawing.Point(277, 257);
-            this.cbDay.Margin = new System.Windows.Forms.Padding(4);
-            this.cbDay.Name = "cbDay";
-            this.cbDay.Size = new System.Drawing.Size(64, 28);
-            this.cbDay.TabIndex = 47;
-            this.cbDay.WaterText = "";
-            // 
-            // skinLabel25
-            // 
-            this.skinLabel25.AutoSize = true;
-            this.skinLabel25.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel25.BorderColor = System.Drawing.Color.White;
-            this.skinLabel25.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel25.Location = new System.Drawing.Point(246, 257);
-            this.skinLabel25.Name = "skinLabel25";
-            this.skinLabel25.Size = new System.Drawing.Size(32, 27);
-            this.skinLabel25.TabIndex = 46;
-            this.skinLabel25.Text = "月";
-            // 
-            // cbMonth
-            // 
-            this.cbMonth.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbMonth.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbMonth.FormattingEnabled = true;
-            this.cbMonth.Location = new System.Drawing.Point(177, 257);
-            this.cbMonth.Margin = new System.Windows.Forms.Padding(4);
-            this.cbMonth.Name = "cbMonth";
-            this.cbMonth.Size = new System.Drawing.Size(64, 28);
-            this.cbMonth.TabIndex = 45;
-            this.cbMonth.WaterText = "";
-            // 
-            // cbAgeRange
-            // 
-            this.cbAgeRange.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbAgeRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAgeRange.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbAgeRange.FormattingEnabled = true;
-            this.cbAgeRange.Location = new System.Drawing.Point(177, 296);
-            this.cbAgeRange.Margin = new System.Windows.Forms.Padding(4);
-            this.cbAgeRange.Name = "cbAgeRange";
-            this.cbAgeRange.Size = new System.Drawing.Size(119, 28);
-            this.cbAgeRange.TabIndex = 44;
-            this.cbAgeRange.WaterText = "";
-            // 
-            // skinLabel26
-            // 
-            this.skinLabel26.AutoSize = true;
-            this.skinLabel26.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel26.BorderColor = System.Drawing.Color.White;
-            this.skinLabel26.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel26.Location = new System.Drawing.Point(75, 296);
-            this.skinLabel26.Name = "skinLabel26";
-            this.skinLabel26.Size = new System.Drawing.Size(92, 27);
-            this.skinLabel26.TabIndex = 43;
-            this.skinLabel26.Text = "年龄段：";
-            // 
-            // cbVipComb
-            // 
-            this.cbVipComb.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbVipComb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbVipComb.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbVipComb.FormattingEnabled = true;
-            this.cbVipComb.Location = new System.Drawing.Point(177, 395);
-            this.cbVipComb.Margin = new System.Windows.Forms.Padding(4);
-            this.cbVipComb.Name = "cbVipComb";
-            this.cbVipComb.Size = new System.Drawing.Size(119, 28);
-            this.cbVipComb.TabIndex = 42;
-            this.cbVipComb.WaterText = "";
-            // 
-            // txtPhone
-            // 
-            this.txtPhone.BackColor = System.Drawing.Color.Transparent;
-            this.txtPhone.DownBack = null;
-            this.txtPhone.Icon = null;
-            this.txtPhone.IconIsButton = false;
-            this.txtPhone.IconMouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtPhone.IsPasswordChat = '\0';
-            this.txtPhone.IsSystemPasswordChar = false;
-            this.txtPhone.Lines = new string[0];
-            this.txtPhone.Location = new System.Drawing.Point(177, 346);
-            this.txtPhone.Margin = new System.Windows.Forms.Padding(0);
-            this.txtPhone.MaxLength = 32767;
-            this.txtPhone.MinimumSize = new System.Drawing.Size(37, 35);
-            this.txtPhone.MouseBack = null;
-            this.txtPhone.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtPhone.Multiline = true;
-            this.txtPhone.Name = "txtPhone";
-            this.txtPhone.NormlBack = null;
-            this.txtPhone.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.txtPhone.ReadOnly = false;
-            this.txtPhone.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtPhone.Size = new System.Drawing.Size(175, 35);
-            // 
-            // 
-            // 
-            this.txtPhone.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtPhone.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPhone.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtPhone.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtPhone.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtPhone.SkinTxt.Multiline = true;
-            this.txtPhone.SkinTxt.Name = "BaseText";
-            this.txtPhone.SkinTxt.Size = new System.Drawing.Size(161, 23);
-            this.txtPhone.SkinTxt.TabIndex = 0;
-            this.txtPhone.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtPhone.SkinTxt.WaterText = "";
-            this.txtPhone.TabIndex = 41;
-            this.txtPhone.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.txtPhone.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
-            this.txtPhone.WaterText = "";
-            this.txtPhone.WordWrap = true;
-            // 
-            // skinLabel27
-            // 
-            this.skinLabel27.AutoSize = true;
-            this.skinLabel27.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel27.BorderColor = System.Drawing.Color.White;
-            this.skinLabel27.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel27.Location = new System.Drawing.Point(99, 257);
-            this.skinLabel27.Name = "skinLabel27";
-            this.skinLabel27.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel27.TabIndex = 40;
-            this.skinLabel27.Text = "生日：";
-            // 
-            // skinLabel28
-            // 
-            this.skinLabel28.AutoSize = true;
-            this.skinLabel28.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel28.BorderColor = System.Drawing.Color.White;
-            this.skinLabel28.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel28.Location = new System.Drawing.Point(100, 395);
-            this.skinLabel28.Name = "skinLabel28";
-            this.skinLabel28.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel28.TabIndex = 39;
-            this.skinLabel28.Text = "套餐：";
-            // 
-            // skinLabel29
-            // 
-            this.skinLabel29.AutoSize = true;
-            this.skinLabel29.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel29.BorderColor = System.Drawing.Color.White;
-            this.skinLabel29.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel29.Location = new System.Drawing.Point(55, 347);
-            this.skinLabel29.Name = "skinLabel29";
-            this.skinLabel29.Size = new System.Drawing.Size(112, 27);
-            this.skinLabel29.TabIndex = 38;
-            this.skinLabel29.Text = "联系方式：";
-            // 
-            // skinLabel12
-            // 
-            this.skinLabel12.AutoSize = true;
-            this.skinLabel12.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel12.BorderColor = System.Drawing.Color.White;
-            this.skinLabel12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel12.Location = new System.Drawing.Point(443, 332);
-            this.skinLabel12.Name = "skinLabel12";
-            this.skinLabel12.Size = new System.Drawing.Size(112, 27);
-            this.skinLabel12.TabIndex = 155;
-            this.skinLabel12.Text = "性别打扮：";
-            // 
-            // skinLabel30
-            // 
-            this.skinLabel30.AutoSize = true;
-            this.skinLabel30.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel30.BorderColor = System.Drawing.Color.White;
-            this.skinLabel30.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel30.Location = new System.Drawing.Point(443, 291);
-            this.skinLabel30.Name = "skinLabel30";
-            this.skinLabel30.Size = new System.Drawing.Size(112, 27);
-            this.skinLabel30.TabIndex = 154;
-            this.skinLabel30.Text = "脱发趋势：";
-            // 
-            // skinLabel31
-            // 
-            this.skinLabel31.AutoSize = true;
-            this.skinLabel31.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel31.BorderColor = System.Drawing.Color.White;
-            this.skinLabel31.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel31.Location = new System.Drawing.Point(463, 250);
-            this.skinLabel31.Name = "skinLabel31";
-            this.skinLabel31.Size = new System.Drawing.Size(92, 27);
-            this.skinLabel31.TabIndex = 153;
-            this.skinLabel31.Text = "浓密度：";
-            // 
-            // skinLabel32
-            // 
-            this.skinLabel32.AutoSize = true;
-            this.skinLabel32.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel32.BorderColor = System.Drawing.Color.White;
-            this.skinLabel32.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel32.Location = new System.Drawing.Point(835, 114);
-            this.skinLabel32.Name = "skinLabel32";
-            this.skinLabel32.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel32.TabIndex = 152;
-            this.skinLabel32.Text = "体型：";
-            // 
-            // skinLabel33
-            // 
-            this.skinLabel33.AutoSize = true;
-            this.skinLabel33.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel33.BorderColor = System.Drawing.Color.White;
-            this.skinLabel33.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel33.Location = new System.Drawing.Point(483, 377);
-            this.skinLabel33.Name = "skinLabel33";
-            this.skinLabel33.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel33.TabIndex = 151;
-            this.skinLabel33.Text = "身高：";
-            // 
-            // cbSexDress
-            // 
-            this.cbSexDress.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbSexDress.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSexDress.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbSexDress.FormattingEnabled = true;
-            this.cbSexDress.Location = new System.Drawing.Point(562, 333);
-            this.cbSexDress.Margin = new System.Windows.Forms.Padding(4);
-            this.cbSexDress.Name = "cbSexDress";
-            this.cbSexDress.Size = new System.Drawing.Size(119, 28);
-            this.cbSexDress.TabIndex = 150;
-            this.cbSexDress.WaterText = "";
-            // 
-            // cbHairLossTrend
-            // 
-            this.cbHairLossTrend.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbHairLossTrend.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbHairLossTrend.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbHairLossTrend.FormattingEnabled = true;
-            this.cbHairLossTrend.Location = new System.Drawing.Point(562, 290);
-            this.cbHairLossTrend.Margin = new System.Windows.Forms.Padding(4);
-            this.cbHairLossTrend.Name = "cbHairLossTrend";
-            this.cbHairLossTrend.Size = new System.Drawing.Size(119, 28);
-            this.cbHairLossTrend.TabIndex = 149;
-            this.cbHairLossTrend.WaterText = "";
-            // 
-            // cbHairDensity
-            // 
-            this.cbHairDensity.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbHairDensity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbHairDensity.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbHairDensity.FormattingEnabled = true;
-            this.cbHairDensity.Location = new System.Drawing.Point(562, 249);
-            this.cbHairDensity.Margin = new System.Windows.Forms.Padding(4);
-            this.cbHairDensity.Name = "cbHairDensity";
-            this.cbHairDensity.Size = new System.Drawing.Size(119, 28);
-            this.cbHairDensity.TabIndex = 148;
-            this.cbHairDensity.WaterText = "";
-            // 
-            // cbProfession
-            // 
-            this.cbProfession.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbProfession.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbProfession.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbProfession.FormattingEnabled = true;
-            this.cbProfession.Location = new System.Drawing.Point(914, 206);
-            this.cbProfession.Margin = new System.Windows.Forms.Padding(4);
-            this.cbProfession.Name = "cbProfession";
-            this.cbProfession.Size = new System.Drawing.Size(119, 28);
-            this.cbProfession.TabIndex = 147;
-            this.cbProfession.WaterText = "";
-            // 
-            // skinLabel34
-            // 
-            this.skinLabel34.AutoSize = true;
-            this.skinLabel34.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel34.BorderColor = System.Drawing.Color.White;
-            this.skinLabel34.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel34.Location = new System.Drawing.Point(835, 206);
-            this.skinLabel34.Name = "skinLabel34";
-            this.skinLabel34.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel34.TabIndex = 146;
-            this.skinLabel34.Text = "职业：";
-            // 
-            // cbSkinColor
-            // 
-            this.cbSkinColor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbSkinColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSkinColor.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbSkinColor.FormattingEnabled = true;
-            this.cbSkinColor.Location = new System.Drawing.Point(914, 160);
-            this.cbSkinColor.Margin = new System.Windows.Forms.Padding(4);
-            this.cbSkinColor.Name = "cbSkinColor";
-            this.cbSkinColor.Size = new System.Drawing.Size(119, 28);
-            this.cbSkinColor.TabIndex = 145;
-            this.cbSkinColor.WaterText = "";
-            // 
-            // skinLabel35
-            // 
-            this.skinLabel35.AutoSize = true;
-            this.skinLabel35.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel35.BorderColor = System.Drawing.Color.White;
-            this.skinLabel35.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel35.Location = new System.Drawing.Point(835, 160);
-            this.skinLabel35.Name = "skinLabel35";
-            this.skinLabel35.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel35.TabIndex = 144;
-            this.skinLabel35.Text = "肤色：";
-            // 
-            // cbBodySize
-            // 
-            this.cbBodySize.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbBodySize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbBodySize.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbBodySize.FormattingEnabled = true;
-            this.cbBodySize.Location = new System.Drawing.Point(914, 113);
-            this.cbBodySize.Margin = new System.Windows.Forms.Padding(4);
-            this.cbBodySize.Name = "cbBodySize";
-            this.cbBodySize.Size = new System.Drawing.Size(119, 28);
-            this.cbBodySize.TabIndex = 143;
-            this.cbBodySize.WaterText = "";
-            // 
-            // cbHeight
-            // 
-            this.cbHeight.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbHeight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbHeight.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbHeight.FormattingEnabled = true;
-            this.cbHeight.Location = new System.Drawing.Point(562, 376);
-            this.cbHeight.Margin = new System.Windows.Forms.Padding(4);
-            this.cbHeight.Name = "cbHeight";
-            this.cbHeight.Size = new System.Drawing.Size(119, 28);
-            this.cbHeight.TabIndex = 142;
-            this.cbHeight.WaterText = "";
-            // 
-            // cbHairQuality
-            // 
-            this.cbHairQuality.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbHairQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbHairQuality.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbHairQuality.FormattingEnabled = true;
-            this.cbHairQuality.Location = new System.Drawing.Point(562, 203);
-            this.cbHairQuality.Margin = new System.Windows.Forms.Padding(4);
-            this.cbHairQuality.Name = "cbHairQuality";
-            this.cbHairQuality.Size = new System.Drawing.Size(119, 28);
-            this.cbHairQuality.TabIndex = 141;
-            this.cbHairQuality.WaterText = "";
-            // 
-            // skinLabel36
-            // 
-            this.skinLabel36.AutoSize = true;
-            this.skinLabel36.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel36.BorderColor = System.Drawing.Color.White;
-            this.skinLabel36.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel36.Location = new System.Drawing.Point(483, 203);
-            this.skinLabel36.Name = "skinLabel36";
-            this.skinLabel36.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel36.TabIndex = 140;
-            this.skinLabel36.Text = "发质：";
-            // 
-            // cbHairColor
-            // 
-            this.cbHairColor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbHairColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbHairColor.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbHairColor.FormattingEnabled = true;
-            this.cbHairColor.Location = new System.Drawing.Point(562, 162);
-            this.cbHairColor.Margin = new System.Windows.Forms.Padding(4);
-            this.cbHairColor.Name = "cbHairColor";
-            this.cbHairColor.Size = new System.Drawing.Size(119, 28);
-            this.cbHairColor.TabIndex = 139;
-            this.cbHairColor.WaterText = "";
-            // 
-            // skinLabel37
-            // 
-            this.skinLabel37.AutoSize = true;
-            this.skinLabel37.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel37.BorderColor = System.Drawing.Color.White;
-            this.skinLabel37.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel37.Location = new System.Drawing.Point(483, 162);
-            this.skinLabel37.Name = "skinLabel37";
-            this.skinLabel37.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel37.TabIndex = 138;
-            this.skinLabel37.Text = "发色：";
-            // 
-            // cbFaceType
-            // 
-            this.cbFaceType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbFaceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFaceType.Font = new System.Drawing.Font("宋体", 10F);
-            this.cbFaceType.FormattingEnabled = true;
-            this.cbFaceType.Location = new System.Drawing.Point(562, 116);
-            this.cbFaceType.Margin = new System.Windows.Forms.Padding(4);
-            this.cbFaceType.Name = "cbFaceType";
-            this.cbFaceType.Size = new System.Drawing.Size(119, 28);
-            this.cbFaceType.TabIndex = 137;
-            this.cbFaceType.WaterText = "";
-            // 
-            // skinLabel38
-            // 
-            this.skinLabel38.AutoSize = true;
-            this.skinLabel38.BackColor = System.Drawing.Color.Transparent;
-            this.skinLabel38.BorderColor = System.Drawing.Color.White;
-            this.skinLabel38.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel38.Location = new System.Drawing.Point(483, 116);
-            this.skinLabel38.Name = "skinLabel38";
-            this.skinLabel38.Size = new System.Drawing.Size(72, 27);
-            this.skinLabel38.TabIndex = 136;
-            this.skinLabel38.Text = "脸型：";
-            // 
-            // VipNo
-            // 
-            this.VipNo.DataPropertyName = "VipNo";
-            this.VipNo.HeaderText = "编号";
-            this.VipNo.Name = "VipNo";
-            this.VipNo.ReadOnly = true;
-            // 
-            // VipName
-            // 
-            this.VipName.DataPropertyName = "VipName";
-            this.VipName.HeaderText = "姓名";
-            this.VipName.Name = "VipName";
-            this.VipName.ReadOnly = true;
-            // 
-            // VipGender
-            // 
-            this.VipGender.DataPropertyName = "Gender";
-            this.VipGender.HeaderText = "性别";
-            this.VipGender.Name = "VipGender";
-            this.VipGender.ReadOnly = true;
-            // 
-            // VipPhone
-            // 
-            this.VipPhone.DataPropertyName = "Phone";
-            this.VipPhone.HeaderText = "联系方式";
-            this.VipPhone.Name = "VipPhone";
-            this.VipPhone.ReadOnly = true;
-            // 
-            // VipBirth
-            // 
-            this.VipBirth.DataPropertyName = "Birth";
-            this.VipBirth.HeaderText = "生日";
-            this.VipBirth.Name = "VipBirth";
-            this.VipBirth.ReadOnly = true;
-            // 
-            // VipCreateAt
-            // 
-            this.VipCreateAt.DataPropertyName = "CreateAt";
-            this.VipCreateAt.HeaderText = "加入时间";
-            this.VipCreateAt.Name = "VipCreateAt";
-            this.VipCreateAt.ReadOnly = true;
-            // 
-            // VipCombName
-            // 
-            this.VipCombName.DataPropertyName = "CombName";
-            this.VipCombName.HeaderText = "套餐";
-            this.VipCombName.Name = "VipCombName";
-            this.VipCombName.ReadOnly = true;
-            // 
-            // VipLastPayAt
-            // 
-            this.VipLastPayAt.DataPropertyName = "LastPayAt";
-            this.VipLastPayAt.HeaderText = "最近支付时间";
-            this.VipLastPayAt.Name = "VipLastPayAt";
-            this.VipLastPayAt.ReadOnly = true;
-            // 
-            // VipPayNum
-            // 
-            this.VipPayNum.DataPropertyName = "PayNum";
-            this.VipPayNum.HeaderText = "累计消费次数";
-            this.VipPayNum.Name = "VipPayNum";
-            this.VipPayNum.ReadOnly = true;
-            // 
-            // VipCombNo
-            // 
-            this.VipCombNo.DataPropertyName = "CombNo";
-            this.VipCombNo.HeaderText = "套餐编号";
-            this.VipCombNo.Name = "VipCombNo";
-            this.VipCombNo.ReadOnly = true;
-            this.VipCombNo.Visible = false;
-            // 
             // Mains
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -2634,20 +2694,12 @@
         private CCWin.SkinControl.SkinLabel labCombUnit;
         private CCWin.SkinControl.SkinLabel labCombDetail;
         private CCWin.SkinControl.SkinTextBox txtCombDetail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CombNo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CombName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CombDesc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CombInType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CombCreateAt;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CombLastPayAt;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CombPayNum;
         private CCWin.SkinControl.SkinLabel skinLabel13;
         private CCWin.SkinControl.SkinComboBox cbDay;
         private CCWin.SkinControl.SkinLabel skinLabel25;
         private CCWin.SkinControl.SkinComboBox cbMonth;
         private CCWin.SkinControl.SkinComboBox cbAgeRange;
         private CCWin.SkinControl.SkinLabel skinLabel26;
-        private CCWin.SkinControl.SkinComboBox cbVipComb;
         private CCWin.SkinControl.SkinTextBox txtPhone;
         private CCWin.SkinControl.SkinLabel skinLabel27;
         private CCWin.SkinControl.SkinLabel skinLabel28;
@@ -2672,7 +2724,18 @@
         private CCWin.SkinControl.SkinLabel skinLabel37;
         private CCWin.SkinControl.SkinComboBox cbFaceType;
         private CCWin.SkinControl.SkinLabel skinLabel38;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombInType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombCreateAt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombLastPayAt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CombPayNum;
+        private CCWin.SkinControl.SkinTextBox txtVipComb;
+        private CCWin.SkinControl.SkinButton btnEditVipComb;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn VipID;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipName;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipGender;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipPhone;
@@ -2681,7 +2744,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn VipCombName;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipLastPayAt;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipPayNum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn VipCombNo;
 
 
 

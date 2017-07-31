@@ -195,6 +195,7 @@
             // cbType
             // 
             this.cbType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbType.Font = new System.Drawing.Font("宋体", 10F);
             this.cbType.FormattingEnabled = true;
             this.cbType.Items.AddRange(new object[] {
@@ -206,7 +207,6 @@
             this.cbType.Name = "cbType";
             this.cbType.Size = new System.Drawing.Size(119, 28);
             this.cbType.TabIndex = 29;
-            this.cbType.Text = "次数型";
             this.cbType.WaterText = "";
             this.cbType.TextChanged += new System.EventHandler(this.cbType_TextChanged);
             // 
@@ -273,7 +273,7 @@
             this.skinLabel2.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel2.BorderColor = System.Drawing.Color.White;
             this.skinLabel2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel2.Location = new System.Drawing.Point(324, 270);
+            this.skinLabel2.Location = new System.Drawing.Point(324, 281);
             this.skinLabel2.Name = "skinLabel2";
             this.skinLabel2.Size = new System.Drawing.Size(132, 27);
             this.skinLabel2.TabIndex = 33;
@@ -316,6 +316,7 @@
             // cbPro
             // 
             this.cbPro.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbPro.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPro.Font = new System.Drawing.Font("宋体", 10F);
             this.cbPro.FormattingEnabled = true;
             this.cbPro.Location = new System.Drawing.Point(467, 219);
@@ -471,6 +472,7 @@
             // cbCombTime
             // 
             this.cbCombTime.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbCombTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCombTime.FormattingEnabled = true;
             this.cbCombTime.Items.AddRange(new object[] {
             "月卡",
@@ -481,7 +483,6 @@
             this.cbCombTime.Name = "cbCombTime";
             this.cbCombTime.Size = new System.Drawing.Size(121, 26);
             this.cbCombTime.TabIndex = 46;
-            this.cbCombTime.Text = "季卡";
             this.cbCombTime.Visible = false;
             this.cbCombTime.WaterText = "";
             // 

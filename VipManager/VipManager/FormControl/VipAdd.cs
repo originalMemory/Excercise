@@ -47,7 +47,7 @@ namespace VipManager.FormControl
             adapter.Fill(DtComb);
             cbVipComb.DataSource = DtComb;
             cbVipComb.DisplayMember = "CombName";
-            cbVipComb.ValueMember = "No";
+            cbVipComb.ValueMember = "ID";
 
             //绑定生日下拉框
             cbMonth.DataSource = Config.MonthAr;
@@ -74,6 +74,9 @@ namespace VipManager.FormControl
             cbSexDress.DataSource = Config.SexDressList;
             //绑定职业下拉框
             cbProfession.DataSource = Config.ProfessionList;
+
+            //输入框限制事件
+            txtPhone.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
         }
 
         /// <summary>
@@ -123,39 +126,57 @@ namespace VipManager.FormControl
             OleDbCommand comAddVip = new OleDbCommand(sqlAddVip, Config.con);
             comAddVip.ExecuteNonQuery();
 
+            //获取插入的会员编号
+            string sqlGetVip = "select [ID] from [vip] where [no]={0}".FormatStr(txtNo.Text);
+            OleDbCommand combGetVip = new OleDbCommand(sqlGetVip, Config.con);
+            OleDbDataReader readerVip = combGetVip.ExecuteReader();
+            int vipID = 0;
+            if (readerVip.Read())
+            {
+                vipID = Convert.ToInt32(readerVip[0]);
+            }
+            readerVip.Close();
+
             //插入套餐映射
-            int combNo = Convert.ToInt32(cbVipComb.SelectedValue);
-            var combRows = DtComb.Select("No=" + combNo);
+            int combID = Convert.ToInt32(cbVipComb.SelectedValue);
+            var combRows = DtComb.Select("ID=" + combID);
             DataRow combRow = combRows[0];
             int payNum = Convert.ToInt32(combRow["PayNum"]) + 1;
             DateTime startAt = DateTime.Now;
             int timeRange = Convert.ToInt32(combRow["TimeRange"]);
             DateTime endAt = startAt.AddMonths(timeRange);
             string sqlAddCombSnap = @"insert into [CombSnap]([No],[CombName],[Description],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],
-[Num],[Discount],[IsDel],[StartAt],[EndAt],[VipNo]) values(
+[Num],[Discount],[IsDel],[StartAt],[EndAt],[VipID],[CombID]) values(
 {0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14})"
                 .FormatStr(combRow["No"], combRow["CombName"], combRow["Description"], DateTime.Now, combRow["UserId"], combRow["LastPayAt"], payNum
-                , combRow["Type"], combRow["Price"], combRow["Num"], combRow["Discount"],false,startAt,endAt,txtNo.Text);
+                , combRow["Type"], combRow["Price"], combRow["Num"], combRow["Discount"], false, startAt, endAt, vipID, combID);
             OleDbCommand comAddCombSnap = new OleDbCommand(sqlAddCombSnap, Config.con);
             comAddCombSnap.ExecuteNonQuery();
 
             //更新套餐使用信息
-            string sqlUpComb = @"update [Combination] set [LastPayAt]=#{0}#,[PayNum]={1} where [No]={2}".FormatStr(DateTime.Now, payNum, combNo);
+            string sqlUpComb = @"update [Combination] set [LastPayAt]=#{0}#,[PayNum]={1} where [ID]={2}".FormatStr(DateTime.Now, payNum, combID);
             OleDbCommand comUpComb = new OleDbCommand(sqlUpComb, Config.con);
             comUpComb.ExecuteNonQuery();
 
+            //获取新套餐映射的ID
+            string sqlGetCombSnap = "select [ID] from [CombSnap] where [VipID]={0} and [IsDel]={1}".FormatStr(vipID, false);
+            OleDbCommand comGetCombSnap = new OleDbCommand(sqlGetCombSnap, Config.con);
+            OleDbDataReader readerCombSnap = comGetCombSnap.ExecuteReader();
+            readerCombSnap.Read();
+            int newCombID = readerCombSnap.GetInt32(0);
+
             //获取套餐内产品信息
             DataTable dtPro = new DataTable();
-            string sqlGetPro = "select * from [Product] where [No] in({0})".FormatStr(combRow["ProNos"]);
+            string sqlGetPro = "select * from [Product] where [ID] in({0})".FormatStr(combRow["ProIDs"]);
             OleDbDataAdapter adapterPro = new OleDbDataAdapter(sqlGetPro, Config.con);
             adapterPro.Fill(dtPro);
 
             foreach (DataRow row in dtPro.Rows)
             {
                 //插入产品映射
-                string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[ProDesc],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipNo],[CombSnapNo]) values(
+                string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipID],[CombSnapID]) values(
 {0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10})"
-                    .FormatStr(row["No"], row["ProName"], row["ProDesc"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, txtNo.Text, combNo);
+                    .FormatStr(row["No"], row["ProName"], row["Description"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, vipID, newCombID);
                 OleDbCommand comAddPro = new OleDbCommand(sqlAddPro, Config.con);
                 comAddPro.ExecuteNonQuery();
             }

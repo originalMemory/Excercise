@@ -30,7 +30,7 @@ namespace VipManager.FormControl
         /// <summary>
         /// 所有产品数据表
         /// </summary>
-        DataTable dtPro = new DataTable();
+        DataTable DtPro = new DataTable();
 
         public CombAdd()
         {
@@ -50,10 +50,14 @@ namespace VipManager.FormControl
             InitCbPro();
 
             //初始化产品列表
-            ProInComb = dtPro.Clone();
+            ProInComb = DtPro.Clone();
             lbPro.DataSource = ProInComb;
             lbPro.DisplayMember = "ProName";
-            lbPro.ValueMember = "No";
+            lbPro.ValueMember = "ID";
+
+            //限制文本框输入范围
+            txtCombDetail.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
+            txtCombNum.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
         }
 
         /// <summary>
@@ -61,15 +65,15 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitCbPro()
         {
-            string sqlPro = "select [No],[ProName],[Price] from [Product]";
+            string sqlPro = "select [ID],[No],[ProName],[Price] from [Product]";
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
-            adapter.Fill(dtPro);
-            cbPro.DataSource = dtPro;
+            adapter.Fill(DtPro);
+            cbPro.DataSource = DtPro;
             cbPro.DisplayMember = "ProName";
-            cbPro.ValueMember = "No"; 
+            cbPro.ValueMember = "ID"; 
         }
 
-        //根据会员类型激活或禁用不同选项
+        //根据套餐类型激活或禁用不同选项
         private void cbType_TextChanged(object sender, EventArgs e)
         {
             ComboBox type = (ComboBox)sender;
@@ -153,14 +157,14 @@ namespace VipManager.FormControl
                 return;
             }
 
-            string proNos = "";
+            string proIDs = "";
 
             foreach (DataRow row in ProInComb.Rows)
             {
-                proNos += row["No"].ToString()+",";
+                proIDs += row["ID"].ToString()+",";
             }
-            if (proNos.Length > 0)
-                proNos = proNos.Substring(0, proNos.Length - 1);
+            if (proIDs.Length > 0)
+                proIDs = proIDs.Substring(0, proIDs.Length - 1);
 
             double price = 0.0;
             int num = 0;
@@ -203,9 +207,9 @@ namespace VipManager.FormControl
             }
 
             //插入套餐信息
-            string sqlAddComb = @"insert into [Combination]([No],[CombName],[Description],[ProNos],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],[Num],[Discount],[TimeRange]) values(
+            string sqlAddComb = @"insert into [Combination]([No],[CombName],[Description],[ProIDs],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],[Num],[Discount],[TimeRange]) values(
 {0},'{1}','{2}','{3}',#{4}#,'{5}',#{6}#,{7},{8},{9},{10},{11},{12})"
-                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, proNos, DateTime.Now, userId, DateTime.MinValue, 0, (int)type,price,num,discount,timeRange);
+                .FormatStr(txtNo.Text, txtName.Text, txtDesc.Text, proIDs, DateTime.Now, userId, DateTime.MinValue, 0, (int)type,price,num,discount,timeRange);
             OleDbCommand com = new OleDbCommand(sqlAddComb, Config.con);
             com.ExecuteNonQuery();
             MessageBoxEx.Show("套餐添加成功！", "提示");
@@ -219,14 +223,14 @@ namespace VipManager.FormControl
             int no = Convert.ToInt32(cbPro.SelectedValue);
 
             //检查该产品是否已添加
-            DataRow[] rows = ProInComb.Select("No='{0}'".FormatStr(no));
+            DataRow[] rows = ProInComb.Select("ID='{0}'".FormatStr(no));
             if (rows.Count() > 0)
             {
                 MessageBoxEx.Show("该产品已添加！", "提示");
             }
             else
             {
-                rows = dtPro.Select("No='{0}'".FormatStr(no));
+                rows = DtPro.Select("ID='{0}'".FormatStr(no));
                 if (rows.Count() > 0)
                 {
                     ProInComb.ImportRow(rows[0]);
@@ -237,8 +241,8 @@ namespace VipManager.FormControl
         //删除产品
         private void btnDelProInComb_Click(object sender, EventArgs e)
         {
-            int no = Convert.ToInt32(lbPro.SelectedValue);
-            DataRow[] rows = ProInComb.Select("No='{0}'".FormatStr(no));
+            int id = Convert.ToInt32(lbPro.SelectedValue);
+            DataRow[] rows = ProInComb.Select("ID='{0}'".FormatStr(id));
             if (rows.Count() > 0)
             {
                 ProInComb.Rows.Remove(rows[0]);
