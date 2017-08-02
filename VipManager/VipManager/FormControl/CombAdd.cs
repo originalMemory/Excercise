@@ -18,7 +18,7 @@ namespace VipManager.FormControl
     public partial class CombAdd : Skin_Color
     {
         /// <summary>
-        /// 新会员编号
+        /// 新套餐编号
         /// </summary>
         int No;
 
@@ -100,6 +100,7 @@ namespace VipManager.FormControl
         {
             labCombDetail.Text = "价格：";
             labCombUnit.Text = "元";
+            labCombNum.Text = "次数";
             txtCombDetail.Text = "0.0";
             txtCombNum.Text = "0";
             cbCombTime.Visible = false;
@@ -107,6 +108,7 @@ namespace VipManager.FormControl
             labCombUnit.Visible = true;
             txtCombDetail.Visible = true;
             txtCombNum.Visible = true;
+            cbDiscountTime.Visible = false;
         }
 
         /// <summary>
@@ -115,13 +117,15 @@ namespace VipManager.FormControl
         private void SetCombDiscount()
         {
             labCombDetail.Text = "折扣：";
+            labCombNum.Text = "时间";
             labCombUnit.Text = "%";
             txtCombDetail.Text = "0.0";
             cbCombTime.Visible = false;
-            labCombNum.Visible = false;
+            labCombNum.Visible = true;
             labCombUnit.Visible = true;
             txtCombDetail.Visible = true;
             txtCombNum.Visible = false;
+            cbDiscountTime.Visible = true;
         }
 
         /// <summary>
@@ -135,6 +139,7 @@ namespace VipManager.FormControl
             txtCombNum.Visible = false;
             labCombUnit.Visible = false;
             txtCombDetail.Visible = false;
+            cbDiscountTime.Visible = false;
         }
 
         private void btnAddVip_Click(object sender, EventArgs e)
@@ -176,11 +181,30 @@ namespace VipManager.FormControl
                 case "次数型":
                     type = CombType.Num;
                     price = Convert.ToDouble(txtCombDetail.Text);
-                    num = Convert.ToInt32(txtCombDetail.Text);
+                    num = Convert.ToInt32(txtCombNum.Text);
                     break;
                 case "折扣型":
-                    type = CombType.Discount;
-                    discount = Convert.ToDouble(txtCombDetail.Text);
+                    {
+                        type = CombType.Discount;
+                        discount = Convert.ToDouble(txtCombDetail.Text);
+                        switch (cbDiscountTime.Text)
+                        {
+                            case "月卡":
+                                timeRange = 1;
+                                break;
+                            case "季卡":
+                                timeRange = 3;
+                                break;
+                            case "半年卡":
+                                timeRange = 6;
+                                break;
+                            case "年卡":
+                                timeRange = 12;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     break;
                 case "时间型":
                     {
@@ -220,17 +244,17 @@ namespace VipManager.FormControl
         //添加产品
         private void btnAddPro_Click(object sender, EventArgs e)
         {
-            int no = Convert.ToInt32(cbPro.SelectedValue);
+            int id = Convert.ToInt32(cbPro.SelectedValue);
 
             //检查该产品是否已添加
-            DataRow[] rows = ProInComb.Select("ID='{0}'".FormatStr(no));
+            DataRow[] rows = ProInComb.Select("ID='{0}'".FormatStr(id));
             if (rows.Count() > 0)
             {
                 MessageBoxEx.Show("该产品已添加！", "提示");
             }
             else
             {
-                rows = DtPro.Select("ID='{0}'".FormatStr(no));
+                rows = DtPro.Select("ID='{0}'".FormatStr(id));
                 if (rows.Count() > 0)
                 {
                     ProInComb.ImportRow(rows[0]);

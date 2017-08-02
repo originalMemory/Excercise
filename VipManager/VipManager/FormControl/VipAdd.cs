@@ -49,6 +49,8 @@ namespace VipManager.FormControl
             cbVipComb.DisplayMember = "CombName";
             cbVipComb.ValueMember = "ID";
 
+            cbGender.Text = "男";
+
             //绑定生日下拉框
             cbMonth.DataSource = Config.MonthAr;
             InitCbDay(Config.MonthAr[0]);
@@ -147,7 +149,7 @@ namespace VipManager.FormControl
             DateTime endAt = startAt.AddMonths(timeRange);
             string sqlAddCombSnap = @"insert into [CombSnap]([No],[CombName],[Description],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],
 [Num],[Discount],[IsDel],[StartAt],[EndAt],[VipID],[CombID]) values(
-{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14})"
+{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14},{15})"
                 .FormatStr(combRow["No"], combRow["CombName"], combRow["Description"], DateTime.Now, combRow["UserId"], combRow["LastPayAt"], payNum
                 , combRow["Type"], combRow["Price"], combRow["Num"], combRow["Discount"], false, startAt, endAt, vipID, combID);
             OleDbCommand comAddCombSnap = new OleDbCommand(sqlAddCombSnap, Config.con);
@@ -174,9 +176,9 @@ namespace VipManager.FormControl
             foreach (DataRow row in dtPro.Rows)
             {
                 //插入产品映射
-                string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipID],[CombSnapID]) values(
-{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10})"
-                    .FormatStr(row["No"], row["ProName"], row["Description"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, vipID, newCombID);
+                string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipID],[CombSnapID],[ProID]) values(
+{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10},{11})"
+                    .FormatStr(row["No"], row["ProName"], row["Description"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, vipID, newCombID, row["ID"]);
                 OleDbCommand comAddPro = new OleDbCommand(sqlAddPro, Config.con);
                 comAddPro.ExecuteNonQuery();
             }

@@ -29,9 +29,11 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            double db = 0.120000000025;
-            int i = Convert.ToInt32(db * 100);
-            Console.WriteLine(i);
+            var emailList = new List<string>();
+            emailList.Add("353702907@qq.com");
+            emailList.Add("dersenf@163.com");
+            DnlTools tool = new DnlTools();
+            tool.DelUser(emailList);
             Console.ReadKey();
         }
 

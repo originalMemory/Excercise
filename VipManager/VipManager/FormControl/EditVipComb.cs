@@ -101,9 +101,9 @@ namespace VipManager.FormControl
                 foreach (DataRow row in ProInComb.Rows)
                 {
                     //插入产品映射
-                    string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipID],[CombSnapID]) values(
-{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10})"
-                        .FormatStr(row["No"], row["ProName"], row["Description"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, VipID, newCombID);
+                    string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipID],[CombSnapID],[ProID]) values(
+{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10},{11})"
+                        .FormatStr(row["No"], row["ProName"], row["Description"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, VipID, newCombID, row["ID"]);
                     OleDbCommand comAddPro = new OleDbCommand(sqlAddPro, Config.con);
                     comAddPro.ExecuteNonQuery();
                 }

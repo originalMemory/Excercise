@@ -139,6 +139,11 @@ namespace CSharpTest.Helper
             return base.GetCollection<Dnl_EntityTree>("Dnl_EntityTree");
         }
 
+        public IMongoCollection<Dnl_EntityTreeMapping> GetDnl_EntityTreeMapping()
+        {
+            return base.GetCollection<Dnl_EntityTreeMapping>("Dnl_EntityTreeMapping");
+        }
+
         #region 独立关键词与链接库
         public IMongoCollection<Dnl_Keyword> GetDnl_Keyword()
         {
@@ -227,6 +232,35 @@ namespace CSharpTest.Helper
         public IMongoCollection<OrderMongo> GetOrder()
         {
             return base.GetCollection<OrderMongo>("Order");
+        }
+
+        public IMongoCollection<Dnl_ProjectGroup> GetDnl_ProjectGroup()
+        {
+            return base.GetCollection<Dnl_ProjectGroup>("Dnl_ProjectGroup");
+        }
+
+        public IMongoCollection<Dnl_ProjectCategory> GetDnl_ProjectCategory()
+        {
+            return base.GetCollection<Dnl_ProjectCategory>("Dnl_ProjectCategory");
+        }
+
+        public IMongoCollection<IW2S_ProLinksCount> GetIW2S_ProLinksCount()
+        {
+            return base.GetCollection<IW2S_ProLinksCount>("IW2S_ProLinksCount");
+        }
+
+        public IMongoCollection<IW2S_ProjectShare> GetIW2S_ProjectShare()
+        {
+            return base.GetCollection<IW2S_ProjectShare>("IW2S_ProjectShare");
+        }
+
+        public IMongoCollection<Dnl_MappingCoPresent> GetDnl_MappingCoPresent()
+        {
+            return base.GetCollection<Dnl_MappingCoPresent>("Dnl_MappingCoPresent");
+        }
+        public IMongoCollection<MediaMappingCoPresentMongo> GetMediaMappingCoPresent()
+        {
+            return base.GetCollection<MediaMappingCoPresentMongo>("MediaMappingCoPresent");
         }
     }
 

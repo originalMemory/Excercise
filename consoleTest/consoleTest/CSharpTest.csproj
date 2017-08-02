@@ -154,7 +154,7 @@
     <Content Include="Libs\Newtonsoft.Json.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DWC\IWSBot2\IWSData\IWSData.csproj">
+    <ProjectReference Include="..\..\..\GitHub\Dataweco_N\IWSBot2\IWSData\IWSData.csproj">
       <Project>{6969baf9-6ed1-4660-b4d4-a2403c55fdb4}</Project>
       <Name>IWSData</Name>
     </ProjectReference>

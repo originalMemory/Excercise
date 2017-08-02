@@ -50,6 +50,7 @@
             this.labCombUnit = new CCWin.SkinControl.SkinLabel();
             this.labCombDetail = new CCWin.SkinControl.SkinLabel();
             this.cbCombTime = new CCWin.SkinControl.SkinComboBox();
+            this.cbDiscountTime = new CCWin.SkinControl.SkinComboBox();
             this.SuspendLayout();
             // 
             // skinLabel1
@@ -486,11 +487,29 @@
             this.cbCombTime.Visible = false;
             this.cbCombTime.WaterText = "";
             // 
+            // cbDiscountTime
+            // 
+            this.cbDiscountTime.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbDiscountTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDiscountTime.FormattingEnabled = true;
+            this.cbDiscountTime.Items.AddRange(new object[] {
+            "月卡",
+            "季卡",
+            "半年卡",
+            "年卡"});
+            this.cbDiscountTime.Location = new System.Drawing.Point(152, 333);
+            this.cbDiscountTime.Name = "cbDiscountTime";
+            this.cbDiscountTime.Size = new System.Drawing.Size(121, 26);
+            this.cbDiscountTime.TabIndex = 47;
+            this.cbDiscountTime.Visible = false;
+            this.cbDiscountTime.WaterText = "";
+            // 
             // CombAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(916, 590);
+            this.Controls.Add(this.cbDiscountTime);
             this.Controls.Add(this.cbCombTime);
             this.Controls.Add(this.txtCombNum);
             this.Controls.Add(this.txtCombDetail);
@@ -545,5 +564,6 @@
         private CCWin.SkinControl.SkinLabel labCombUnit;
         private CCWin.SkinControl.SkinLabel labCombDetail;
         private CCWin.SkinControl.SkinComboBox cbCombTime;
+        private CCWin.SkinControl.SkinComboBox cbDiscountTime;
     }
 }

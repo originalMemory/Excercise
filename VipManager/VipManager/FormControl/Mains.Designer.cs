@@ -29,20 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabVip = new System.Windows.Forms.TabPage();
+            this.btnPay = new CCWin.SkinControl.SkinButton();
             this.btnEditVipComb = new CCWin.SkinControl.SkinButton();
             this.txtVipComb = new CCWin.SkinControl.SkinTextBox();
             this.skinLabel12 = new CCWin.SkinControl.SkinLabel();
@@ -136,6 +137,7 @@
             this.txtSearchPro = new CCWin.SkinControl.SkinTextBox();
             this.btnAddPro = new CCWin.SkinControl.SkinButton();
             this.tabComb = new System.Windows.Forms.TabPage();
+            this.cbDiscountTime = new CCWin.SkinControl.SkinComboBox();
             this.cbCombTime = new CCWin.SkinControl.SkinComboBox();
             this.txtCombNum = new CCWin.SkinControl.SkinTextBox();
             this.txtCombDetail = new CCWin.SkinControl.SkinTextBox();
@@ -200,6 +202,7 @@
             // tabVip
             // 
             this.tabVip.AutoScroll = true;
+            this.tabVip.Controls.Add(this.btnPay);
             this.tabVip.Controls.Add(this.btnEditVipComb);
             this.tabVip.Controls.Add(this.txtVipComb);
             this.tabVip.Controls.Add(this.skinLabel12);
@@ -259,13 +262,30 @@
             this.tabVip.Text = "会员管理";
             this.tabVip.UseVisualStyleBackColor = true;
             // 
+            // btnPay
+            // 
+            this.btnPay.BackColor = System.Drawing.Color.Transparent;
+            this.btnPay.ControlState = CCWin.SkinClass.ControlState.Normal;
+            this.btnPay.DownBack = null;
+            this.btnPay.Font = new System.Drawing.Font("宋体", 11F);
+            this.btnPay.Location = new System.Drawing.Point(965, 43);
+            this.btnPay.Margin = new System.Windows.Forms.Padding(4);
+            this.btnPay.MouseBack = null;
+            this.btnPay.Name = "btnPay";
+            this.btnPay.NormlBack = null;
+            this.btnPay.Size = new System.Drawing.Size(128, 35);
+            this.btnPay.TabIndex = 158;
+            this.btnPay.Text = "收银";
+            this.btnPay.UseVisualStyleBackColor = false;
+            this.btnPay.Click += new System.EventHandler(this.btnPay_Click);
+            // 
             // btnEditVipComb
             // 
             this.btnEditVipComb.BackColor = System.Drawing.Color.Transparent;
             this.btnEditVipComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnEditVipComb.DownBack = null;
             this.btnEditVipComb.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnEditVipComb.Location = new System.Drawing.Point(1150, 347);
+            this.btnEditVipComb.Location = new System.Drawing.Point(1189, 250);
             this.btnEditVipComb.Margin = new System.Windows.Forms.Padding(4);
             this.btnEditVipComb.MouseBack = null;
             this.btnEditVipComb.Name = "btnEditVipComb";
@@ -645,7 +665,7 @@
             this.skinLabel11.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel11.BorderColor = System.Drawing.Color.White;
             this.skinLabel11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel11.Location = new System.Drawing.Point(746, 352);
+            this.skinLabel11.Location = new System.Drawing.Point(747, 352);
             this.skinLabel11.Name = "skinLabel11";
             this.skinLabel11.Size = new System.Drawing.Size(152, 27);
             this.skinLabel11.TabIndex = 134;
@@ -669,7 +689,7 @@
             this.skinLabel4.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel4.BorderColor = System.Drawing.Color.White;
             this.skinLabel4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel4.Location = new System.Drawing.Point(746, 299);
+            this.skinLabel4.Location = new System.Drawing.Point(747, 299);
             this.skinLabel4.Name = "skinLabel4";
             this.skinLabel4.Size = new System.Drawing.Size(152, 27);
             this.skinLabel4.TabIndex = 133;
@@ -963,7 +983,7 @@
             this.skinLabel5.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel5.BorderColor = System.Drawing.Color.White;
             this.skinLabel5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel5.Location = new System.Drawing.Point(100, 112);
+            this.skinLabel5.Location = new System.Drawing.Point(100, 116);
             this.skinLabel5.Name = "skinLabel5";
             this.skinLabel5.Size = new System.Drawing.Size(72, 27);
             this.skinLabel5.TabIndex = 121;
@@ -1063,8 +1083,8 @@
             // 
             this.dgvVip.AllowUserToAddRows = false;
             this.dgvVip.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
-            this.dgvVip.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
+            this.dgvVip.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle25;
             this.dgvVip.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -1072,14 +1092,14 @@
             this.dgvVip.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvVip.ColumnFont = null;
             this.dgvVip.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvVip.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvVip.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle26;
             this.dgvVip.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvVip.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.VipNo,
@@ -1093,14 +1113,14 @@
             this.VipLastPayAt,
             this.VipPayNum});
             this.dgvVip.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvVip.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle27.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle27.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle27.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle27.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle27.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvVip.DefaultCellStyle = dataGridViewCellStyle27;
             this.dgvVip.EnableHeadersVisualStyles = false;
             this.dgvVip.Font = new System.Drawing.Font("宋体", 11F);
             this.dgvVip.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -1112,11 +1132,11 @@
             this.dgvVip.Name = "dgvVip";
             this.dgvVip.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvVip.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvVip.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle28.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvVip.RowsDefaultCellStyle = dataGridViewCellStyle28;
             this.dgvVip.RowTemplate.Height = 23;
             this.dgvVip.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvVip.Size = new System.Drawing.Size(1513, 428);
@@ -1203,7 +1223,7 @@
             this.btnAddVip.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnAddVip.DownBack = null;
             this.btnAddVip.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnAddVip.Location = new System.Drawing.Point(1127, 43);
+            this.btnAddVip.Location = new System.Drawing.Point(1180, 43);
             this.btnAddVip.Margin = new System.Windows.Forms.Padding(4);
             this.btnAddVip.MouseBack = null;
             this.btnAddVip.Name = "btnAddVip";
@@ -1250,8 +1270,8 @@
             // 
             this.dgvPro.AllowUserToAddRows = false;
             this.dgvPro.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
-            this.dgvPro.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle29.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
+            this.dgvPro.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle29;
             this.dgvPro.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -1259,14 +1279,14 @@
             this.dgvPro.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvPro.ColumnFont = null;
             this.dgvPro.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvPro.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle30.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
+            dataGridViewCellStyle30.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle30.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle30.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvPro.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle30;
             this.dgvPro.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPro.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ProId,
@@ -1280,14 +1300,14 @@
             this.ProPayNum,
             this.ProUserId});
             this.dgvPro.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPro.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle31.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle31.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle31.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle31.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle31.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle31.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPro.DefaultCellStyle = dataGridViewCellStyle31;
             this.dgvPro.EnableHeadersVisualStyles = false;
             this.dgvPro.Font = new System.Drawing.Font("宋体", 11F);
             this.dgvPro.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -1299,11 +1319,11 @@
             this.dgvPro.Name = "dgvPro";
             this.dgvPro.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvPro.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvPro.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvPro.RowsDefaultCellStyle = dataGridViewCellStyle32;
             this.dgvPro.RowTemplate.Height = 23;
             this.dgvPro.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPro.Size = new System.Drawing.Size(1513, 586);
@@ -1837,6 +1857,7 @@
             // 
             // tabComb
             // 
+            this.tabComb.Controls.Add(this.cbDiscountTime);
             this.tabComb.Controls.Add(this.cbCombTime);
             this.tabComb.Controls.Add(this.txtCombNum);
             this.tabComb.Controls.Add(this.txtCombDetail);
@@ -1874,6 +1895,23 @@
             this.tabComb.TabIndex = 2;
             this.tabComb.Text = "套餐管理";
             this.tabComb.UseVisualStyleBackColor = true;
+            // 
+            // cbDiscountTime
+            // 
+            this.cbDiscountTime.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbDiscountTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDiscountTime.FormattingEnabled = true;
+            this.cbDiscountTime.Items.AddRange(new object[] {
+            "月卡",
+            "季卡",
+            "半年卡",
+            "年卡"});
+            this.cbDiscountTime.Location = new System.Drawing.Point(503, 187);
+            this.cbDiscountTime.Name = "cbDiscountTime";
+            this.cbDiscountTime.Size = new System.Drawing.Size(121, 33);
+            this.cbDiscountTime.TabIndex = 145;
+            this.cbDiscountTime.Visible = false;
+            this.cbDiscountTime.WaterText = "";
             // 
             // cbCombTime
             // 
@@ -2357,8 +2395,8 @@
             // 
             this.dgvComb.AllowUserToAddRows = false;
             this.dgvComb.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
-            this.dgvComb.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
+            this.dgvComb.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle33;
             this.dgvComb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -2366,14 +2404,14 @@
             this.dgvComb.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvComb.ColumnFont = null;
             this.dgvComb.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvComb.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle34.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
+            dataGridViewCellStyle34.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle34.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvComb.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle34;
             this.dgvComb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvComb.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CombNo,
@@ -2385,14 +2423,14 @@
             this.CombLastPayAt,
             this.CombPayNum});
             this.dgvComb.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvComb.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle35.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle35.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle35.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle35.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle35.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvComb.DefaultCellStyle = dataGridViewCellStyle35;
             this.dgvComb.EnableHeadersVisualStyles = false;
             this.dgvComb.Font = new System.Drawing.Font("宋体", 11F);
             this.dgvComb.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -2404,11 +2442,11 @@
             this.dgvComb.Name = "dgvComb";
             this.dgvComb.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvComb.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvComb.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle36.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle36.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle36.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvComb.RowsDefaultCellStyle = dataGridViewCellStyle36;
             this.dgvComb.RowTemplate.Height = 23;
             this.dgvComb.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvComb.Size = new System.Drawing.Size(1513, 495);
@@ -2636,16 +2674,6 @@
         private System.Windows.Forms.DateTimePicker dtpProLastPay;
         private CCWin.SkinControl.SkinTextBox txtProPayNum;
         private CCWin.SkinControl.SkinLabel skinLabel16;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProNo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProDesc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProCreateAt;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProIsDel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProLastPayAt;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProPayNum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProUserId;
         private System.Windows.Forms.TabPage tabComb;
         private CCWin.SkinControl.SkinDataGridView dgvComb;
         private CCWin.SkinControl.SkinButton skinButton1;
@@ -2734,6 +2762,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn CombPayNum;
         private CCWin.SkinControl.SkinTextBox txtVipComb;
         private CCWin.SkinControl.SkinButton btnEditVipComb;
+        private CCWin.SkinControl.SkinButton btnPay;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipID;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipName;
@@ -2744,6 +2773,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn VipCombName;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipLastPayAt;
         private System.Windows.Forms.DataGridViewTextBoxColumn VipPayNum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProCreateAt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProIsDel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProLastPayAt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProPayNum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProUserId;
+        private CCWin.SkinControl.SkinComboBox cbDiscountTime;
 
 
 

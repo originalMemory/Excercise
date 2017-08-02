@@ -50,6 +50,7 @@ namespace VipManager.FormControl
             //输入框限制事件
             txtPhone.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
 
+            cbGender.Text = "男";
             //绑定生日下拉框
             cbMonth.DataSource = Config.MonthAr;
             InitCbDay(Config.MonthAr[0]);
@@ -110,12 +111,13 @@ namespace VipManager.FormControl
         private void InitFirstVip()
         {
             DataTable dt = new DataTable();
-            string sqlLast = @"select a.[ID] as [VipID], a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
-            [CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false order by a.[LastPayAt] desc";
+            string sqlLast = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false order by a.[LastPayAt] desc";
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             adapter.Fill(dt);
-            LoadVipSelectedRow(dt.Rows[0]);
+            if (dt.Rows.Count > 0)
+                LoadVipSelectedRow(dt.Rows[0]);
         }
 
         /// <summary>
@@ -144,10 +146,11 @@ namespace VipManager.FormControl
             dt.Columns.Add("Birth", System.Type.GetType("System.String"));
             dt.Columns.Add("Phone", System.Type.GetType("System.String"));
             dt.Columns.Add("Gender", System.Type.GetType("System.String"));
+            dt.Columns.Add("CombSnapID", System.Type.GetType("System.Int32"));
 
             //获取数据
             string sql = @"select a.[ID] as [VipID],a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
-            [CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false";
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false";
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DtVip.Clear();
@@ -165,10 +168,16 @@ namespace VipManager.FormControl
                 row["Birth"] = oldRow["Birth"].ToString();
                 row["Phone"] = oldRow["Phone"].ToString();
                 row["Gender"] = oldRow["Gender"].ToString();
+                row["CombSnapID"] = Convert.ToInt32(oldRow["CombSnapID"]);
                 dt.Rows.Add(row);
             }
             dgvVip.DataSource = dt;
         }
+
+        /// <summary>
+        /// 当前套餐映射ID
+        /// </summary>
+        int CurCombSnapID = 0;
 
         /// <summary>
         /// 加载选定行的会员数据
@@ -177,6 +186,7 @@ namespace VipManager.FormControl
         private void LoadVipSelectedRow(DataRow row)
         {
             CurVipID = Convert.ToInt32(row["VipID"]);
+            CurCombSnapID = Convert.ToInt32(row["CombSnapID"]);
             txtVipNo.Text = row["VipNo"].ToString();
             txtVipName.Text = row["VipName"].ToString();
             txtPhone.Text = row["Phone"].ToString();
@@ -329,7 +339,8 @@ namespace VipManager.FormControl
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
-            LoadProSelectedRow(dt.Rows[0]);
+            if (dt.Rows.Count > 0)
+                LoadProSelectedRow(dt.Rows[0]);
         }
 
 
@@ -485,7 +496,7 @@ namespace VipManager.FormControl
         /// </summary>
         int CurCombID = 0;
         /// <summary>
-        /// 加载最近一次支付的会员的信息
+        /// 加载最近一次使用的套餐的信息
         /// </summary>
         private void InitFirstComb()
         {
@@ -494,7 +505,8 @@ namespace VipManager.FormControl
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
-            LoadCombSelectedRow(dt.Rows[0]);
+            if (dt.Rows.Count > 0)
+                LoadCombSelectedRow(dt.Rows[0]);
         }
 
         /// <summary>
@@ -580,6 +592,7 @@ namespace VipManager.FormControl
         {
             labCombDetail.Text = "价格：";
             labCombUnit.Text = "元";
+            labCombNum.Text = "次数";
             txtCombDetail.Text = "0.0";
             txtCombNum.Text = "0";
             cbCombTime.Visible = false;
@@ -587,6 +600,7 @@ namespace VipManager.FormControl
             labCombUnit.Visible = true;
             txtCombDetail.Visible = true;
             txtCombNum.Visible = true;
+            cbDiscountTime.Visible = false;
         }
 
         /// <summary>
@@ -595,13 +609,15 @@ namespace VipManager.FormControl
         private void SetCombDiscount()
         {
             labCombDetail.Text = "折扣：";
+            labCombNum.Text = "时间";
             labCombUnit.Text = "%";
             txtCombDetail.Text = "0.0";
             cbCombTime.Visible = false;
-            labCombNum.Visible = false;
+            labCombNum.Visible = true;
             labCombUnit.Visible = true;
             txtCombDetail.Visible = true;
             txtCombNum.Visible = false;
+            cbDiscountTime.Visible = true;
         }
 
         /// <summary>
@@ -615,6 +631,7 @@ namespace VipManager.FormControl
             txtCombNum.Visible = false;
             labCombUnit.Visible = false;
             txtCombDetail.Visible = false;
+            cbDiscountTime.Visible = false;
         }
         #endregion
 
@@ -673,14 +690,34 @@ namespace VipManager.FormControl
                         SetCombDiscount();
                         double discount = Convert.ToDouble(row["Discount"]);
                         txtCombDetail.Text = discount.ToString();
+                        int timeType = Convert.ToInt32(row["TimeRange"]);
+                        timeType /= 3;
+                        switch ((CombTimeType)timeType)
+                        {
+                            case CombTimeType.Month:
+                                cbDiscountTime.Text = "月卡";
+                                break;
+                            case CombTimeType.Season:
+                                cbDiscountTime.Text = "季卡";
+                                break;
+                            case CombTimeType.HalfYear:
+                                cbDiscountTime.Text = "半年卡";
+                                break;
+                            case CombTimeType.Year:
+                                cbDiscountTime.Text = "年卡";
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     break;
                 case CombType.Time:
                     {
                         cbCombType.Text = "时间型";
                         SetCombTime();
-                        CombTimeType timeType = (CombTimeType)row["Type"];
-                        switch (timeType)
+                        int timeType = Convert.ToInt32(row["TimeRange"]);
+                        timeType /= 3;
+                        switch ((CombTimeType)timeType)
                         {
                             case CombTimeType.Month:
                                 cbCombTime.Text = "月卡";
@@ -781,8 +818,27 @@ namespace VipManager.FormControl
                     num = Convert.ToInt32(txtCombDetail.Text);
                     break;
                 case "折扣型":
-                    type = CombType.Discount;
-                    discount = Convert.ToDouble(txtCombDetail.Text);
+                    {
+                        type = CombType.Discount;
+                        discount = Convert.ToDouble(txtCombDetail.Text);
+                        switch (cbDiscountTime.Text)
+                        {
+                            case "月卡":
+                                timeRange = 1;
+                                break;
+                            case "季卡":
+                                timeRange = 3;
+                                break;
+                            case "半年卡":
+                                timeRange = 6;
+                                break;
+                            case "年卡":
+                                timeRange = 12;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     break;
                 case "时间型":
                     {
@@ -808,7 +864,7 @@ namespace VipManager.FormControl
                     break;
             }
 
-            string sqlEditComb = @"update [Combination] set [CombName]='{0}',[Description]='{1}',[ProIDs]='{2}',[Type]='{3}',[Price]={4},[Num]={5},[Discount]={6},[TimeRange]={7} where [No]={8}"
+            string sqlEditComb = @"update [Combination] set [CombName]='{0}',[Description]='{1}',[ProIDs]='{2}',[Type]='{3}',[Price]={4},[Num]={5},[Discount]={6},[TimeRange]={7} where [ID]={8}"
                 .FormatStr(txtCombName.Text, txtCombDesc.Text, proIDs, (int)type, price, num, discount, timeRange, CurCombID);
             OleDbCommand com = new OleDbCommand(sqlEditComb, Config.con);
             com.ExecuteNonQuery();
@@ -859,13 +915,6 @@ namespace VipManager.FormControl
             }
             if (e.TabPage == tabPro&&!IsInitPro)
             {
-                ProInComb.Columns.Add("ID", System.Type.GetType("System.Int32"));
-                ProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
-                ProInComb.Columns.Add("Price", System.Type.GetType("System.Double"));
-                lbPro.DataSource = ProInComb;
-                lbPro.DisplayMember = "ProName";
-                lbPro.ValueMember = "ID";
-
                 InitDgvPro();
                 InitFirstPro();
                 IsInitPro = true;
@@ -876,6 +925,12 @@ namespace VipManager.FormControl
             }
             if (e.TabPage == tabComb && !IsInitComb)
             {
+                ProInComb.Columns.Add("ID", System.Type.GetType("System.Int32"));
+                ProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
+                ProInComb.Columns.Add("Price", System.Type.GetType("System.Double"));
+                lbPro.DisplayMember = "ProName";
+                lbPro.ValueMember = "ID";
+                lbPro.DataSource = ProInComb;
                 InitDgvComb();
                 InitFirstComb();
                 IsInitComb = true;
@@ -903,8 +958,14 @@ namespace VipManager.FormControl
             txtVipComb.Text = combName;
         }
 
+        private void btnPay_Click(object sender, EventArgs e)
+        {
+            VipPay pay = new VipPay();
+            pay.SetVipInfo(txtVipNo.Text, txtVipName.Text, CurVipID, CurCombSnapID);
+            pay.ShowDialog();
+        }
 
-        
+       
 
     }
 }

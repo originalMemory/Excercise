@@ -898,6 +898,102 @@ namespace CSharpTest.Tools
             }
             Console.WriteLine("更新完毕！");
         }
+
+        public void DelUser(List<string> userEmailList)
+        {
+            var builderUser = Builders<IW2SUser>.Filter;
+            var filterUser = builderUser.In(x => x.UsrEmail, userEmailList);
+            var colUser = MongoDBHelper.Instance.Get_IW2SUser();
+            var queryUser = colUser.Find(filterUser).ToList();
+            var userObjIdList = queryUser.Select(x => x._id).ToList();
+
+            var buiderPro = Builders<IW2S_Project>.Filter;
+            var filterPro = buiderPro.In(x => x.UsrId, userObjIdList);
+            var colPro = MongoDBHelper.Instance.GetIW2S_Projects();
+            var queryPro = colPro.Find(filterPro).ToList();
+            var proObjIdList = queryPro.Select(x => x._id).ToList();
+            colPro.DeleteMany(filterPro);
+
+            //删除项目组及映射
+            var filterProGr = Builders<Dnl_ProjectCategory>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_ProjectCategory().DeleteMany(filterProGr);
+            var fiterProGrMap = Builders<Dnl_ProjectGroup>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_ProjectGroup().DeleteMany(fiterProGrMap);
+
+            //删除项目折线数据
+            var filterProLink = Builders<IW2S_ProLinksCount>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetIW2S_ProLinksCount().DeleteMany(filterProLink);
+
+            //删除项目组分享
+            var filterShare = Builders<IW2S_ProjectShare>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetIW2S_ProjectShare().DeleteMany(filterShare);
+
+            //删除百度分组及关键词映射
+            var filterBaiduCate = Builders<Dnl_KeywordCategory>.Filter.In(x => x.ProjectId, proObjIdList);
+            MongoDBHelper.Instance.GetDnl_KeywordCategory().DeleteMany(filterBaiduCate);
+            var filterBaiduMap = Builders<Dnl_KeywordMapping>.Filter.In(x => x.ProjectId, proObjIdList);
+            MongoDBHelper.Instance.GetDnl_KeywordMapping().DeleteMany(filterBaiduMap);
+            var filterBaiduCoPresent = Builders<Dnl_MappingCoPresent>.Filter.In(x => x.ProjectId, proObjIdList);
+            MongoDBHelper.Instance.GetDnl_MappingCoPresent().DeleteMany(filterBaiduCoPresent);
+
+            //删除微信分组及关键词映射
+            var filterWxCate = Builders<MediaKeywordCategoryMongo>.Filter.In(x => x.ProjectId, proObjIdList);
+            MongoDBHelper.Instance.GetMediaKeywordCategory().DeleteMany(filterWxCate);
+            var filterWxMap = Builders<MediaKeywordMappingMongo>.Filter.In(x => x.ProjectId, proObjIdList);
+            MongoDBHelper.Instance.GetMediaKeywordMapping().DeleteMany(filterWxMap);
+            var filterWxCoPresent = Builders<MediaMappingCoPresentMongo>.Filter.In(x => x.ProjectId, proObjIdList);
+            MongoDBHelper.Instance.GetMediaMappingCoPresent().DeleteMany(filterWxCoPresent);
+
+            //删除链接映射
+            var filterLinkMapping = Builders<Dnl_LinkMapping_Baidu>.Filter.In(x => x.ProjectId, proObjIdList);
+            MongoDBHelper.Instance.GetDnl_LinkMapping_Baidu().DeleteMany(filterLinkMapping);
+
+            //删除命名实体
+            var filterEntity = Builders<Dnl_EntityTree>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_EntityTree().DeleteMany(filterEntity);
+            var fiterEnMap = Builders<Dnl_EntityTreeMapping>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_EntityTreeMapping().DeleteMany(fiterEnMap);
+
+            
+            //获取简报ID
+            var filterReprot = Builders<Dnl_Report>.Filter.In(x => x.UsrId, userObjIdList);
+            //var queryReport = MongoDBHelper.Instance.GetDnl_Report().Find(filterReprot).ToList();
+            //var reObjIdList = queryReport.Select(x => x._id).ToList();
+            MongoDBHelper.Instance.GetDnl_Report().DeleteMany(filterReprot);
+
+            //删除简报及所有相关数据
+            var filterReDesc = Builders<Dnl_Report_Description>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_Description().DeleteMany(filterReDesc);
+            var filterReDomainChart = Builders<Dnl_Report_DomainChart>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_DomainChart().DeleteMany(filterReDomainChart);
+            var filterReKeyword = Builders<Dnl_Report_Keyword>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_Keyword().DeleteMany(filterReKeyword);
+            var filterReKeywordCate = Builders<Dnl_Report_KeywordCategory>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_KeywordCategory().DeleteMany(filterReKeywordCate);
+            var filterReKeywordChart = Builders<Dnl_Report_keywordChart>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_keywordChart().DeleteMany(filterReKeywordChart);
+            var filterReLinkChart = Builders<Dnl_Report_LinkChart>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_LinkChart().DeleteMany(filterReLinkChart);
+            var filterReLinkChartCate = Builders<Dnl_Report_LinkChartCategory>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_LinkChartCategory().DeleteMany(filterReLinkChartCate);
+            var filterReStatistics = Builders<Dnl_Report_Statistics>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_Statistics().DeleteMany(filterReStatistics);
+            var filterReTimeLink = Builders<Dnl_Report_TimeLink>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_TimeLink().DeleteMany(filterReTimeLink);
+            var filterReWordTree = Builders<Dnl_Report_WordTree>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_Report_WordTree().DeleteMany(filterReWordTree);
+            var filterReShare = Builders<Dnl_ReportShare>.Filter.In(x => x.UsrId, userObjIdList);
+            MongoDBHelper.Instance.GetDnl_ReportShare().DeleteMany(filterReShare);
+
+
+            colUser.DeleteMany(filterUser);
+            Console.WriteLine("删除完毕！");
+
+
+
+
+
+        }
     }
 
     

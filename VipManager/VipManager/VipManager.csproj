@@ -84,23 +84,23 @@
     <Compile Include="FormControl\ProAdd.Designer.cs">
       <DependentUpon>ProAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormControl\Temp.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormControl\Temp.Designer.cs">
-      <DependentUpon>Temp.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormControl\VipAdd.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormControl\VipAdd.Designer.cs">
       <DependentUpon>VipAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormControl\VipPay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormControl\VipPay.Designer.cs">
+      <DependentUpon>VipPay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helper\Config.cs" />
     <Compile Include="Helper\ControlEvent.cs" />
     <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Model\Enum.cs" />
-    <Compile Include="Model\ProInfo.cs" />
+    <Compile Include="Model\CombSnap.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -122,11 +122,11 @@
     <EmbeddedResource Include="FormControl\ProAdd.resx">
       <DependentUpon>ProAdd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormControl\Temp.resx">
-      <DependentUpon>Temp.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormControl\VipAdd.resx">
       <DependentUpon>VipAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormControl\VipPay.resx">
+      <DependentUpon>VipPay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
