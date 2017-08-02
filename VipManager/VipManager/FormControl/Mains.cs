@@ -12,6 +12,7 @@ using CCWin;
 using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
+using System.IO;
 
 namespace VipManager.FormControl
 {
@@ -961,8 +962,41 @@ namespace VipManager.FormControl
         private void btnPay_Click(object sender, EventArgs e)
         {
             VipPay pay = new VipPay();
-            pay.SetVipInfo(txtVipNo.Text, txtVipName.Text, CurVipID, CurCombSnapID);
+            pay.SetVipInfo(txtVipNo.Text, txtVipName.Text, CurVipID);
             pay.ShowDialog();
+        }
+
+        //备份数据
+        private void btnBackupData_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.Title = "备份数据";
+            save.Filter = "数据文件|*.mdb";
+            if (save.ShowDialog() == DialogResult.OK)
+            {
+                string backupFilePath = save.FileName;
+                FileInfo file = new FileInfo(Config.DbPath);
+                file.CopyTo(backupFilePath, true);
+            }
+        }
+
+        private void btnRecoverData_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog recover = new OpenFileDialog();
+            recover.Title = "恢复数据";
+            recover.Filter = "数据文件|*.mdb";
+            recover.Multiselect = false;
+            if (recover.ShowDialog() == DialogResult.OK)
+            {
+                FileInfo oldFile = new FileInfo(Config.DbPath);
+                Config.Dispose();
+                oldFile.Delete();
+
+                string backupFilePath = recover.FileName;
+                FileInfo newFile = new FileInfo(backupFilePath);
+                newFile.CopyTo(Config.DbPath);
+                Config.Init();
+            }
         }
 
        

@@ -61,9 +61,6 @@ namespace VipManager.FormControl
             string sqlDelCombSnap = "update [CombSnap] set [IsDel]={0},[DelAt]=#{1}# where [VipID]={2}".FormatStr(true, DateTime.Now, VipID);
             OleDbCommand combDelComb = new OleDbCommand(sqlDelCombSnap, Config.con);
             combDelComb.ExecuteNonQuery();
-            string sqlDelProSnap = "update [ProSnap] set [IsDel]={0},[DelAt]=#{1}# where [VipID]={2}".FormatStr(true, DateTime.Now, VipID);
-            OleDbCommand ProDelPro = new OleDbCommand(sqlDelProSnap, Config.con);
-            ProDelPro.ExecuteNonQuery();
 
             //获取套餐信息
             string sqlGetComb = "select * from [Combination] where [ID]={0}".FormatStr(combID);
@@ -77,36 +74,18 @@ namespace VipManager.FormControl
                 int timeRange = Convert.ToInt32(readerComb["TimeRange"]);
                 DateTime endAt = startAt.AddMonths(timeRange);
                 string sqlAddCombSnap = @"insert into [CombSnap]([No],[CombName],[Description],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],
-[Num],[Discount],[IsDel],[StartAt],[EndAt],[VipID],[CombID]) values(
-{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14},{15})"
+[Num],[Discount],[IsDel],[StartAt],[EndAt],[VipID],[CombID],[ProIDs]) values(
+{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14},{15},'{16}')"
                     .FormatStr(readerComb["No"], readerComb["CombName"], readerComb["Description"], DateTime.Now, readerComb["UserId"], readerComb["LastPayAt"], payNum
-                    , readerComb["Type"], readerComb["Price"], readerComb["Num"], readerComb["Discount"], false, startAt, endAt, VipID, combID);
+                    , readerComb["Type"], readerComb["Price"], readerComb["Num"], readerComb["Discount"], false, startAt, endAt, VipID, combID, readerComb["ProIDs"]);
                 OleDbCommand comAddCombSnap = new OleDbCommand(sqlAddCombSnap, Config.con);
                 comAddCombSnap.ExecuteNonQuery();
                 readerComb.Close();
-
-                //获取新套餐映射的ID
-                string sqlGetCombSnap = "select [ID] from [CombSnap] where [VipID]={0} and [IsDel]={1}".FormatStr(VipID, false);
-                OleDbCommand comGetCombSnap = new OleDbCommand(sqlGetCombSnap, Config.con);
-                OleDbDataReader readerCombSnap = comGetCombSnap.ExecuteReader();
-                readerCombSnap.Read();
-                int newCombID = readerCombSnap.GetInt32(0);
-
 
                 //更新套餐使用信息
                 string sqlUpComb = @"update [Combination] set [LastPayAt]=#{0}#,[PayNum]={1} where [ID]={2}".FormatStr(DateTime.Now, payNum, combID);
                 OleDbCommand comUpComb = new OleDbCommand(sqlUpComb, Config.con);
                 comUpComb.ExecuteNonQuery();
-
-                foreach (DataRow row in ProInComb.Rows)
-                {
-                    //插入产品映射
-                    string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipID],[CombSnapID],[ProID]) values(
-{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10},{11})"
-                        .FormatStr(row["No"], row["ProName"], row["Description"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, VipID, newCombID, row["ID"]);
-                    OleDbCommand comAddPro = new OleDbCommand(sqlAddPro, Config.con);
-                    comAddPro.ExecuteNonQuery();
-                }
             }
             setCombName(cbComb.Text);
             this.Close();

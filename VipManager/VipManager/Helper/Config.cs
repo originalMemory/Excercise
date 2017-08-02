@@ -17,10 +17,11 @@ namespace VipManager.Helper
         /// 登陆商家信息
         /// </summary>
         public static User userInfo;
+        public static string DbPath = Application.StartupPath + "\\Database\\database.mdb";
         /// <summary>
         /// 数据库连接
         /// </summary>
-        public static OleDbConnection con = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0; Data Source= " + Application.StartupPath + "\\Database\\database.mdb;");
+        public static OleDbConnection con = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0; Data Source={0};".FormatStr(DbPath));
         //public static OleDbConnection con = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;User ID=admin;Jet OleDb:Database Password=sinofaith; Data Source= " + Application.StartupPath + "\\Database\\database.db;");
 
         /// <summary>

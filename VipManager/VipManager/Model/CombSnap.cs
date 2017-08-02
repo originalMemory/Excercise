@@ -50,13 +50,13 @@ namespace VipManager.Model
         /// <summary>
         /// 包含产品信息列表
         /// </summary>
-        public List<ProSnap> ProList;
+        public List<ProInfo> ProList;
     }
 
     /// <summary>
     /// 产品映射
     /// </summary>
-    public class ProSnap
+    public class ProInfo
     {
         /// <summary>
         /// ID

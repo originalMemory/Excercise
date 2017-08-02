@@ -185,7 +185,7 @@
             this.skinPanel2.MouseBack = null;
             this.skinPanel2.Name = "skinPanel2";
             this.skinPanel2.NormlBack = null;
-            this.skinPanel2.Size = new System.Drawing.Size(210, 56);
+            this.skinPanel2.Size = new System.Drawing.Size(153, 41);
             this.skinPanel2.TabIndex = 135;
             // 
             // rbUnUseComb
@@ -392,6 +392,7 @@
             this.btnPay.TabIndex = 145;
             this.btnPay.Text = "确定";
             this.btnPay.UseVisualStyleBackColor = false;
+            this.btnPay.Click += new System.EventHandler(this.btnPay_Click);
             // 
             // VipPay
             // 

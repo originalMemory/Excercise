@@ -148,10 +148,10 @@ namespace VipManager.FormControl
             int timeRange = Convert.ToInt32(combRow["TimeRange"]);
             DateTime endAt = startAt.AddMonths(timeRange);
             string sqlAddCombSnap = @"insert into [CombSnap]([No],[CombName],[Description],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],
-[Num],[Discount],[IsDel],[StartAt],[EndAt],[VipID],[CombID]) values(
-{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14},{15})"
+[Num],[Discount],[IsDel],[StartAt],[EndAt],[VipID],[CombID],[ProIDs]) values(
+{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14},'{15}')"
                 .FormatStr(combRow["No"], combRow["CombName"], combRow["Description"], DateTime.Now, combRow["UserId"], combRow["LastPayAt"], payNum
-                , combRow["Type"], combRow["Price"], combRow["Num"], combRow["Discount"], false, startAt, endAt, vipID, combID);
+                , combRow["Type"], combRow["Price"], combRow["Num"], combRow["Discount"], false, startAt, endAt, vipID, combID, combRow["ProIDs"]);
             OleDbCommand comAddCombSnap = new OleDbCommand(sqlAddCombSnap, Config.con);
             comAddCombSnap.ExecuteNonQuery();
 
@@ -159,31 +159,6 @@ namespace VipManager.FormControl
             string sqlUpComb = @"update [Combination] set [LastPayAt]=#{0}#,[PayNum]={1} where [ID]={2}".FormatStr(DateTime.Now, payNum, combID);
             OleDbCommand comUpComb = new OleDbCommand(sqlUpComb, Config.con);
             comUpComb.ExecuteNonQuery();
-
-            //获取新套餐映射的ID
-            string sqlGetCombSnap = "select [ID] from [CombSnap] where [VipID]={0} and [IsDel]={1}".FormatStr(vipID, false);
-            OleDbCommand comGetCombSnap = new OleDbCommand(sqlGetCombSnap, Config.con);
-            OleDbDataReader readerCombSnap = comGetCombSnap.ExecuteReader();
-            readerCombSnap.Read();
-            int newCombID = readerCombSnap.GetInt32(0);
-
-            //获取套餐内产品信息
-            DataTable dtPro = new DataTable();
-            string sqlGetPro = "select * from [Product] where [ID] in({0})".FormatStr(combRow["ProIDs"]);
-            OleDbDataAdapter adapterPro = new OleDbDataAdapter(sqlGetPro, Config.con);
-            adapterPro.Fill(dtPro);
-
-            foreach (DataRow row in dtPro.Rows)
-            {
-                //插入产品映射
-                string sqlAddPro = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[IsDel],[VipID],[CombSnapID],[ProID]) values(
-{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10},{11})"
-                    .FormatStr(row["No"], row["ProName"], row["Description"], row["Price"], DateTime.Now, DateTime.Now, row["UserId"], Convert.ToInt32(row["PayNum"]), false, vipID, newCombID, row["ID"]);
-                OleDbCommand comAddPro = new OleDbCommand(sqlAddPro, Config.con);
-                comAddPro.ExecuteNonQuery();
-            }
-
-
 
             MessageBoxEx.Show("会员添加成功！", "提示");
             this.Close();
