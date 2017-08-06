@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="Helper\JiebaHelper.cs" />
     <Compile Include="Model\ComputeClass.cs" />
+    <Compile Include="Model\D3forceModel.cs" />
     <Compile Include="Model\OldWeiXinLink.cs" />
     <Compile Include="Model\PostClass.cs" />
     <Compile Include="Model\ReturnClass.cs" />
@@ -125,6 +126,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CommonTools.cs" />
+    <Compile Include="Tools\D3force.cs" />
     <Compile Include="Tools\GetMainContentHelper.cs" />
     <Compile Include="Tools\GSDataSDK.cs" />
     <Compile Include="Tools\MD5Tools.cs" />
@@ -135,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Model\miserables.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

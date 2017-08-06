@@ -39,7 +39,20 @@ namespace VipManager.FormControl
             InitFirstVip();
             IsInitVip = true;
 
-            
+            //限制文本框输入范围
+            txtCombDetail.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
+            txtCombNum.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
+            txtSearchComb.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchComb_KeyPress);
+
+            //产品初始设置
+            ProInComb.Columns.Add("ID", System.Type.GetType("System.Int32"));
+            ProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
+            ProInComb.Columns.Add("Price", System.Type.GetType("System.Double"));
+            lbPro.DisplayMember = "ProName";
+            lbPro.ValueMember = "ID";
+            lbPro.DataSource = ProInComb;
+            txtProPrice.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
+            txtSearchPro.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchPro_KeyPress);
         }
 
         #region 会员管理
@@ -50,6 +63,8 @@ namespace VipManager.FormControl
         {
             //输入框限制事件
             txtPhone.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
+            //搜索框绑定搜索事件
+            txtSearchVip.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchVip_KeyPress);
 
             cbGender.Text = "男";
             //绑定生日下拉框
@@ -78,25 +93,6 @@ namespace VipManager.FormControl
             //绑定职业下拉框
             cbProfession.DataSource = Config.ProfessionList;
         }
-
-        ///// <summary>
-        ///// 会员套餐
-        ///// </summary>
-        //DataTable DtVipComb = new DataTable();
-
-        ///// <summary>
-        ///// 初始化会员套餐
-        ///// </summary>
-        //private void IntVipComb()
-        //{
-        //    string sql = "select [ID],[CombName] from [Combination]";
-        //    OleDbCommand com = new OleDbCommand(sql, Config.con);
-        //    OleDbDataAdapter adapter = new OleDbDataAdapter(com);
-        //    adapter.Fill(DtVipComb);
-        //    cbVipComb.DataSource = DtVipComb;
-        //    cbVipComb.DisplayMember = "CombName";
-        //    cbVipComb.ValueMember = "ID";
-        //}
 
         //添加会员
         private void btnAddVip_Click(object sender, EventArgs e)
@@ -294,17 +290,46 @@ namespace VipManager.FormControl
         private void btnSearchVip_Click(object sender, EventArgs e)
         {
             string factor = txtSearchVip.Text;
+            DataTable dt = new DataTable();
             if (!string.IsNullOrEmpty(factor))
             {
                 //判断是搜索编号还是姓名或联系方式
                 if (factor.IsNum())
                 {
-                    
+                    //搜索编号
+                    string sqlVipNo = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[No]={0} and a.[ID]=b.[VipID] and b.[IsDel]=false".FormatStr(factor);
+                    OleDbCommand comVipNo = new OleDbCommand(sqlVipNo, Config.con);
+                    OleDbDataAdapter adapterVipNo = new OleDbDataAdapter(comVipNo);
+                    adapterVipNo.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadVipSelectedRow(dt.Rows[0]);
+                    else
+                    {
+                        //搜索联系方式
+                        string sqlVipPhone = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[Phone]='{0}' and a.[ID]=b.[VipID] and b.[IsDel]=false".FormatStr(factor);
+                        OleDbCommand comVipPhone = new OleDbCommand(sqlVipPhone, Config.con);
+                        OleDbDataAdapter adapterVipPhone = new OleDbDataAdapter(comVipPhone);
+                        adapterVipPhone.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                            LoadVipSelectedRow(dt.Rows[0]);
+                        else
+                            MessageBoxEx.Show("无符合条件数据！", "提示");
+                    }
                 }
                 else
                 {
-                    
-                    
+                    //搜索姓名
+                    string sqlVipName = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[VipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[VipName]='{0}' and a.[ID]=b.[VipID] and b.[IsDel]=false".FormatStr(factor);
+                    OleDbCommand comVipName = new OleDbCommand(sqlVipName, Config.con);
+                    OleDbDataAdapter adapterVipName = new OleDbDataAdapter(comVipName);
+                    adapterVipName.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadVipSelectedRow(dt.Rows[0]);
+                    else
+                        MessageBoxEx.Show("无符合条件数据！", "提示");
                 }
             }
             else
@@ -319,6 +344,23 @@ namespace VipManager.FormControl
             {
                 btnSearchVip_Click(sender, e);
             }
+        }
+
+        /// <summary>
+        /// 设置会员套餐名
+        /// </summary>
+        /// <param name="combName">套餐名</param>
+        public void SetVipComb(string combName)
+        {
+            txtVipComb.Text = combName;
+        }
+
+        //收银
+        private void btnPay_Click(object sender, EventArgs e)
+        {
+            VipPay pay = new VipPay();
+            pay.SetVipInfo(txtVipNo.Text, txtVipName.Text, CurVipID);
+            pay.ShowDialog();
         }
         #endregion
 
@@ -473,15 +515,58 @@ namespace VipManager.FormControl
         private void btnSearchPro_Click(object sender, EventArgs e)
         {
             string factor = txtSearchPro.Text;
-
+            DataTable dt = new DataTable();
+            if (!string.IsNullOrEmpty(factor))
+            {
+                if (factor.IsNum())
+                {
+                    //搜索产品编号
+                    string sqlProNo = "select top 1 * from [Product] where [No]={0}".FormatStr(factor);
+                    OleDbCommand comProNo = new OleDbCommand(sqlProNo, Config.con);
+                    OleDbDataAdapter adapterProNo = new OleDbDataAdapter(comProNo);
+                    adapterProNo.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadProSelectedRow(dt.Rows[0]);
+                    else
+                        MessageBoxEx.Show("无符合条件数据！", "提示");
+                }
+                else
+                {
+                    //搜索产品名称
+                    string sqlProName = "select top 1 * from [Product] where [ProName] like '%{0}%'".FormatStr(factor);
+                    OleDbCommand comProName = new OleDbCommand(sqlProName, Config.con);
+                    OleDbDataAdapter adapterProName = new OleDbDataAdapter(comProName);
+                    adapterProName.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadProSelectedRow(dt.Rows[0]);
+                    else
+                        MessageBoxEx.Show("无符合条件数据！", "提示");
+                }
+            }
+            else
+            {
+                MessageBoxEx.Show("搜索条件不能为空！", "提示");
+            }
+            
         }
 
         private void txtSearchPro_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                //btnSearchVip_Click(sender, e);
+                btnSearchPro_Click(sender, e);
             }
+        }
+
+
+        //修改产品套餐
+        private void btnEditVipComb_Click(object sender, EventArgs e)
+        {
+            EditVipComb edit = new EditVipComb();
+            edit.VipID = CurVipID;
+            edit.setCombName += this.SetVipComb;
+            edit.ShowDialog();
+            InitDgvVip();
         }
         #endregion
 
@@ -877,29 +962,45 @@ namespace VipManager.FormControl
         private void btnSearchComb_Click(object sender, EventArgs e)
         {
             string factor = txtSearchComb.Text;
-            DataRow[] rowAr = null;
-
-            if (string.IsNullOrEmpty(factor))
+            DataTable dt = new DataTable();
+            if (!string.IsNullOrEmpty(factor))
+            {
+                if (factor.IsNum())
+                {
+                    //搜索编号
+                    string sqlCombNo = "select top 1 * from [Combination] where [No]={0}".FormatStr(factor);
+                    OleDbCommand comCombNo = new OleDbCommand(sqlCombNo, Config.con);
+                    OleDbDataAdapter adapterCombNo = new OleDbDataAdapter(comCombNo);
+                    adapterCombNo.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadCombSelectedRow(dt.Rows[0]);
+                    else
+                        MessageBoxEx.Show("无符合条件数据！", "提示");
+                }
+                else
+                {
+                    //搜索名称
+                    string sqlCombName = "select top 1 * from [Combination] where [CombName] like '%{0}%'".FormatStr(factor);
+                    OleDbCommand comCombName = new OleDbCommand(sqlCombName, Config.con);
+                    OleDbDataAdapter adapterCombName = new OleDbDataAdapter(comCombName);
+                    adapterCombName.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadCombSelectedRow(dt.Rows[0]);
+                    else
+                        MessageBoxEx.Show("无符合条件数据！", "提示");
+                }
+            }
+            else
             {
                 MessageBoxEx.Show("搜索条件不能为空！", "提示");
             }
-            else if (factor.IsNum())
-            {
-                rowAr = DtComb.Select("No=" + factor);
-            }
-            else
-            {
-                rowAr = DtComb.Select("CombName like '%{0}%'".FormatStr(factor));
-            }
+        }
 
-            //判断是否加载数据
-            if (rowAr.Length > 0)
+        private void txtSearchComb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
             {
-                LoadCombSelectedRow(rowAr[0]);
-            }
-            else
-            {
-                MessageBoxEx.Show("无搜索结果！", "提示");
+                btnSearchComb_Click(sender, e);
             }
         }
         #endregion
@@ -912,6 +1013,9 @@ namespace VipManager.FormControl
         {
             if (e.TabPage == tabVip&&!IsInitVip)
             {
+                InitDgvVip();
+                InitFirstVip();
+                IsInitVip = true;
                 return;
             }
             if (e.TabPage == tabPro&&!IsInitPro)
@@ -919,53 +1023,18 @@ namespace VipManager.FormControl
                 InitDgvPro();
                 InitFirstPro();
                 IsInitPro = true;
-                //限制文本框输入范围
-                txtCombDetail.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
-                txtCombNum.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
                 return;
             }
             if (e.TabPage == tabComb && !IsInitComb)
             {
-                ProInComb.Columns.Add("ID", System.Type.GetType("System.Int32"));
-                ProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
-                ProInComb.Columns.Add("Price", System.Type.GetType("System.Double"));
-                lbPro.DisplayMember = "ProName";
-                lbPro.ValueMember = "ID";
-                lbPro.DataSource = ProInComb;
                 InitDgvComb();
                 InitFirstComb();
                 IsInitComb = true;
-                txtProPrice.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
                 return;
             }
-        }
+        }      
 
-        //修改产品套餐
-        private void btnEditVipComb_Click(object sender, EventArgs e)
-        {
-            EditVipComb edit = new EditVipComb();
-            edit.VipID = CurVipID;
-            edit.setCombName += this.SetVipComb;
-            edit.ShowDialog();
-            InitDgvVip();
-        }
-
-        /// <summary>
-        /// 设置会员套餐名
-        /// </summary>
-        /// <param name="combName">套餐名</param>
-        public void SetVipComb(string combName)
-        {
-            txtVipComb.Text = combName;
-        }
-
-        private void btnPay_Click(object sender, EventArgs e)
-        {
-            VipPay pay = new VipPay();
-            pay.SetVipInfo(txtVipNo.Text, txtVipName.Text, CurVipID);
-            pay.ShowDialog();
-        }
-
+        #region 数据管理
         //备份数据
         private void btnBackupData_Click(object sender, EventArgs e)
         {
@@ -980,6 +1049,7 @@ namespace VipManager.FormControl
             }
         }
 
+        //恢复数据
         private void btnRecoverData_Click(object sender, EventArgs e)
         {
             OpenFileDialog recover = new OpenFileDialog();
@@ -998,8 +1068,12 @@ namespace VipManager.FormControl
                 Config.Init();
             }
         }
+        #endregion
 
-       
+
+        #region 商铺信息
+
+        #endregion
 
     }
 }
