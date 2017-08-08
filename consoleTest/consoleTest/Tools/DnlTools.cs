@@ -708,6 +708,9 @@ namespace CSharpTest.Tools
 
         }
 
+        /// <summary>
+        /// 获取微信前200公众号文章评论
+        /// </summary>
         public void GetWXTop200NameComment()
         {
             var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
@@ -823,6 +826,10 @@ namespace CSharpTest.Tools
             Console.WriteLine(LinkStr);
         }
 
+        /// <summary>
+        /// 抓取5118拓展词
+        /// </summary>
+        /// <param name="keyword">关键词</param>
         public void Craw5118(string keyword)
         {
             string url = "http://www.5118.com/seo/words/{0}".FormatStr(keyword);
@@ -843,6 +850,9 @@ namespace CSharpTest.Tools
             Console.WriteLine(base64);
         }
 
+        /// <summary>
+        /// 修复因服务器搬迁导致的图片无法显示
+        /// </summary>
         public void repairImg()
         {
             string sourceServer = "211.154.6.166:9999";
@@ -899,6 +909,10 @@ namespace CSharpTest.Tools
             Console.WriteLine("更新完毕！");
         }
 
+        /// <summary>
+        /// 根据邮箱删除用户
+        /// </summary>
+        /// <param name="userEmailList">邮箱列表</param>
         public void DelUser(List<string> userEmailList)
         {
             var builderUser = Builders<IW2SUser>.Filter;

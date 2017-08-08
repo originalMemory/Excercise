@@ -31,19 +31,12 @@ namespace CSharpTest
         {
             //D3force force = new D3force();
             //force.initializeNodes();
-            
-            var paths=Directory.GetFiles(@"E:\图片\临时\yande.re");
-            string direct = @"E:\图片\临时\新建文件夹\";
-            int i = 1;
-            foreach (var path in paths)
-            {
-                string newname = Path.GetFileName(path.Replace("yande.re", "yande"));
-                FileInfo file = new FileInfo(path);
-                file.MoveTo(direct+newname);
-                Console.WriteLine("[{0}/{1}]:{2}".FormatStr(i,paths.Length,newname));
-                i++;
-            }
-            Console.WriteLine("重命名结束！");
+
+            double i = 3;
+            double j = i;
+            i--;
+            Console.WriteLine(i);
+            Console.WriteLine(j);
             Console.ReadKey();
         }
 
