@@ -1008,6 +1008,216 @@ namespace CSharpTest.Tools
 
 
         }
+
+        /// <summary>
+        /// 导出未分组域名
+        /// </summary>
+        public void ExportUngroupDomain()
+        {
+            var proObjId = new ObjectId("598a7a4af4b87d07ccbc8d17");
+            string filename = "未分组网址.xls";
+            string path = @"F:\" + filename;
+
+            HSSFWorkbook linkExcel = new HSSFWorkbook();     //Excel表格
+            ISheet linkSheet = linkExcel.CreateSheet();
+            IRow RowHead0 = linkSheet.CreateRow(0);
+            RowHead0.CreateCell(0).SetCellValue("域名");
+            RowHead0.CreateCell(1).SetCellValue("关键词数");
+            RowHead0.CreateCell(2).SetCellValue("链接数");
+
+            var buiderMap = Builders<Dnl_KeywordMapping>.Filter;
+            var filterMap = buiderMap.Eq(x => x.ProjectId, proObjId) & buiderMap.Eq(x => x.CategoryId, ObjectId.Empty) & buiderMap.Eq(x => x.IsDel, false);
+            var colMap = MongoDBHelper.Instance.GetDnl_KeywordMapping();
+            var keyIds = colMap.Find(filterMap).Project(x => x.KeywordId.ToString()).ToList();
+            keyIds = keyIds.Distinct().ToList();
+            CommonTools.Log("获取关键词 - {0}".FormatStr(keyIds.Count));
+
+            var builderLink = Builders<Dnl_Link_Baidu>.Filter;
+            var filterLink = builderLink.In(x => x.SearchkeywordId, keyIds);
+            var colLink = MongoDBHelper.Instance.GetDnl_Link_Baidu();
+            var queryLink = colLink.Find(filterLink).Project(x => new
+            {
+                Id=x._id.ToString(),
+                Domain = x.Domain,
+                Keyword = x.Keywords,
+                PublishTime = x.PublishTime,
+                LinkUrl=x.LinkUrl
+            }).ToList();
+            var links = new List<IW2S_Timelevel1linkDto>();
+            int years = int.MaxValue;
+            int yeare = 0;
+            foreach (var item in queryLink)
+            {
+                DateTime tpTime = new DateTime();
+                DateTime.TryParse(item.PublishTime, out tpTime);
+                if (tpTime != DateTime.MinValue)
+                {
+                    if (tpTime.Year > yeare)
+                        yeare = tpTime.Year;
+                    if (tpTime.Year < years)
+                        years = tpTime.Year;
+                }
+                var link = new IW2S_Timelevel1linkDto
+                {
+                    Id = item.Id,
+                    Domain = item.Domain,
+                    Keywords = item.Keyword,
+                    PublishTime = tpTime,
+                    LinkUrl=item.LinkUrl
+                };
+                links.Add(link);
+            }
+
+            //创建年份时间段
+            int i = 3;
+            Dictionary<int, int> yearToIndex = new Dictionary<int, int>();
+            int cpyear = years;
+            while (cpyear <= yeare)
+            {
+                RowHead0.CreateCell(i).SetCellValue(cpyear);
+                yearToIndex.Add(cpyear, i);
+                cpyear++;
+                i++;
+            }
+
+            //获取已分组域名
+            var domainCatBuilder = Builders<IW2S_DomainCategoryData>.Filter;
+            var domainCatFilter = domainCatBuilder.Eq(x => x.UsrId, ObjectId.Empty);
+            var domainCategoryDatas = MongoDBHelper.Instance.GetIW2S_DomainCategoryDatas().Find(domainCatFilter).Project(x => x.DomainName).ToList().Distinct().ToList();
+            CommonTools.Log("获取已分组域名 - {0}".FormatStr(domainCategoryDatas.Count));
+
+            //links.RemoveAll(x => domainCategoryDatas.Contains(x.Domain));
+            var domains = links.Select(x => x.Domain).ToList();
+            domains = domains.Distinct().ToList();
+            CommonTools.Log("获取域名 - {0}".FormatStr(domains.Count));
+
+            var linkByDomain = links.GroupBy(x => x.Domain).ToList();
+
+            int j = 1;
+            foreach (var x in linkByDomain)
+            {
+                var tpLinks = x.ToList();
+                IRow row = linkSheet.CreateRow(j);
+                row.CreateCell(0).SetCellValue(x.Key);
+                int keyNum = tpLinks.Select(s => s.Keywords).Distinct().Count();
+                int linkNum = tpLinks.Select(s => s.LinkUrl).Distinct().Count();
+                row.CreateCell(1).SetCellValue(keyNum);
+                row.CreateCell(2).SetCellValue(linkNum);
+
+                var yearList = tpLinks.DistinctBy(s => s.LinkUrl).Select(s => s.PublishTime.Year).ToList();
+                i = 3;
+                cpyear = years;
+                while (cpyear <= yeare)
+                {
+                    int num = yearList.Count(s => s == cpyear);
+                    if (num != 0)
+                        row.CreateCell(i).SetCellValue(num);
+                    cpyear++;
+                    i++;
+                }
+                j++;
+            }
+
+            using (FileStream fileAna = new FileStream(path, FileMode.Create))
+            {
+                linkExcel.Write(fileAna);　　//创建Excel文件。
+            }
+            CommonTools.Log("导出完毕！");
+        }
+
+        /// <summary>
+        /// 导入域名分组
+        /// </summary>
+        /// <param name="path">分组文件路径</param>
+        /// <param name="userObjId">用户ID</param>
+        public void ImportDomain(string path, ObjectId userObjId)
+        {
+            Dictionary<string, string> domainToCateName = new Dictionary<string, string>(); //域名和分组名词典
+            Dictionary<string, ObjectId> CateNameToObjId = new Dictionary<string, ObjectId>(); //分组名和ID词典
+            List<string> domains = new List<string>();      //域名列表
+            List<string> cateNames = new List<string>();      //域名列表
+
+            //读取Excel文件
+            using (Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                HSSFWorkbook workbook = new HSSFWorkbook(stream);
+                HSSFSheet sheet = workbook.GetSheetAt(0) as HSSFSheet;
+                
+                for (int i = 1; i <= sheet.LastRowNum; i++)
+                {
+                    //获取域名及其归属分组
+                    HSSFRow row = sheet.GetRow(i) as HSSFRow;
+                    if (row.GetCell(0) == null || string.IsNullOrEmpty(row.GetCell(0).StringCellValue))
+                    {
+                        continue;
+                    }
+                    string cateName = row.GetCell(0).StringCellValue;
+                    string domain = row.GetCell(1).StringCellValue;
+                    if (!domainToCateName.ContainsKey(domain))
+                    {
+                        domainToCateName.Add(domain, cateName);
+                        domains.Add(domain);
+                        cateNames.Add(cateName);
+                    }
+                }
+            }
+            cateNames = cateNames.Distinct().ToList();
+
+            //查询词组是否已存在
+            var builderCate = Builders<IW2S_DomainCategory>.Filter;
+            var colCate = MongoDBHelper.Instance.GetIW2S_DomainCategorys();
+            foreach (var cateName in cateNames)
+            {
+                var filterCate = builderCate.Eq(x => x.UsrId, userObjId);
+                filterCate &= builderCate.Eq(x => x.Name, cateName);
+                var queryCate = colCate.Find(filterCate).FirstOrDefault();
+                if (queryCate != null)
+                {
+                    CateNameToObjId.Add(cateName, queryCate._id);
+                }
+                else
+                {
+                    //不存在则创建新分组
+                    var cate = new IW2S_DomainCategory
+                    {
+                        _id = ObjectId.GenerateNewId(),
+                        Name = cateName,
+                        UsrId = userObjId
+                    };
+                    colCate.InsertOne(cate);
+                    CateNameToObjId.Add(cateName, cate._id);
+                }
+            }
+            CommonTools.Log("分组已添加完毕！");
+
+            var builderDomain = Builders<IW2S_DomainCategoryData>.Filter;
+            var colDomain = MongoDBHelper.Instance.GetIW2S_DomainCategoryDatas();
+            int j = 0;
+            foreach (var domain in domains)
+            {
+                j++;
+                string cateName = domainToCateName[domain];
+                //查询本域名是否已被分组
+                var filterDomain = builderDomain.Eq(x => x.UsrId, userObjId);
+                filterDomain &= builderDomain.Eq(x => x.DomainName, domain);
+                var queryDomain = colDomain.Find(filterDomain).FirstOrDefault();
+                if (queryDomain != null)
+                    continue;
+                else
+                {
+                    //添加新的域名
+                    var newDomain = new IW2S_DomainCategoryData
+                    {
+                        UsrId = userObjId,
+                        DomainName = domain,
+                        DomainCategoryId = CateNameToObjId[cateName]
+                    };
+                    colDomain.InsertOne(newDomain);
+                }
+                CommonTools.Log("已添加域名[{0}/{1}] - {2}；\t分组 - {3}".FormatStr(j, domains.Count, domain, cateName));
+            }
+            CommonTools.Log("导入完成");
+        }
     }
 
     

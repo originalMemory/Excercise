@@ -16,7 +16,7 @@ namespace VipManager.Helper
         /// <summary>
         /// 登陆商家信息
         /// </summary>
-        public static User userInfo;
+        public static UserMongo User;
         public static string DbPath = Application.StartupPath + "\\Database\\database.mdb";
         /// <summary>
         /// 数据库连接

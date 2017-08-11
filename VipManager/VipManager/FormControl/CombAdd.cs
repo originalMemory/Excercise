@@ -144,7 +144,7 @@ namespace VipManager.FormControl
 
         private void btnAddVip_Click(object sender, EventArgs e)
         {
-            string userId="1";
+            string userId = Config.User._id.ToString();
             //验证数据是否填写完整
             if (string.IsNullOrEmpty(txtName.Text))
             {

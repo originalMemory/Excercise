@@ -127,16 +127,12 @@ namespace MyTools.SelectImg
                             continue;
                         }
                     }
-
-                    if (img.Width > img.Height && img.Width >= 600)
-                    {
-                        string fileName = regFileName.Match(imgPath).Groups["info"].Value;
-                        string fileNovel = regFileNovel.Match(imgPath).Groups["name"].Value;
-                        CopyImg(imgPath, TargetPath, fileName, 0);
-                        int percent = i * 100 / count;
-                        progressBar1.Value = percent+1;
-                        richTextBox1.Text=richTextBox1.Text.Insert(0, fileNovel+Environment.NewLine);
-                    }
+                    string fileName = regFileName.Match(imgPath).Groups["info"].Value;
+                    string fileNovel = regFileNovel.Match(imgPath).Groups["name"].Value;
+                    CopyImg(imgPath, TargetPath, fileName, 0);
+                    int percent = i * 100 / count;
+                    progressBar1.Value = percent + 1;
+                    richTextBox1.Text = richTextBox1.Text.Insert(0, fileNovel + Environment.NewLine);
                 }
             }
             MessageBox.Show("图片复制完毕!", "提示");

@@ -63,7 +63,7 @@ namespace VipManager.FormControl
             this.VipID = vipID;
 
             //获取套餐映射信息
-            string sqlCombSnap = @"select * from [CombSnap] where [VipID]={0} and [IsDel]=false".FormatStr(vipID);
+            string sqlCombSnap = @"select * from [CombSnap] where [VipID]={0} and [UserId]='{1}' and [IsDel]=false".FormatStr(vipID, Config.User._id.ToString());
             OleDbCommand comCombSnap = new OleDbCommand(sqlCombSnap, Config.con);
             OleDbDataReader readerCombSnap = comCombSnap.ExecuteReader();
             CombSnapInfo.ProList = new List<ProInfo>();
@@ -80,6 +80,7 @@ namespace VipManager.FormControl
                 CombSnapInfo.Discount = Convert.ToDouble(readerCombSnap["Discount"]);
                 CombSnapInfo.EndAt = (DateTime)readerCombSnap["EndAt"];
                 proIDs = readerCombSnap["ProIDs"].ToString();
+                txtPayVipComb.Text = CombSnapInfo.Name;
             }
 
             //获取套餐内产品信息
@@ -102,7 +103,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitCbPro()
         {
-            string sqlPro = "select [ID],[No],[ProName],[Price] from [Product]";
+            string sqlPro = "select [ID],[No],[ProName],[Price] from [Product] where [userId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
             adapter.Fill(DtAllPro);
             cbPro.DataSource = DtAllPro;
@@ -184,6 +185,7 @@ namespace VipManager.FormControl
                 }
                 PayPrice += price;
             }
+            txtTotalPrice.Text = TotalPrice.ToString();
             txtTruePrice.Text = PayPrice.ToString("f2");
         }
 
@@ -224,9 +226,9 @@ namespace VipManager.FormControl
         private void btnPay_Click(object sender, EventArgs e)
         {
             //生成交易记录
-            string sqlAddPay = @"insert into [PayRecord]([VipID],[IsUseComb],[CombSnapID],[CombSnapName],[CreateAt],[TotalPrice],[PayPrice]) values(
-{0},{1},'{2}','{3}',#{4}#,{5},{6})"
-                .FormatStr(VipID, rbUseComb.Checked, CombSnapInfo.ID, CombSnapInfo.Name, DateTime.Now, TotalPrice, PayPrice);
+            string sqlAddPay = @"insert into [PayRecord]([VipID],[IsUseComb],[CombSnapID],[CombSnapName],[CreateAt],[TotalPrice],[PayPrice],[VipName],[VipNo],[UserId]) values(
+{0},{1},'{2}','{3}',#{4}#,{5},{6},'{7}',{8},'{9}')"
+                .FormatStr(VipID, rbUseComb.Checked, CombSnapInfo.ID, CombSnapInfo.Name, DateTime.Now, TotalPrice, PayPrice, txtVipName.Text, txtVipNo.Text, Config.User._id.ToString());
             OleDbCommand comAddPay = new OleDbCommand(sqlAddPay, Config.con);
             comAddPay.ExecuteNonQuery();
 
@@ -269,9 +271,9 @@ namespace VipManager.FormControl
                     combSnapID = proInfo.ProID;
                 }
                 //插入产品映射
-                string sqlAddProSnap = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[LastPayAt],[UserId],[PayNum],[VipID],[CombSnapID],[ProID],[PayID]) values(
-{0},'{1}','{2}',{3},#{4}#,#{5}#,'{6}',{7},{8},{9},{10},{11})"
-                   .FormatStr(readerGetPro["No"], readerGetPro["ProName"], readerGetPro["Description"], readerGetPro["Price"], DateTime.Now, DateTime.Now
+                string sqlAddProSnap = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],,[UserId],[PayNum],[VipID],[CombSnapID],[ProID],[PayID]) values(
+{0},'{1}','{2}',{3},#{4}#,'{5}',{6},{7},{8},{9},{10})"
+                   .FormatStr(readerGetPro["No"], readerGetPro["ProName"], readerGetPro["Description"], readerGetPro["Price"], DateTime.Now
                    , readerGetPro["UserId"], Convert.ToInt32(readerGetPro["PayNum"]), VipID, combSnapID, readerGetPro["ID"], payID);
                 OleDbCommand comAddProSnap = new OleDbCommand(sqlAddProSnap, Config.con);
                 comAddProSnap.ExecuteNonQuery();

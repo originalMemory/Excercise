@@ -115,7 +115,7 @@ namespace VipManager.FormControl
                 MessageBoxEx.Show("联系方式未填写！", "提示");
                 return;
             }
-            string userId="1";
+            string userId = Config.User._id.ToString();
             string birth = cbMonth.Text + "/" + cbDay.Text;
 
             //插入会员信息

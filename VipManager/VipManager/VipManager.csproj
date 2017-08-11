@@ -36,7 +36,32 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\CSkin.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.2.2.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.2.2.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.2.2.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.GridFS, Version=2.2.2.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\MongoDB.Driver.GridFS.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Legacy, Version=2.2.2.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\MongoDB.Driver.Legacy.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoV2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\MongoV2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -96,8 +121,13 @@
     <Compile Include="FormControl\VipPay.Designer.cs">
       <DependentUpon>VipPay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Commons.cs" />
     <Compile Include="Helper\Config.cs" />
     <Compile Include="Helper\ControlEvent.cs" />
+    <Compile Include="Helper\EncryptHelper.cs" />
+    <Compile Include="Helper\MongoDBClass.cs" />
+    <Compile Include="Helper\MongoDBHelper.cs" />
+    <Compile Include="Helper\OperateIni.cs" />
     <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\CombSnap.cs" />
@@ -155,6 +185,12 @@
   <ItemGroup>
     <Content Include="DLL\CSkin.dll" />
     <Content Include="DLL\CSkin.XML" />
+    <Content Include="DLL\MongoDB.Bson.dll" />
+    <Content Include="DLL\MongoDB.Driver.Core.dll" />
+    <Content Include="DLL\MongoDB.Driver.dll" />
+    <Content Include="DLL\MongoDB.Driver.GridFS.dll" />
+    <Content Include="DLL\MongoDB.Driver.Legacy.dll" />
+    <Content Include="DLL\MongoV2.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UControl\" />

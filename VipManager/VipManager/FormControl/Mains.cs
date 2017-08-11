@@ -13,6 +13,8 @@ using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
 using System.IO;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace VipManager.FormControl
 {
@@ -45,14 +47,24 @@ namespace VipManager.FormControl
             txtSearchComb.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchComb_KeyPress);
 
             //产品初始设置
-            ProInComb.Columns.Add("ID", System.Type.GetType("System.Int32"));
-            ProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
-            ProInComb.Columns.Add("Price", System.Type.GetType("System.Double"));
+            DtProInComb.Columns.Add("ID", System.Type.GetType("System.Int32"));
+            DtProInComb.Columns.Add("ProName", System.Type.GetType("System.String"));
+            DtProInComb.Columns.Add("Price", System.Type.GetType("System.Double"));
             lbPro.DisplayMember = "ProName";
             lbPro.ValueMember = "ID";
-            lbPro.DataSource = ProInComb;
+            lbPro.DataSource = DtProInComb;
             txtProPrice.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
             txtSearchPro.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchPro_KeyPress);
+
+            txtShopPhone.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
+
+            //消息记录初始设置
+            DtPayPro.Columns.Add("ID", System.Type.GetType("System.Int32"));
+            DtPayPro.Columns.Add("ProName", System.Type.GetType("System.String"));
+            lbPayPro.DisplayMember = "PayName";
+            lbPayPro.ValueMember = "ID";
+            lbPayPro.DataSource = DtPayPro;
+            txtSearchPay.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchPay_KeyPress);
         }
 
         #region 会员管理
@@ -109,7 +121,7 @@ namespace VipManager.FormControl
         {
             DataTable dt = new DataTable();
             string sqlLast = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
-            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false order by a.[LastPayAt] desc";
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false and a.[UserId]='{0}' order by a.[LastPayAt] desc".FormatStr(Config.User._id.ToString());
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             adapter.Fill(dt);
@@ -298,7 +310,7 @@ namespace VipManager.FormControl
                 {
                     //搜索编号
                     string sqlVipNo = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
-            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[No]={0} and a.[ID]=b.[VipID] and b.[IsDel]=false".FormatStr(factor);
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[No]={0} and a.[ID]=b.[VipID] and b.[IsDel]=false and a.[UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
                     OleDbCommand comVipNo = new OleDbCommand(sqlVipNo, Config.con);
                     OleDbDataAdapter adapterVipNo = new OleDbDataAdapter(comVipNo);
                     adapterVipNo.Fill(dt);
@@ -308,7 +320,7 @@ namespace VipManager.FormControl
                     {
                         //搜索联系方式
                         string sqlVipPhone = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
-            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[Phone]='{0}' and a.[ID]=b.[VipID] and b.[IsDel]=false".FormatStr(factor);
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[Phone]='{0}' and a.[ID]=b.[VipID] and b.[IsDel]=false and a.[UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
                         OleDbCommand comVipPhone = new OleDbCommand(sqlVipPhone, Config.con);
                         OleDbDataAdapter adapterVipPhone = new OleDbDataAdapter(comVipPhone);
                         adapterVipPhone.Fill(dt);
@@ -322,7 +334,7 @@ namespace VipManager.FormControl
                 {
                     //搜索姓名
                     string sqlVipName = @"select top 1 a.[ID] as [VipID], a.[No] as [VipNo],a.[VipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
-            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[VipName]='{0}' and a.[ID]=b.[VipID] and b.[IsDel]=false".FormatStr(factor);
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[VipName]='{0}' and a.[ID]=b.[VipID] and b.[IsDel]=false and a.[UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
                     OleDbCommand comVipName = new OleDbCommand(sqlVipName, Config.con);
                     OleDbDataAdapter adapterVipName = new OleDbDataAdapter(comVipName);
                     adapterVipName.Fill(dt);
@@ -377,7 +389,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitFirstPro()
         {
-            string sqlLast = "select top 1 * from [Product] order by [LastPayAt] desc";
+            string sqlLast = "select top 1 * from [Product] where [UserId]='{0}' order by [LastPayAt] desc".FormatStr(Config.User._id.ToString());
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DataTable dt = new DataTable();
@@ -412,7 +424,7 @@ namespace VipManager.FormControl
             dt.Columns.Add("LastPayAt", System.Type.GetType("System.String"));
             dt.Columns.Add("PayNum", System.Type.GetType("System.Int32"));
 
-            string sql = "select * from [Product]";
+            string sql = "select * from [Product] where [UserId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DtPro.Clear();
@@ -521,7 +533,7 @@ namespace VipManager.FormControl
                 if (factor.IsNum())
                 {
                     //搜索产品编号
-                    string sqlProNo = "select top 1 * from [Product] where [No]={0}".FormatStr(factor);
+                    string sqlProNo = "select top 1 * from [Product] where [No]={0} and [UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
                     OleDbCommand comProNo = new OleDbCommand(sqlProNo, Config.con);
                     OleDbDataAdapter adapterProNo = new OleDbDataAdapter(comProNo);
                     adapterProNo.Fill(dt);
@@ -533,7 +545,7 @@ namespace VipManager.FormControl
                 else
                 {
                     //搜索产品名称
-                    string sqlProName = "select top 1 * from [Product] where [ProName] like '%{0}%'".FormatStr(factor);
+                    string sqlProName = "select top 1 * from [Product] where [ProName] like '%{0}%' and [UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
                     OleDbCommand comProName = new OleDbCommand(sqlProName, Config.con);
                     OleDbDataAdapter adapterProName = new OleDbDataAdapter(comProName);
                     adapterProName.Fill(dt);
@@ -586,7 +598,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitFirstComb()
         {
-            string sqlLast = "select top 1 * from [Combination] order by [LastPayAt] desc";
+            string sqlLast = "select top 1 * from [Combination] where [UserId]='{0}' order by [LastPayAt] desc".FormatStr(Config.User._id.ToString());
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DataTable dt = new DataTable();
@@ -612,7 +624,7 @@ namespace VipManager.FormControl
             dt.Columns.Add("Type", System.Type.GetType("System.String"));
 
             //获取源数据
-            string sql = "select * from [Combination]";
+            string sql = "select * from [Combination] where [UserId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DtComb.Clear();
@@ -651,7 +663,7 @@ namespace VipManager.FormControl
         /// <summary>
         /// 套餐内产品信息列表
         /// </summary>
-        DataTable ProInComb = new DataTable();
+        DataTable DtProInComb = new DataTable();
 
         private void cbCombType_TextChanged(object sender, EventArgs e)
         {
@@ -827,14 +839,14 @@ namespace VipManager.FormControl
             string proIDs = row["ProIDs"].ToString();
             string sqlPro = "select [ID],[ProName] from [Product] where [ID] in({0}) ".FormatStr(proIDs);
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
-            ProInComb.Clear();
-            adapter.Fill(ProInComb);
+            DtProInComb.Clear();
+            adapter.Fill(DtProInComb);
         }
 
         //修改套餐内产品信息
         private void btnEditProInComb_Click(object sender, EventArgs e)
         {
-            EditProInComb edit = new EditProInComb(ProInComb);
+            EditProInComb edit = new EditProInComb(DtProInComb);
             edit.ReturnProList += this.SetProInCmob;
             edit.ShowDialog();
         }
@@ -845,8 +857,8 @@ namespace VipManager.FormControl
         /// <param name="dt"></param>
         public void SetProInCmob(DataTable dt)
         {
-            ProInComb = dt.Copy();
-            lbPro.DataSource = ProInComb;
+            DtProInComb = dt.Copy();
+            lbPro.DataSource = DtProInComb;
             lbPro.DisplayMember = "ProName";
             lbPro.ValueMember = "ID";
         }
@@ -884,7 +896,7 @@ namespace VipManager.FormControl
 
             string proIDs = "";
 
-            foreach (DataRow row in ProInComb.Rows)
+            foreach (DataRow row in DtProInComb.Rows)
             {
                 proIDs += row["ID"].ToString() + ",";
             }
@@ -968,7 +980,7 @@ namespace VipManager.FormControl
                 if (factor.IsNum())
                 {
                     //搜索编号
-                    string sqlCombNo = "select top 1 * from [Combination] where [No]={0}".FormatStr(factor);
+                    string sqlCombNo = "select top 1 * from [Combination] where [No]={0} and [UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
                     OleDbCommand comCombNo = new OleDbCommand(sqlCombNo, Config.con);
                     OleDbDataAdapter adapterCombNo = new OleDbDataAdapter(comCombNo);
                     adapterCombNo.Fill(dt);
@@ -980,7 +992,7 @@ namespace VipManager.FormControl
                 else
                 {
                     //搜索名称
-                    string sqlCombName = "select top 1 * from [Combination] where [CombName] like '%{0}%'".FormatStr(factor);
+                    string sqlCombName = "select top 1 * from [Combination] where [CombName] like '%{0}%' and [UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
                     OleDbCommand comCombName = new OleDbCommand(sqlCombName, Config.con);
                     OleDbDataAdapter adapterCombName = new OleDbDataAdapter(comCombName);
                     adapterCombName.Fill(dt);
@@ -1009,6 +1021,8 @@ namespace VipManager.FormControl
         bool IsInitVip = false;
         bool IsInitPro = false;
         bool IsInitComb = false;
+        bool IsInitShop = false;
+        bool IsInitPay = false;
         private void tabMain_Selected(object sender, TabControlEventArgs e)
         {
             if (e.TabPage == tabVip&&!IsInitVip)
@@ -1030,6 +1044,21 @@ namespace VipManager.FormControl
                 InitDgvComb();
                 InitFirstComb();
                 IsInitComb = true;
+                return;
+            }
+
+            if (e.TabPage == tabShop && !IsInitShop)
+            {
+                InitShop();
+                IsInitShop = true;
+                return;
+            }
+
+            if (e.TabPage == tabPay && !IsInitPay)
+            {
+                InitDgvPay();
+                InitFirstPay();
+                IsInitPay = true;
                 return;
             }
         }      
@@ -1070,9 +1099,214 @@ namespace VipManager.FormControl
         }
         #endregion
 
-
         #region 商铺信息
+        void InitShop()
+        {
+            picLicence.ImageLocation = Config.User.PicLicenUrl;
+            picLogo.ImageLocation = Config.User.LogoUrl;
+            txtShopAlipay.Text = Config.User.Alipay;
+            txtShopEmail.Text = Config.User.Email;
+            txtShopName.Text = Config.User.Name;
+            txtShopNo.Text = Config.User.ShopNo;
+            txtShopPhone.Text = Config.User.Phone;
+            txtShopWeixin.Text = Config.User.Weixin;
+            txtAddress.Text = Config.User.Address;
+        }
+        private void btnEditUser_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtAddress.Text) || string.IsNullOrEmpty(txtShopNo.Text) || string.IsNullOrEmpty(txtShopName.Text) || string.IsNullOrEmpty(txtShopPhone.Text)
+                || string.IsNullOrEmpty(txtShopEmail.Text) || string.IsNullOrEmpty(txtShopWeixin.Text) || string.IsNullOrEmpty(txtShopAlipay.Text))
+            {
+                MessageBoxEx.Show("内容不能为空！", "提示");
+            }
+            bool isEmail = System.Text.RegularExpressions.Regex.IsMatch(txtShopEmail.Text, @"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
+            if (!isEmail)
+            {
+                MessageBoxEx.Show("邮箱格式错误！", "提示");
+            }
 
+            try
+            {
+                var buider = Builders<UserMongo>.Filter;
+                var filter = buider.Eq(x => x._id, Config.User._id);
+                var col = MongoDBHelper.Instance.GetUser();
+                var update = new UpdateDocument{{"$set",new QueryDocument{{"Address",txtAddress.Text},{"ShopNo",txtShopNo.Text},{"Name",txtShopName.Text},{"Phone",txtShopPhone.Text}
+                ,{"Email",txtShopEmail.Text},{"Weixin",txtShopWeixin.Text},{"Alipay",txtShopAlipay.Text}}}};
+                col.UpdateOne(filter, update);
+                var user = col.Find(filter).FirstOrDefault();
+                Config.User = user;
+                InitShop();
+            }
+            catch
+            {
+                MessageBoxEx.Show("网络不佳,请重试！", "提示");
+            }
+            
+        }
+        #endregion
+
+        #region 交易记录
+        /// <summary>
+        /// 加载最近一次支付的交易
+        /// </summary>
+        private void InitFirstPay()
+        {
+            string sqlLast = "select top 1 * from [Product] where [UserId]='{0}' order by [LastPayAt] desc".FormatStr(Config.User._id.ToString());
+            OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(com);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            if (dt.Rows.Count > 0)
+                LoadPaySelectedRow(dt.Rows[0]);
+        }
+
+
+        /// <summary>
+        /// 支付信息数据表
+        /// </summary>
+        DataTable DtPay = new DataTable();
+        /// <summary>
+        /// 当前选中支付信息ID
+        /// </summary>
+        int CurPayID = 0;
+
+        /// <summary>
+        /// 初始化支付记录表
+        /// </summary>
+        private void InitDgvPay()
+        {
+            //第一次时设置数据表结构
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", System.Type.GetType("System.Int32"));
+            dt.Columns.Add("VipName", System.Type.GetType("System.String"));
+            dt.Columns.Add("ToalPrice", System.Type.GetType("System.Double"));
+            dt.Columns.Add("CreateAt", System.Type.GetType("System.DateTime"));
+            dt.Columns.Add("IsUseComb", System.Type.GetType("System.Boolean"));
+            dt.Columns.Add("PayPrice", System.Type.GetType("System.Double"));
+            
+
+            string sql = "select * from [PayRecord] where [UserId]='{0}'".FormatStr(Config.User._id.ToString());
+            OleDbCommand com = new OleDbCommand(sql, Config.con);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(com);
+            DtPay.Clear();
+            adapter.Fill(DtPay);
+            foreach (DataRow oldRow in DtPay.Rows)
+            {
+                DataRow row = dt.NewRow();
+                row["ID"] = Convert.ToInt32(oldRow["ID"]);
+                row["VipName"] = oldRow["VipName"].ToString();
+                row["ToalPrice"] = Convert.ToDouble(oldRow["ToalPrice"]);
+                row["PayPrice"] = Convert.ToDouble(oldRow["PayPrice"]);
+                row["CreateAt"] = (System.DateTime)oldRow["CreateAt"];
+                row["IsUseComb"] = (System.Boolean)oldRow["IsUseComb"];
+                dt.Rows.Add(row);
+            }
+            dgvPay.DataSource = dt;
+        }
+
+        private void dgvPay_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //根据选中行刷新上方数据
+            DataGridView dgt = (DataGridView)sender;
+            DataGridViewRow dr = dgt.CurrentRow;
+            int id = Convert.ToInt32(dr.Cells["PayID"].Value);
+            DataRow[] rows = DtPay.Select("ID=" + id);
+            LoadPaySelectedRow(rows[0]);
+        }
+
+        DataTable DtPayPro = new DataTable();
+
+        /// <summary>
+        /// 展示当前选中的支付记录行
+        /// </summary>
+        /// <param name="row"></param>
+        private void LoadPaySelectedRow(DataRow row)
+        {
+            CurPayID = Convert.ToInt32(row["ID"]);
+            txtPayVipNo.Text = row["VipNo"].ToString();
+            txtPayVipName.Text = row["VipName"].ToString();
+            txtTotalPrice.Text = row["TotalPrice"].ToString();
+            txtPayPrice.Text = row["PayPrice"].ToString();
+            dtpPayAt.Value = (DateTime)row["CreateAt"];
+
+            //判断是否使用套餐
+            bool isUseComb = (System.Boolean)row["IsUseComb"];
+            if (isUseComb)
+            {
+                rbUseComb.Checked = true;
+                txtPayVipComb.Text = row["CombSnapName"].ToString();
+            }
+            else
+            {
+                rbUnUseComb.Checked = true;
+                txtPayVipComb.Text = null;
+            }
+
+            //加载已使用支付记录列表
+            string sqlPay = "select [ID],[ProName] from [ProSnap] where [PayID] ={0} ".FormatStr(CurPayID);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPay, Config.con);
+            DtPayPro.Clear();
+            adapter.Fill(DtPayPro);
+        }
+
+        //搜索支付记录信息
+        private void btnSearchPay_Click(object sender, EventArgs e)
+        {
+            string factor = txtSearchPay.Text;
+            DataTable dt = new DataTable();
+            if (!string.IsNullOrEmpty(factor))
+            {
+                if (factor.IsNum())
+                {
+                    //搜索支付记录会员编号
+                    string sqlPayNo = "select top 1 * from [PayRecord] where [VipNo]={0} and [UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
+                    if (cbFilterPayAt.Checked)
+                    {
+                        DateTime timeFactor=dtpSearchPayAt.Value.Date;
+                        sqlPayNo += " and [CreateAt]>#{0}# and [CreateAt]<#{1}".FormatStr(timeFactor, timeFactor.AddDays(1).AddSeconds(-1));
+                    }
+                    sqlPayNo += " order by [CreateAt] desc";
+                    OleDbCommand comPayNo = new OleDbCommand(sqlPayNo, Config.con);
+                    OleDbDataAdapter adapterPayNo = new OleDbDataAdapter(comPayNo);
+                    adapterPayNo.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadPaySelectedRow(dt.Rows[0]);
+                    else
+                        MessageBoxEx.Show("无符合条件数据！", "提示");
+                }
+                else
+                {
+                    //搜索支付记录名称
+                    string sqlPayName = "select top 1 * from [PayRecord] where [VipName] like '%{0}%' and [UserId]='{1}'".FormatStr(factor, Config.User._id.ToString());
+                    if (cbFilterPayAt.Checked)
+                    {
+                        DateTime timeFactor = dtpSearchPayAt.Value.Date;
+                        sqlPayName += " and [CreateAt]>#{0}# and [CreateAt]<#{1}".FormatStr(timeFactor, timeFactor.AddDays(1).AddSeconds(-1));
+                    }
+                    sqlPayName += " order by [CreateAt] desc";
+                    OleDbCommand comPayName = new OleDbCommand(sqlPayName, Config.con);
+                    OleDbDataAdapter adapterPayName = new OleDbDataAdapter(comPayName);
+                    adapterPayName.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                        LoadPaySelectedRow(dt.Rows[0]);
+                    else
+                        MessageBoxEx.Show("无符合条件数据！", "提示");
+                }
+            }
+            else
+            {
+                MessageBoxEx.Show("搜索条件不能为空！", "提示");
+            }
+
+        }
+
+        private void txtSearchPay_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnSearchPay_Click(sender, e);
+            }
+        }
         #endregion
 
     }

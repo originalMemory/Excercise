@@ -58,6 +58,16 @@ namespace CSharpTest.Tools
             }
 
         }
+
+        double x(ForceNode node)
+        {
+            return node.x + node.vx;
+        }
+
+        double y(ForceNode node)
+        {
+            return node.y + node.vy;
+        }
         
         #region simnulation，模拟器
         /// <summary>
@@ -109,6 +119,9 @@ namespace CSharpTest.Tools
             }
         }
 
+        /// <summary>
+        /// 监听函数，不断调用计算新位置
+        /// </summary>
         public void tick()
         {
             //重计算衰减值
@@ -120,8 +133,40 @@ namespace CSharpTest.Tools
             {
                 var node = Nodes[i];
                 node.x += node.vx *= velocityDecay;
-                node.y = node.vy *= velocityDecay;
+                node.y += node.vy *= velocityDecay;
             }
+        }
+
+        /// <summary>
+        /// 返回与距离位置<x，y> 给定搜索半径最接近的节点
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="radius">半径</param>
+        /// <returns></returns>
+        ForceNode find(double x, double y, double radius)
+        {
+            ForceNode closest = null;
+            if (radius == null)
+                radius = double.MaxValue;
+            else
+                radius *= radius;
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                var node = Nodes[i];
+                double dx = x - node.x;
+                double dy = y - node.y;
+                double d2 = dx * dx + dy * dy;
+                if (d2 < radius)
+                {
+                    closest = node;
+                    radius = d2;
+                }
+            }
+            if (closest != null)
+                return closest;
+            else
+                return null;
         }
         #endregion
 
@@ -334,7 +379,8 @@ namespace CSharpTest.Tools
         
         #endregion
 
-        #region x
+        #region x$2
+        
 
         #endregion
     }

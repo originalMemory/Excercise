@@ -32,11 +32,10 @@ namespace CSharpTest
             //D3force force = new D3force();
             //force.initializeNodes();
 
-            double i = 3;
-            double j = i;
-            i--;
-            Console.WriteLine(i);
-            Console.WriteLine(j);
+            string path = @"F:\全部网址-Jacky标注了471个.xls";
+            var userObjId = new ObjectId("571e283e6ce8b80cb8963e84");
+            DnlTools dnl = new DnlTools();
+            dnl.ImportDomain(path, userObjId);
             Console.ReadKey();
         }
 
