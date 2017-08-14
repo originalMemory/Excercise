@@ -30,7 +30,7 @@ namespace VipManager.Helper
 
         public IMongoCollection<UserMongo> GetUser()
         {
-            return GetCollection<UserMongo>("user");
+            return GetCollection<UserMongo>("User");
         }
     }
 

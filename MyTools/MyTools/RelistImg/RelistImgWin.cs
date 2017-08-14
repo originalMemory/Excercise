@@ -11,6 +11,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
+using MyTools.Tools;
+using MyTools.Model;
+using MyTools.Helper;
 
 namespace MyTools.RelistImg
 {
@@ -18,11 +21,62 @@ namespace MyTools.RelistImg
     {
         string SourcePath = "";
         string TargetPath = "";
+        /// <summary>
+        /// ini文件中区块名
+        /// </summary>
+        string IniSection = "RelistImg";
 
         public RelistImgWin()
         {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
+
+            txtMinImgWidth.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
+            txtLimitNum.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
+
+            //加载上一次目录信息
+            txtSourcePath.Text = OperateIni.ReadIniData(IniSection, "sourcePath");
+            txtTargetPath.Text = OperateIni.ReadIniData(IniSection, "targetPath");
+            txtExcludeFloder.Text = OperateIni.ReadIniData(IniSection, "excludeFloder");
+            //加载图片条件
+            string strType = OperateIni.ReadIniData(IniSection, "imgType");
+            if (!string.IsNullOrEmpty(strType))
+            {
+                ImgType type = (ImgType)Convert.ToInt32(strType);
+                switch (type)
+                {
+                    case ImgType.Horizon:
+                        cmbImgType.Text = "横图";
+                        break;
+                    case ImgType.Vertical:
+                        cmbImgType.Text = "竖图";
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            txtMinImgWidth.Text = OperateIni.ReadIniData(IniSection, "minImgWidth");
+            string strStartAt = OperateIni.ReadIniData(IniSection, "startAt");
+            if (!string.IsNullOrEmpty(strStartAt))
+            {
+                DateTime startAt = new DateTime();
+                DateTime.TryParse(strStartAt, out startAt);
+                dtpStart.Value = startAt;
+            }
+            string strCheckTime = OperateIni.ReadIniData(IniSection, "checkTime");
+            if (!string.IsNullOrEmpty(strCheckTime))
+                checkTime.Checked = Convert.ToBoolean(strCheckTime);
+            string strcheckCopy = OperateIni.ReadIniData(IniSection, "checkCopy");
+            if (!string.IsNullOrEmpty(strcheckCopy))
+                checkCopy.Checked = Convert.ToBoolean(strcheckCopy);
+            string strcheckDeep = OperateIni.ReadIniData(IniSection, "checkDeep");
+            if (!string.IsNullOrEmpty(strcheckDeep))
+                checkDeep.Checked = Convert.ToBoolean(strcheckDeep);
+            txtLimitNum.Text = OperateIni.ReadIniData(IniSection, "limitNum");
+            string strSortReg = OperateIni.ReadIniData(IniSection, "txtSortReg");
+            if (!string.IsNullOrEmpty(strSortReg))
+                txtSortReg.Text = strSortReg;
         }
 
         //获取原图路径
@@ -31,7 +85,7 @@ namespace MyTools.RelistImg
             dialog.Description = "请选择原图目录";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                txt_SourcePath.Text = dialog.SelectedPath;
+                txtSourcePath.Text = dialog.SelectedPath;
                 dialog.Reset();
             }
         }
@@ -42,7 +96,7 @@ namespace MyTools.RelistImg
             dialog.Description = "请选择目标目录";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                txt_TargetPath.Text = dialog.SelectedPath;
+                txtTargetPath.Text = dialog.SelectedPath;
                 dialog.Reset();
             }
         }
@@ -51,17 +105,42 @@ namespace MyTools.RelistImg
         private void btn_Relist_Click(object sender, EventArgs e)
         {
             new Thread(run).Start();
-            pic_Working.Visible = true;
+            picRunning.Visible = true;
+
+            //保存本次设置
+            OperateIni.WriteIniData(IniSection, "sourcePath", txtSourcePath.Text);
+            OperateIni.WriteIniData(IniSection, "targetPath", txtTargetPath.Text);
+            OperateIni.WriteIniData(IniSection, "excludeFloder", txtExcludeFloder.Text);
+            ImgType type = new ImgType();
+            switch (cmbImgType.Text)
+            {
+                case "横图":
+                    type = ImgType.Horizon;
+                    break;
+                case "竖图":
+                    type = ImgType.Vertical;
+                    break;
+                default:
+                    break;
+            }
+            OperateIni.WriteIniData(IniSection, "imgType", (int)type);
+            OperateIni.WriteIniData(IniSection, "minImgWidth", txtMinImgWidth.Text);
+            OperateIni.WriteIniData(IniSection, "startAt", dtpStart.Value);
+            OperateIni.WriteIniData(IniSection, "checkTime", checkTime.Checked);
+            OperateIni.WriteIniData(IniSection, "checkCopy", checkCopy.Checked);
+            OperateIni.WriteIniData(IniSection, "checkDeep", checkDeep.Checked);
+            OperateIni.WriteIniData(IniSection, "limitNum", txtLimitNum.Text);
+            OperateIni.WriteIniData(IniSection, "txtSortReg", txtSortReg.Text);
         }
 
         void run()
         {
-            TargetPath = txt_TargetPath.Text;
-            SourcePath = txt_SourcePath.Text;
-            string str = txt_ExcludeFloder.Text;
-            int limitNum = Convert.ToInt32(txt_LimitNum.Text);
+            TargetPath = txtTargetPath.Text;
+            SourcePath = txtSourcePath.Text;
+            string str = txtExcludeFloder.Text;
+            int limitNum = Convert.ToInt32(txtLimitNum.Text);
             var exclude = str.Split(';', '；').Where(x => !string.IsNullOrEmpty(x) && x != "undefined").ToList();
-            Regex reg=new Regex(txt_reg.Text);
+            Regex reg = new Regex(txtSortReg.Text);
 
             /* 获取原图路径下的图片
              * 判断是搜索子目录
@@ -69,7 +148,7 @@ namespace MyTools.RelistImg
              */
             var imgPathList = new List<ImgInfo>();
             var tempList = new List<string>();
-            if (cb_IsDeep.Checked)
+            if (checkDeep.Checked)
                 tempList = Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories).ToList();
             else
                 tempList = Directory.GetFiles(SourcePath, "*.*", SearchOption.TopDirectoryOnly).ToList();
@@ -86,7 +165,7 @@ namespace MyTools.RelistImg
             int count = imgPathList.Count;      //图片总数
 
             imgPathList = imgPathList.OrderBy(x => x.Num).ToList();     //按序号大小排序
-            int floderCount=1;      //文件夹起始序号
+            int floderCount = 1;      //文件夹起始序号
             int imgCount = 0;       //图片起始序号
             for (int i = 0; i < count; i++)
             {
@@ -99,7 +178,7 @@ namespace MyTools.RelistImg
                 string path = imgPathList[i].Path;      //原图路径
                 FileInfo file = new FileInfo(path);
                 string name = file.Name;
-                string folderPath = TargetPath +"\\"+ floderCount;
+                string folderPath = TargetPath + "\\" + floderCount;
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
                 string newImgPath = folderPath + "\\" + name;
@@ -113,10 +192,10 @@ namespace MyTools.RelistImg
                 }
                 else
                 {
-                    bool IsMove=true;
+                    bool IsMove = true;
                     foreach (var x in exclude)
                     {
-                        if(path.Contains(x))
+                        if (path.Contains(x))
                         {
                             IsMove = false;
                             break;
@@ -126,21 +205,17 @@ namespace MyTools.RelistImg
                         file.MoveTo(newImgPath);
                     else
                         file.CopyTo(newImgPath, false);
-                    richTextBox1.Text = richTextBox1.Text.Insert(0, floderCount+@"/"+ name + Environment.NewLine);
+                    rtxtImgList.Text = rtxtImgList.Text.Insert(0, floderCount + @"/" + name + Environment.NewLine);
                 }
-                
+
             }
-            pic_Working.Visible = false;
+            picRunning.Visible = false;
         }
 
         class ImgInfo
         {
             public string Path { get; set; }
             public long Num { get; set; }
-        }
-
-        private void RelistImgWin_FormClosed(object sender, FormClosedEventArgs e)
-        {
         }
 
     }

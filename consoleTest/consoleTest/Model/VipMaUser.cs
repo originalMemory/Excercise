@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
-namespace VipManager.Model
+namespace CSharpTest.Model
 {
     /// <summary>
     /// 登陆商家信息
     /// </summary>
-    public class UserMongo
+    public class VipMaUserMongo
     {
         /// <summary>
         /// MongoID

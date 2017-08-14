@@ -57,21 +57,18 @@ namespace VipManager.Helper
         /// <returns></returns>
         public static bool WriteIniData(string Section,string Key,string Value,string iniFilePath)
         {
-            if(File.Exists(iniFilePath))
+            if (!File.Exists(iniFilePath))
             {
-                long OpStation = WritePrivateProfileString(Section,Key,Value,iniFilePath);    
-                if(OpStation == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                File.Create(iniFilePath);
+            }
+            long OpStation = WritePrivateProfileString(Section, Key, Value, iniFilePath);
+            if (OpStation == 0)
+            {
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
 

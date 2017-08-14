@@ -34,12 +34,12 @@ namespace VipManager.FormControl
             }
 
             //获取用户信息
-            Guid pwGuid = EncryptHelper.GetEncryPwd(password.ToLower());        //加密密码
+            Guid pwGuid = EncryptHelper.GetEncryPwd(password);        //加密密码
             try
             {
                 var builder = Builders<UserMongo>.Filter;
-                var filter = builder.Eq(x => x.userName, userName);
-                filter &= builder.Eq(x => x.Password, pwGuid);
+                var filter = builder.Eq(x => x.UserName, userName);
+                //filter &= builder.Eq(x => x.Password, pwGuid);
                 var col = MongoDBHelper.Instance.GetUser();
                 var user = col.Find(filter).FirstOrDefault();
 

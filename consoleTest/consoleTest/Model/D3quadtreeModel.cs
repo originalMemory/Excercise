@@ -6,23 +6,29 @@ using System.Threading.Tasks;
 
 namespace CSharpTest.Model
 {
+    /// <summary>
+    /// 四叉树
+    /// </summary>
     public class QuadtreeRoot
     {
+        /// <summary>
+        /// 根结点
+        /// </summary>
         public QuadtreeNode _root;
         /// <summary>
-        /// 最小的x坐标
+        /// x坐标左值
         /// </summary>
         public double _x0;
         /// <summary>
-        /// 最小的y坐标
+        /// y坐标下值
         /// </summary>
         public double _y0;
         /// <summary>
-        /// 最大的x坐标
+        /// x坐标右值
         /// </summary>
         public double _x1;
         /// <summary>
-        /// 最大的y坐标
+        /// y坐标上值
         /// </summary>
         public double _y1;
     }
@@ -39,15 +45,15 @@ namespace CSharpTest.Model
         /// <summary>
         /// 节点数据
         /// </summary>
-        public ForceNode[] data;
+        public ForceNode data;
         //public QuadtreeNode()
         //{
         //    children = new QuadtreeNode[4];
         //    data = new ForceNode[4];
         //}
         /// <summary>
-        /// 判断本节点是否有值
+        /// 判断本节点是分支结点还是叶子结点
         /// </summary>
-        public bool IsValue;
+        public bool IsLeaf;
     }
 }

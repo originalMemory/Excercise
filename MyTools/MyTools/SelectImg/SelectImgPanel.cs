@@ -11,6 +11,9 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Threading;
+using MyTools.Tools;
+using MyTools.Model;
+using MyTools.Helper;
 
 namespace MyTools.SelectImg
 {
@@ -18,12 +21,53 @@ namespace MyTools.SelectImg
     {
         string SourcePath = "";
         string TargetPath = "";
+        /// <summary>
+        /// ini文件中区块名
+        /// </summary>
+        string IniSection = "SelectImg";
+
         FolderBrowserDialog dialog = new FolderBrowserDialog();
         public SelectImgPanel()
         {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
-            richTextBox1.Text = "";
+            rtxtPicList.Text = "";
+
+            txtMinImgWidth.KeyPress += new KeyPressEventHandler(ControlEvent.NumLimit);
+
+            //加载上一次目录信息
+            txtSourcePath.Text = OperateIni.ReadIniData(IniSection, "sourcePath");
+            txtTargetPath.Text = OperateIni.ReadIniData(IniSection, "targetPath");
+            txtExcludeFloder.Text = OperateIni.ReadIniData(IniSection, "excludeFloder");
+            //加载图片条件
+            string strType = OperateIni.ReadIniData(IniSection, "imgType");
+            if (!string.IsNullOrEmpty(strType))
+            {
+                ImgType type = (ImgType)Convert.ToInt32(strType);
+                switch (type)
+                {
+                    case ImgType.Horizon:
+                        cmbImgType.Text = "横图";
+                        break;
+                    case ImgType.Vertical:
+                        cmbImgType.Text = "竖图";
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            txtMinImgWidth.Text = OperateIni.ReadIniData(IniSection, "minImgWidth");
+            string strStartAt = OperateIni.ReadIniData(IniSection, "startAt");
+            if (!string.IsNullOrEmpty(strStartAt))
+            {
+                DateTime startAt = new DateTime();
+                DateTime.TryParse(strStartAt, out startAt);
+                dtpStart.Value = startAt;
+            }
+            string strCheckTime = OperateIni.ReadIniData(IniSection, "checkTime");
+            if (!string.IsNullOrEmpty(strCheckTime))
+                checkTime.Checked = Convert.ToBoolean(strCheckTime);
         }
 
         //获取源目录
@@ -32,7 +76,7 @@ namespace MyTools.SelectImg
             dialog.Description = "请选择源目录";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                txt_SourcePath.Text = dialog.SelectedPath;
+                txtSourcePath.Text = dialog.SelectedPath;
                 dialog.Reset();
             }
         }
@@ -43,7 +87,7 @@ namespace MyTools.SelectImg
             dialog.Description = "请选择目标目录";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                txt_TargetPath.Text = dialog.SelectedPath;
+                txtTargetPath.Text = dialog.SelectedPath;
                 dialog.Reset();
             }
         }
@@ -52,29 +96,50 @@ namespace MyTools.SelectImg
         private void btn_Start_Click(object sender, EventArgs e)
         {
             //判断目标文件夹是否存在，不存在则创建文件
-            if (!Directory.Exists(txt_TargetPath.Text))
+            if (!Directory.Exists(txtTargetPath.Text))
             {
-                Directory.CreateDirectory(txt_TargetPath.Text);
+                Directory.CreateDirectory(txtTargetPath.Text);
             }
             new Thread(run).Start();
-            pictureBox1.Visible = true;
+            picRunning.Visible = true;
+
+            //保存本次信息
+            OperateIni.WriteIniData(IniSection, "sourcePath",txtSourcePath.Text);
+            OperateIni.WriteIniData(IniSection, "targetPath",txtTargetPath.Text);
+            OperateIni.WriteIniData(IniSection, "excludeFloder",txtExcludeFloder.Text);
+            ImgType type = new ImgType();
+            switch (cmbImgType.Text)
+            {
+                case "横图":
+                    type = ImgType.Horizon;
+                    break;
+                case "竖图":
+                    type = ImgType.Vertical;
+                    break;
+                default:
+                    break;
+            }
+            OperateIni.WriteIniData(IniSection, "imgType", (int)type);
+            OperateIni.WriteIniData(IniSection, "minImgWidth", txtMinImgWidth.Text);
+            OperateIni.WriteIniData(IniSection, "startAt", dtpStart.Value);
+            OperateIni.WriteIniData(IniSection, "checkTime", checkTime.Checked);
         }
 
         void run()
         {
-            TargetPath = txt_TargetPath.Text;
-            SourcePath = txt_SourcePath.Text;
-            string str = txt_ExcludeFloder.Text;
+            TargetPath = txtTargetPath.Text;
+            SourcePath = txtSourcePath.Text;
+            string str = txtExcludeFloder.Text;
             var exclude = str.Split(';', '；').Where(x => !string.IsNullOrEmpty(x)).ToList();
             bool horizon = false;
-            switch (cmb_ImgType.Text)
+            switch (cmbImgType.Text)
             {
                 case "横图": horizon = true; break;
                 case "树图": horizon = false; break;
             }
-            int miniWidth = Convert.ToInt32(txt_MiniWidth.Text);
+            int miniWidth = Convert.ToInt32(txtMinImgWidth.Text);
             SelectCopy(horizon, miniWidth, exclude);
-            pictureBox1.Visible = false;
+            picRunning.Visible = false;
         }
 
         /// <summary>
@@ -117,10 +182,10 @@ namespace MyTools.SelectImg
                     {
                         if (img.Width > img.Height) continue;
                     }
-                    if (check_Time.Checked)
+                    if (checkTime.Checked)
                     {
                         //判断开始时间
-                        DateTime startTime = dt_Start.Value;
+                        DateTime startTime = dtpStart.Value;
                         FileInfo file = new FileInfo(imgPath);
                         if (file.CreationTime <= startTime && file.LastWriteTime <= startTime)
                         {
@@ -131,8 +196,8 @@ namespace MyTools.SelectImg
                     string fileNovel = regFileNovel.Match(imgPath).Groups["name"].Value;
                     CopyImg(imgPath, TargetPath, fileName, 0);
                     int percent = i * 100 / count;
-                    progressBar1.Value = percent + 1;
-                    richTextBox1.Text = richTextBox1.Text.Insert(0, fileNovel + Environment.NewLine);
+                    pbCopy.Value = percent + 1;
+                    rtxtPicList.Text = rtxtPicList.Text.Insert(0, fileNovel + Environment.NewLine);
                 }
             }
             MessageBox.Show("图片复制完毕!", "提示");

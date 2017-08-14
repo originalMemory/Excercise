@@ -262,6 +262,11 @@ namespace CSharpTest.Helper
         {
             return base.GetCollection<MediaMappingCoPresentMongo>("MediaMappingCoPresent");
         }
+
+        public IMongoCollection<VipMaUserMongo> GetVipMaUser()
+        {
+            return base.GetCollection<VipMaUserMongo>("User");
+        }
     }
 
     public static class MongoExtension

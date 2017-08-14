@@ -97,7 +97,9 @@
             this.Controls.Add(this.btn_TextEdit);
             this.Controls.Add(this.btn_CrawImg);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Mains";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mains";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Mains_FormClosed);
             this.ResumeLayout(false);

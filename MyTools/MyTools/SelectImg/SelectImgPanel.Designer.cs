@@ -28,71 +28,71 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btn_SourcePath = new System.Windows.Forms.Button();
-            this.btn_TargetPath = new System.Windows.Forms.Button();
-            this.txt_SourcePath = new System.Windows.Forms.TextBox();
-            this.txt_TargetPath = new System.Windows.Forms.TextBox();
-            this.txt_MiniWidth = new System.Windows.Forms.TextBox();
+            this.btnSourcePath = new System.Windows.Forms.Button();
+            this.btnTargetPath = new System.Windows.Forms.Button();
+            this.txtSourcePath = new System.Windows.Forms.TextBox();
+            this.txtTargetPath = new System.Windows.Forms.TextBox();
+            this.txtMinImgWidth = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.cmb_ImgType = new System.Windows.Forms.ComboBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.cmbImgType = new System.Windows.Forms.ComboBox();
+            this.pbCopy = new System.Windows.Forms.ProgressBar();
+            this.picRunning = new System.Windows.Forms.PictureBox();
+            this.rtxtPicList = new System.Windows.Forms.RichTextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.txt_ExcludeFloder = new System.Windows.Forms.TextBox();
-            this.btn_Start = new System.Windows.Forms.Button();
+            this.txtExcludeFloder = new System.Windows.Forms.TextBox();
+            this.btnStart = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.dt_Start = new System.Windows.Forms.DateTimePicker();
-            this.check_Time = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.dtpStart = new System.Windows.Forms.DateTimePicker();
+            this.checkTime = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.picRunning)).BeginInit();
             this.SuspendLayout();
             // 
-            // btn_SourcePath
+            // btnSourcePath
             // 
-            this.btn_SourcePath.Location = new System.Drawing.Point(306, 21);
-            this.btn_SourcePath.Name = "btn_SourcePath";
-            this.btn_SourcePath.Size = new System.Drawing.Size(75, 23);
-            this.btn_SourcePath.TabIndex = 0;
-            this.btn_SourcePath.Text = "选择源目录";
-            this.btn_SourcePath.UseVisualStyleBackColor = true;
-            this.btn_SourcePath.Click += new System.EventHandler(this.btn_SourcePath_Click);
+            this.btnSourcePath.Location = new System.Drawing.Point(306, 21);
+            this.btnSourcePath.Name = "btnSourcePath";
+            this.btnSourcePath.Size = new System.Drawing.Size(75, 23);
+            this.btnSourcePath.TabIndex = 0;
+            this.btnSourcePath.Text = "选择源目录";
+            this.btnSourcePath.UseVisualStyleBackColor = true;
+            this.btnSourcePath.Click += new System.EventHandler(this.btn_SourcePath_Click);
             // 
-            // btn_TargetPath
+            // btnTargetPath
             // 
-            this.btn_TargetPath.Location = new System.Drawing.Point(306, 52);
-            this.btn_TargetPath.Name = "btn_TargetPath";
-            this.btn_TargetPath.Size = new System.Drawing.Size(90, 23);
-            this.btn_TargetPath.TabIndex = 1;
-            this.btn_TargetPath.Text = "选择目标目录";
-            this.btn_TargetPath.UseVisualStyleBackColor = true;
-            this.btn_TargetPath.Click += new System.EventHandler(this.btn_TargetPath_Click);
+            this.btnTargetPath.Location = new System.Drawing.Point(306, 52);
+            this.btnTargetPath.Name = "btnTargetPath";
+            this.btnTargetPath.Size = new System.Drawing.Size(90, 23);
+            this.btnTargetPath.TabIndex = 1;
+            this.btnTargetPath.Text = "选择目标目录";
+            this.btnTargetPath.UseVisualStyleBackColor = true;
+            this.btnTargetPath.Click += new System.EventHandler(this.btn_TargetPath_Click);
             // 
-            // txt_SourcePath
+            // txtSourcePath
             // 
-            this.txt_SourcePath.Location = new System.Drawing.Point(94, 22);
-            this.txt_SourcePath.Name = "txt_SourcePath";
-            this.txt_SourcePath.Size = new System.Drawing.Size(200, 21);
-            this.txt_SourcePath.TabIndex = 2;
-            this.txt_SourcePath.Text = "M:\\H\\图片\\Cosplay\\Flameworks";
+            this.txtSourcePath.Location = new System.Drawing.Point(94, 22);
+            this.txtSourcePath.Name = "txtSourcePath";
+            this.txtSourcePath.Size = new System.Drawing.Size(200, 21);
+            this.txtSourcePath.TabIndex = 2;
+            this.txtSourcePath.Text = "M:\\H\\图片\\Cosplay\\Flameworks";
             // 
-            // txt_TargetPath
+            // txtTargetPath
             // 
-            this.txt_TargetPath.Location = new System.Drawing.Point(94, 52);
-            this.txt_TargetPath.Name = "txt_TargetPath";
-            this.txt_TargetPath.Size = new System.Drawing.Size(200, 21);
-            this.txt_TargetPath.TabIndex = 3;
-            this.txt_TargetPath.Text = "E:\\图片\\Cosplay\\壁纸";
+            this.txtTargetPath.Location = new System.Drawing.Point(94, 52);
+            this.txtTargetPath.Name = "txtTargetPath";
+            this.txtTargetPath.Size = new System.Drawing.Size(200, 21);
+            this.txtTargetPath.TabIndex = 3;
+            this.txtTargetPath.Text = "E:\\图片\\Cosplay\\壁纸";
             // 
-            // txt_MiniWidth
+            // txtMinImgWidth
             // 
-            this.txt_MiniWidth.Location = new System.Drawing.Point(257, 92);
-            this.txt_MiniWidth.Name = "txt_MiniWidth";
-            this.txt_MiniWidth.Size = new System.Drawing.Size(75, 21);
-            this.txt_MiniWidth.TabIndex = 4;
-            this.txt_MiniWidth.Text = "600";
+            this.txtMinImgWidth.Location = new System.Drawing.Point(257, 92);
+            this.txtMinImgWidth.Name = "txtMinImgWidth";
+            this.txtMinImgWidth.Size = new System.Drawing.Size(75, 21);
+            this.txtMinImgWidth.TabIndex = 4;
+            this.txtMinImgWidth.Text = "600";
             // 
             // label1
             // 
@@ -130,43 +130,43 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "最小宽度：";
             // 
-            // cmb_ImgType
+            // cmbImgType
             // 
-            this.cmb_ImgType.FormattingEnabled = true;
-            this.cmb_ImgType.Items.AddRange(new object[] {
+            this.cmbImgType.FormattingEnabled = true;
+            this.cmbImgType.Items.AddRange(new object[] {
             "横图",
             "竖图"});
-            this.cmb_ImgType.Location = new System.Drawing.Point(94, 92);
-            this.cmb_ImgType.Name = "cmb_ImgType";
-            this.cmb_ImgType.Size = new System.Drawing.Size(75, 20);
-            this.cmb_ImgType.TabIndex = 10;
-            this.cmb_ImgType.Text = "横图";
+            this.cmbImgType.Location = new System.Drawing.Point(94, 92);
+            this.cmbImgType.Name = "cmbImgType";
+            this.cmbImgType.Size = new System.Drawing.Size(75, 20);
+            this.cmbImgType.TabIndex = 10;
+            this.cmbImgType.Text = "横图";
             // 
-            // progressBar1
+            // pbCopy
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 174);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(713, 23);
-            this.progressBar1.TabIndex = 11;
+            this.pbCopy.Location = new System.Drawing.Point(12, 174);
+            this.pbCopy.Name = "pbCopy";
+            this.pbCopy.Size = new System.Drawing.Size(713, 23);
+            this.pbCopy.TabIndex = 11;
             // 
-            // pictureBox1
+            // picRunning
             // 
-            this.pictureBox1.Image = global::MyTools.Properties.Resources.jiance;
-            this.pictureBox1.Location = new System.Drawing.Point(41, 220);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(278, 259);
-            this.pictureBox1.TabIndex = 12;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Visible = false;
+            this.picRunning.Image = global::MyTools.Properties.Resources.jiance;
+            this.picRunning.Location = new System.Drawing.Point(41, 220);
+            this.picRunning.Name = "picRunning";
+            this.picRunning.Size = new System.Drawing.Size(278, 259);
+            this.picRunning.TabIndex = 12;
+            this.picRunning.TabStop = false;
+            this.picRunning.Visible = false;
             // 
-            // richTextBox1
+            // rtxtPicList
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(362, 220);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(346, 259);
-            this.richTextBox1.TabIndex = 13;
-            this.richTextBox1.Text = "";
-            this.richTextBox1.WordWrap = false;
+            this.rtxtPicList.Location = new System.Drawing.Point(362, 220);
+            this.rtxtPicList.Name = "rtxtPicList";
+            this.rtxtPicList.Size = new System.Drawing.Size(346, 259);
+            this.rtxtPicList.TabIndex = 13;
+            this.rtxtPicList.Text = "";
+            this.rtxtPicList.WordWrap = false;
             // 
             // label5
             // 
@@ -177,23 +177,23 @@
             this.label5.TabIndex = 15;
             this.label5.Text = "排除文件夹名：";
             // 
-            // txt_ExcludeFloder
+            // txtExcludeFloder
             // 
-            this.txt_ExcludeFloder.Location = new System.Drawing.Point(511, 22);
-            this.txt_ExcludeFloder.Name = "txt_ExcludeFloder";
-            this.txt_ExcludeFloder.Size = new System.Drawing.Size(200, 21);
-            this.txt_ExcludeFloder.TabIndex = 14;
-            this.txt_ExcludeFloder.Text = "新建文件夹";
+            this.txtExcludeFloder.Location = new System.Drawing.Point(511, 22);
+            this.txtExcludeFloder.Name = "txtExcludeFloder";
+            this.txtExcludeFloder.Size = new System.Drawing.Size(200, 21);
+            this.txtExcludeFloder.TabIndex = 14;
+            this.txtExcludeFloder.Text = "新建文件夹";
             // 
-            // btn_Start
+            // btnStart
             // 
-            this.btn_Start.Location = new System.Drawing.Point(306, 131);
-            this.btn_Start.Name = "btn_Start";
-            this.btn_Start.Size = new System.Drawing.Size(103, 30);
-            this.btn_Start.TabIndex = 16;
-            this.btn_Start.Text = "开始复制";
-            this.btn_Start.UseVisualStyleBackColor = true;
-            this.btn_Start.Click += new System.EventHandler(this.btn_Start_Click);
+            this.btnStart.Location = new System.Drawing.Point(306, 131);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(103, 30);
+            this.btnStart.TabIndex = 16;
+            this.btnStart.Text = "开始复制";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btn_Start_Click);
             // 
             // label6
             // 
@@ -204,51 +204,51 @@
             this.label6.TabIndex = 18;
             this.label6.Text = "开始日期：";
             // 
-            // dt_Start
+            // dtpStart
             // 
-            this.dt_Start.Location = new System.Drawing.Point(428, 92);
-            this.dt_Start.Name = "dt_Start";
-            this.dt_Start.Size = new System.Drawing.Size(127, 21);
-            this.dt_Start.TabIndex = 19;
-            this.dt_Start.Value = new System.DateTime(2016, 11, 12, 0, 0, 0, 0);
+            this.dtpStart.Location = new System.Drawing.Point(428, 92);
+            this.dtpStart.Name = "dtpStart";
+            this.dtpStart.Size = new System.Drawing.Size(127, 21);
+            this.dtpStart.TabIndex = 19;
+            this.dtpStart.Value = new System.DateTime(2016, 11, 12, 0, 0, 0, 0);
             // 
-            // check_Time
+            // checkTime
             // 
-            this.check_Time.AutoSize = true;
-            this.check_Time.Location = new System.Drawing.Point(569, 95);
-            this.check_Time.Name = "check_Time";
-            this.check_Time.Size = new System.Drawing.Size(96, 16);
-            this.check_Time.TabIndex = 20;
-            this.check_Time.Text = "是否筛选时间";
-            this.check_Time.UseVisualStyleBackColor = true;
+            this.checkTime.AutoSize = true;
+            this.checkTime.Location = new System.Drawing.Point(569, 95);
+            this.checkTime.Name = "checkTime";
+            this.checkTime.Size = new System.Drawing.Size(96, 16);
+            this.checkTime.TabIndex = 20;
+            this.checkTime.Text = "是否筛选时间";
+            this.checkTime.UseVisualStyleBackColor = true;
             // 
             // SelectImgPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(744, 515);
-            this.Controls.Add(this.check_Time);
-            this.Controls.Add(this.dt_Start);
+            this.Controls.Add(this.checkTime);
+            this.Controls.Add(this.dtpStart);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.btn_Start);
+            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.txt_ExcludeFloder);
-            this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.cmb_ImgType);
+            this.Controls.Add(this.txtExcludeFloder);
+            this.Controls.Add(this.rtxtPicList);
+            this.Controls.Add(this.picRunning);
+            this.Controls.Add(this.pbCopy);
+            this.Controls.Add(this.cmbImgType);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txt_MiniWidth);
-            this.Controls.Add(this.txt_TargetPath);
-            this.Controls.Add(this.txt_SourcePath);
-            this.Controls.Add(this.btn_TargetPath);
-            this.Controls.Add(this.btn_SourcePath);
+            this.Controls.Add(this.txtMinImgWidth);
+            this.Controls.Add(this.txtTargetPath);
+            this.Controls.Add(this.txtSourcePath);
+            this.Controls.Add(this.btnTargetPath);
+            this.Controls.Add(this.btnSourcePath);
             this.Name = "SelectImgPanel";
             this.Text = "SelectImgPanel";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picRunning)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -256,24 +256,24 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btn_SourcePath;
-        private System.Windows.Forms.Button btn_TargetPath;
-        private System.Windows.Forms.TextBox txt_SourcePath;
-        private System.Windows.Forms.TextBox txt_TargetPath;
-        private System.Windows.Forms.TextBox txt_MiniWidth;
+        private System.Windows.Forms.Button btnSourcePath;
+        private System.Windows.Forms.Button btnTargetPath;
+        private System.Windows.Forms.TextBox txtSourcePath;
+        private System.Windows.Forms.TextBox txtTargetPath;
+        private System.Windows.Forms.TextBox txtMinImgWidth;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cmb_ImgType;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.ComboBox cmbImgType;
+        private System.Windows.Forms.ProgressBar pbCopy;
+        private System.Windows.Forms.PictureBox picRunning;
+        private System.Windows.Forms.RichTextBox rtxtPicList;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txt_ExcludeFloder;
-        private System.Windows.Forms.Button btn_Start;
+        private System.Windows.Forms.TextBox txtExcludeFloder;
+        private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.DateTimePicker dt_Start;
-        private System.Windows.Forms.CheckBox check_Time;
+        private System.Windows.Forms.DateTimePicker dtpStart;
+        private System.Windows.Forms.CheckBox checkTime;
     }
 }
