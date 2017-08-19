@@ -125,6 +125,7 @@
     <Compile Include="Helper\Config.cs" />
     <Compile Include="Helper\ControlEvent.cs" />
     <Compile Include="Helper\EncryptHelper.cs" />
+    <Compile Include="Helper\FileUpDownload.cs" />
     <Compile Include="Helper\MongoDBClass.cs" />
     <Compile Include="Helper\MongoDBHelper.cs" />
     <Compile Include="Helper\OperateIni.cs" />

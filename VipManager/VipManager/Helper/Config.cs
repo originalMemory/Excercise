@@ -57,9 +57,9 @@ namespace VipManager.Helper
         /// </summary>
         public static List<string> HairLossTrendList = new List<string> { "未知", "无", "有", "严重" };
         /// <summary>
-        /// 发色
+        /// 肤色
         /// </summary>
-        public static List<string> SkinColorList = new List<string> { "未知", "白皙", "中等", "较黑" };
+        public static List<string> SkinColorList = new List<string> { "未知", "白皙", "正常", "较黑" };
         /// <summary>
         /// 身高
         /// </summary>

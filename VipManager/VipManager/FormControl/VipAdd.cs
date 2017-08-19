@@ -56,6 +56,7 @@ namespace VipManager.FormControl
             InitCbDay(Config.MonthAr[0]);
             //绑定年龄段下拉框
             cbAge.DataSource = Config.AgeRangeList;
+            cbAge.Text = "青年";
             //绑定脸型下拉框
             cbFaceType.DataSource = Config.FaceTypeList;
             //绑定发色下拉框
@@ -68,10 +69,12 @@ namespace VipManager.FormControl
             cbHairLossTrend.DataSource = Config.HairLossTrendList;
             //绑定肤色下拉框
             cbSkinColor.DataSource = Config.SkinColorList;
+            cbSkinColor.Text = "正常";
             //绑定身高下拉框
             cbHeight.DataSource = Config.HeightList;
             //绑定体型下拉框
             cbBodySize.DataSource = Config.BodySizeList;
+            cbBodySize.Text = "中等";
             //绑定性别打扮下拉框
             cbSexDress.DataSource = Config.SexDressList;
             //绑定职业下拉框

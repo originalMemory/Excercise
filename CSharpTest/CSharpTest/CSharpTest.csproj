@@ -7,8 +7,8 @@
     <ProjectGuid>{5F87669F-6463-4005-869A-9FBB23AF4EB1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>consoleTest</RootNamespace>
-    <AssemblyName>consoleTest</AssemblyName>
+    <RootNamespace>CSharpTest</RootNamespace>
+    <AssemblyName>CSharpTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

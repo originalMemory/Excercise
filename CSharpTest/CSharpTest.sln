@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTest", "consoleTest\CSharpTest.csproj", "{5F87669F-6463-4005-869A-9FBB23AF4EB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTest", "CSharpTest\CSharpTest.csproj", "{5F87669F-6463-4005-869A-9FBB23AF4EB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IWSData", "..\..\GitHub\Dataweco_N\IWSBot2\IWSData\IWSData.csproj", "{6969BAF9-6ED1-4660-B4D4-A2403C55FDB4}"
 EndProject

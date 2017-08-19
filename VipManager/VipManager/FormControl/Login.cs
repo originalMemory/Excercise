@@ -33,13 +33,16 @@ namespace VipManager.FormControl
                 MessageBoxEx.Show("用户名或密码不能为空！", "提示");
             }
 
+            //加密密码
+            string md5 = EncryptHelper.GetMD5(password);
+            string base64 = EncryptHelper.EncordBase64(md5);
+
             //获取用户信息
-            Guid pwGuid = EncryptHelper.GetEncryPwd(password);        //加密密码
             try
             {
                 var builder = Builders<UserMongo>.Filter;
                 var filter = builder.Eq(x => x.UserName, userName);
-                //filter &= builder.Eq(x => x.Password, pwGuid);
+                filter &= builder.Eq(x => x.Password, base64);
                 var col = MongoDBHelper.Instance.GetUser();
                 var user = col.Find(filter).FirstOrDefault();
 
@@ -50,11 +53,13 @@ namespace VipManager.FormControl
                     col.UpdateOne(filter, update);
 
                     //更新用户登陆Logo地址
-
+                    RefreshLogo();
 
                     Mains main = new Mains();
                     main.Show();
                     this.Hide();
+
+                    
                 }
                 else
                 {
@@ -76,6 +81,20 @@ namespace VipManager.FormControl
             string logoUrl = Config.User.LogoUrl;
             string iniPath = Commons.GetAppSetting("config");
             OperateIni.WriteIniData("Enveronment", "logoUrl", logoUrl, iniPath);
+        }
+
+        /// <summary>
+        /// 备份本地数据文件
+        /// </summary>
+        void BackUpLocalDB()
+        {
+            string backupFloder = Application.StartupPath + "\\Backup\\";
+            string backupfile = backupFloder + "backup.mdb";
+            var files = System.IO.Directory.GetFiles(backupFloder);
+            if (files.Length > 0)
+            {
+
+            }
         }
     }
 }

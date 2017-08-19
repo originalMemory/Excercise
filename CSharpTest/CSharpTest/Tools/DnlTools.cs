@@ -20,9 +20,11 @@ using System.Threading;
 
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 
 using Newtonsoft.Json.Linq;
 using System.Web.Script.Serialization;
+using System.Web;
 
 namespace CSharpTest.Tools
 {
@@ -1217,6 +1219,172 @@ namespace CSharpTest.Tools
                 CommonTools.Log("已添加域名[{0}/{1}] - {2}；\t分组 - {3}".FormatStr(j, domains.Count, domain, cateName));
             }
             CommonTools.Log("导入完成");
+        }
+
+        /// <summary>
+        /// Html表格转Excel
+        /// </summary>
+        /// <param name="tableHtml">Html表格代码</param>
+        public void ExportExcel(string tableHtml)
+        {
+            //创建数据表
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            int colIndex = 0;   //当前列位置
+            int rowIndex = 0;   //当前行位置
+
+            //解析table数据
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(tableHtml);
+            //解析标题栏
+            HtmlNodeCollection heads = doc.DocumentNode.SelectNodes("/thead/tr");
+            if (heads != null)
+            {
+                foreach (var x in heads)
+                {
+                    HtmlNode head = HtmlNode.CreateNode(x.OuterHtml);
+                    //获取本行内所有单元格
+                    var cells = head.Descendants().Where(s => s.Name == "td" || s.Name == "th").ToList();
+                    if (cells.Count() == 0)
+                        continue;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    //遍历所有单元格，为其赋值
+                    foreach (var cell in cells)
+                    {
+                        //判断本单元格是否为合并单元格
+                        int colspan = Convert.ToInt32(cell.GetAttributeValue("colspan", 1));
+                        int rowspan = Convert.ToInt32(cell.GetAttributeValue("rowspan", 1));
+                        if (colspan > 1 || rowspan > 1)
+                        {
+                            sheet.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex + rowspan - 1, colIndex, colIndex + colspan - 1));
+                        }
+                        row.CreateCell(colIndex).SetCellValue(cell.InnerText);
+                        colIndex += colspan;
+                    }
+                    rowIndex++;
+                    colIndex = 0;
+                }
+            }
+
+            //解析表格数据
+            HtmlNodeCollection bodys = doc.DocumentNode.SelectNodes("/tbody/tr");
+            if (bodys != null)
+            {
+                foreach (var x in bodys)
+                {
+                    HtmlNode body = HtmlNode.CreateNode(x.OuterHtml);
+                    //获取本行内所有单元格
+                    var cells = body.Descendants().Where(s => s.Name == "td" || s.Name == "th").ToList();
+                    if (cells.Count() == 0)
+                        continue;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    //遍历所有单元格，为其赋值
+                    foreach (var cell in cells)
+                    {
+                        //判断本单元格是否为合并单元格
+                        int colspan = Convert.ToInt32(cell.GetAttributeValue("colspan", 1));
+                        int rowspan = Convert.ToInt32(cell.GetAttributeValue("rowspan", 1));
+                        if (colspan > 1 || rowspan > 1)
+                        {
+                            sheet.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex + rowspan - 1, colIndex, colIndex + colspan - 1));
+                        }
+                        row.CreateCell(colIndex).SetCellValue(cell.InnerText);
+                        colIndex += colspan;
+                    }
+                    rowIndex++;
+                    colIndex = 0;
+                }
+            }
+
+            string path = "E:\\test.xls";
+            using (FileStream file = new FileStream(path, FileMode.Create))
+            {
+                workbook.Write(file);　　//创建Excel文件。
+            }
+            CommonTools.Log("导出完毕！");
+            
+        }
+
+        /// <summary>
+        /// 删除无效罗拉
+        /// </summary>
+        public void DelUnuseLink()
+        {
+            string errStr = "robots.txt";       //异常域名特征
+            //var sw = new System.Diagnostics.Stopwatch();
+            //sw.Start();
+            //int computeNum = 0;
+            //int errorNum = 0;       //连续异常数
+            //int startPos, length;
+            //Console.Write("输入起始位置：");
+            //startPos = Convert.ToInt32(Console.ReadLine());
+            //Console.Write("输入计算数量：");
+            //length = Convert.ToInt32(Console.ReadLine());
+            //获取现在所有搜索完成的关键词
+            var builderKey = Builders<Dnl_Keyword>.Filter;
+            var filterKey = builderKey.Eq(x => x.BotStatus_Baidu, 2);
+            var colKey = MongoDBHelper.Instance.GetDnl_Keyword();
+            var keys = colKey.Find(filterKey).ToList();
+            keys = keys.OrderBy(x => x.CreatedAt).ToList();
+            //int top = startPos + length;
+            for (int i = 0; i <= keys.Count; i++)
+            {
+                //if (i == keys.Count)
+                //    break;
+
+                //if (computeNum == 5000)
+                //{
+                //    CommonTools.Log("计算量已接近阈值，暂停30分钟！");
+                //    Thread.Sleep(30 * 60 * 1000);
+                //}
+
+                CommonTools.Log("当前关键词[" + (i + 1) + "/" + keys.Count + "] - " + keys[i].Keyword);
+                try
+                {
+                    //获取关键词对应链接
+                    var builderLink = Builders<Dnl_Link_Baidu>.Filter;
+                    var filterLink = builderLink.Eq(x => x.SearchkeywordId, keys[i]._id.ToString());
+                    var colLink = MongoDBHelper.Instance.GetDnl_Link_Baidu();
+                    var links = colLink.Find(filterLink).Project(x => new
+                    {
+                        Id = x._id,
+                        Domain = x.Domain,
+                    }).ToList();
+                    int delNum = 0;
+                    List<ObjectId> delLinkIds = new List<ObjectId>();
+                    int j = 1;
+                    //对比域名，筛选错误链接
+                    foreach (var x in links)
+                    {
+                        if (x.Domain.Contains(errStr))
+                        {
+                            delLinkIds.Add(x.Id);
+                            delNum++;
+                        }
+                        j++;
+                    }
+
+                    if (delLinkIds.Count > 0)
+                    {
+                        filterLink = builderLink.In(x => x._id, delLinkIds);
+                        colLink.DeleteMany(filterLink);
+
+                        int newLinkNum = keys[i].LinkCount_Baidu - delNum;
+                        var updateKey = new UpdateDocument { { "$set", new QueryDocument { { "LinkCount_Baidu", newLinkNum } } } };
+                        var filterUpKey = builderKey.Eq(x => x._id, keys[i]._id);
+                        colKey.UpdateOne(filterUpKey, updateKey);
+                    }
+
+                    CommonTools.Log("本关键词错误链接数 - " + delNum);
+                    Console.WriteLine("\n");
+                }
+                catch (Exception ex)
+                {
+                    CommonTools.Log(ex.Message);
+                }
+            }
+
+            CommonTools.Log("全部迁移完毕！");
         }
     }
 

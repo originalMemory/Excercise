@@ -67,6 +67,14 @@ namespace VipManager.FormControl
             txtSearchPay.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchPay_KeyPress);
         }
 
+        /// <summary>
+        /// 计算会员数量
+        /// </summary>
+        public void ComputeVipNum()
+        {
+
+        }
+
         #region 会员管理
         /// <summary>
         /// 初始化会员管理页
@@ -159,7 +167,7 @@ namespace VipManager.FormControl
 
             //获取数据
             string sql = @"select a.[ID] as [VipID],a.[No] as [VipNo],a.[vipName],a.[CreateAt],a.[LastPayAt],a.[PayNum],[Birth],[Phone],[Gender],[AgeRange],[FaceType],[HairColor],[HairQuality],[HairDensity],[HairLossTrend],[Height],[BodySize],[SkinColor],[Profession],[SexDress],
-            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false";
+            b.[ID] as [CombSnapID],[CombID],[CombName] from [Vip] as a , [CombSnap] as b where a.[ID]=b.[VipID] and b.[IsDel]=false and a.[UserId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbCommand com = new OleDbCommand(sql, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DtVip.Clear();

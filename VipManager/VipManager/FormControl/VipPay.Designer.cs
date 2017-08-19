@@ -364,12 +364,12 @@
             this.skinLabel2.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel2.BorderColor = System.Drawing.Color.White;
             this.skinLabel2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel2.Location = new System.Drawing.Point(53, 158);
+            this.skinLabel2.Location = new System.Drawing.Point(51, 158);
             this.skinLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel2.Name = "skinLabel2";
             this.skinLabel2.Size = new System.Drawing.Size(90, 21);
             this.skinLabel2.TabIndex = 138;
-            this.skinLabel2.Text = "消费产品：";
+            this.skinLabel2.Text = "消费项目：";
             // 
             // labCombUnit
             // 

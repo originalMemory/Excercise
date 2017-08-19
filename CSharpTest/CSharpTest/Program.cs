@@ -20,6 +20,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using JiebaNet.Segmenter;
 using System.Web;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 
 namespace CSharpTest
 {
@@ -30,22 +33,22 @@ namespace CSharpTest
         {
             //D3force force = new D3force();
             //force.initializeNodes();
+            DnlTools dnl = new DnlTools();
+            dnl.DelUnuseLink();
 
-            //string path = @"F:\全部网址-Jacky标注了471个.xls";
-            //var userObjId = new ObjectId("571e283e6ce8b80cb8963e84");
-            //DnlTools dnl = new DnlTools();
-            //dnl.ImportDomain(path, userObjId);
+            //string userName = "test";
+            //string pw = "123";
+            //string md5 = EncryptHelper.GetMD5(pw);
+            //string base64 = EncryptHelper.EncordBase64(md5);
+            //VipMaUserMongo user = new VipMaUserMongo
+            //{
+            //    UserName = userName,
+            //    Password = base64
+            //};
+            //MongoDBHelper.Instance.GetVipMaUser().InsertOne(user);
 
-            string userName = "test";
-            string pw = "123";
-            Guid pwGuid = EncryptHelper.GetEncryPwd(userName + pw);
-            VipMaUserMongo user = new VipMaUserMongo
-            {
-                UserName = userName,
-                Password = pwGuid
-            };
-            MongoDBHelper.Instance.GetVipMaUser().InsertOne(pwGuid);
-            
+           
+
             Console.ReadKey();
         }
 
