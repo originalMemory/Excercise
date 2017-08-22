@@ -12,6 +12,7 @@ using CCWin;
 using System.Data.OleDb;
 using VipManager.Helper;
 using VipManager.Model;
+using VipData.Model;
 
 namespace VipManager.FormControl
 {
@@ -36,7 +37,7 @@ namespace VipManager.FormControl
         {
             InitializeComponent();
             //获取原有套餐编号，计算新会员编号
-            string sqlVip = "select top 1 [No] from [Combination] order by [No] desc";
+            string sqlVip = "select top 1 [No] from [Combination] where [UserId]='{0}' order by [No] desc".FormatStr(Config.User._id.ToString());
             OleDbCommand comVip = new OleDbCommand(sqlVip, Config.con);
             OleDbDataReader reader = comVip.ExecuteReader();
             int maxNo = 0;
@@ -65,7 +66,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitCbPro()
         {
-            string sqlPro = "select [ID],[No],[ProName],[Price] from [Product]";
+            string sqlPro = "select [ID],[No],[ProName],[Price] from [Product] where [UserId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
             adapter.Fill(DtPro);
             cbPro.DataSource = DtPro;

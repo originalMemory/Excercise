@@ -12,6 +12,7 @@ using System.Data.OleDb;
 using CCWin;
 using VipManager.Helper;
 using VipManager.Model;
+using VipData.Model;
 
 namespace VipManager.FormControl
 {

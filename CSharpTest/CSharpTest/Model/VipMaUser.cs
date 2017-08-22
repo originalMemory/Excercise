@@ -27,7 +27,7 @@ namespace CSharpTest.Model
         /// <summary>
         /// 密码
         /// </summary>
-        public string Password { get; set; }
+        public Guid Password { get; set; }
         /// <summary>
         /// 地理位置
         /// </summary>

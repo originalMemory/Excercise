@@ -53,7 +53,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitCbPro()
         {
-            string sqlPro = "select [ID],[ProName] from [Product]";
+            string sqlPro = "select [ID],[ProName] from [Product] where [UserId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPro, Config.con);
             adapter.Fill(this.DtPro);
             this.cbPro.DataSource = this.DtPro;

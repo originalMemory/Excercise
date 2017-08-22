@@ -26,7 +26,7 @@ namespace VipManager.Model
         /// <summary>
         /// 类型
         /// </summary>
-        public CombType Type;
+        public VipData.Model.CombType Type;
         /// <summary>
         /// 价格
         /// </summary>

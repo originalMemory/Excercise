@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VipManager.Model
+namespace VipData.Model
 {
     /// <summary>
     /// 会员类型
@@ -69,5 +69,20 @@ namespace VipManager.Model
         /// 年卡
         /// </summary>
         Year,
+    }
+
+    /// <summary>
+    /// 用户头像类型
+    /// </summary>
+    public enum UserImgType
+    {
+        /// <summary>
+        /// 营业执照
+        /// </summary>
+        License,
+        /// <summary>
+        /// Logo
+        /// </summary>
+        Logo
     }
 }

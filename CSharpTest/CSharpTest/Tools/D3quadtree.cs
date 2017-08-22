@@ -21,12 +21,25 @@ namespace CSharpTest.Tools
         /// <returns></returns>
         public QuadtreeRoot quadtree(List<ForceNode> nodes)
         {
-            var tree = new QuadtreeRoot();
+            Quadtree(0.0, 0.0, 0.0, 0.0);
             if (nodes.Count > 0)
             {
-
+                addAll(nodes);
+                return Tree;
             }
-            return tree;
+            else
+            {
+                return null;
+            }
+        }
+
+        void Quadtree(double x0, double y0, double x1, double y1)
+        {
+            Tree._x0 = x0;
+            Tree._y0 = y0;
+            Tree._x1 = x1;
+            Tree._y1 = y1;
+            Tree._root = null;
         }
 
         /// <summary>
@@ -53,6 +66,8 @@ namespace CSharpTest.Tools
                 var d = data[i];
                 x = d.x;
                 y = d.y;
+                xz[i] = x;
+                yz[i] = y;
                 if (x < x0)
                     x0 = x;
                 if (x > x1)
@@ -80,6 +95,10 @@ namespace CSharpTest.Tools
             cover(x1, y1);
 
             //添加新节点
+            for (int i = 0; i < n; i++)
+            {
+                add(xz[i], yz[i], data[i]);
+            }
         }
 
         /// <summary>
@@ -328,6 +347,22 @@ namespace CSharpTest.Tools
             parent.IsLeaf = false;
             parent.children[j] = oldNode;
             parent.children[i] = leaf;
+        }
+
+        void visitAfter()
+        {
+            var quads = new List<QuadtreeRoot>();
+            var next = new List<QuadtreeRoot>();
+            QuadtreeRoot q = null;
+            if (Tree._root != null)
+            {
+                
+            }
+        }
+
+        void quad(QuadtreeNode node, double x0, double y0, double x1, double y1)
+        {
+            
         }
     }
 }

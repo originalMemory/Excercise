@@ -8,6 +8,7 @@ using System.Data.OleDb;
 using VipManager.Model;
 using System.Windows.Forms;
 using System.Data;
+using VipData.Model;
 
 namespace VipManager.Helper
 {

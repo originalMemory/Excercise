@@ -44,7 +44,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitCbComb()
         {
-            string sqlComb = "select [ID],[CombName],[ProIDs] from [Combination]";
+            string sqlComb = "select [ID],[CombName],[ProIDs] from [Combination] where [UserId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlComb, Config.con);
             adapter.Fill(DtComb);
             cbComb.DisplayMember = "CombName";

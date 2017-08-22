@@ -126,13 +126,12 @@
     <Compile Include="Helper\ControlEvent.cs" />
     <Compile Include="Helper\EncryptHelper.cs" />
     <Compile Include="Helper\FileUpDownload.cs" />
+    <Compile Include="Helper\ImgUpDown.cs" />
     <Compile Include="Helper\MongoDBClass.cs" />
     <Compile Include="Helper\MongoDBHelper.cs" />
     <Compile Include="Helper\OperateIni.cs" />
     <Compile Include="Helper\StringExtension.cs" />
-    <Compile Include="Model\Enum.cs" />
     <Compile Include="Model\CombSnap.cs" />
-    <Compile Include="Model\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormControl\CombAdd.resx">
@@ -195,6 +194,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UControl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VipData\VipData.csproj">
+      <Project>{98e9e99e-7708-48c2-ae82-3e5ced830026}</Project>
+      <Name>VipData</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -26,7 +26,7 @@ namespace VipManager.FormControl
         {
             InitializeComponent();
             //获取原有会员编号，计算新会员编号
-            string sqlVip = "select top 1 [No] from [Product] order by [No] desc";
+            string sqlVip = "select top 1 [No] from [Product] where [UserId]='{0}' order by [No] desc".FormatStr(Config.User._id.ToString());
             OleDbCommand comVip = new OleDbCommand(sqlVip, Config.con);
             OleDbDataReader reader = comVip.ExecuteReader();
             int maxNo = 0;

@@ -446,7 +446,7 @@ namespace MyTools.CrawImg
                 ImgList img = GetUrl();
                 if (img == null)
                 {
-                    if (!isFirst&&status==2)
+                    if (!isFirst && status == 2)
                     {
                         MessageBox.Show("本次下载任务已完成！", "提示");
                         status = 0;

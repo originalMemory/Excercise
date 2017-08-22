@@ -15,6 +15,7 @@ using VipManager.Model;
 using System.IO;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using VipData.Model;
 
 namespace VipManager.FormControl
 {
@@ -40,6 +41,9 @@ namespace VipManager.FormControl
             InitDgvVip();
             InitFirstVip();
             IsInitVip = true;
+
+            RefreshStatus();
+
 
             //限制文本框输入范围
             txtCombDetail.SkinTxt.KeyPress += new KeyPressEventHandler(ControlEvent.DoubleLimit);
@@ -378,9 +382,14 @@ namespace VipManager.FormControl
         //收银
         private void btnPay_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(txtVipNo.Text))
+            {
+                MessageBoxEx.Show("无会员时不能收银！", "提示");
+            }
             VipPay pay = new VipPay();
             pay.SetVipInfo(txtVipNo.Text, txtVipName.Text, CurVipID);
             pay.ShowDialog();
+            RefreshStatus();
         }
         #endregion
 
@@ -1313,6 +1322,68 @@ namespace VipManager.FormControl
             if (e.KeyChar == (char)Keys.Enter)
             {
                 btnSearchPay_Click(sender, e);
+            }
+        }
+        #endregion
+
+        #region 状态栏
+        public void RefreshStatus()
+        {
+            DayOfWeek day = DateTime.Now.DayOfWeek;
+            DateTime dt = DateTime.Now.Date;
+            int i = 0;
+            switch (day)
+            {
+                case DayOfWeek.Friday:
+                    i = 4;
+                    break;
+                case DayOfWeek.Monday:
+                    i = 0;
+                    break;
+                case DayOfWeek.Saturday:
+                    i = 5;
+                    break;
+                case DayOfWeek.Sunday:
+                    i = 6;
+                    break;
+                case DayOfWeek.Thursday:
+                    i = 3;
+                    break;
+                case DayOfWeek.Tuesday:
+                    i = 1;
+                    break;
+                case DayOfWeek.Wednesday:
+                    i = 2;
+                    break;
+                default:
+                    break;
+            }
+            dt.AddDays(-i);
+            //本周新增会员数
+            string sqlAddVip = "select count(*) from [Vip] where [CreateAt]>=#{0}# and [UserId]='{1}'".FormatStr(dt, Config.User._id.ToString());
+            OleDbCommand comAddVip = new OleDbCommand(sqlAddVip, Config.con);
+            OleDbDataReader readerAddVip = comAddVip.ExecuteReader();
+            if (readerAddVip.Read())
+            {
+                labNewVipNum.Text = readerAddVip[0].ToString();
+            }
+
+            //本周消费会员数
+            string sqlPayVip = "select count(*) from [Vip] where [LastPayAt]>=#{0}# and [UserId]='{1}'".FormatStr(dt, Config.User._id.ToString());
+            OleDbCommand comPayVip = new OleDbCommand(sqlPayVip, Config.con);
+            OleDbDataReader readerPayVip = comPayVip.ExecuteReader();
+            if (readerPayVip.Read())
+            {
+                labelPayVipNum.Text = readerPayVip[0].ToString();
+            }
+
+            //会员总数
+            string sqlAllVip = "select count(*) from [Vip] where [CreateAt]>=#{0}# and [UserId]='{1}'".FormatStr(dt, Config.User._id.ToString());
+            OleDbCommand comAllVip = new OleDbCommand(sqlAllVip, Config.con);
+            OleDbDataReader readerAllVip = comAllVip.ExecuteReader();
+            if (readerAllVip.Read())
+            {
+                labAllVipNum.Text = readerAllVip[0].ToString();
             }
         }
         #endregion

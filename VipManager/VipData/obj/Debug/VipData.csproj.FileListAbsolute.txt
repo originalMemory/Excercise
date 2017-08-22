@@ -1,0 +1,12 @@
+F:\MyGit\VipMa\VipManager\VipData\bin\Debug\VipData.dll
+F:\MyGit\VipMa\VipManager\VipData\bin\Debug\VipData.pdb
+F:\MyGit\VipMa\VipManager\VipData\bin\Debug\MongoDB.Bson.dll
+F:\MyGit\VipMa\VipManager\VipData\obj\Debug\VipData.csprojResolveAssemblyReference.cache
+F:\MyGit\VipMa\VipManager\VipData\obj\Debug\VipData.dll
+F:\MyGit\VipMa\VipManager\VipData\obj\Debug\VipData.pdb
+F:\MyGit\VipManager\VipData\bin\Debug\VipData.dll
+F:\MyGit\VipManager\VipData\bin\Debug\VipData.pdb
+F:\MyGit\VipManager\VipData\bin\Debug\MongoDB.Bson.dll
+F:\MyGit\VipManager\VipData\obj\Debug\VipData.csprojResolveAssemblyReference.cache
+F:\MyGit\VipManager\VipData\obj\Debug\VipData.dll
+F:\MyGit\VipManager\VipData\obj\Debug\VipData.pdb

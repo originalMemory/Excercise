@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
-namespace VipManager.Model
+namespace VipData.Model
 {
     /// <summary>
     /// 登陆商家信息
@@ -27,7 +27,7 @@ namespace VipManager.Model
         /// <summary>
         /// 密码
         /// </summary>
-        public string Password { get; set; }
+        public Guid Password { get; set; }
         /// <summary>
         /// 地理位置
         /// </summary>

@@ -13,6 +13,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using VipManager.Helper;
 using VipManager.Model;
+using VipData.Model;
 
 namespace VipManager.FormControl
 {
@@ -26,6 +27,8 @@ namespace VipManager.FormControl
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
+            var sw1 = new System.Diagnostics.Stopwatch();
+            sw1.Start();
             string userName = txtUserName.Text;
             string password = txtPassword.Text;
             if (userName == null || password == null)
@@ -34,15 +37,16 @@ namespace VipManager.FormControl
             }
 
             //加密密码
-            string md5 = EncryptHelper.GetMD5(password);
-            string base64 = EncryptHelper.EncordBase64(md5);
+            //string md5 = EncryptHelper.GetMD5(password);
+            //string base64 = EncryptHelper.EncordBase64(md5);
+            var guid = EncryptHelper.GetEncryPwd(password);
 
             //获取用户信息
             try
             {
                 var builder = Builders<UserMongo>.Filter;
                 var filter = builder.Eq(x => x.UserName, userName);
-                filter &= builder.Eq(x => x.Password, base64);
+                filter &= builder.Eq(x => x.Password, guid);
                 var col = MongoDBHelper.Instance.GetUser();
                 var user = col.Find(filter).FirstOrDefault();
 
@@ -52,6 +56,9 @@ namespace VipManager.FormControl
                     var update = new UpdateDocument { { "$set", new QueryDocument { { "LastLoginAt", DateTime.Now.AddHours(8) }, { "LoginNum", user.LoginNum + 1 } } } };
                     col.UpdateOne(filter, update);
 
+                    sw1.Stop();
+                    var sw2 = new System.Diagnostics.Stopwatch();
+                    sw2.Start();
                     //更新用户登陆Logo地址
                     RefreshLogo();
 
@@ -59,6 +66,7 @@ namespace VipManager.FormControl
                     main.Show();
                     this.Hide();
 
+                    sw2.Stop();
                     
                 }
                 else

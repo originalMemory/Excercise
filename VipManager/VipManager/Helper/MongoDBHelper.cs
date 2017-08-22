@@ -8,7 +8,8 @@ using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using MongoV2;
 
-using VipManager.Model;
+using VipData.Model;
+
 
 namespace VipManager.Helper
 {
@@ -31,6 +32,11 @@ namespace VipManager.Helper
         public IMongoCollection<UserMongo> GetUser()
         {
             return GetCollection<UserMongo>("User");
+        }
+
+        public IMongoCollection<UserImgMongo> GetUserImg()
+        {
+            return GetCollection<UserImgMongo>("UserImg");
         }
     }
 

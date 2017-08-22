@@ -332,7 +332,9 @@ namespace CSharpTest.Tools
 
         public void forceManyBody()
         {
-            
+            int n = Nodes.Count;
+            D3quadtree quad = new D3quadtree();
+            quad.quadtree(Nodes);
         }
 
         public void initializeManyBody()

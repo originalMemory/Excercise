@@ -33,19 +33,12 @@ namespace CSharpTest
         {
             //D3force force = new D3force();
             //force.initializeNodes();
-            DnlTools dnl = new DnlTools();
-            dnl.DelUnuseLink();
+            //DnlTools dnl = new DnlTools();
+            //dnl.DelUnuseLink();
 
-            //string userName = "test";
-            //string pw = "123";
-            //string md5 = EncryptHelper.GetMD5(pw);
-            //string base64 = EncryptHelper.EncordBase64(md5);
-            //VipMaUserMongo user = new VipMaUserMongo
-            //{
-            //    UserName = userName,
-            //    Password = base64
-            //};
-            //MongoDBHelper.Instance.GetVipMaUser().InsertOne(user);
+            string userName = "test";
+            string pw = "123";
+            VipMaTools.InsertUser(userName, pw);
 
            
 

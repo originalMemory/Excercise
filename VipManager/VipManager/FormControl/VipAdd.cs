@@ -29,7 +29,7 @@ namespace VipManager.FormControl
         {
             InitializeComponent();
             //获取原有会员编号，计算新会员编号
-            string sqlVip = "select top 1 [No] from [Vip] order by [No] desc";
+            string sqlVip = "select top 1 [No] from [Vip] where [UserId]='{0}' order by [No] desc".FormatStr(Config.User._id.ToString());
             OleDbCommand comVip = new OleDbCommand(sqlVip, Config.con);
             OleDbDataReader reader = comVip.ExecuteReader();
             int maxNo = 0;
@@ -41,7 +41,7 @@ namespace VipManager.FormControl
             txtNo.Text = maxNo.ToString();
 
             //获取套餐信息，绑定下拉框
-            string sqlComb = "select * from [Combination]";
+            string sqlComb = "select * from [Combination] where [UserId]='{0}'".FormatStr(Config.User._id.ToString());
             OleDbCommand comComb = new OleDbCommand(sqlComb, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(comComb);
             adapter.Fill(DtComb);
@@ -130,9 +130,9 @@ namespace VipManager.FormControl
                 cbSkinColor.Text, cbProfession.Text, cbSexDress.Text);
             OleDbCommand comAddVip = new OleDbCommand(sqlAddVip, Config.con);
             comAddVip.ExecuteNonQuery();
-
+            
             //获取插入的会员编号
-            string sqlGetVip = "select [ID] from [vip] where [no]={0}".FormatStr(txtNo.Text);
+            string sqlGetVip = "select [ID] from [vip] where [no]={0} and  [UserId]='{0}'".FormatStr(txtNo.Text,Config.User._id.ToString());
             OleDbCommand combGetVip = new OleDbCommand(sqlGetVip, Config.con);
             OleDbDataReader readerVip = combGetVip.ExecuteReader();
             int vipID = 0;
@@ -152,7 +152,7 @@ namespace VipManager.FormControl
             DateTime endAt = startAt.AddMonths(timeRange);
             string sqlAddCombSnap = @"insert into [CombSnap]([No],[CombName],[Description],[CreateAt],[UserId],[LastPayAt],[PayNum],[Type],[Price],
 [Num],[Discount],[IsDel],[StartAt],[EndAt],[VipID],[CombID],[ProIDs]) values(
-{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14},'{15}')"
+{0},'{1}','{2}',#{3}#,'{4}',#{5}#,{6},{7},{8},{9},{10},{11},#{12}#,#{13}#,{14},'{15}','{16}')"
                 .FormatStr(combRow["No"], combRow["CombName"], combRow["Description"], DateTime.Now, combRow["UserId"], combRow["LastPayAt"], payNum
                 , combRow["Type"], combRow["Price"], combRow["Num"], combRow["Discount"], false, startAt, endAt, vipID, combID, combRow["ProIDs"]);
             OleDbCommand comAddCombSnap = new OleDbCommand(sqlAddCombSnap, Config.con);
