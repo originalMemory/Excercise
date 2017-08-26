@@ -22,7 +22,7 @@ namespace VipManager.FormControl
         public Login()
         {
             InitializeComponent();
-            
+            txtPassword.KeyPress += new KeyPressEventHandler(this.txtPassword_KeyPress);
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -102,6 +102,14 @@ namespace VipManager.FormControl
             if (files.Length > 0)
             {
 
+            }
+        }
+
+        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnLogin_Click(sender, e);
             }
         }
     }

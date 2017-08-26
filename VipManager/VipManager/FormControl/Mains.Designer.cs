@@ -29,23 +29,23 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mains));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle46 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle47 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle48 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabVip = new System.Windows.Forms.TabPage();
             this.btnPay = new CCWin.SkinControl.SkinButton();
@@ -278,7 +278,7 @@
             this.tabMain.Margin = new System.Windows.Forms.Padding(4);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(1535, 859);
+            this.tabMain.Size = new System.Drawing.Size(1535, 863);
             this.tabMain.TabIndex = 0;
             this.tabMain.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabMain_Selected);
             // 
@@ -336,11 +336,11 @@
             this.tabVip.Controls.Add(this.dtpVipReg);
             this.tabVip.Controls.Add(this.dgvVip);
             this.tabVip.Controls.Add(this.btnAddVip);
-            this.tabVip.Location = new System.Drawing.Point(4, 32);
+            this.tabVip.Location = new System.Drawing.Point(4, 27);
             this.tabVip.Margin = new System.Windows.Forms.Padding(4);
             this.tabVip.Name = "tabVip";
             this.tabVip.Padding = new System.Windows.Forms.Padding(4);
-            this.tabVip.Size = new System.Drawing.Size(1527, 823);
+            this.tabVip.Size = new System.Drawing.Size(1527, 828);
             this.tabVip.TabIndex = 0;
             this.tabVip.Text = "会员管理";
             this.tabVip.UseVisualStyleBackColor = true;
@@ -431,7 +431,7 @@
             this.skinLabel12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel12.Location = new System.Drawing.Point(443, 332);
             this.skinLabel12.Name = "skinLabel12";
-            this.skinLabel12.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel12.Size = new System.Drawing.Size(90, 21);
             this.skinLabel12.TabIndex = 155;
             this.skinLabel12.Text = "性别打扮：";
             // 
@@ -443,7 +443,7 @@
             this.skinLabel30.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel30.Location = new System.Drawing.Point(443, 291);
             this.skinLabel30.Name = "skinLabel30";
-            this.skinLabel30.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel30.Size = new System.Drawing.Size(90, 21);
             this.skinLabel30.TabIndex = 154;
             this.skinLabel30.Text = "脱发趋势：";
             // 
@@ -455,7 +455,7 @@
             this.skinLabel31.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel31.Location = new System.Drawing.Point(463, 250);
             this.skinLabel31.Name = "skinLabel31";
-            this.skinLabel31.Size = new System.Drawing.Size(92, 27);
+            this.skinLabel31.Size = new System.Drawing.Size(74, 21);
             this.skinLabel31.TabIndex = 153;
             this.skinLabel31.Text = "浓密度：";
             // 
@@ -467,7 +467,7 @@
             this.skinLabel32.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel32.Location = new System.Drawing.Point(835, 114);
             this.skinLabel32.Name = "skinLabel32";
-            this.skinLabel32.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel32.Size = new System.Drawing.Size(58, 21);
             this.skinLabel32.TabIndex = 152;
             this.skinLabel32.Text = "体型：";
             // 
@@ -479,7 +479,7 @@
             this.skinLabel33.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel33.Location = new System.Drawing.Point(483, 378);
             this.skinLabel33.Name = "skinLabel33";
-            this.skinLabel33.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel33.Size = new System.Drawing.Size(58, 21);
             this.skinLabel33.TabIndex = 151;
             this.skinLabel33.Text = "身高：";
             // 
@@ -492,7 +492,7 @@
             this.cbSexDress.Location = new System.Drawing.Point(563, 332);
             this.cbSexDress.Margin = new System.Windows.Forms.Padding(4);
             this.cbSexDress.Name = "cbSexDress";
-            this.cbSexDress.Size = new System.Drawing.Size(119, 28);
+            this.cbSexDress.Size = new System.Drawing.Size(119, 24);
             this.cbSexDress.TabIndex = 150;
             this.cbSexDress.WaterText = "";
             // 
@@ -505,7 +505,7 @@
             this.cbHairLossTrend.Location = new System.Drawing.Point(563, 290);
             this.cbHairLossTrend.Margin = new System.Windows.Forms.Padding(4);
             this.cbHairLossTrend.Name = "cbHairLossTrend";
-            this.cbHairLossTrend.Size = new System.Drawing.Size(119, 28);
+            this.cbHairLossTrend.Size = new System.Drawing.Size(119, 24);
             this.cbHairLossTrend.TabIndex = 149;
             this.cbHairLossTrend.WaterText = "";
             // 
@@ -518,7 +518,7 @@
             this.cbHairDensity.Location = new System.Drawing.Point(563, 249);
             this.cbHairDensity.Margin = new System.Windows.Forms.Padding(4);
             this.cbHairDensity.Name = "cbHairDensity";
-            this.cbHairDensity.Size = new System.Drawing.Size(119, 28);
+            this.cbHairDensity.Size = new System.Drawing.Size(119, 24);
             this.cbHairDensity.TabIndex = 148;
             this.cbHairDensity.WaterText = "";
             // 
@@ -531,7 +531,7 @@
             this.cbProfession.Location = new System.Drawing.Point(915, 206);
             this.cbProfession.Margin = new System.Windows.Forms.Padding(4);
             this.cbProfession.Name = "cbProfession";
-            this.cbProfession.Size = new System.Drawing.Size(119, 28);
+            this.cbProfession.Size = new System.Drawing.Size(119, 24);
             this.cbProfession.TabIndex = 147;
             this.cbProfession.WaterText = "";
             // 
@@ -543,7 +543,7 @@
             this.skinLabel34.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel34.Location = new System.Drawing.Point(835, 206);
             this.skinLabel34.Name = "skinLabel34";
-            this.skinLabel34.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel34.Size = new System.Drawing.Size(58, 21);
             this.skinLabel34.TabIndex = 146;
             this.skinLabel34.Text = "职业：";
             // 
@@ -556,7 +556,7 @@
             this.cbSkinColor.Location = new System.Drawing.Point(915, 160);
             this.cbSkinColor.Margin = new System.Windows.Forms.Padding(4);
             this.cbSkinColor.Name = "cbSkinColor";
-            this.cbSkinColor.Size = new System.Drawing.Size(119, 28);
+            this.cbSkinColor.Size = new System.Drawing.Size(119, 24);
             this.cbSkinColor.TabIndex = 145;
             this.cbSkinColor.WaterText = "";
             // 
@@ -568,7 +568,7 @@
             this.skinLabel35.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel35.Location = new System.Drawing.Point(835, 160);
             this.skinLabel35.Name = "skinLabel35";
-            this.skinLabel35.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel35.Size = new System.Drawing.Size(58, 21);
             this.skinLabel35.TabIndex = 144;
             this.skinLabel35.Text = "肤色：";
             // 
@@ -581,7 +581,7 @@
             this.cbBodySize.Location = new System.Drawing.Point(915, 112);
             this.cbBodySize.Margin = new System.Windows.Forms.Padding(4);
             this.cbBodySize.Name = "cbBodySize";
-            this.cbBodySize.Size = new System.Drawing.Size(119, 28);
+            this.cbBodySize.Size = new System.Drawing.Size(119, 24);
             this.cbBodySize.TabIndex = 143;
             this.cbBodySize.WaterText = "";
             // 
@@ -594,7 +594,7 @@
             this.cbHeight.Location = new System.Drawing.Point(563, 376);
             this.cbHeight.Margin = new System.Windows.Forms.Padding(4);
             this.cbHeight.Name = "cbHeight";
-            this.cbHeight.Size = new System.Drawing.Size(119, 28);
+            this.cbHeight.Size = new System.Drawing.Size(119, 24);
             this.cbHeight.TabIndex = 142;
             this.cbHeight.WaterText = "";
             // 
@@ -607,7 +607,7 @@
             this.cbHairQuality.Location = new System.Drawing.Point(563, 202);
             this.cbHairQuality.Margin = new System.Windows.Forms.Padding(4);
             this.cbHairQuality.Name = "cbHairQuality";
-            this.cbHairQuality.Size = new System.Drawing.Size(119, 28);
+            this.cbHairQuality.Size = new System.Drawing.Size(119, 24);
             this.cbHairQuality.TabIndex = 141;
             this.cbHairQuality.WaterText = "";
             // 
@@ -619,7 +619,7 @@
             this.skinLabel36.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel36.Location = new System.Drawing.Point(483, 202);
             this.skinLabel36.Name = "skinLabel36";
-            this.skinLabel36.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel36.Size = new System.Drawing.Size(58, 21);
             this.skinLabel36.TabIndex = 140;
             this.skinLabel36.Text = "发质：";
             // 
@@ -632,7 +632,7 @@
             this.cbHairColor.Location = new System.Drawing.Point(563, 162);
             this.cbHairColor.Margin = new System.Windows.Forms.Padding(4);
             this.cbHairColor.Name = "cbHairColor";
-            this.cbHairColor.Size = new System.Drawing.Size(119, 28);
+            this.cbHairColor.Size = new System.Drawing.Size(119, 24);
             this.cbHairColor.TabIndex = 139;
             this.cbHairColor.WaterText = "";
             // 
@@ -644,7 +644,7 @@
             this.skinLabel37.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel37.Location = new System.Drawing.Point(483, 162);
             this.skinLabel37.Name = "skinLabel37";
-            this.skinLabel37.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel37.Size = new System.Drawing.Size(58, 21);
             this.skinLabel37.TabIndex = 138;
             this.skinLabel37.Text = "发色：";
             // 
@@ -657,7 +657,7 @@
             this.cbFaceType.Location = new System.Drawing.Point(563, 116);
             this.cbFaceType.Margin = new System.Windows.Forms.Padding(4);
             this.cbFaceType.Name = "cbFaceType";
-            this.cbFaceType.Size = new System.Drawing.Size(119, 28);
+            this.cbFaceType.Size = new System.Drawing.Size(119, 24);
             this.cbFaceType.TabIndex = 137;
             this.cbFaceType.WaterText = "";
             // 
@@ -669,7 +669,7 @@
             this.skinLabel38.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel38.Location = new System.Drawing.Point(483, 116);
             this.skinLabel38.Name = "skinLabel38";
-            this.skinLabel38.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel38.Size = new System.Drawing.Size(58, 21);
             this.skinLabel38.TabIndex = 136;
             this.skinLabel38.Text = "脸型：";
             // 
@@ -681,7 +681,7 @@
             this.skinLabel13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel13.Location = new System.Drawing.Point(347, 258);
             this.skinLabel13.Name = "skinLabel13";
-            this.skinLabel13.Size = new System.Drawing.Size(32, 27);
+            this.skinLabel13.Size = new System.Drawing.Size(26, 21);
             this.skinLabel13.TabIndex = 48;
             this.skinLabel13.Text = "日";
             // 
@@ -738,7 +738,7 @@
             this.cbDay.Location = new System.Drawing.Point(277, 258);
             this.cbDay.Margin = new System.Windows.Forms.Padding(4);
             this.cbDay.Name = "cbDay";
-            this.cbDay.Size = new System.Drawing.Size(64, 28);
+            this.cbDay.Size = new System.Drawing.Size(64, 24);
             this.cbDay.TabIndex = 47;
             this.cbDay.WaterText = "";
             // 
@@ -750,7 +750,7 @@
             this.skinLabel11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel11.Location = new System.Drawing.Point(747, 352);
             this.skinLabel11.Name = "skinLabel11";
-            this.skinLabel11.Size = new System.Drawing.Size(152, 27);
+            this.skinLabel11.Size = new System.Drawing.Size(122, 21);
             this.skinLabel11.TabIndex = 134;
             this.skinLabel11.Text = "累计消费次数：";
             // 
@@ -762,7 +762,7 @@
             this.skinLabel25.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel25.Location = new System.Drawing.Point(245, 258);
             this.skinLabel25.Name = "skinLabel25";
-            this.skinLabel25.Size = new System.Drawing.Size(32, 27);
+            this.skinLabel25.Size = new System.Drawing.Size(26, 21);
             this.skinLabel25.TabIndex = 46;
             this.skinLabel25.Text = "月";
             // 
@@ -774,7 +774,7 @@
             this.skinLabel4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel4.Location = new System.Drawing.Point(747, 299);
             this.skinLabel4.Name = "skinLabel4";
-            this.skinLabel4.Size = new System.Drawing.Size(152, 27);
+            this.skinLabel4.Size = new System.Drawing.Size(122, 21);
             this.skinLabel4.TabIndex = 133;
             this.skinLabel4.Text = "最近消费时间：";
             // 
@@ -787,7 +787,7 @@
             this.cbMonth.Location = new System.Drawing.Point(177, 258);
             this.cbMonth.Margin = new System.Windows.Forms.Padding(4);
             this.cbMonth.Name = "cbMonth";
-            this.cbMonth.Size = new System.Drawing.Size(64, 28);
+            this.cbMonth.Size = new System.Drawing.Size(64, 24);
             this.cbMonth.TabIndex = 45;
             this.cbMonth.WaterText = "";
             // 
@@ -799,7 +799,7 @@
             this.dtpVipLastPay.Location = new System.Drawing.Point(915, 299);
             this.dtpVipLastPay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpVipLastPay.Name = "dtpVipLastPay";
-            this.dtpVipLastPay.Size = new System.Drawing.Size(179, 28);
+            this.dtpVipLastPay.Size = new System.Drawing.Size(179, 24);
             this.dtpVipLastPay.TabIndex = 132;
             // 
             // cbAgeRange
@@ -811,7 +811,7 @@
             this.cbAgeRange.Location = new System.Drawing.Point(177, 296);
             this.cbAgeRange.Margin = new System.Windows.Forms.Padding(4);
             this.cbAgeRange.Name = "cbAgeRange";
-            this.cbAgeRange.Size = new System.Drawing.Size(119, 28);
+            this.cbAgeRange.Size = new System.Drawing.Size(119, 24);
             this.cbAgeRange.TabIndex = 44;
             this.cbAgeRange.WaterText = "";
             // 
@@ -840,7 +840,7 @@
             this.skinLabel26.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel26.Location = new System.Drawing.Point(75, 296);
             this.skinLabel26.Name = "skinLabel26";
-            this.skinLabel26.Size = new System.Drawing.Size(92, 27);
+            this.skinLabel26.Size = new System.Drawing.Size(74, 21);
             this.skinLabel26.TabIndex = 43;
             this.skinLabel26.Text = "年龄段：";
             // 
@@ -929,7 +929,7 @@
             this.skinLabel27.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel27.Location = new System.Drawing.Point(99, 258);
             this.skinLabel27.Name = "skinLabel27";
-            this.skinLabel27.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel27.Size = new System.Drawing.Size(58, 21);
             this.skinLabel27.TabIndex = 40;
             this.skinLabel27.Text = "生日：";
             // 
@@ -941,7 +941,7 @@
             this.skinLabel28.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel28.Location = new System.Drawing.Point(100, 399);
             this.skinLabel28.Name = "skinLabel28";
-            this.skinLabel28.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel28.Size = new System.Drawing.Size(58, 21);
             this.skinLabel28.TabIndex = 39;
             this.skinLabel28.Text = "套餐：";
             // 
@@ -953,7 +953,7 @@
             this.skinLabel29.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel29.Location = new System.Drawing.Point(55, 348);
             this.skinLabel29.Name = "skinLabel29";
-            this.skinLabel29.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel29.Size = new System.Drawing.Size(90, 21);
             this.skinLabel29.TabIndex = 38;
             this.skinLabel29.Text = "联系方式：";
             // 
@@ -969,7 +969,7 @@
             this.cbGender.Location = new System.Drawing.Point(177, 210);
             this.cbGender.Margin = new System.Windows.Forms.Padding(4);
             this.cbGender.Name = "cbGender";
-            this.cbGender.Size = new System.Drawing.Size(119, 28);
+            this.cbGender.Size = new System.Drawing.Size(119, 24);
             this.cbGender.TabIndex = 126;
             this.cbGender.WaterText = "";
             // 
@@ -1068,7 +1068,7 @@
             this.skinLabel5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel5.Location = new System.Drawing.Point(100, 116);
             this.skinLabel5.Name = "skinLabel5";
-            this.skinLabel5.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel5.Size = new System.Drawing.Size(58, 21);
             this.skinLabel5.TabIndex = 121;
             this.skinLabel5.Text = "卡号：";
             // 
@@ -1080,7 +1080,7 @@
             this.skinLabel14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel14.Location = new System.Drawing.Point(100, 211);
             this.skinLabel14.Name = "skinLabel14";
-            this.skinLabel14.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel14.Size = new System.Drawing.Size(58, 21);
             this.skinLabel14.TabIndex = 114;
             this.skinLabel14.Text = "性别：";
             // 
@@ -1092,7 +1092,7 @@
             this.skinLabel15.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel15.Location = new System.Drawing.Point(100, 164);
             this.skinLabel15.Name = "skinLabel15";
-            this.skinLabel15.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel15.Size = new System.Drawing.Size(58, 21);
             this.skinLabel15.TabIndex = 113;
             this.skinLabel15.Text = "姓名：";
             // 
@@ -1147,7 +1147,7 @@
             this.skinLabel10.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel10.Location = new System.Drawing.Point(789, 252);
             this.skinLabel10.Name = "skinLabel10";
-            this.skinLabel10.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel10.Size = new System.Drawing.Size(90, 21);
             this.skinLabel10.TabIndex = 111;
             this.skinLabel10.Text = "注册时间：";
             // 
@@ -1159,15 +1159,15 @@
             this.dtpVipReg.Location = new System.Drawing.Point(915, 252);
             this.dtpVipReg.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpVipReg.Name = "dtpVipReg";
-            this.dtpVipReg.Size = new System.Drawing.Size(179, 28);
+            this.dtpVipReg.Size = new System.Drawing.Size(179, 24);
             this.dtpVipReg.TabIndex = 110;
             // 
             // dgvVip
             // 
             this.dgvVip.AllowUserToAddRows = false;
             this.dgvVip.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
-            this.dgvVip.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle33;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
+            this.dgvVip.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvVip.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -1176,14 +1176,14 @@
             this.dgvVip.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvVip.ColumnFont = null;
             this.dgvVip.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle34.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
-            dataGridViewCellStyle34.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle34.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvVip.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle34;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvVip.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvVip.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvVip.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.VipNo,
@@ -1198,14 +1198,14 @@
             this.VipLastPayAt,
             this.VipPayNum});
             this.dgvVip.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle35.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle35.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle35.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle35.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle35.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvVip.DefaultCellStyle = dataGridViewCellStyle35;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvVip.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvVip.EnableHeadersVisualStyles = false;
             this.dgvVip.Font = new System.Drawing.Font("宋体", 11F);
             this.dgvVip.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -1217,11 +1217,11 @@
             this.dgvVip.Name = "dgvVip";
             this.dgvVip.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvVip.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle36.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle36.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle36.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvVip.RowsDefaultCellStyle = dataGridViewCellStyle36;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvVip.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvVip.RowTemplate.Height = 23;
             this.dgvVip.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvVip.Size = new System.Drawing.Size(1512, 360);
@@ -1350,11 +1350,11 @@
             this.tabPro.Controls.Add(this.btnDelPro);
             this.tabPro.Controls.Add(this.txtSearchPro);
             this.tabPro.Controls.Add(this.btnAddPro);
-            this.tabPro.Location = new System.Drawing.Point(4, 32);
+            this.tabPro.Location = new System.Drawing.Point(4, 27);
             this.tabPro.Margin = new System.Windows.Forms.Padding(4);
             this.tabPro.Name = "tabPro";
             this.tabPro.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPro.Size = new System.Drawing.Size(1527, 823);
+            this.tabPro.Size = new System.Drawing.Size(1527, 828);
             this.tabPro.TabIndex = 1;
             this.tabPro.Text = "服务管理";
             this.tabPro.UseVisualStyleBackColor = true;
@@ -1363,8 +1363,8 @@
             // 
             this.dgvPro.AllowUserToAddRows = false;
             this.dgvPro.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle37.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
-            this.dgvPro.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle37;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
+            this.dgvPro.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvPro.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -1373,14 +1373,14 @@
             this.dgvPro.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvPro.ColumnFont = null;
             this.dgvPro.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle38.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
-            dataGridViewCellStyle38.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle38.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle38.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle38.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle38.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvPro.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle38;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvPro.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgvPro.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPro.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ProId,
@@ -1394,14 +1394,14 @@
             this.ProPayNum,
             this.ProUserId});
             this.dgvPro.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle39.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle39.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle39.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle39.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle39.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle39.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPro.DefaultCellStyle = dataGridViewCellStyle39;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPro.DefaultCellStyle = dataGridViewCellStyle7;
             this.dgvPro.EnableHeadersVisualStyles = false;
             this.dgvPro.Font = new System.Drawing.Font("宋体", 11F);
             this.dgvPro.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -1413,14 +1413,14 @@
             this.dgvPro.Name = "dgvPro";
             this.dgvPro.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvPro.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle40.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle40.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle40.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvPro.RowsDefaultCellStyle = dataGridViewCellStyle40;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvPro.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dgvPro.RowTemplate.Height = 23;
             this.dgvPro.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPro.Size = new System.Drawing.Size(1513, 586);
+            this.dgvPro.Size = new System.Drawing.Size(1513, 529);
             this.dgvPro.TabIndex = 69;
             this.dgvPro.TitleBack = null;
             this.dgvPro.TitleBackColorBegin = System.Drawing.Color.White;
@@ -1553,7 +1553,7 @@
             this.skinLabel16.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel16.Location = new System.Drawing.Point(765, 211);
             this.skinLabel16.Name = "skinLabel16";
-            this.skinLabel16.Size = new System.Drawing.Size(152, 27);
+            this.skinLabel16.Size = new System.Drawing.Size(122, 21);
             this.skinLabel16.TabIndex = 109;
             this.skinLabel16.Text = "累计消费次数：";
             // 
@@ -1565,7 +1565,7 @@
             this.skinLabel6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel6.Location = new System.Drawing.Point(765, 156);
             this.skinLabel6.Name = "skinLabel6";
-            this.skinLabel6.Size = new System.Drawing.Size(152, 27);
+            this.skinLabel6.Size = new System.Drawing.Size(122, 21);
             this.skinLabel6.TabIndex = 108;
             this.skinLabel6.Text = "最近消费时间：";
             // 
@@ -1577,7 +1577,7 @@
             this.dtpProLastPay.Location = new System.Drawing.Point(933, 156);
             this.dtpProLastPay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpProLastPay.Name = "dtpProLastPay";
-            this.dtpProLastPay.Size = new System.Drawing.Size(179, 28);
+            this.dtpProLastPay.Size = new System.Drawing.Size(179, 24);
             this.dtpProLastPay.TabIndex = 107;
             // 
             // skinLabel2
@@ -1588,7 +1588,7 @@
             this.skinLabel2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel2.Location = new System.Drawing.Point(809, 99);
             this.skinLabel2.Name = "skinLabel2";
-            this.skinLabel2.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel2.Size = new System.Drawing.Size(90, 21);
             this.skinLabel2.TabIndex = 106;
             this.skinLabel2.Text = "添加时间：";
             // 
@@ -1600,7 +1600,7 @@
             this.dtpProCreate.Location = new System.Drawing.Point(933, 98);
             this.dtpProCreate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpProCreate.Name = "dtpProCreate";
-            this.dtpProCreate.Size = new System.Drawing.Size(179, 28);
+            this.dtpProCreate.Size = new System.Drawing.Size(179, 24);
             this.dtpProCreate.TabIndex = 105;
             // 
             // txtProPrice
@@ -1786,7 +1786,7 @@
             this.skinLabel9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel9.Location = new System.Drawing.Point(112, 89);
             this.skinLabel9.Name = "skinLabel9";
-            this.skinLabel9.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel9.Size = new System.Drawing.Size(90, 21);
             this.skinLabel9.TabIndex = 100;
             this.skinLabel9.Text = "产品编号：";
             // 
@@ -1798,7 +1798,7 @@
             this.skinLabel8.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel8.Location = new System.Drawing.Point(357, 215);
             this.skinLabel8.Name = "skinLabel8";
-            this.skinLabel8.Size = new System.Drawing.Size(32, 27);
+            this.skinLabel8.Size = new System.Drawing.Size(26, 21);
             this.skinLabel8.TabIndex = 99;
             this.skinLabel8.Text = "元";
             // 
@@ -1810,7 +1810,7 @@
             this.skinLabel7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel7.Location = new System.Drawing.Point(155, 214);
             this.skinLabel7.Name = "skinLabel7";
-            this.skinLabel7.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel7.Size = new System.Drawing.Size(58, 21);
             this.skinLabel7.TabIndex = 98;
             this.skinLabel7.Text = "价格：";
             // 
@@ -1822,7 +1822,7 @@
             this.skinLabel3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel3.Location = new System.Drawing.Point(409, 82);
             this.skinLabel3.Name = "skinLabel3";
-            this.skinLabel3.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel3.Size = new System.Drawing.Size(58, 21);
             this.skinLabel3.TabIndex = 97;
             this.skinLabel3.Text = "描述：";
             // 
@@ -1834,7 +1834,7 @@
             this.skinLabel1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel1.Location = new System.Drawing.Point(155, 149);
             this.skinLabel1.Name = "skinLabel1";
-            this.skinLabel1.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel1.Size = new System.Drawing.Size(58, 21);
             this.skinLabel1.TabIndex = 96;
             this.skinLabel1.Text = "名称：";
             // 
@@ -1981,11 +1981,11 @@
             this.tabComb.Controls.Add(this.btnDelComb);
             this.tabComb.Controls.Add(this.txtSearchComb);
             this.tabComb.Controls.Add(this.btnAddComb);
-            this.tabComb.Location = new System.Drawing.Point(4, 32);
+            this.tabComb.Location = new System.Drawing.Point(4, 27);
             this.tabComb.Margin = new System.Windows.Forms.Padding(4);
             this.tabComb.Name = "tabComb";
             this.tabComb.Padding = new System.Windows.Forms.Padding(4);
-            this.tabComb.Size = new System.Drawing.Size(1527, 823);
+            this.tabComb.Size = new System.Drawing.Size(1527, 828);
             this.tabComb.TabIndex = 2;
             this.tabComb.Text = "套餐管理";
             this.tabComb.UseVisualStyleBackColor = true;
@@ -2003,7 +2003,7 @@
             this.cbDiscountTime.Location = new System.Drawing.Point(503, 188);
             this.cbDiscountTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbDiscountTime.Name = "cbDiscountTime";
-            this.cbDiscountTime.Size = new System.Drawing.Size(121, 33);
+            this.cbDiscountTime.Size = new System.Drawing.Size(121, 28);
             this.cbDiscountTime.TabIndex = 145;
             this.cbDiscountTime.Visible = false;
             this.cbDiscountTime.WaterText = "";
@@ -2021,7 +2021,7 @@
             this.cbCombTime.Location = new System.Drawing.Point(503, 138);
             this.cbCombTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbCombTime.Name = "cbCombTime";
-            this.cbCombTime.Size = new System.Drawing.Size(121, 28);
+            this.cbCombTime.Size = new System.Drawing.Size(121, 24);
             this.cbCombTime.TabIndex = 144;
             this.cbCombTime.Text = "季卡";
             this.cbCombTime.Visible = false;
@@ -2121,7 +2121,7 @@
             this.labCombNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labCombNum.Location = new System.Drawing.Point(425, 190);
             this.labCombNum.Name = "labCombNum";
-            this.labCombNum.Size = new System.Drawing.Size(72, 27);
+            this.labCombNum.Size = new System.Drawing.Size(58, 21);
             this.labCombNum.TabIndex = 141;
             this.labCombNum.Text = "次数：";
             // 
@@ -2133,7 +2133,7 @@
             this.labCombUnit.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labCombUnit.Location = new System.Drawing.Point(627, 139);
             this.labCombUnit.Name = "labCombUnit";
-            this.labCombUnit.Size = new System.Drawing.Size(32, 27);
+            this.labCombUnit.Size = new System.Drawing.Size(26, 21);
             this.labCombUnit.TabIndex = 140;
             this.labCombUnit.Text = "元";
             // 
@@ -2145,7 +2145,7 @@
             this.labCombDetail.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labCombDetail.Location = new System.Drawing.Point(425, 139);
             this.labCombDetail.Name = "labCombDetail";
-            this.labCombDetail.Size = new System.Drawing.Size(72, 27);
+            this.labCombDetail.Size = new System.Drawing.Size(58, 21);
             this.labCombDetail.TabIndex = 139;
             this.labCombDetail.Text = "价格：";
             // 
@@ -2157,7 +2157,7 @@
             this.skinLabel24.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel24.Location = new System.Drawing.Point(380, 262);
             this.skinLabel24.Name = "skinLabel24";
-            this.skinLabel24.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel24.Size = new System.Drawing.Size(90, 21);
             this.skinLabel24.TabIndex = 138;
             this.skinLabel24.Text = "添加时间：";
             // 
@@ -2169,7 +2169,7 @@
             this.dtpCombCreate.Location = new System.Drawing.Point(504, 261);
             this.dtpCombCreate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpCombCreate.Name = "dtpCombCreate";
-            this.dtpCombCreate.Size = new System.Drawing.Size(179, 28);
+            this.dtpCombCreate.Size = new System.Drawing.Size(179, 24);
             this.dtpCombCreate.TabIndex = 137;
             // 
             // txtCombPayNum
@@ -2224,7 +2224,7 @@
             this.skinLabel17.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel17.Location = new System.Drawing.Point(816, 278);
             this.skinLabel17.Name = "skinLabel17";
-            this.skinLabel17.Size = new System.Drawing.Size(152, 27);
+            this.skinLabel17.Size = new System.Drawing.Size(122, 21);
             this.skinLabel17.TabIndex = 135;
             this.skinLabel17.Text = "累计消费次数：";
             // 
@@ -2236,7 +2236,7 @@
             this.skinLabel23.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel23.Location = new System.Drawing.Point(816, 222);
             this.skinLabel23.Name = "skinLabel23";
-            this.skinLabel23.Size = new System.Drawing.Size(152, 27);
+            this.skinLabel23.Size = new System.Drawing.Size(122, 21);
             this.skinLabel23.TabIndex = 134;
             this.skinLabel23.Text = "最近消费时间：";
             // 
@@ -2248,17 +2248,17 @@
             this.dtpCombLastPay.Location = new System.Drawing.Point(984, 222);
             this.dtpCombLastPay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpCombLastPay.Name = "dtpCombLastPay";
-            this.dtpCombLastPay.Size = new System.Drawing.Size(179, 28);
+            this.dtpCombLastPay.Size = new System.Drawing.Size(179, 24);
             this.dtpCombLastPay.TabIndex = 133;
             // 
             // lbPro
             // 
             this.lbPro.FormattingEnabled = true;
-            this.lbPro.ItemHeight = 22;
+            this.lbPro.ItemHeight = 17;
             this.lbPro.Location = new System.Drawing.Point(984, 81);
             this.lbPro.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lbPro.Name = "lbPro";
-            this.lbPro.Size = new System.Drawing.Size(207, 92);
+            this.lbPro.Size = new System.Drawing.Size(207, 89);
             this.lbPro.TabIndex = 131;
             // 
             // btnEditProInComb
@@ -2286,7 +2286,7 @@
             this.skinLabel18.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel18.Location = new System.Drawing.Point(845, 81);
             this.skinLabel18.Name = "skinLabel18";
-            this.skinLabel18.Size = new System.Drawing.Size(132, 27);
+            this.skinLabel18.Size = new System.Drawing.Size(106, 21);
             this.skinLabel18.TabIndex = 125;
             this.skinLabel18.Text = "套餐内产品：";
             // 
@@ -2343,7 +2343,7 @@
             this.skinLabel19.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel19.Location = new System.Drawing.Point(77, 216);
             this.skinLabel19.Name = "skinLabel19";
-            this.skinLabel19.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel19.Size = new System.Drawing.Size(58, 21);
             this.skinLabel19.TabIndex = 123;
             this.skinLabel19.Text = "描述：";
             // 
@@ -2359,7 +2359,7 @@
             this.cbCombType.Location = new System.Drawing.Point(504, 86);
             this.cbCombType.Margin = new System.Windows.Forms.Padding(4);
             this.cbCombType.Name = "cbCombType";
-            this.cbCombType.Size = new System.Drawing.Size(119, 28);
+            this.cbCombType.Size = new System.Drawing.Size(119, 24);
             this.cbCombType.TabIndex = 122;
             this.cbCombType.Text = "次数型";
             this.cbCombType.WaterText = "";
@@ -2460,7 +2460,7 @@
             this.skinLabel20.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel20.Location = new System.Drawing.Point(79, 81);
             this.skinLabel20.Name = "skinLabel20";
-            this.skinLabel20.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel20.Size = new System.Drawing.Size(58, 21);
             this.skinLabel20.TabIndex = 119;
             this.skinLabel20.Text = "编号：";
             // 
@@ -2472,7 +2472,7 @@
             this.skinLabel21.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel21.Location = new System.Drawing.Point(427, 86);
             this.skinLabel21.Name = "skinLabel21";
-            this.skinLabel21.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel21.Size = new System.Drawing.Size(58, 21);
             this.skinLabel21.TabIndex = 118;
             this.skinLabel21.Text = "类型：";
             // 
@@ -2484,7 +2484,7 @@
             this.skinLabel22.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel22.Location = new System.Drawing.Point(79, 142);
             this.skinLabel22.Name = "skinLabel22";
-            this.skinLabel22.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel22.Size = new System.Drawing.Size(58, 21);
             this.skinLabel22.TabIndex = 117;
             this.skinLabel22.Text = "名称：";
             // 
@@ -2492,8 +2492,8 @@
             // 
             this.dgvComb.AllowUserToAddRows = false;
             this.dgvComb.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle41.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
-            this.dgvComb.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle41;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
+            this.dgvComb.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvComb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -2502,14 +2502,14 @@
             this.dgvComb.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvComb.ColumnFont = null;
             this.dgvComb.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle42.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
-            dataGridViewCellStyle42.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle42.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle42.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle42.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle42.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvComb.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle42;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvComb.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.dgvComb.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvComb.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CombNo,
@@ -2521,14 +2521,14 @@
             this.CombLastPayAt,
             this.CombPayNum});
             this.dgvComb.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle43.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle43.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle43.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle43.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle43.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle43.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvComb.DefaultCellStyle = dataGridViewCellStyle43;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvComb.DefaultCellStyle = dataGridViewCellStyle11;
             this.dgvComb.EnableHeadersVisualStyles = false;
             this.dgvComb.Font = new System.Drawing.Font("宋体", 11F);
             this.dgvComb.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -2540,14 +2540,14 @@
             this.dgvComb.Name = "dgvComb";
             this.dgvComb.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvComb.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle44.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle44.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle44.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvComb.RowsDefaultCellStyle = dataGridViewCellStyle44;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvComb.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dgvComb.RowTemplate.Height = 23;
             this.dgvComb.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvComb.Size = new System.Drawing.Size(1513, 495);
+            this.dgvComb.Size = new System.Drawing.Size(1513, 450);
             this.dgvComb.TabIndex = 112;
             this.dgvComb.TitleBack = null;
             this.dgvComb.TitleBackColorBegin = System.Drawing.Color.White;
@@ -2726,11 +2726,11 @@
             // 
             this.tabData.Controls.Add(this.btnBackupData);
             this.tabData.Controls.Add(this.btnRecoverData);
-            this.tabData.Location = new System.Drawing.Point(4, 32);
+            this.tabData.Location = new System.Drawing.Point(4, 27);
             this.tabData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabData.Name = "tabData";
             this.tabData.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabData.Size = new System.Drawing.Size(1527, 823);
+            this.tabData.Size = new System.Drawing.Size(1527, 828);
             this.tabData.TabIndex = 3;
             this.tabData.Text = "数据管理";
             this.tabData.UseVisualStyleBackColor = true;
@@ -2790,11 +2790,11 @@
             this.tabShop.Controls.Add(this.picLicence);
             this.tabShop.Controls.Add(this.txtShopNo);
             this.tabShop.Controls.Add(this.skinLabel39);
-            this.tabShop.Location = new System.Drawing.Point(4, 32);
+            this.tabShop.Location = new System.Drawing.Point(4, 27);
             this.tabShop.Margin = new System.Windows.Forms.Padding(4);
             this.tabShop.Name = "tabShop";
             this.tabShop.Padding = new System.Windows.Forms.Padding(4);
-            this.tabShop.Size = new System.Drawing.Size(1527, 823);
+            this.tabShop.Size = new System.Drawing.Size(1527, 828);
             this.tabShop.TabIndex = 4;
             this.tabShop.Text = "商铺信息";
             this.tabShop.UseVisualStyleBackColor = true;
@@ -2953,7 +2953,7 @@
             this.skinLabel48.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel48.Location = new System.Drawing.Point(664, 270);
             this.skinLabel48.Name = "skinLabel48";
-            this.skinLabel48.Size = new System.Drawing.Size(92, 27);
+            this.skinLabel48.Size = new System.Drawing.Size(74, 21);
             this.skinLabel48.TabIndex = 113;
             this.skinLabel48.Text = "支付宝：";
             // 
@@ -2965,7 +2965,7 @@
             this.skinLabel45.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel45.Location = new System.Drawing.Point(687, 216);
             this.skinLabel45.Name = "skinLabel45";
-            this.skinLabel45.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel45.Size = new System.Drawing.Size(58, 21);
             this.skinLabel45.TabIndex = 115;
             this.skinLabel45.Text = "微信：";
             // 
@@ -2977,7 +2977,7 @@
             this.skinLabel44.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel44.Location = new System.Drawing.Point(643, 110);
             this.skinLabel44.Name = "skinLabel44";
-            this.skinLabel44.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel44.Size = new System.Drawing.Size(90, 21);
             this.skinLabel44.TabIndex = 111;
             this.skinLabel44.Text = "联系方式：";
             // 
@@ -3032,7 +3032,7 @@
             this.skinLabel46.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel46.Location = new System.Drawing.Point(687, 164);
             this.skinLabel46.Name = "skinLabel46";
-            this.skinLabel46.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel46.Size = new System.Drawing.Size(58, 21);
             this.skinLabel46.TabIndex = 113;
             this.skinLabel46.Text = "邮箱：";
             // 
@@ -3087,7 +3087,7 @@
             this.skinLabel43.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel43.Location = new System.Drawing.Point(687, 59);
             this.skinLabel43.Name = "skinLabel43";
-            this.skinLabel43.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel43.Size = new System.Drawing.Size(58, 21);
             this.skinLabel43.TabIndex = 105;
             this.skinLabel43.Text = "姓名：";
             // 
@@ -3142,7 +3142,7 @@
             this.skinLabel42.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel42.Location = new System.Drawing.Point(99, 544);
             this.skinLabel42.Name = "skinLabel42";
-            this.skinLabel42.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel42.Size = new System.Drawing.Size(58, 21);
             this.skinLabel42.TabIndex = 109;
             this.skinLabel42.Text = "地址：";
             // 
@@ -3154,7 +3154,7 @@
             this.skinLabel41.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel41.Location = new System.Drawing.Point(80, 330);
             this.skinLabel41.Name = "skinLabel41";
-            this.skinLabel41.Size = new System.Drawing.Size(89, 27);
+            this.skinLabel41.Size = new System.Drawing.Size(72, 21);
             this.skinLabel41.TabIndex = 108;
             this.skinLabel41.Text = "LOGO：";
             // 
@@ -3178,7 +3178,7 @@
             this.skinLabel40.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel40.Location = new System.Drawing.Point(56, 119);
             this.skinLabel40.Name = "skinLabel40";
-            this.skinLabel40.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel40.Size = new System.Drawing.Size(90, 21);
             this.skinLabel40.TabIndex = 106;
             this.skinLabel40.Text = "营业执照：";
             // 
@@ -3245,7 +3245,7 @@
             this.skinLabel39.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel39.Location = new System.Drawing.Point(99, 64);
             this.skinLabel39.Name = "skinLabel39";
-            this.skinLabel39.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel39.Size = new System.Drawing.Size(58, 21);
             this.skinLabel39.TabIndex = 103;
             this.skinLabel39.Text = "商号：";
             // 
@@ -3274,11 +3274,11 @@
             this.tabPay.Controls.Add(this.skinLabel54);
             this.tabPay.Controls.Add(this.txtPayPrice);
             this.tabPay.Controls.Add(this.skinLabel55);
-            this.tabPay.Location = new System.Drawing.Point(4, 32);
+            this.tabPay.Location = new System.Drawing.Point(4, 27);
             this.tabPay.Margin = new System.Windows.Forms.Padding(4);
             this.tabPay.Name = "tabPay";
             this.tabPay.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPay.Size = new System.Drawing.Size(1527, 823);
+            this.tabPay.Size = new System.Drawing.Size(1527, 832);
             this.tabPay.TabIndex = 5;
             this.tabPay.Text = "消费记录";
             this.tabPay.UseVisualStyleBackColor = true;
@@ -3335,7 +3335,7 @@
             this.skinLabel57.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel57.Location = new System.Drawing.Point(536, 149);
             this.skinLabel57.Name = "skinLabel57";
-            this.skinLabel57.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel57.Size = new System.Drawing.Size(58, 21);
             this.skinLabel57.TabIndex = 153;
             this.skinLabel57.Text = "套餐：";
             // 
@@ -3354,7 +3354,7 @@
             this.cbFilterPayAt.SelectedDownBack = null;
             this.cbFilterPayAt.SelectedMouseBack = null;
             this.cbFilterPayAt.SelectedNormlBack = null;
-            this.cbFilterPayAt.Size = new System.Drawing.Size(91, 24);
+            this.cbFilterPayAt.Size = new System.Drawing.Size(75, 21);
             this.cbFilterPayAt.TabIndex = 169;
             this.cbFilterPayAt.Text = "筛选时间";
             this.cbFilterPayAt.UseVisualStyleBackColor = false;
@@ -3367,7 +3367,7 @@
             this.dtpSearchPayAt.Location = new System.Drawing.Point(695, 29);
             this.dtpSearchPayAt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpSearchPayAt.Name = "dtpSearchPayAt";
-            this.dtpSearchPayAt.Size = new System.Drawing.Size(179, 28);
+            this.dtpSearchPayAt.Size = new System.Drawing.Size(179, 24);
             this.dtpSearchPayAt.TabIndex = 168;
             // 
             // skinLabel56
@@ -3378,7 +3378,7 @@
             this.skinLabel56.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel56.Location = new System.Drawing.Point(489, 286);
             this.skinLabel56.Name = "skinLabel56";
-            this.skinLabel56.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel56.Size = new System.Drawing.Size(90, 21);
             this.skinLabel56.TabIndex = 167;
             this.skinLabel56.Text = "消费时间：";
             // 
@@ -3390,15 +3390,15 @@
             this.dtpPayAt.Location = new System.Drawing.Point(615, 286);
             this.dtpPayAt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtpPayAt.Name = "dtpPayAt";
-            this.dtpPayAt.Size = new System.Drawing.Size(179, 28);
+            this.dtpPayAt.Size = new System.Drawing.Size(179, 24);
             this.dtpPayAt.TabIndex = 166;
             // 
             // dgvPay
             // 
             this.dgvPay.AllowUserToAddRows = false;
             this.dgvPay.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle45.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
-            this.dgvPay.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle45;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(246)))), ((int)(((byte)(253)))));
+            this.dgvPay.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
             this.dgvPay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -3407,14 +3407,14 @@
             this.dgvPay.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvPay.ColumnFont = null;
             this.dgvPay.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle46.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
-            dataGridViewCellStyle46.Font = new System.Drawing.Font("宋体", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle46.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle46.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle46.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle46.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvPay.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle46;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(246)))), ((int)(((byte)(239)))));
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("宋体", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvPay.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.dgvPay.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPay.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.PayAt,
@@ -3424,14 +3424,14 @@
             this.PayTotalPrice,
             this.PayPayPrice});
             this.dgvPay.ColumnSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle47.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle47.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle47.Font = new System.Drawing.Font("宋体", 11F);
-            dataGridViewCellStyle47.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle47.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
-            dataGridViewCellStyle47.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle47.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPay.DefaultCellStyle = dataGridViewCellStyle47;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("宋体", 11F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(188)))), ((int)(((byte)(240)))));
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPay.DefaultCellStyle = dataGridViewCellStyle15;
             this.dgvPay.EnableHeadersVisualStyles = false;
             this.dgvPay.Font = new System.Drawing.Font("宋体", 11F);
             this.dgvPay.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -3443,18 +3443,19 @@
             this.dgvPay.Name = "dgvPay";
             this.dgvPay.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvPay.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle48.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle48.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle48.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle48.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvPay.RowsDefaultCellStyle = dataGridViewCellStyle48;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvPay.RowsDefaultCellStyle = dataGridViewCellStyle16;
             this.dgvPay.RowTemplate.Height = 23;
             this.dgvPay.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPay.Size = new System.Drawing.Size(1503, 521);
+            this.dgvPay.Size = new System.Drawing.Size(1503, 470);
             this.dgvPay.TabIndex = 165;
             this.dgvPay.TitleBack = null;
             this.dgvPay.TitleBackColorBegin = System.Drawing.Color.White;
             this.dgvPay.TitleBackColorEnd = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(196)))), ((int)(((byte)(242)))));
+            this.dgvPay.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPay_CellClick);
             // 
             // PayAt
             // 
@@ -3564,11 +3565,11 @@
             // lbPayPro
             // 
             this.lbPayPro.FormattingEnabled = true;
-            this.lbPayPro.ItemHeight = 22;
+            this.lbPayPro.ItemHeight = 17;
             this.lbPayPro.Location = new System.Drawing.Point(224, 205);
             this.lbPayPro.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lbPayPro.Name = "lbPayPro";
-            this.lbPayPro.Size = new System.Drawing.Size(152, 92);
+            this.lbPayPro.Size = new System.Drawing.Size(152, 89);
             this.lbPayPro.TabIndex = 158;
             // 
             // skinLabel47
@@ -3579,7 +3580,7 @@
             this.skinLabel47.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel47.Location = new System.Drawing.Point(105, 205);
             this.skinLabel47.Name = "skinLabel47";
-            this.skinLabel47.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel47.Size = new System.Drawing.Size(90, 21);
             this.skinLabel47.TabIndex = 157;
             this.skinLabel47.Text = "消费产品：";
             // 
@@ -3591,7 +3592,7 @@
             this.skinLabel49.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel49.Location = new System.Drawing.Point(449, 108);
             this.skinLabel49.Name = "skinLabel49";
-            this.skinLabel49.Size = new System.Drawing.Size(152, 27);
+            this.skinLabel49.Size = new System.Drawing.Size(122, 21);
             this.skinLabel49.TabIndex = 153;
             this.skinLabel49.Text = "是否使用套餐：";
             // 
@@ -3691,7 +3692,7 @@
             this.skinLabel50.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel50.Location = new System.Drawing.Point(145, 105);
             this.skinLabel50.Name = "skinLabel50";
-            this.skinLabel50.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel50.Size = new System.Drawing.Size(58, 21);
             this.skinLabel50.TabIndex = 150;
             this.skinLabel50.Text = "卡号：";
             // 
@@ -3703,7 +3704,7 @@
             this.skinLabel51.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel51.Location = new System.Drawing.Point(145, 154);
             this.skinLabel51.Name = "skinLabel51";
-            this.skinLabel51.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel51.Size = new System.Drawing.Size(58, 21);
             this.skinLabel51.TabIndex = 149;
             this.skinLabel51.Text = "姓名：";
             // 
@@ -3738,7 +3739,7 @@
             this.rbUnUseComb.SelectedDownBack = null;
             this.rbUnUseComb.SelectedMouseBack = null;
             this.rbUnUseComb.SelectedNormlBack = null;
-            this.rbUnUseComb.Size = new System.Drawing.Size(52, 29);
+            this.rbUnUseComb.Size = new System.Drawing.Size(42, 24);
             this.rbUnUseComb.TabIndex = 134;
             this.rbUnUseComb.TabStop = true;
             this.rbUnUseComb.Text = "否";
@@ -3759,7 +3760,7 @@
             this.rbUseComb.SelectedDownBack = null;
             this.rbUseComb.SelectedMouseBack = null;
             this.rbUseComb.SelectedNormlBack = null;
-            this.rbUseComb.Size = new System.Drawing.Size(52, 29);
+            this.rbUseComb.Size = new System.Drawing.Size(42, 24);
             this.rbUseComb.TabIndex = 133;
             this.rbUseComb.Text = "是";
             this.rbUseComb.UseVisualStyleBackColor = false;
@@ -3772,7 +3773,7 @@
             this.skinLabel52.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel52.Location = new System.Drawing.Point(744, 191);
             this.skinLabel52.Name = "skinLabel52";
-            this.skinLabel52.Size = new System.Drawing.Size(32, 27);
+            this.skinLabel52.Size = new System.Drawing.Size(26, 21);
             this.skinLabel52.TabIndex = 162;
             this.skinLabel52.Text = "元";
             // 
@@ -3828,7 +3829,7 @@
             this.skinLabel53.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel53.Location = new System.Drawing.Point(536, 191);
             this.skinLabel53.Name = "skinLabel53";
-            this.skinLabel53.Size = new System.Drawing.Size(72, 27);
+            this.skinLabel53.Size = new System.Drawing.Size(58, 21);
             this.skinLabel53.TabIndex = 160;
             this.skinLabel53.Text = "总价：";
             // 
@@ -3840,7 +3841,7 @@
             this.skinLabel54.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel54.Location = new System.Drawing.Point(744, 238);
             this.skinLabel54.Name = "skinLabel54";
-            this.skinLabel54.Size = new System.Drawing.Size(32, 27);
+            this.skinLabel54.Size = new System.Drawing.Size(26, 21);
             this.skinLabel54.TabIndex = 159;
             this.skinLabel54.Text = "元";
             // 
@@ -3896,20 +3897,18 @@
             this.skinLabel55.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel55.Location = new System.Drawing.Point(493, 238);
             this.skinLabel55.Name = "skinLabel55";
-            this.skinLabel55.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel55.Size = new System.Drawing.Size(90, 21);
             this.skinLabel55.TabIndex = 155;
             this.skinLabel55.Text = "实际价格：";
             // 
             // panel2
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.Controls.Add(this.tabMain);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1535, 859);
+            this.panel2.Size = new System.Drawing.Size(1535, 863);
             this.panel2.TabIndex = 2;
             // 
             // skinLabel58
@@ -3920,7 +3919,7 @@
             this.skinLabel58.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel58.Location = new System.Drawing.Point(15, 16);
             this.skinLabel58.Name = "skinLabel58";
-            this.skinLabel58.Size = new System.Drawing.Size(172, 27);
+            this.skinLabel58.Size = new System.Drawing.Size(138, 21);
             this.skinLabel58.TabIndex = 114;
             this.skinLabel58.Text = "本周新增会员数：";
             // 
@@ -3932,7 +3931,7 @@
             this.labNewVipNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labNewVipNum.Location = new System.Drawing.Point(204, 16);
             this.labNewVipNum.Name = "labNewVipNum";
-            this.labNewVipNum.Size = new System.Drawing.Size(36, 27);
+            this.labNewVipNum.Size = new System.Drawing.Size(28, 21);
             this.labNewVipNum.TabIndex = 115;
             this.labNewVipNum.Text = "15";
             // 
@@ -3944,7 +3943,7 @@
             this.skinLabel61.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel61.Location = new System.Drawing.Point(291, 16);
             this.skinLabel61.Name = "skinLabel61";
-            this.skinLabel61.Size = new System.Drawing.Size(172, 27);
+            this.skinLabel61.Size = new System.Drawing.Size(138, 21);
             this.skinLabel61.TabIndex = 116;
             this.skinLabel61.Text = "本周消费会员数：";
             // 
@@ -3956,7 +3955,7 @@
             this.labelPayVipNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labelPayVipNum.Location = new System.Drawing.Point(480, 16);
             this.labelPayVipNum.Name = "labelPayVipNum";
-            this.labelPayVipNum.Size = new System.Drawing.Size(36, 27);
+            this.labelPayVipNum.Size = new System.Drawing.Size(28, 21);
             this.labelPayVipNum.TabIndex = 117;
             this.labelPayVipNum.Text = "15";
             // 
@@ -3968,7 +3967,7 @@
             this.skinLabel62.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.skinLabel62.Location = new System.Drawing.Point(573, 16);
             this.skinLabel62.Name = "skinLabel62";
-            this.skinLabel62.Size = new System.Drawing.Size(112, 27);
+            this.skinLabel62.Size = new System.Drawing.Size(90, 21);
             this.skinLabel62.TabIndex = 118;
             this.skinLabel62.Text = "总会员数：";
             // 
@@ -3980,21 +3979,20 @@
             this.labAllVipNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labAllVipNum.Location = new System.Drawing.Point(700, 16);
             this.labAllVipNum.Name = "labAllVipNum";
-            this.labAllVipNum.Size = new System.Drawing.Size(36, 27);
+            this.labAllVipNum.Size = new System.Drawing.Size(28, 21);
             this.labAllVipNum.TabIndex = 119;
             this.labAllVipNum.Text = "15";
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.labAllVipNum);
             this.panel1.Controls.Add(this.skinLabel62);
             this.panel1.Controls.Add(this.labelPayVipNum);
             this.panel1.Controls.Add(this.skinLabel61);
             this.panel1.Controls.Add(this.labNewVipNum);
             this.panel1.Controls.Add(this.skinLabel58);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 863);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";

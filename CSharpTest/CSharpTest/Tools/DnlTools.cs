@@ -28,12 +28,12 @@ using System.Web;
 
 namespace CSharpTest.Tools
 {
-    public class DnlTools
+    public static class DnlTools
     {
         /// <summary>
         /// 计算百度链接数
         /// </summary>
-        public void CountLinkNum()
+        public static void CountLinkNum()
         {
             var colKey=MongoDBHelper.Instance.GetDnl_Keyword();
             var keywords = colKey.Find(Builders<Dnl_Keyword>.Filter.Empty).ToList();
@@ -55,7 +55,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 计算百度链接收录数
         /// </summary>
-        public void ComputeDCNum()
+        public static void ComputeDCNum()
         {
             var sw=new System.Diagnostics.Stopwatch();
             sw.Start();
@@ -154,7 +154,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 微信数据分析
         /// </summary>
-        public void AnalysizeWeiXinLink()
+        public static void AnalysizeWeiXinLink()
         {
             string baseUrl = System.AppDomain.CurrentDomain.BaseDirectory;
 
@@ -335,7 +335,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 计算微信正文
         /// </summary>
-        public void GetWeiXinLinkContent()
+        public static void GetWeiXinLinkContent()
         {
             string baseUrl = System.AppDomain.CurrentDomain.BaseDirectory;
 
@@ -484,7 +484,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 计算微信公众号信息
         /// </summary>
-        public void ComputeWeiXinName()
+        public static void ComputeWeiXinName()
         {
             try
             {
@@ -698,7 +698,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 计算微信公众号信息
         /// </summary>
-        public void ResetWeiXinSearchRange()
+        public static void ResetWeiXinSearchRange()
         {
             var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
@@ -713,7 +713,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 获取微信前200公众号文章评论
         /// </summary>
-        public void GetWXTop200NameComment()
+        public static void GetWXTop200NameComment()
         {
             var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
             var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
@@ -809,7 +809,7 @@ namespace CSharpTest.Tools
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
         /// <param name="startNum">搜索起始位置</param>
-        public void TestGSSearch(string keyword, string startTime = "2016-11-01", string endTime = "2017-07-01",int startNum=0)
+        public static void TestGSSearch(string keyword, string startTime = "2016-11-01", string endTime = "2017-07-01",int startNum=0)
         {
             //搜索关键词
             string baseUrl = "http://open.gsdata.cn/";
@@ -832,7 +832,7 @@ namespace CSharpTest.Tools
         /// 抓取5118拓展词
         /// </summary>
         /// <param name="keyword">关键词</param>
-        public void Craw5118(string keyword)
+        public static void Craw5118(string keyword)
         {
             string url = "http://www.5118.com/seo/words/{0}".FormatStr(keyword);
             string html = WebApiInvoke.GetHtml(url);
@@ -855,7 +855,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 修复因服务器搬迁导致的图片无法显示
         /// </summary>
-        public void repairImg()
+        public static void repairImg()
         {
             string sourceServer = "211.154.6.166:9999";
             string nowServer = "43.240.138.233:9999";
@@ -915,7 +915,7 @@ namespace CSharpTest.Tools
         /// 根据邮箱删除用户
         /// </summary>
         /// <param name="userEmailList">邮箱列表</param>
-        public void DelUser(List<string> userEmailList)
+        public static void DelUser(List<string> userEmailList)
         {
             var builderUser = Builders<IW2SUser>.Filter;
             var filterUser = builderUser.In(x => x.UsrEmail, userEmailList);
@@ -1014,7 +1014,7 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 导出未分组域名
         /// </summary>
-        public void ExportUngroupDomain()
+        public static void ExportUngroupDomain()
         {
             var proObjId = new ObjectId("598a7a4af4b87d07ccbc8d17");
             string filename = "未分组网址.xls";
@@ -1132,7 +1132,7 @@ namespace CSharpTest.Tools
         /// </summary>
         /// <param name="path">分组文件路径</param>
         /// <param name="userObjId">用户ID</param>
-        public void ImportDomain(string path, ObjectId userObjId)
+        public static void ImportDomain(string path, ObjectId userObjId)
         {
             Dictionary<string, string> domainToCateName = new Dictionary<string, string>(); //域名和分组名词典
             Dictionary<string, ObjectId> CateNameToObjId = new Dictionary<string, ObjectId>(); //分组名和ID词典
@@ -1225,7 +1225,7 @@ namespace CSharpTest.Tools
         /// Html表格转Excel
         /// </summary>
         /// <param name="tableHtml">Html表格代码</param>
-        public void ExportExcel(string tableHtml)
+        public static void ExportExcel(string tableHtml)
         {
             //创建数据表
             HSSFWorkbook workbook = new HSSFWorkbook();
@@ -1306,9 +1306,9 @@ namespace CSharpTest.Tools
         }
 
         /// <summary>
-        /// 删除无效罗拉
+        /// 删除无效链接
         /// </summary>
-        public void DelUnuseLink()
+        public static void DelUnuseLink()
         {
             string errStr = "robots.txt";       //异常域名特征
             //var sw = new System.Diagnostics.Stopwatch();
@@ -1386,7 +1386,207 @@ namespace CSharpTest.Tools
 
             CommonTools.Log("全部迁移完毕！");
         }
+
+        public static void ExportData(List<string> keys)
+        {
+            //获取所有链接数据
+            var builderKey = Builders<Dnl_Keyword>.Filter;
+            var filterKey = builderKey.In(x => x.Keyword, keys);
+            var colKey = MongoDBHelper.Instance.GetDnl_Keyword();
+            var queryKey = colKey.Find(filterKey).ToList();
+            var keyIds = queryKey.Select(x => x._id.ToString()).ToList();
+
+            var builderLink = Builders<Dnl_Link_Baidu>.Filter;
+            var filterLink = builderLink.In(x => x.SearchkeywordId, keyIds);
+            var colLink = MongoDBHelper.Instance.GetDnl_Link_Baidu();
+            var queryLink = colLink.Find(filterLink).Project(x => new
+            {
+                Id = x._id,
+                Keyword = x.Keywords,
+                KeywordId = x.SearchkeywordId,
+                Url = x.LinkUrl,
+                Title = x.Title,
+                Domain = x.Domain,
+                Desc = x.Description,
+                PublishTime=x.PublishTime
+            }).ToList();
+
+            //筛选无效时间
+            var links = new List<BaiduLink>();
+            foreach (var x in queryLink)
+            {
+                DateTime dt = new DateTime();
+                if (DateTime.TryParse(x.PublishTime, out dt))
+                {
+                    if (dt < new DateTime(1978, 1, 1) || dt > DateTime.Now)
+                        continue;
+                    var link = new BaiduLink
+                    {
+                        Id = x.Id.ToString(),
+                        Keyword = x.Keyword,
+                        KeywordId = x.KeywordId,
+                        Url = x.Url,
+                        Title = x.Title,
+                        Domain = x.Domain,
+                        Description = x.Desc,
+                        PublishTime = dt
+                    };
+                    links.Add(link);
+                }
+            }
+
+            //输出逐年时间分布表
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet timeSheet = workbook.CreateSheet("逐年分布");
+            int i = 0, j = 0;
+            var years = links.Select(x => x.PublishTime.Year).ToList();
+            var startDt = years.Min();
+            var endDt = years.Max();
+            IRow headTime = timeSheet.CreateRow(i);
+            while (startDt <= endDt)
+            {
+                headTime.CreateCell(j).SetCellValue(startDt);
+                j++;
+                startDt++;
+            }
+            i++;
+            j = 0;
+            startDt = years.Min();
+            IRow rowTime = timeSheet.CreateRow(i);
+            while (startDt <= endDt)
+            {
+                int num = years.Count(x => x == startDt);
+                rowTime.CreateCell(j).SetCellValue(num);
+                j++;
+                startDt++;
+            }
+
+            //输出域名分组出现表
+            ISheet domainSheet = workbook.CreateSheet("域名分组出现表");
+
+            //获取域名分组
+            var userObjId = ObjectId.Empty;
+            var builderDoCate = Builders<IW2S_DomainCategory>.Filter;
+            var filterDoCate = builderDoCate.Eq(x => x.UsrId, userObjId);
+            var colDoCate = MongoDBHelper.Instance.GetIW2S_DomainCategorys();
+            var queryDoCate = colDoCate.Find(filterDoCate).ToList();
+            //如果用户无分组，使用公用分组
+            if (queryDoCate.Count == 0)
+            {
+                userObjId = ObjectId.Empty;
+                filterDoCate = builderDoCate.Eq(x => x.UsrId, userObjId);
+            }
+            queryDoCate = colDoCate.Find(filterDoCate).ToList();
+            i = 0;
+            j = 0;
+            IRow headDomain = domainSheet.CreateRow(i);
+            foreach (var x in queryDoCate)
+            {
+                headDomain.CreateCell(j).SetCellValue(x.Name);
+                j++;
+            }
+            headDomain.CreateCell(j).SetCellValue("未分组");
+            i++;
+            j = 0;
+
+            var linkNums = new int[queryDoCate.Count + 1];
+
+            //获取域名分组数据
+            var buiderDo = Builders<IW2S_DomainCategoryData>.Filter;
+            var filterDo = buiderDo.Eq(x => x.UsrId, userObjId);
+            var colDo = MongoDBHelper.Instance.GetIW2S_DomainCategoryDatas();
+            var queryDo = colDo.Find(filterDo).ToList();
+            //生成域名及其域名类别索引辞典
+            Dictionary<string, string> domainToCate = new Dictionary<string, string>();
+            foreach (var domain in queryDo)
+            {
+                if (!domainToCate.ContainsKey(domain.DomainName))
+                {
+                    var index = queryDoCate.FindIndex(x => x._id == domain.DomainCategoryId);
+                    if (index != -1)
+                    {
+                        domainToCate.Add(domain.DomainName, queryDoCate[index].Name);
+                    }
+                }
+            }
+            foreach (var x in links)
+            {
+                if (domainToCate.ContainsKey(x.Domain))
+                {
+                    string cateName= domainToCate[x.Domain];
+                    int index = queryDoCate.FindIndex(s => s.Name == cateName);
+                    linkNums[index]++;
+                }
+                else
+                {
+                    linkNums[queryDoCate.Count]++;
+                }
+            }
+            IRow rowDomain = domainSheet.CreateRow(i);
+            for (int k = 0; k < linkNums.Length; k++)
+            {
+                rowDomain.CreateCell(k).SetCellValue(linkNums[k]);
+                
+            }
+            i = 0; j = 0;
+            
+            //输出链接详情表
+            ISheet linkSheetAll = workbook.CreateSheet("链接详情表（全部）");
+            IRow headLink = linkSheetAll.CreateRow(i);
+            headLink.CreateCell(0).SetCellValue("ID");
+            headLink.CreateCell(1).SetCellValue("域名");
+            headLink.CreateCell(2).SetCellValue("域名分组");
+            headLink.CreateCell(3).SetCellValue("标题");
+            headLink.CreateCell(4).SetCellValue("链接");
+
+            ISheet linkSheetPart = workbook.CreateSheet("链接详情表（部分）");
+            IRow headLink2 = linkSheetPart.CreateRow(i);
+            headLink2.CreateCell(0).SetCellValue("ID");
+            headLink2.CreateCell(1).SetCellValue("域名");
+            headLink2.CreateCell(2).SetCellValue("域名分组");
+            headLink2.CreateCell(3).SetCellValue("标题");
+            headLink2.CreateCell(4).SetCellValue("链接");
+            i++;
+            j = 1;
+            foreach (var x in links)
+            {
+                var row1 = linkSheetAll.CreateRow(i);
+                row1.CreateCell(0).SetCellValue(x.Id);
+                row1.CreateCell(1).SetCellValue(x.Domain);
+                row1.CreateCell(3).SetCellValue(x.Title);
+                row1.CreateCell(4).SetCellValue(x.Url);
+                if(domainToCate.ContainsKey(x.Domain))
+                {
+                    string cate = domainToCate[x.Domain];
+                    row1.CreateCell(2).SetCellValue(cate);
+
+                    //判断是否为部分表内数据
+                    Regex reg = new Regex("门户|新闻|财经|公益|资讯");
+                    if (reg.IsMatch(cate))
+                    {
+                        var row2 = linkSheetPart.CreateRow(j);
+                        row2.CreateCell(0).SetCellValue(x.Id);
+                        row2.CreateCell(1).SetCellValue(x.Domain);
+                        row2.CreateCell(2).SetCellValue(cate);
+                        row2.CreateCell(3).SetCellValue(x.Title);
+                        row2.CreateCell(4).SetCellValue(x.Url);
+                        j++;
+                    }
+                }
+                else
+                    row1.CreateCell(2).SetCellValue("未分组");
+                i++;
+            }
+
+            using (FileStream fs = new FileStream("F:\\Test.xls", FileMode.Create))
+            {
+                workbook.Write(fs);
+            }
+            Console.WriteLine("计算完毕");
+        }
     }
+
+
 
     
 }

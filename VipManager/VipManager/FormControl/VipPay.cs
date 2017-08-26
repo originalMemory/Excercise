@@ -264,18 +264,18 @@ namespace VipManager.FormControl
             OleDbDataReader readerGetPro = comGetPro.ExecuteReader();
             while (readerGetPro.Read())
             {
-                int proID = Convert.ToInt32(readerGetPro["ID"]);
-                var proInfo = CombSnapInfo.ProList.Find(x => x.ProID == proID);
-                int combSnapID = 0;
-                if (proInfo != null)
-                {
-                    combSnapID = proInfo.ProID;
-                }
+                //int proID = Convert.ToInt32(readerGetPro["ID"]);
+                //var proInfo = CombSnapInfo.ProList.Find(x => x.ProID == proID);
+                //int combSnapID = 0;
+                //if (proInfo != null)
+                //{
+                //    combSnapID = proInfo.ProID;
+                //}
                 //插入产品映射
-                string sqlAddProSnap = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],,[UserId],[PayNum],[VipID],[CombSnapID],[ProID],[PayID]) values(
+                string sqlAddProSnap = @"insert into [ProSnap]([No],[ProName],[Description],[Price],[CreateAt],[UserId],[PayNum],[VipID],[CombSnapID],[ProID],[PayID]) values(
 {0},'{1}','{2}',{3},#{4}#,'{5}',{6},{7},{8},{9},{10})"
                    .FormatStr(readerGetPro["No"], readerGetPro["ProName"], readerGetPro["Description"], readerGetPro["Price"], DateTime.Now
-                   , readerGetPro["UserId"], Convert.ToInt32(readerGetPro["PayNum"]), VipID, combSnapID, readerGetPro["ID"], payID);
+                   , readerGetPro["UserId"], Convert.ToInt32(readerGetPro["PayNum"]), VipID, CombSnapInfo.ID, readerGetPro["ID"], payID);
                 OleDbCommand comAddProSnap = new OleDbCommand(sqlAddProSnap, Config.con);
                 comAddProSnap.ExecuteNonQuery();
             }

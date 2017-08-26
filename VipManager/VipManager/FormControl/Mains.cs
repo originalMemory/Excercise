@@ -65,7 +65,7 @@ namespace VipManager.FormControl
             //消息记录初始设置
             DtPayPro.Columns.Add("ID", System.Type.GetType("System.Int32"));
             DtPayPro.Columns.Add("ProName", System.Type.GetType("System.String"));
-            lbPayPro.DisplayMember = "PayName";
+            lbPayPro.DisplayMember = "ProName";
             lbPayPro.ValueMember = "ID";
             lbPayPro.DataSource = DtPayPro;
             txtSearchPay.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchPay_KeyPress);
@@ -1168,7 +1168,7 @@ namespace VipManager.FormControl
         /// </summary>
         private void InitFirstPay()
         {
-            string sqlLast = "select top 1 * from [Product] where [UserId]='{0}' order by [LastPayAt] desc".FormatStr(Config.User._id.ToString());
+            string sqlLast = "select top 1 * from [PayRecord] where [UserId]='{0}' order by [CreateAt] desc".FormatStr(Config.User._id.ToString());
             OleDbCommand com = new OleDbCommand(sqlLast, Config.con);
             OleDbDataAdapter adapter = new OleDbDataAdapter(com);
             DataTable dt = new DataTable();
@@ -1196,7 +1196,7 @@ namespace VipManager.FormControl
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", System.Type.GetType("System.Int32"));
             dt.Columns.Add("VipName", System.Type.GetType("System.String"));
-            dt.Columns.Add("ToalPrice", System.Type.GetType("System.Double"));
+            dt.Columns.Add("TotalPrice", System.Type.GetType("System.Double"));
             dt.Columns.Add("CreateAt", System.Type.GetType("System.DateTime"));
             dt.Columns.Add("IsUseComb", System.Type.GetType("System.Boolean"));
             dt.Columns.Add("PayPrice", System.Type.GetType("System.Double"));
@@ -1212,7 +1212,7 @@ namespace VipManager.FormControl
                 DataRow row = dt.NewRow();
                 row["ID"] = Convert.ToInt32(oldRow["ID"]);
                 row["VipName"] = oldRow["VipName"].ToString();
-                row["ToalPrice"] = Convert.ToDouble(oldRow["ToalPrice"]);
+                row["TotalPrice"] = Convert.ToDouble(oldRow["TotalPrice"]);
                 row["PayPrice"] = Convert.ToDouble(oldRow["PayPrice"]);
                 row["CreateAt"] = (System.DateTime)oldRow["CreateAt"];
                 row["IsUseComb"] = (System.Boolean)oldRow["IsUseComb"];
@@ -1264,6 +1264,10 @@ namespace VipManager.FormControl
             OleDbDataAdapter adapter = new OleDbDataAdapter(sqlPay, Config.con);
             DtPayPro.Clear();
             adapter.Fill(DtPayPro);
+            //if (DtPayPro.Rows.Count > 0)
+            //{
+            //    DataRow row3 = DtPayPro.Rows[0];
+            //}
         }
 
         //搜索支付记录信息

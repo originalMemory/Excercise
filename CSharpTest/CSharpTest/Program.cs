@@ -36,11 +36,14 @@ namespace CSharpTest
             //DnlTools dnl = new DnlTools();
             //dnl.DelUnuseLink();
 
-            string userName = "test";
-            string pw = "123";
-            VipMaTools.InsertUser(userName, pw);
+            //string userName = "test";
+            //string pw = "123";
+            //VipMaTools.InsertUser(userName, pw);
 
-           
+            var keys = new List<string> { "公益筹款人", "筹款人", "劝募人" };
+            var key = keys.Skip(4).Take(10).ToList();
+            if(key.Count>0)
+                Console.WriteLine(key.First());
 
             Console.ReadKey();
         }

@@ -93,4 +93,19 @@ namespace CSharpTest.Model
         public bool isNode { get; set; }
 
     }
+
+    /// <summary>
+    /// 百度链接数据
+    /// </summary>
+    public class BaiduLink
+    {
+        public string Id;
+        public string Url;
+        public string Title;
+        public string Description;
+        public string Domain;
+        public string Keyword;
+        public string KeywordId;
+        public DateTime PublishTime;
+    }
 }
