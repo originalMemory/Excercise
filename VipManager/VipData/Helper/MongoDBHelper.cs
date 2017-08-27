@@ -11,14 +11,14 @@ using MongoV2;
 using VipData.Model;
 
 
-namespace VipManager.Helper
+namespace VipData.Helper
 {
     public class MongoDBHelper:MDB
     {
 
-        static string conn = Commons.GetAppSetting("mongoCon");
+        static string conn = "mongodb://vipMa:vip2017@101.200.43.118:2017/admin";
 
-        static string dbName = Commons.GetAppSetting("mongoDB");
+        static string dbName = "vipManage";
 
 
         public MongoDBHelper()

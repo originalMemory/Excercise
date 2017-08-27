@@ -9,7 +9,7 @@ namespace VipData.Model
     /// <summary>
     /// 结果类
     /// </summary>
-    public class Result
+    public class ResultDto
     {
         /// <summary>
         /// 是否成功

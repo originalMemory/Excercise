@@ -12,11 +12,12 @@ using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
 using VipData.Model;
-using VipImgApi.Helper;
+using VipData.Helper;
+using System.Text.RegularExpressions;
 
 namespace VipImgApi.Controllers
 {
-    public class ImgApi : ApiController
+    public class ImgController : ApiController
     {
         /// <summary>
         /// 根据md5上传文件
@@ -26,7 +27,7 @@ namespace VipImgApi.Controllers
         /// <param name="fileName">文件名</param>
         /// <returns></returns>
         [HttpPost]
-        public bool UploadFile(string fileId, string fileType, string fileName)
+        public bool UploadImg(string fileId)
         {
             try
             {
@@ -34,14 +35,17 @@ namespace VipImgApi.Controllers
                 HttpPostedFile file = HttpContext.Current.Request.Files[0];
                 byte[] bs = new byte[file.ContentLength];       //比特流
                 file.InputStream.Read(bs, 0, bs.Length);        //获取文件流
+                string extension = System.IO.Path.GetExtension(file.FileName);
                 UserImgMongo ff = new UserImgMongo();
                 ff.Bytes = bs;
-                ff.Extention = fileType;
-                ff.Name = fileName;
+                ff.Extention = extension;
+                ff.Name = file.FileName;
                 ff._id = new ObjectId(fileId);
                 ff.Size = bs.Length;
                 ff.CreateAt = DateTime.Now.AddHours(8);
-                MongoDBHelper.Instance.GetUserImgMongo().InsertOne(ff);
+                
+                
+                MongoDBHelper.Instance.GetUserImg().InsertOne(ff);
                 return true;
             }
             catch (Exception)
@@ -56,60 +60,32 @@ namespace VipImgApi.Controllers
         /// <param name="fileId">文件唯一标识</param>
         /// <returns></returns>
         [HttpGet]
-        public HttpResponseMessage DownloadFile(string fileId)
+        public HttpResponseMessage DownloadImg(string fileId)
         {
             var builder = Builders<UserImgMongo>.Filter;
             var filter = builder.Eq(x => x._id, new ObjectId(fileId));
-            var file = MongoDBHelper.Instance.GetUserImgMongo().Find(filter).FirstOrDefault();
+            var file = MongoDBHelper.Instance.GetUserImg().Find(filter).FirstOrDefault();
 
             if (file != null)
             {
                 HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
                 MemoryStream stream = new MemoryStream(file.Bytes);
                 response.Content = new StreamContent(stream);
-                if (file.FileType == "png")
+                Regex reg = new Regex("png|jpg|bmp|gif|jpeg");
+                if (reg.IsMatch(file.Extention))
                     response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
                 else
                 {
                     response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                     response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                     {
-                        FileName = file.FileName
+                        FileName = file.Name
                     };
                 }
 
                 return response;
             }
             return ControllerContext.Request.CreateErrorResponse(HttpStatusCode.NotFound, "");
-        }
-
-        /// <summary>
-        /// 上传图片
-        /// </summary>
-        /// <param name="path">图片相对路径</param>
-        /// <returns></returns>
-        [HttpPost]
-        public string ImgUpload()
-        {
-            var imgId = ObjectId.GenerateNewId();
-            //读取文件
-            HttpPostedFile file = HttpContext.Current.Request.Files[0];
-            byte[] bs = new byte[file.ContentLength];       //比特流
-            file.InputStream.Read(bs, 0, bs.Length);        //获取文件流
-            string exten = Path.GetExtension(file.FileName);               //扩展名
-            string name = Guid.NewGuid().ToString() + exten;      //图片名
-            UserImgMongo ff = new UserImgMongo();
-            ff.Bytes = bs;
-            ff.FileType = "png";
-            ff.FileName = name;
-            ff._id = imgId;
-            ff.Size = bs.Length;
-            ff.CreateAt = DateTime.Now.AddHours(8);
-            MongoDBHelper.Instance.GetUserImgMongo().InsertOne(ff);
-            //返回图片链接
-            string baseUrl = "http://211.154.6.166:9999";
-            string imgUrl = baseUrl + "/api/File/DownloadFile?fileId=" + imgId;
-            return imgUrl;
         }
     }
 }

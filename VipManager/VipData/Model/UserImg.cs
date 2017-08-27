@@ -37,5 +37,13 @@ namespace VipData.Model
         /// 用户图片类型
         /// </summary>
         public UserImgType Type { get; set; }
+        /// <summary>
+        /// 是否删除
+        /// </summary>
+        public bool IsDel { get; set; }
+        /// <summary>
+        /// 删除时间
+        /// </summary>
+        public DateTime DelAt { get; set; }
     }
 }

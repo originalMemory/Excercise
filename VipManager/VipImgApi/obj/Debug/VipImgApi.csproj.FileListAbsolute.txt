@@ -40,3 +40,5 @@ F:\MyGit\VipMa\VipManager\VipImgApi\bin\zh-Hans\System.Web.WebPages.Razor.resour
 F:\MyGit\VipMa\VipManager\VipImgApi\obj\Debug\VipImgApi.csprojResolveAssemblyReference.cache
 F:\MyGit\VipMa\VipManager\VipImgApi\obj\Debug\VipImgApi.dll
 F:\MyGit\VipMa\VipManager\VipImgApi\obj\Debug\VipImgApi.pdb
+F:\MyGit\VipManager\VipImgApi\obj\Debug\VipImgApi.csprojResolveAssemblyReference.cache
+F:\MyGit\VipManager\VipImgApi\obj\Debug\VipImgApi.dll

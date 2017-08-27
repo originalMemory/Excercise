@@ -19,7 +19,7 @@ namespace VipData.Model
         /// <summary>
         /// 注册时间
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreateAt { get; set; }
         /// <summary>
         /// 用户名
         /// </summary>
@@ -43,7 +43,7 @@ namespace VipData.Model
         /// <summary>
         /// 总计登陆次数
         /// </summary>
-        public string LoginNum { get; set; }
+        public int LoginNum { get; set; }
         /// <summary>
         /// 商号
         /// </summary>

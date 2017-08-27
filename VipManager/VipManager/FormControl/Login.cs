@@ -87,7 +87,7 @@ namespace VipManager.FormControl
         void RefreshLogo()
         {
             string logoUrl = Config.User.LogoUrl;
-            string iniPath = Commons.GetAppSetting("config");
+            string iniPath = VipData.Helper.Commons.GetAppSetting("config");
             OperateIni.WriteIniData("Enveronment", "logoUrl", logoUrl, iniPath);
         }
 

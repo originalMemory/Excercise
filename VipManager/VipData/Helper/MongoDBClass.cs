@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace VipManager.Helper
+namespace VipData.Helper
 {
     public class MongoDBClass<T>
     {
 
-        private string conn = Commons.GetAppSetting("mongoCon");
+        private string conn = "mongodb://vipMa:vip2017@101.200.43.118:2017/admin";
 
-        private string dbName = Commons.GetAppSetting("mongoDB");
+        private string dbName = "vipManage";
 
         public MongoDatabase GetMongoDB()
         {
