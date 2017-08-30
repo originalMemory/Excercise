@@ -10,36 +10,47 @@ namespace CSharpTest.Tools
     class D3quadtree
     {
         /// <summary>
-        /// 四叉树
+        /// 根结点
         /// </summary>
-        public QuadtreeRoot Tree = new QuadtreeRoot();
+        public QuadtreeNode _root;
+        /// <summary>
+        /// x坐标左值
+        /// </summary>
+        public double _x0;
+        /// <summary>
+        /// y坐标下值
+        /// </summary>
+        public double _y0;
+        /// <summary>
+        /// x坐标右值
+        /// </summary>
+        public double _x1;
+        /// <summary>
+        /// y坐标上值
+        /// </summary>
+        public double _y1;
 
         /// <summary>
         /// 初始化四叉树
         /// </summary>
         /// <param name="nodes">节点</param>
         /// <returns></returns>
-        public QuadtreeRoot quadtree(List<ForceNode> nodes)
+        public D3quadtree(List<ForceNode> nodes)
         {
             Quadtree(0.0, 0.0, 0.0, 0.0);
             if (nodes.Count > 0)
             {
                 addAll(nodes);
-                return Tree;
-            }
-            else
-            {
-                return null;
             }
         }
 
         void Quadtree(double x0, double y0, double x1, double y1)
         {
-            Tree._x0 = x0;
-            Tree._y0 = y0;
-            Tree._x1 = x1;
-            Tree._y1 = y1;
-            Tree._root = null;
+            this._x0 = x0;
+            this._y0 = y0;
+            this._x1 = x1;
+            this._y1 = y1;
+            this._root = null;
         }
 
         /// <summary>
@@ -81,13 +92,13 @@ namespace CSharpTest.Tools
             //如果极值不存在，则使用已存在的极值
             if (x1 < x0)
             {
-                x0 = Tree._x0;
-                x1 = Tree._x1;
+                x0 = this._x0;
+                x1 = this._x1;
             }
             if (y1 < y0)
             {
-                y0 = Tree._y0;
-                y1 = Tree._y1;
+                y0 = this._y0;
+                y1 = this._y1;
             }
 
             //扩展树以覆盖新节点
@@ -111,10 +122,10 @@ namespace CSharpTest.Tools
             if (x == 0.0 || y == 0.0)
                 return;
 
-            double x0 = Tree._x0;
-            double x1 = Tree._x1;
-            double y0 = Tree._y0;
-            double y1 = Tree._y1;
+            double x0 = this._x0;
+            double x1 = this._x1;
+            double y0 = this._y0;
+            double y1 = this._y1;
 
             if (x0 == x1 && y0 == y1)
             {
@@ -128,9 +139,9 @@ namespace CSharpTest.Tools
             {
                 //不再其范围内则扩展4四叉树至包含该点
                 var z = x1 - x0;            //叶子节点间隔
-                if (Tree._root == null)
-                    Tree._root = new QuadtreeNode();
-                var node = Tree._root;
+                if (this._root == null)
+                    this._root = new QuadtreeNode();
+                var node = this._root;
 
                 //判断节点类型
                 //(y < (y0 + y1) / 2) << 1 | (x < (x0 + x1) / 2)
@@ -209,12 +220,12 @@ namespace CSharpTest.Tools
                     default:
                         break;
                 }
-                Tree._root = node;
+                this._root = node;
             }
-            Tree._x0 = x0;
-            Tree._x1 = x1;
-            Tree._y0 = y0;
-            Tree._y1 = y1;
+            this._x0 = x0;
+            this._x1 = x1;
+            this._y0 = y0;
+            this._y1 = y1;
         }
 
         /// <summary>
@@ -227,14 +238,14 @@ namespace CSharpTest.Tools
         {
             if (x == 0.0 && y == 0.0)
                 return;
-            var node = Tree._root;
+            var node = this._root;
             QuadtreeNode parent = node;
             var leaf = new QuadtreeNode
             {
                 IsLeaf = true,
                 data = d
             };
-            double x0 = Tree._x0, x1 = Tree._x1, y0 = Tree._y0, y1 = Tree._y1;
+            double x0 = this._x0, x1 = this._x1, y0 = this._y0, y1 = this._y1;
             double xm;      //四叉树当前区块x轴中点
             double ym;      //四叉树当前区块y轴中点
             double xp;      //数据结点x坐标
@@ -247,7 +258,7 @@ namespace CSharpTest.Tools
             //如果根节点为空，初始化根节点为叶结点
             if (node == null)
             {
-                Tree._root = leaf;
+                this._root = leaf;
                 return;
             }
 
@@ -297,7 +308,7 @@ namespace CSharpTest.Tools
                         parent.children[i] = leaf;
                     }
                     else
-                        Tree._root = leaf;
+                        this._root = leaf;
                     return;
                 }
             }
@@ -349,20 +360,93 @@ namespace CSharpTest.Tools
             parent.children[i] = leaf;
         }
 
-        void visitAfter()
+
+        public void visitAfter(CallBackHandler callback)
         {
-            var quads = new List<QuadtreeRoot>();
-            var next = new List<QuadtreeRoot>();
-            QuadtreeRoot q = null;
-            if (Tree._root != null)
+            var quads = new Stack<QuadtreeVisit>();
+            var next = new Stack<QuadtreeVisit>();
+            QuadtreeVisit q = null;
+            if (this._root != null)
+            {
+                quads.Push(quad(this._root, this._x0, this._y0, this._x1, this._y1));
+            }
+            while (quads.Count > 0)
+            {
+                q = quads.Pop();
+                var node = q.node;
+                //判断是否已经到了底层叶结点
+                if (node.children != null)
+                {
+                    double x0 = q.x0, y0 = q.y0, x1 = q.x1, y1 = q.y1, xm = (x0 + x1) / 2, ym = (y0 + y1) / 2;
+                    if (node.children[0] != null)
+                        quads.Push(quad(node.children[0], x0, y0, x1, y1));
+                    if (node.children[1] != null)
+                        quads.Push(quad(node.children[1], x0, y0, x1, y1));
+                    if (node.children[2] != null)
+                        quads.Push(quad(node.children[2], x0, y0, x1, y1));
+                    if (node.children[3] != null)
+                        quads.Push(quad(node.children[3], x0, y0, x1, y1));
+                }
+                next.Push(q);
+            }
+            //while (q = next.pop())
+            //{
+            //    callback(q.node, q.x0, q.y0, q.x1, q.y1);
+            //}
+            while (next.Count > 0)
+            {
+                q = next.Pop();
+                callback(q.node);
+            }
+        }
+
+        public void visit(CallBackHandler callback)
+        {
+  //          var quads = [], q, node = this._root, child, x0, y0, x1, y1;
+  //if (node) quads.push(new Quad(node, this._x0, this._y0, this._x1, this._y1));
+  //while (q = quads.pop()) {
+  //  if (!callback(node = q.node, x0 = q.x0, y0 = q.y0, x1 = q.x1, y1 = q.y1) && node.length) {
+  //    var xm = (x0 + x1) / 2, ym = (y0 + y1) / 2;
+  //    if (child = node[3]) quads.push(new Quad(child, xm, ym, x1, y1));
+  //    if (child = node[2]) quads.push(new Quad(child, x0, ym, xm, y1));
+  //    if (child = node[1]) quads.push(new Quad(child, xm, y0, x1, ym));
+  //    if (child = node[0]) quads.push(new Quad(child, x0, y0, xm, ym));
+  //  }
+  //}
+            var quads = new Stack<QuadtreeVisit>();
+            QuadtreeVisit q;
+            var node = this._root;
+            double x0, y0, x1, y1;
+            if (node != null)
+            {
+                quads.Push(quad(node, this._x0, this._y0, this._x1, this._y1));
+            }
+            while (quads.Count > 0)
             {
                 
             }
         }
 
-        void quad(QuadtreeNode node, double x0, double y0, double x1, double y1)
+        /// <summary>
+        /// 查询初始化
+        /// </summary>
+        /// <param name="node">初始节点</param>
+        /// <param name="x0"></param>
+        /// <param name="y0"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <returns></returns>
+        QuadtreeVisit quad(QuadtreeNode node, double x0, double y0, double x1, double y1)
         {
-            
+            QuadtreeVisit visit = new QuadtreeVisit
+            {
+                node = node,
+                x0 = x0,
+                x1 = x1,
+                y0 = y0,
+                y1 = y1
+            };
+            return visit;
         }
     }
 }

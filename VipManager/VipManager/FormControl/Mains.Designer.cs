@@ -185,6 +185,7 @@
             this.btnBackupData = new CCWin.SkinControl.SkinButton();
             this.btnRecoverData = new CCWin.SkinControl.SkinButton();
             this.tabShop = new System.Windows.Forms.TabPage();
+            this.btnEditLogo = new CCWin.SkinControl.SkinButton();
             this.btnEditUser = new CCWin.SkinControl.SkinButton();
             this.txtShopWeixin = new CCWin.SkinControl.SkinTextBox();
             this.txtShopPhone = new CCWin.SkinControl.SkinTextBox();
@@ -244,6 +245,8 @@
             this.skinLabel62 = new CCWin.SkinControl.SkinLabel();
             this.labAllVipNum = new CCWin.SkinControl.SkinLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbBackDBs = new System.Windows.Forms.ListBox();
+            this.skinLabel59 = new CCWin.SkinControl.SkinLabel();
             this.tabMain.SuspendLayout();
             this.tabVip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvVip)).BeginInit();
@@ -275,10 +278,9 @@
             this.tabMain.Controls.Add(this.tabPay);
             this.tabMain.Font = new System.Drawing.Font("宋体", 13F);
             this.tabMain.Location = new System.Drawing.Point(0, 0);
-            this.tabMain.Margin = new System.Windows.Forms.Padding(4);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(1535, 863);
+            this.tabMain.Size = new System.Drawing.Size(1151, 690);
             this.tabMain.TabIndex = 0;
             this.tabMain.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabMain_Selected);
             // 
@@ -337,10 +339,9 @@
             this.tabVip.Controls.Add(this.dgvVip);
             this.tabVip.Controls.Add(this.btnAddVip);
             this.tabVip.Location = new System.Drawing.Point(4, 27);
-            this.tabVip.Margin = new System.Windows.Forms.Padding(4);
             this.tabVip.Name = "tabVip";
-            this.tabVip.Padding = new System.Windows.Forms.Padding(4);
-            this.tabVip.Size = new System.Drawing.Size(1527, 828);
+            this.tabVip.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabVip.Size = new System.Drawing.Size(1143, 659);
             this.tabVip.TabIndex = 0;
             this.tabVip.Text = "会员管理";
             this.tabVip.UseVisualStyleBackColor = true;
@@ -351,12 +352,11 @@
             this.btnPay.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnPay.DownBack = null;
             this.btnPay.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnPay.Location = new System.Drawing.Point(965, 42);
-            this.btnPay.Margin = new System.Windows.Forms.Padding(4);
+            this.btnPay.Location = new System.Drawing.Point(724, 34);
             this.btnPay.MouseBack = null;
             this.btnPay.Name = "btnPay";
             this.btnPay.NormlBack = null;
-            this.btnPay.Size = new System.Drawing.Size(128, 35);
+            this.btnPay.Size = new System.Drawing.Size(96, 28);
             this.btnPay.TabIndex = 158;
             this.btnPay.Text = "收银";
             this.btnPay.UseVisualStyleBackColor = false;
@@ -368,12 +368,11 @@
             this.btnEditVipComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnEditVipComb.DownBack = null;
             this.btnEditVipComb.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnEditVipComb.Location = new System.Drawing.Point(1189, 250);
-            this.btnEditVipComb.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEditVipComb.Location = new System.Drawing.Point(892, 200);
             this.btnEditVipComb.MouseBack = null;
             this.btnEditVipComb.Name = "btnEditVipComb";
             this.btnEditVipComb.NormlBack = null;
-            this.btnEditVipComb.Size = new System.Drawing.Size(128, 35);
+            this.btnEditVipComb.Size = new System.Drawing.Size(96, 28);
             this.btnEditVipComb.TabIndex = 157;
             this.btnEditVipComb.Text = "修改套餐";
             this.btnEditVipComb.UseVisualStyleBackColor = false;
@@ -389,31 +388,29 @@
             this.txtVipComb.IsPasswordChat = '\0';
             this.txtVipComb.IsSystemPasswordChar = false;
             this.txtVipComb.Lines = new string[0];
-            this.txtVipComb.Location = new System.Drawing.Point(177, 395);
+            this.txtVipComb.Location = new System.Drawing.Point(133, 316);
             this.txtVipComb.Margin = new System.Windows.Forms.Padding(0);
             this.txtVipComb.MaxLength = 32767;
-            this.txtVipComb.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtVipComb.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtVipComb.MouseBack = null;
             this.txtVipComb.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtVipComb.Multiline = true;
+            this.txtVipComb.Multiline = false;
             this.txtVipComb.Name = "txtVipComb";
             this.txtVipComb.NormlBack = null;
-            this.txtVipComb.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtVipComb.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtVipComb.ReadOnly = true;
             this.txtVipComb.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtVipComb.Size = new System.Drawing.Size(175, 35);
+            this.txtVipComb.Size = new System.Drawing.Size(131, 28);
             // 
             // 
             // 
             this.txtVipComb.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtVipComb.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtVipComb.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtVipComb.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtVipComb.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtVipComb.SkinTxt.Multiline = true;
+            this.txtVipComb.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtVipComb.SkinTxt.Name = "BaseText";
             this.txtVipComb.SkinTxt.ReadOnly = true;
-            this.txtVipComb.SkinTxt.Size = new System.Drawing.Size(161, 23);
+            this.txtVipComb.SkinTxt.Size = new System.Drawing.Size(121, 18);
             this.txtVipComb.SkinTxt.TabIndex = 0;
             this.txtVipComb.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtVipComb.SkinTxt.WaterText = "";
@@ -429,7 +426,8 @@
             this.skinLabel12.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel12.BorderColor = System.Drawing.Color.White;
             this.skinLabel12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel12.Location = new System.Drawing.Point(443, 332);
+            this.skinLabel12.Location = new System.Drawing.Point(332, 266);
+            this.skinLabel12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel12.Name = "skinLabel12";
             this.skinLabel12.Size = new System.Drawing.Size(90, 21);
             this.skinLabel12.TabIndex = 155;
@@ -441,7 +439,8 @@
             this.skinLabel30.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel30.BorderColor = System.Drawing.Color.White;
             this.skinLabel30.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel30.Location = new System.Drawing.Point(443, 291);
+            this.skinLabel30.Location = new System.Drawing.Point(332, 233);
+            this.skinLabel30.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel30.Name = "skinLabel30";
             this.skinLabel30.Size = new System.Drawing.Size(90, 21);
             this.skinLabel30.TabIndex = 154;
@@ -453,7 +452,8 @@
             this.skinLabel31.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel31.BorderColor = System.Drawing.Color.White;
             this.skinLabel31.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel31.Location = new System.Drawing.Point(463, 250);
+            this.skinLabel31.Location = new System.Drawing.Point(347, 200);
+            this.skinLabel31.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel31.Name = "skinLabel31";
             this.skinLabel31.Size = new System.Drawing.Size(74, 21);
             this.skinLabel31.TabIndex = 153;
@@ -465,7 +465,8 @@
             this.skinLabel32.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel32.BorderColor = System.Drawing.Color.White;
             this.skinLabel32.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel32.Location = new System.Drawing.Point(835, 114);
+            this.skinLabel32.Location = new System.Drawing.Point(626, 91);
+            this.skinLabel32.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel32.Name = "skinLabel32";
             this.skinLabel32.Size = new System.Drawing.Size(58, 21);
             this.skinLabel32.TabIndex = 152;
@@ -477,7 +478,8 @@
             this.skinLabel33.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel33.BorderColor = System.Drawing.Color.White;
             this.skinLabel33.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel33.Location = new System.Drawing.Point(483, 378);
+            this.skinLabel33.Location = new System.Drawing.Point(362, 302);
+            this.skinLabel33.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel33.Name = "skinLabel33";
             this.skinLabel33.Size = new System.Drawing.Size(58, 21);
             this.skinLabel33.TabIndex = 151;
@@ -489,10 +491,9 @@
             this.cbSexDress.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSexDress.Font = new System.Drawing.Font("宋体", 10F);
             this.cbSexDress.FormattingEnabled = true;
-            this.cbSexDress.Location = new System.Drawing.Point(563, 332);
-            this.cbSexDress.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSexDress.Location = new System.Drawing.Point(422, 266);
             this.cbSexDress.Name = "cbSexDress";
-            this.cbSexDress.Size = new System.Drawing.Size(119, 24);
+            this.cbSexDress.Size = new System.Drawing.Size(90, 24);
             this.cbSexDress.TabIndex = 150;
             this.cbSexDress.WaterText = "";
             // 
@@ -502,10 +503,9 @@
             this.cbHairLossTrend.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairLossTrend.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairLossTrend.FormattingEnabled = true;
-            this.cbHairLossTrend.Location = new System.Drawing.Point(563, 290);
-            this.cbHairLossTrend.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairLossTrend.Location = new System.Drawing.Point(422, 232);
             this.cbHairLossTrend.Name = "cbHairLossTrend";
-            this.cbHairLossTrend.Size = new System.Drawing.Size(119, 24);
+            this.cbHairLossTrend.Size = new System.Drawing.Size(90, 24);
             this.cbHairLossTrend.TabIndex = 149;
             this.cbHairLossTrend.WaterText = "";
             // 
@@ -515,10 +515,9 @@
             this.cbHairDensity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairDensity.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairDensity.FormattingEnabled = true;
-            this.cbHairDensity.Location = new System.Drawing.Point(563, 249);
-            this.cbHairDensity.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairDensity.Location = new System.Drawing.Point(422, 199);
             this.cbHairDensity.Name = "cbHairDensity";
-            this.cbHairDensity.Size = new System.Drawing.Size(119, 24);
+            this.cbHairDensity.Size = new System.Drawing.Size(90, 24);
             this.cbHairDensity.TabIndex = 148;
             this.cbHairDensity.WaterText = "";
             // 
@@ -528,10 +527,9 @@
             this.cbProfession.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProfession.Font = new System.Drawing.Font("宋体", 10F);
             this.cbProfession.FormattingEnabled = true;
-            this.cbProfession.Location = new System.Drawing.Point(915, 206);
-            this.cbProfession.Margin = new System.Windows.Forms.Padding(4);
+            this.cbProfession.Location = new System.Drawing.Point(686, 165);
             this.cbProfession.Name = "cbProfession";
-            this.cbProfession.Size = new System.Drawing.Size(119, 24);
+            this.cbProfession.Size = new System.Drawing.Size(90, 24);
             this.cbProfession.TabIndex = 147;
             this.cbProfession.WaterText = "";
             // 
@@ -541,7 +539,8 @@
             this.skinLabel34.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel34.BorderColor = System.Drawing.Color.White;
             this.skinLabel34.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel34.Location = new System.Drawing.Point(835, 206);
+            this.skinLabel34.Location = new System.Drawing.Point(626, 165);
+            this.skinLabel34.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel34.Name = "skinLabel34";
             this.skinLabel34.Size = new System.Drawing.Size(58, 21);
             this.skinLabel34.TabIndex = 146;
@@ -553,10 +552,9 @@
             this.cbSkinColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSkinColor.Font = new System.Drawing.Font("宋体", 10F);
             this.cbSkinColor.FormattingEnabled = true;
-            this.cbSkinColor.Location = new System.Drawing.Point(915, 160);
-            this.cbSkinColor.Margin = new System.Windows.Forms.Padding(4);
+            this.cbSkinColor.Location = new System.Drawing.Point(686, 128);
             this.cbSkinColor.Name = "cbSkinColor";
-            this.cbSkinColor.Size = new System.Drawing.Size(119, 24);
+            this.cbSkinColor.Size = new System.Drawing.Size(90, 24);
             this.cbSkinColor.TabIndex = 145;
             this.cbSkinColor.WaterText = "";
             // 
@@ -566,7 +564,8 @@
             this.skinLabel35.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel35.BorderColor = System.Drawing.Color.White;
             this.skinLabel35.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel35.Location = new System.Drawing.Point(835, 160);
+            this.skinLabel35.Location = new System.Drawing.Point(626, 128);
+            this.skinLabel35.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel35.Name = "skinLabel35";
             this.skinLabel35.Size = new System.Drawing.Size(58, 21);
             this.skinLabel35.TabIndex = 144;
@@ -578,10 +577,9 @@
             this.cbBodySize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBodySize.Font = new System.Drawing.Font("宋体", 10F);
             this.cbBodySize.FormattingEnabled = true;
-            this.cbBodySize.Location = new System.Drawing.Point(915, 112);
-            this.cbBodySize.Margin = new System.Windows.Forms.Padding(4);
+            this.cbBodySize.Location = new System.Drawing.Point(686, 90);
             this.cbBodySize.Name = "cbBodySize";
-            this.cbBodySize.Size = new System.Drawing.Size(119, 24);
+            this.cbBodySize.Size = new System.Drawing.Size(90, 24);
             this.cbBodySize.TabIndex = 143;
             this.cbBodySize.WaterText = "";
             // 
@@ -591,10 +589,9 @@
             this.cbHeight.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHeight.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHeight.FormattingEnabled = true;
-            this.cbHeight.Location = new System.Drawing.Point(563, 376);
-            this.cbHeight.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHeight.Location = new System.Drawing.Point(422, 301);
             this.cbHeight.Name = "cbHeight";
-            this.cbHeight.Size = new System.Drawing.Size(119, 24);
+            this.cbHeight.Size = new System.Drawing.Size(90, 24);
             this.cbHeight.TabIndex = 142;
             this.cbHeight.WaterText = "";
             // 
@@ -604,10 +601,9 @@
             this.cbHairQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairQuality.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairQuality.FormattingEnabled = true;
-            this.cbHairQuality.Location = new System.Drawing.Point(563, 202);
-            this.cbHairQuality.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairQuality.Location = new System.Drawing.Point(422, 162);
             this.cbHairQuality.Name = "cbHairQuality";
-            this.cbHairQuality.Size = new System.Drawing.Size(119, 24);
+            this.cbHairQuality.Size = new System.Drawing.Size(90, 24);
             this.cbHairQuality.TabIndex = 141;
             this.cbHairQuality.WaterText = "";
             // 
@@ -617,7 +613,8 @@
             this.skinLabel36.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel36.BorderColor = System.Drawing.Color.White;
             this.skinLabel36.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel36.Location = new System.Drawing.Point(483, 202);
+            this.skinLabel36.Location = new System.Drawing.Point(362, 162);
+            this.skinLabel36.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel36.Name = "skinLabel36";
             this.skinLabel36.Size = new System.Drawing.Size(58, 21);
             this.skinLabel36.TabIndex = 140;
@@ -629,10 +626,9 @@
             this.cbHairColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbHairColor.Font = new System.Drawing.Font("宋体", 10F);
             this.cbHairColor.FormattingEnabled = true;
-            this.cbHairColor.Location = new System.Drawing.Point(563, 162);
-            this.cbHairColor.Margin = new System.Windows.Forms.Padding(4);
+            this.cbHairColor.Location = new System.Drawing.Point(422, 130);
             this.cbHairColor.Name = "cbHairColor";
-            this.cbHairColor.Size = new System.Drawing.Size(119, 24);
+            this.cbHairColor.Size = new System.Drawing.Size(90, 24);
             this.cbHairColor.TabIndex = 139;
             this.cbHairColor.WaterText = "";
             // 
@@ -642,7 +638,8 @@
             this.skinLabel37.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel37.BorderColor = System.Drawing.Color.White;
             this.skinLabel37.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel37.Location = new System.Drawing.Point(483, 162);
+            this.skinLabel37.Location = new System.Drawing.Point(362, 130);
+            this.skinLabel37.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel37.Name = "skinLabel37";
             this.skinLabel37.Size = new System.Drawing.Size(58, 21);
             this.skinLabel37.TabIndex = 138;
@@ -654,10 +651,9 @@
             this.cbFaceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFaceType.Font = new System.Drawing.Font("宋体", 10F);
             this.cbFaceType.FormattingEnabled = true;
-            this.cbFaceType.Location = new System.Drawing.Point(563, 116);
-            this.cbFaceType.Margin = new System.Windows.Forms.Padding(4);
+            this.cbFaceType.Location = new System.Drawing.Point(422, 93);
             this.cbFaceType.Name = "cbFaceType";
-            this.cbFaceType.Size = new System.Drawing.Size(119, 24);
+            this.cbFaceType.Size = new System.Drawing.Size(90, 24);
             this.cbFaceType.TabIndex = 137;
             this.cbFaceType.WaterText = "";
             // 
@@ -667,7 +663,8 @@
             this.skinLabel38.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel38.BorderColor = System.Drawing.Color.White;
             this.skinLabel38.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel38.Location = new System.Drawing.Point(483, 116);
+            this.skinLabel38.Location = new System.Drawing.Point(362, 93);
+            this.skinLabel38.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel38.Name = "skinLabel38";
             this.skinLabel38.Size = new System.Drawing.Size(58, 21);
             this.skinLabel38.TabIndex = 136;
@@ -679,7 +676,8 @@
             this.skinLabel13.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel13.BorderColor = System.Drawing.Color.White;
             this.skinLabel13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel13.Location = new System.Drawing.Point(347, 258);
+            this.skinLabel13.Location = new System.Drawing.Point(260, 206);
+            this.skinLabel13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel13.Name = "skinLabel13";
             this.skinLabel13.Size = new System.Drawing.Size(26, 21);
             this.skinLabel13.TabIndex = 48;
@@ -695,31 +693,29 @@
             this.txtVipPayNum.IsPasswordChat = '\0';
             this.txtVipPayNum.IsSystemPasswordChar = false;
             this.txtVipPayNum.Lines = new string[0];
-            this.txtVipPayNum.Location = new System.Drawing.Point(915, 348);
+            this.txtVipPayNum.Location = new System.Drawing.Point(686, 278);
             this.txtVipPayNum.Margin = new System.Windows.Forms.Padding(0);
             this.txtVipPayNum.MaxLength = 32767;
-            this.txtVipPayNum.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtVipPayNum.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtVipPayNum.MouseBack = null;
             this.txtVipPayNum.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtVipPayNum.Multiline = true;
+            this.txtVipPayNum.Multiline = false;
             this.txtVipPayNum.Name = "txtVipPayNum";
             this.txtVipPayNum.NormlBack = null;
-            this.txtVipPayNum.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtVipPayNum.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtVipPayNum.ReadOnly = true;
             this.txtVipPayNum.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtVipPayNum.Size = new System.Drawing.Size(120, 35);
+            this.txtVipPayNum.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtVipPayNum.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtVipPayNum.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtVipPayNum.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtVipPayNum.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtVipPayNum.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtVipPayNum.SkinTxt.Multiline = true;
+            this.txtVipPayNum.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtVipPayNum.SkinTxt.Name = "BaseText";
             this.txtVipPayNum.SkinTxt.ReadOnly = true;
-            this.txtVipPayNum.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtVipPayNum.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtVipPayNum.SkinTxt.TabIndex = 0;
             this.txtVipPayNum.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtVipPayNum.SkinTxt.WaterText = "";
@@ -735,10 +731,9 @@
             this.cbDay.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDay.Font = new System.Drawing.Font("宋体", 10F);
             this.cbDay.FormattingEnabled = true;
-            this.cbDay.Location = new System.Drawing.Point(277, 258);
-            this.cbDay.Margin = new System.Windows.Forms.Padding(4);
+            this.cbDay.Location = new System.Drawing.Point(208, 206);
             this.cbDay.Name = "cbDay";
-            this.cbDay.Size = new System.Drawing.Size(64, 24);
+            this.cbDay.Size = new System.Drawing.Size(49, 24);
             this.cbDay.TabIndex = 47;
             this.cbDay.WaterText = "";
             // 
@@ -748,7 +743,8 @@
             this.skinLabel11.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel11.BorderColor = System.Drawing.Color.White;
             this.skinLabel11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel11.Location = new System.Drawing.Point(747, 352);
+            this.skinLabel11.Location = new System.Drawing.Point(560, 282);
+            this.skinLabel11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel11.Name = "skinLabel11";
             this.skinLabel11.Size = new System.Drawing.Size(122, 21);
             this.skinLabel11.TabIndex = 134;
@@ -760,7 +756,8 @@
             this.skinLabel25.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel25.BorderColor = System.Drawing.Color.White;
             this.skinLabel25.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel25.Location = new System.Drawing.Point(245, 258);
+            this.skinLabel25.Location = new System.Drawing.Point(184, 206);
+            this.skinLabel25.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel25.Name = "skinLabel25";
             this.skinLabel25.Size = new System.Drawing.Size(26, 21);
             this.skinLabel25.TabIndex = 46;
@@ -772,7 +769,8 @@
             this.skinLabel4.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel4.BorderColor = System.Drawing.Color.White;
             this.skinLabel4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel4.Location = new System.Drawing.Point(747, 299);
+            this.skinLabel4.Location = new System.Drawing.Point(560, 239);
+            this.skinLabel4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel4.Name = "skinLabel4";
             this.skinLabel4.Size = new System.Drawing.Size(122, 21);
             this.skinLabel4.TabIndex = 133;
@@ -784,10 +782,9 @@
             this.cbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMonth.Font = new System.Drawing.Font("宋体", 10F);
             this.cbMonth.FormattingEnabled = true;
-            this.cbMonth.Location = new System.Drawing.Point(177, 258);
-            this.cbMonth.Margin = new System.Windows.Forms.Padding(4);
+            this.cbMonth.Location = new System.Drawing.Point(133, 206);
             this.cbMonth.Name = "cbMonth";
-            this.cbMonth.Size = new System.Drawing.Size(64, 24);
+            this.cbMonth.Size = new System.Drawing.Size(49, 24);
             this.cbMonth.TabIndex = 45;
             this.cbMonth.WaterText = "";
             // 
@@ -796,10 +793,10 @@
             this.dtpVipLastPay.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpVipLastPay.Enabled = false;
             this.dtpVipLastPay.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpVipLastPay.Location = new System.Drawing.Point(915, 299);
-            this.dtpVipLastPay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpVipLastPay.Location = new System.Drawing.Point(686, 239);
+            this.dtpVipLastPay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpVipLastPay.Name = "dtpVipLastPay";
-            this.dtpVipLastPay.Size = new System.Drawing.Size(179, 24);
+            this.dtpVipLastPay.Size = new System.Drawing.Size(135, 24);
             this.dtpVipLastPay.TabIndex = 132;
             // 
             // cbAgeRange
@@ -808,10 +805,9 @@
             this.cbAgeRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAgeRange.Font = new System.Drawing.Font("宋体", 10F);
             this.cbAgeRange.FormattingEnabled = true;
-            this.cbAgeRange.Location = new System.Drawing.Point(177, 296);
-            this.cbAgeRange.Margin = new System.Windows.Forms.Padding(4);
+            this.cbAgeRange.Location = new System.Drawing.Point(133, 237);
             this.cbAgeRange.Name = "cbAgeRange";
-            this.cbAgeRange.Size = new System.Drawing.Size(119, 24);
+            this.cbAgeRange.Size = new System.Drawing.Size(90, 24);
             this.cbAgeRange.TabIndex = 44;
             this.cbAgeRange.WaterText = "";
             // 
@@ -821,12 +817,11 @@
             this.btnSearchVip.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnSearchVip.DownBack = null;
             this.btnSearchVip.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnSearchVip.Location = new System.Drawing.Point(801, 42);
-            this.btnSearchVip.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSearchVip.Location = new System.Drawing.Point(601, 34);
             this.btnSearchVip.MouseBack = null;
             this.btnSearchVip.Name = "btnSearchVip";
             this.btnSearchVip.NormlBack = null;
-            this.btnSearchVip.Size = new System.Drawing.Size(128, 35);
+            this.btnSearchVip.Size = new System.Drawing.Size(96, 28);
             this.btnSearchVip.TabIndex = 131;
             this.btnSearchVip.Text = "搜索";
             this.btnSearchVip.UseVisualStyleBackColor = false;
@@ -838,7 +833,8 @@
             this.skinLabel26.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel26.BorderColor = System.Drawing.Color.White;
             this.skinLabel26.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel26.Location = new System.Drawing.Point(75, 296);
+            this.skinLabel26.Location = new System.Drawing.Point(56, 237);
+            this.skinLabel26.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel26.Name = "skinLabel26";
             this.skinLabel26.Size = new System.Drawing.Size(74, 21);
             this.skinLabel26.TabIndex = 43;
@@ -850,12 +846,11 @@
             this.btnModVip.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnModVip.DownBack = null;
             this.btnModVip.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnModVip.Location = new System.Drawing.Point(1189, 112);
-            this.btnModVip.Margin = new System.Windows.Forms.Padding(4);
+            this.btnModVip.Location = new System.Drawing.Point(892, 90);
             this.btnModVip.MouseBack = null;
             this.btnModVip.Name = "btnModVip";
             this.btnModVip.NormlBack = null;
-            this.btnModVip.Size = new System.Drawing.Size(128, 35);
+            this.btnModVip.Size = new System.Drawing.Size(96, 28);
             this.btnModVip.TabIndex = 130;
             this.btnModVip.Text = "修改";
             this.btnModVip.UseVisualStyleBackColor = false;
@@ -867,12 +862,11 @@
             this.btnDelVip.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnDelVip.DownBack = null;
             this.btnDelVip.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnDelVip.Location = new System.Drawing.Point(1189, 181);
-            this.btnDelVip.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDelVip.Location = new System.Drawing.Point(892, 145);
             this.btnDelVip.MouseBack = null;
             this.btnDelVip.Name = "btnDelVip";
             this.btnDelVip.NormlBack = null;
-            this.btnDelVip.Size = new System.Drawing.Size(128, 35);
+            this.btnDelVip.Size = new System.Drawing.Size(96, 28);
             this.btnDelVip.TabIndex = 129;
             this.btnDelVip.Text = "删除";
             this.btnDelVip.UseVisualStyleBackColor = false;
@@ -888,30 +882,28 @@
             this.txtPhone.IsPasswordChat = '\0';
             this.txtPhone.IsSystemPasswordChar = false;
             this.txtPhone.Lines = new string[0];
-            this.txtPhone.Location = new System.Drawing.Point(177, 346);
+            this.txtPhone.Location = new System.Drawing.Point(133, 277);
             this.txtPhone.Margin = new System.Windows.Forms.Padding(0);
             this.txtPhone.MaxLength = 32767;
-            this.txtPhone.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtPhone.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtPhone.MouseBack = null;
             this.txtPhone.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtPhone.Multiline = true;
+            this.txtPhone.Multiline = false;
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.NormlBack = null;
-            this.txtPhone.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtPhone.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtPhone.ReadOnly = false;
             this.txtPhone.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtPhone.Size = new System.Drawing.Size(175, 35);
+            this.txtPhone.Size = new System.Drawing.Size(131, 28);
             // 
             // 
             // 
             this.txtPhone.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPhone.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPhone.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtPhone.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtPhone.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtPhone.SkinTxt.Multiline = true;
+            this.txtPhone.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtPhone.SkinTxt.Name = "BaseText";
-            this.txtPhone.SkinTxt.Size = new System.Drawing.Size(161, 23);
+            this.txtPhone.SkinTxt.Size = new System.Drawing.Size(121, 18);
             this.txtPhone.SkinTxt.TabIndex = 0;
             this.txtPhone.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtPhone.SkinTxt.WaterText = "";
@@ -927,7 +919,8 @@
             this.skinLabel27.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel27.BorderColor = System.Drawing.Color.White;
             this.skinLabel27.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel27.Location = new System.Drawing.Point(99, 258);
+            this.skinLabel27.Location = new System.Drawing.Point(74, 206);
+            this.skinLabel27.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel27.Name = "skinLabel27";
             this.skinLabel27.Size = new System.Drawing.Size(58, 21);
             this.skinLabel27.TabIndex = 40;
@@ -939,7 +932,8 @@
             this.skinLabel28.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel28.BorderColor = System.Drawing.Color.White;
             this.skinLabel28.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel28.Location = new System.Drawing.Point(100, 399);
+            this.skinLabel28.Location = new System.Drawing.Point(75, 319);
+            this.skinLabel28.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel28.Name = "skinLabel28";
             this.skinLabel28.Size = new System.Drawing.Size(58, 21);
             this.skinLabel28.TabIndex = 39;
@@ -951,7 +945,8 @@
             this.skinLabel29.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel29.BorderColor = System.Drawing.Color.White;
             this.skinLabel29.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel29.Location = new System.Drawing.Point(55, 348);
+            this.skinLabel29.Location = new System.Drawing.Point(41, 278);
+            this.skinLabel29.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel29.Name = "skinLabel29";
             this.skinLabel29.Size = new System.Drawing.Size(90, 21);
             this.skinLabel29.TabIndex = 38;
@@ -966,10 +961,9 @@
             this.cbGender.Items.AddRange(new object[] {
             "男",
             "女"});
-            this.cbGender.Location = new System.Drawing.Point(177, 210);
-            this.cbGender.Margin = new System.Windows.Forms.Padding(4);
+            this.cbGender.Location = new System.Drawing.Point(133, 168);
             this.cbGender.Name = "cbGender";
-            this.cbGender.Size = new System.Drawing.Size(119, 24);
+            this.cbGender.Size = new System.Drawing.Size(90, 24);
             this.cbGender.TabIndex = 126;
             this.cbGender.WaterText = "";
             // 
@@ -983,30 +977,28 @@
             this.txtVipName.IsPasswordChat = '\0';
             this.txtVipName.IsSystemPasswordChar = false;
             this.txtVipName.Lines = new string[0];
-            this.txtVipName.Location = new System.Drawing.Point(177, 162);
+            this.txtVipName.Location = new System.Drawing.Point(133, 130);
             this.txtVipName.Margin = new System.Windows.Forms.Padding(0);
             this.txtVipName.MaxLength = 32767;
-            this.txtVipName.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtVipName.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtVipName.MouseBack = null;
             this.txtVipName.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtVipName.Multiline = true;
+            this.txtVipName.Multiline = false;
             this.txtVipName.Name = "txtVipName";
             this.txtVipName.NormlBack = null;
-            this.txtVipName.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtVipName.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtVipName.ReadOnly = false;
             this.txtVipName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtVipName.Size = new System.Drawing.Size(120, 35);
+            this.txtVipName.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtVipName.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtVipName.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtVipName.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtVipName.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtVipName.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtVipName.SkinTxt.Multiline = true;
+            this.txtVipName.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtVipName.SkinTxt.Name = "BaseText";
-            this.txtVipName.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtVipName.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtVipName.SkinTxt.TabIndex = 0;
             this.txtVipName.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtVipName.SkinTxt.WaterText = "";
@@ -1026,31 +1018,29 @@
             this.txtVipNo.IsPasswordChat = '\0';
             this.txtVipNo.IsSystemPasswordChar = false;
             this.txtVipNo.Lines = new string[0];
-            this.txtVipNo.Location = new System.Drawing.Point(177, 112);
+            this.txtVipNo.Location = new System.Drawing.Point(133, 90);
             this.txtVipNo.Margin = new System.Windows.Forms.Padding(0);
             this.txtVipNo.MaxLength = 32767;
-            this.txtVipNo.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtVipNo.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtVipNo.MouseBack = null;
             this.txtVipNo.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtVipNo.Multiline = true;
+            this.txtVipNo.Multiline = false;
             this.txtVipNo.Name = "txtVipNo";
             this.txtVipNo.NormlBack = null;
-            this.txtVipNo.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtVipNo.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtVipNo.ReadOnly = true;
             this.txtVipNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtVipNo.Size = new System.Drawing.Size(120, 35);
+            this.txtVipNo.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtVipNo.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtVipNo.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtVipNo.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtVipNo.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtVipNo.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtVipNo.SkinTxt.Multiline = true;
+            this.txtVipNo.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtVipNo.SkinTxt.Name = "BaseText";
             this.txtVipNo.SkinTxt.ReadOnly = true;
-            this.txtVipNo.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtVipNo.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtVipNo.SkinTxt.TabIndex = 0;
             this.txtVipNo.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtVipNo.SkinTxt.WaterText = "";
@@ -1066,7 +1056,8 @@
             this.skinLabel5.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel5.BorderColor = System.Drawing.Color.White;
             this.skinLabel5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel5.Location = new System.Drawing.Point(100, 116);
+            this.skinLabel5.Location = new System.Drawing.Point(75, 93);
+            this.skinLabel5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel5.Name = "skinLabel5";
             this.skinLabel5.Size = new System.Drawing.Size(58, 21);
             this.skinLabel5.TabIndex = 121;
@@ -1078,7 +1069,8 @@
             this.skinLabel14.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel14.BorderColor = System.Drawing.Color.White;
             this.skinLabel14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel14.Location = new System.Drawing.Point(100, 211);
+            this.skinLabel14.Location = new System.Drawing.Point(75, 169);
+            this.skinLabel14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel14.Name = "skinLabel14";
             this.skinLabel14.Size = new System.Drawing.Size(58, 21);
             this.skinLabel14.TabIndex = 114;
@@ -1090,7 +1082,8 @@
             this.skinLabel15.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel15.BorderColor = System.Drawing.Color.White;
             this.skinLabel15.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel15.Location = new System.Drawing.Point(100, 164);
+            this.skinLabel15.Location = new System.Drawing.Point(75, 131);
+            this.skinLabel15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel15.Name = "skinLabel15";
             this.skinLabel15.Size = new System.Drawing.Size(58, 21);
             this.skinLabel15.TabIndex = 113;
@@ -1106,30 +1099,28 @@
             this.txtSearchVip.IsPasswordChat = '\0';
             this.txtSearchVip.IsSystemPasswordChar = false;
             this.txtSearchVip.Lines = new string[0];
-            this.txtSearchVip.Location = new System.Drawing.Point(531, 42);
+            this.txtSearchVip.Location = new System.Drawing.Point(398, 34);
             this.txtSearchVip.Margin = new System.Windows.Forms.Padding(0);
             this.txtSearchVip.MaxLength = 32767;
-            this.txtSearchVip.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtSearchVip.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtSearchVip.MouseBack = null;
             this.txtSearchVip.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtSearchVip.Multiline = true;
+            this.txtSearchVip.Multiline = false;
             this.txtSearchVip.Name = "txtSearchVip";
             this.txtSearchVip.NormlBack = null;
-            this.txtSearchVip.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtSearchVip.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtSearchVip.ReadOnly = false;
             this.txtSearchVip.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtSearchVip.Size = new System.Drawing.Size(247, 35);
+            this.txtSearchVip.Size = new System.Drawing.Size(185, 28);
             // 
             // 
             // 
             this.txtSearchVip.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSearchVip.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchVip.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtSearchVip.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtSearchVip.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSearchVip.SkinTxt.Multiline = true;
+            this.txtSearchVip.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtSearchVip.SkinTxt.Name = "BaseText";
-            this.txtSearchVip.SkinTxt.Size = new System.Drawing.Size(233, 23);
+            this.txtSearchVip.SkinTxt.Size = new System.Drawing.Size(175, 18);
             this.txtSearchVip.SkinTxt.TabIndex = 0;
             this.txtSearchVip.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtSearchVip.SkinTxt.WaterText = "卡号/姓名/联系方式";
@@ -1145,7 +1136,8 @@
             this.skinLabel10.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel10.BorderColor = System.Drawing.Color.White;
             this.skinLabel10.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel10.Location = new System.Drawing.Point(789, 252);
+            this.skinLabel10.Location = new System.Drawing.Point(592, 202);
+            this.skinLabel10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel10.Name = "skinLabel10";
             this.skinLabel10.Size = new System.Drawing.Size(90, 21);
             this.skinLabel10.TabIndex = 111;
@@ -1156,10 +1148,10 @@
             this.dtpVipReg.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpVipReg.Enabled = false;
             this.dtpVipReg.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpVipReg.Location = new System.Drawing.Point(915, 252);
-            this.dtpVipReg.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpVipReg.Location = new System.Drawing.Point(686, 202);
+            this.dtpVipReg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpVipReg.Name = "dtpVipReg";
-            this.dtpVipReg.Size = new System.Drawing.Size(179, 24);
+            this.dtpVipReg.Size = new System.Drawing.Size(135, 24);
             this.dtpVipReg.TabIndex = 110;
             // 
             // dgvVip
@@ -1211,8 +1203,7 @@
             this.dgvVip.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.dgvVip.HeadFont = new System.Drawing.Font("宋体", 11F);
             this.dgvVip.HeadSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvVip.Location = new System.Drawing.Point(8, 455);
-            this.dgvVip.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvVip.Location = new System.Drawing.Point(6, 364);
             this.dgvVip.MultiSelect = false;
             this.dgvVip.Name = "dgvVip";
             this.dgvVip.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -1224,7 +1215,7 @@
             this.dgvVip.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvVip.RowTemplate.Height = 23;
             this.dgvVip.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvVip.Size = new System.Drawing.Size(1512, 360);
+            this.dgvVip.Size = new System.Drawing.Size(1134, 288);
             this.dgvVip.TabIndex = 105;
             this.dgvVip.TitleBack = null;
             this.dgvVip.TitleBackColorBegin = System.Drawing.Color.White;
@@ -1316,12 +1307,11 @@
             this.btnAddVip.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnAddVip.DownBack = null;
             this.btnAddVip.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnAddVip.Location = new System.Drawing.Point(1180, 42);
-            this.btnAddVip.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAddVip.Location = new System.Drawing.Point(885, 34);
             this.btnAddVip.MouseBack = null;
             this.btnAddVip.Name = "btnAddVip";
             this.btnAddVip.NormlBack = null;
-            this.btnAddVip.Size = new System.Drawing.Size(128, 35);
+            this.btnAddVip.Size = new System.Drawing.Size(96, 28);
             this.btnAddVip.TabIndex = 104;
             this.btnAddVip.Text = "添加会员";
             this.btnAddVip.UseVisualStyleBackColor = false;
@@ -1351,10 +1341,9 @@
             this.tabPro.Controls.Add(this.txtSearchPro);
             this.tabPro.Controls.Add(this.btnAddPro);
             this.tabPro.Location = new System.Drawing.Point(4, 27);
-            this.tabPro.Margin = new System.Windows.Forms.Padding(4);
             this.tabPro.Name = "tabPro";
-            this.tabPro.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPro.Size = new System.Drawing.Size(1527, 828);
+            this.tabPro.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPro.Size = new System.Drawing.Size(1143, 659);
             this.tabPro.TabIndex = 1;
             this.tabPro.Text = "服务管理";
             this.tabPro.UseVisualStyleBackColor = true;
@@ -1407,8 +1396,7 @@
             this.dgvPro.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.dgvPro.HeadFont = new System.Drawing.Font("宋体", 11F);
             this.dgvPro.HeadSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvPro.Location = new System.Drawing.Point(5, 291);
-            this.dgvPro.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvPro.Location = new System.Drawing.Point(4, 233);
             this.dgvPro.MultiSelect = false;
             this.dgvPro.Name = "dgvPro";
             this.dgvPro.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -1420,7 +1408,7 @@
             this.dgvPro.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dgvPro.RowTemplate.Height = 23;
             this.dgvPro.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPro.Size = new System.Drawing.Size(1513, 529);
+            this.dgvPro.Size = new System.Drawing.Size(1135, 423);
             this.dgvPro.TabIndex = 69;
             this.dgvPro.TitleBack = null;
             this.dgvPro.TitleBackColorBegin = System.Drawing.Color.White;
@@ -1511,31 +1499,29 @@
             this.txtProPayNum.IsPasswordChat = '\0';
             this.txtProPayNum.IsSystemPasswordChar = false;
             this.txtProPayNum.Lines = new string[0];
-            this.txtProPayNum.Location = new System.Drawing.Point(933, 206);
+            this.txtProPayNum.Location = new System.Drawing.Point(700, 165);
             this.txtProPayNum.Margin = new System.Windows.Forms.Padding(0);
             this.txtProPayNum.MaxLength = 32767;
-            this.txtProPayNum.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtProPayNum.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtProPayNum.MouseBack = null;
             this.txtProPayNum.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtProPayNum.Multiline = true;
+            this.txtProPayNum.Multiline = false;
             this.txtProPayNum.Name = "txtProPayNum";
             this.txtProPayNum.NormlBack = null;
-            this.txtProPayNum.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtProPayNum.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtProPayNum.ReadOnly = true;
             this.txtProPayNum.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtProPayNum.Size = new System.Drawing.Size(120, 35);
+            this.txtProPayNum.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtProPayNum.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtProPayNum.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtProPayNum.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtProPayNum.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtProPayNum.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtProPayNum.SkinTxt.Multiline = true;
+            this.txtProPayNum.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtProPayNum.SkinTxt.Name = "BaseText";
             this.txtProPayNum.SkinTxt.ReadOnly = true;
-            this.txtProPayNum.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtProPayNum.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtProPayNum.SkinTxt.TabIndex = 0;
             this.txtProPayNum.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtProPayNum.SkinTxt.WaterText = "";
@@ -1551,7 +1537,8 @@
             this.skinLabel16.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel16.BorderColor = System.Drawing.Color.White;
             this.skinLabel16.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel16.Location = new System.Drawing.Point(765, 211);
+            this.skinLabel16.Location = new System.Drawing.Point(574, 169);
+            this.skinLabel16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel16.Name = "skinLabel16";
             this.skinLabel16.Size = new System.Drawing.Size(122, 21);
             this.skinLabel16.TabIndex = 109;
@@ -1563,7 +1550,8 @@
             this.skinLabel6.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel6.BorderColor = System.Drawing.Color.White;
             this.skinLabel6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel6.Location = new System.Drawing.Point(765, 156);
+            this.skinLabel6.Location = new System.Drawing.Point(574, 125);
+            this.skinLabel6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel6.Name = "skinLabel6";
             this.skinLabel6.Size = new System.Drawing.Size(122, 21);
             this.skinLabel6.TabIndex = 108;
@@ -1574,10 +1562,10 @@
             this.dtpProLastPay.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpProLastPay.Enabled = false;
             this.dtpProLastPay.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpProLastPay.Location = new System.Drawing.Point(933, 156);
-            this.dtpProLastPay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpProLastPay.Location = new System.Drawing.Point(700, 125);
+            this.dtpProLastPay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpProLastPay.Name = "dtpProLastPay";
-            this.dtpProLastPay.Size = new System.Drawing.Size(179, 24);
+            this.dtpProLastPay.Size = new System.Drawing.Size(135, 24);
             this.dtpProLastPay.TabIndex = 107;
             // 
             // skinLabel2
@@ -1586,7 +1574,8 @@
             this.skinLabel2.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel2.BorderColor = System.Drawing.Color.White;
             this.skinLabel2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel2.Location = new System.Drawing.Point(809, 99);
+            this.skinLabel2.Location = new System.Drawing.Point(607, 79);
+            this.skinLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel2.Name = "skinLabel2";
             this.skinLabel2.Size = new System.Drawing.Size(90, 21);
             this.skinLabel2.TabIndex = 106;
@@ -1597,10 +1586,10 @@
             this.dtpProCreate.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpProCreate.Enabled = false;
             this.dtpProCreate.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpProCreate.Location = new System.Drawing.Point(933, 98);
-            this.dtpProCreate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpProCreate.Location = new System.Drawing.Point(700, 78);
+            this.dtpProCreate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpProCreate.Name = "dtpProCreate";
-            this.dtpProCreate.Size = new System.Drawing.Size(179, 24);
+            this.dtpProCreate.Size = new System.Drawing.Size(135, 24);
             this.dtpProCreate.TabIndex = 105;
             // 
             // txtProPrice
@@ -1613,30 +1602,28 @@
             this.txtProPrice.IsPasswordChat = '\0';
             this.txtProPrice.IsSystemPasswordChar = false;
             this.txtProPrice.Lines = new string[0];
-            this.txtProPrice.Location = new System.Drawing.Point(232, 211);
+            this.txtProPrice.Location = new System.Drawing.Point(174, 169);
             this.txtProPrice.Margin = new System.Windows.Forms.Padding(0);
             this.txtProPrice.MaxLength = 32767;
-            this.txtProPrice.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtProPrice.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtProPrice.MouseBack = null;
             this.txtProPrice.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtProPrice.Multiline = true;
+            this.txtProPrice.Multiline = false;
             this.txtProPrice.Name = "txtProPrice";
             this.txtProPrice.NormlBack = null;
-            this.txtProPrice.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtProPrice.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtProPrice.ReadOnly = false;
             this.txtProPrice.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtProPrice.Size = new System.Drawing.Size(120, 35);
+            this.txtProPrice.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtProPrice.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtProPrice.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtProPrice.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtProPrice.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtProPrice.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtProPrice.SkinTxt.Multiline = true;
+            this.txtProPrice.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtProPrice.SkinTxt.Name = "BaseText";
-            this.txtProPrice.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtProPrice.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtProPrice.SkinTxt.TabIndex = 0;
             this.txtProPrice.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtProPrice.SkinTxt.WaterText = "";
@@ -1657,31 +1644,30 @@
             this.txtProDesc.IsPasswordChat = '\0';
             this.txtProDesc.IsSystemPasswordChar = false;
             this.txtProDesc.Lines = new string[0];
-            this.txtProDesc.Location = new System.Drawing.Point(488, 82);
+            this.txtProDesc.Location = new System.Drawing.Point(366, 66);
             this.txtProDesc.Margin = new System.Windows.Forms.Padding(0);
             this.txtProDesc.MaxLength = 32767;
-            this.txtProDesc.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtProDesc.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtProDesc.MouseBack = null;
             this.txtProDesc.MouseState = CCWin.SkinClass.ControlState.Normal;
             this.txtProDesc.Multiline = true;
             this.txtProDesc.Name = "txtProDesc";
             this.txtProDesc.NormlBack = null;
-            this.txtProDesc.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtProDesc.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtProDesc.ReadOnly = false;
             this.txtProDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtProDesc.Size = new System.Drawing.Size(228, 189);
+            this.txtProDesc.Size = new System.Drawing.Size(171, 151);
             // 
             // 
             // 
             this.txtProDesc.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtProDesc.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtProDesc.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtProDesc.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtProDesc.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
+            this.txtProDesc.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtProDesc.SkinTxt.Multiline = true;
             this.txtProDesc.SkinTxt.Name = "BaseText";
             this.txtProDesc.SkinTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtProDesc.SkinTxt.Size = new System.Drawing.Size(214, 177);
+            this.txtProDesc.SkinTxt.Size = new System.Drawing.Size(161, 141);
             this.txtProDesc.SkinTxt.TabIndex = 0;
             this.txtProDesc.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtProDesc.SkinTxt.WaterText = "";
@@ -1701,30 +1687,28 @@
             this.txtProName.IsPasswordChat = '\0';
             this.txtProName.IsSystemPasswordChar = false;
             this.txtProName.Lines = new string[0];
-            this.txtProName.Location = new System.Drawing.Point(232, 146);
+            this.txtProName.Location = new System.Drawing.Point(174, 117);
             this.txtProName.Margin = new System.Windows.Forms.Padding(0);
             this.txtProName.MaxLength = 32767;
-            this.txtProName.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtProName.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtProName.MouseBack = null;
             this.txtProName.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtProName.Multiline = true;
+            this.txtProName.Multiline = false;
             this.txtProName.Name = "txtProName";
             this.txtProName.NormlBack = null;
-            this.txtProName.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtProName.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtProName.ReadOnly = false;
             this.txtProName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtProName.Size = new System.Drawing.Size(120, 35);
+            this.txtProName.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtProName.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtProName.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtProName.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtProName.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtProName.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtProName.SkinTxt.Multiline = true;
+            this.txtProName.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtProName.SkinTxt.Name = "BaseText";
-            this.txtProName.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtProName.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtProName.SkinTxt.TabIndex = 0;
             this.txtProName.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtProName.SkinTxt.WaterText = "";
@@ -1744,31 +1728,29 @@
             this.txtProNo.IsPasswordChat = '\0';
             this.txtProNo.IsSystemPasswordChar = false;
             this.txtProNo.Lines = new string[0];
-            this.txtProNo.Location = new System.Drawing.Point(232, 84);
+            this.txtProNo.Location = new System.Drawing.Point(174, 67);
             this.txtProNo.Margin = new System.Windows.Forms.Padding(0);
             this.txtProNo.MaxLength = 32767;
-            this.txtProNo.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtProNo.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtProNo.MouseBack = null;
             this.txtProNo.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtProNo.Multiline = true;
+            this.txtProNo.Multiline = false;
             this.txtProNo.Name = "txtProNo";
             this.txtProNo.NormlBack = null;
-            this.txtProNo.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtProNo.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtProNo.ReadOnly = true;
             this.txtProNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtProNo.Size = new System.Drawing.Size(120, 35);
+            this.txtProNo.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtProNo.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtProNo.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtProNo.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtProNo.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtProNo.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtProNo.SkinTxt.Multiline = true;
+            this.txtProNo.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtProNo.SkinTxt.Name = "BaseText";
             this.txtProNo.SkinTxt.ReadOnly = true;
-            this.txtProNo.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtProNo.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtProNo.SkinTxt.TabIndex = 0;
             this.txtProNo.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtProNo.SkinTxt.WaterText = "";
@@ -1784,7 +1766,8 @@
             this.skinLabel9.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel9.BorderColor = System.Drawing.Color.White;
             this.skinLabel9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel9.Location = new System.Drawing.Point(112, 89);
+            this.skinLabel9.Location = new System.Drawing.Point(84, 71);
+            this.skinLabel9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel9.Name = "skinLabel9";
             this.skinLabel9.Size = new System.Drawing.Size(90, 21);
             this.skinLabel9.TabIndex = 100;
@@ -1796,7 +1779,8 @@
             this.skinLabel8.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel8.BorderColor = System.Drawing.Color.White;
             this.skinLabel8.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel8.Location = new System.Drawing.Point(357, 215);
+            this.skinLabel8.Location = new System.Drawing.Point(268, 172);
+            this.skinLabel8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel8.Name = "skinLabel8";
             this.skinLabel8.Size = new System.Drawing.Size(26, 21);
             this.skinLabel8.TabIndex = 99;
@@ -1808,7 +1792,8 @@
             this.skinLabel7.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel7.BorderColor = System.Drawing.Color.White;
             this.skinLabel7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel7.Location = new System.Drawing.Point(155, 214);
+            this.skinLabel7.Location = new System.Drawing.Point(116, 171);
+            this.skinLabel7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel7.Name = "skinLabel7";
             this.skinLabel7.Size = new System.Drawing.Size(58, 21);
             this.skinLabel7.TabIndex = 98;
@@ -1820,7 +1805,8 @@
             this.skinLabel3.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel3.BorderColor = System.Drawing.Color.White;
             this.skinLabel3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel3.Location = new System.Drawing.Point(409, 82);
+            this.skinLabel3.Location = new System.Drawing.Point(307, 66);
+            this.skinLabel3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel3.Name = "skinLabel3";
             this.skinLabel3.Size = new System.Drawing.Size(58, 21);
             this.skinLabel3.TabIndex = 97;
@@ -1832,7 +1818,8 @@
             this.skinLabel1.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel1.BorderColor = System.Drawing.Color.White;
             this.skinLabel1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel1.Location = new System.Drawing.Point(155, 149);
+            this.skinLabel1.Location = new System.Drawing.Point(116, 119);
+            this.skinLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel1.Name = "skinLabel1";
             this.skinLabel1.Size = new System.Drawing.Size(58, 21);
             this.skinLabel1.TabIndex = 96;
@@ -1844,12 +1831,11 @@
             this.btnSearchPro.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnSearchPro.DownBack = null;
             this.btnSearchPro.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnSearchPro.Location = new System.Drawing.Point(803, 31);
-            this.btnSearchPro.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSearchPro.Location = new System.Drawing.Point(602, 25);
             this.btnSearchPro.MouseBack = null;
             this.btnSearchPro.Name = "btnSearchPro";
             this.btnSearchPro.NormlBack = null;
-            this.btnSearchPro.Size = new System.Drawing.Size(128, 35);
+            this.btnSearchPro.Size = new System.Drawing.Size(96, 28);
             this.btnSearchPro.TabIndex = 95;
             this.btnSearchPro.Text = "搜索";
             this.btnSearchPro.UseVisualStyleBackColor = false;
@@ -1861,12 +1847,11 @@
             this.btnModPro.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnModPro.DownBack = null;
             this.btnModPro.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnModPro.Location = new System.Drawing.Point(1179, 159);
-            this.btnModPro.Margin = new System.Windows.Forms.Padding(4);
+            this.btnModPro.Location = new System.Drawing.Point(884, 127);
             this.btnModPro.MouseBack = null;
             this.btnModPro.Name = "btnModPro";
             this.btnModPro.NormlBack = null;
-            this.btnModPro.Size = new System.Drawing.Size(128, 35);
+            this.btnModPro.Size = new System.Drawing.Size(96, 28);
             this.btnModPro.TabIndex = 94;
             this.btnModPro.Text = "修改";
             this.btnModPro.UseVisualStyleBackColor = false;
@@ -1878,12 +1863,11 @@
             this.btnDelPro.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnDelPro.DownBack = null;
             this.btnDelPro.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnDelPro.Location = new System.Drawing.Point(1179, 226);
-            this.btnDelPro.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDelPro.Location = new System.Drawing.Point(884, 181);
             this.btnDelPro.MouseBack = null;
             this.btnDelPro.Name = "btnDelPro";
             this.btnDelPro.NormlBack = null;
-            this.btnDelPro.Size = new System.Drawing.Size(128, 35);
+            this.btnDelPro.Size = new System.Drawing.Size(96, 28);
             this.btnDelPro.TabIndex = 93;
             this.btnDelPro.Text = "删除";
             this.btnDelPro.UseVisualStyleBackColor = false;
@@ -1899,30 +1883,28 @@
             this.txtSearchPro.IsPasswordChat = '\0';
             this.txtSearchPro.IsSystemPasswordChar = false;
             this.txtSearchPro.Lines = new string[0];
-            this.txtSearchPro.Location = new System.Drawing.Point(532, 31);
+            this.txtSearchPro.Location = new System.Drawing.Point(399, 25);
             this.txtSearchPro.Margin = new System.Windows.Forms.Padding(0);
             this.txtSearchPro.MaxLength = 32767;
-            this.txtSearchPro.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtSearchPro.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtSearchPro.MouseBack = null;
             this.txtSearchPro.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtSearchPro.Multiline = true;
+            this.txtSearchPro.Multiline = false;
             this.txtSearchPro.Name = "txtSearchPro";
             this.txtSearchPro.NormlBack = null;
-            this.txtSearchPro.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtSearchPro.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtSearchPro.ReadOnly = false;
             this.txtSearchPro.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtSearchPro.Size = new System.Drawing.Size(247, 35);
+            this.txtSearchPro.Size = new System.Drawing.Size(185, 28);
             // 
             // 
             // 
             this.txtSearchPro.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSearchPro.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchPro.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtSearchPro.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtSearchPro.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSearchPro.SkinTxt.Multiline = true;
+            this.txtSearchPro.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtSearchPro.SkinTxt.Name = "BaseText";
-            this.txtSearchPro.SkinTxt.Size = new System.Drawing.Size(233, 23);
+            this.txtSearchPro.SkinTxt.Size = new System.Drawing.Size(175, 18);
             this.txtSearchPro.SkinTxt.TabIndex = 0;
             this.txtSearchPro.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtSearchPro.SkinTxt.WaterText = "产品编号/名称";
@@ -1938,12 +1920,11 @@
             this.btnAddPro.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnAddPro.DownBack = null;
             this.btnAddPro.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnAddPro.Location = new System.Drawing.Point(1179, 89);
-            this.btnAddPro.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAddPro.Location = new System.Drawing.Point(884, 71);
             this.btnAddPro.MouseBack = null;
             this.btnAddPro.Name = "btnAddPro";
             this.btnAddPro.NormlBack = null;
-            this.btnAddPro.Size = new System.Drawing.Size(128, 35);
+            this.btnAddPro.Size = new System.Drawing.Size(96, 28);
             this.btnAddPro.TabIndex = 68;
             this.btnAddPro.Text = "添加产品";
             this.btnAddPro.UseVisualStyleBackColor = false;
@@ -1982,10 +1963,9 @@
             this.tabComb.Controls.Add(this.txtSearchComb);
             this.tabComb.Controls.Add(this.btnAddComb);
             this.tabComb.Location = new System.Drawing.Point(4, 27);
-            this.tabComb.Margin = new System.Windows.Forms.Padding(4);
             this.tabComb.Name = "tabComb";
-            this.tabComb.Padding = new System.Windows.Forms.Padding(4);
-            this.tabComb.Size = new System.Drawing.Size(1527, 828);
+            this.tabComb.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabComb.Size = new System.Drawing.Size(1143, 659);
             this.tabComb.TabIndex = 2;
             this.tabComb.Text = "套餐管理";
             this.tabComb.UseVisualStyleBackColor = true;
@@ -2000,10 +1980,10 @@
             "季卡",
             "半年卡",
             "年卡"});
-            this.cbDiscountTime.Location = new System.Drawing.Point(503, 188);
-            this.cbDiscountTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbDiscountTime.Location = new System.Drawing.Point(377, 150);
+            this.cbDiscountTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbDiscountTime.Name = "cbDiscountTime";
-            this.cbDiscountTime.Size = new System.Drawing.Size(121, 28);
+            this.cbDiscountTime.Size = new System.Drawing.Size(92, 28);
             this.cbDiscountTime.TabIndex = 145;
             this.cbDiscountTime.Visible = false;
             this.cbDiscountTime.WaterText = "";
@@ -2018,10 +1998,10 @@
             "季卡",
             "半年卡",
             "年卡"});
-            this.cbCombTime.Location = new System.Drawing.Point(503, 138);
-            this.cbCombTime.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbCombTime.Location = new System.Drawing.Point(377, 110);
+            this.cbCombTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbCombTime.Name = "cbCombTime";
-            this.cbCombTime.Size = new System.Drawing.Size(121, 24);
+            this.cbCombTime.Size = new System.Drawing.Size(92, 24);
             this.cbCombTime.TabIndex = 144;
             this.cbCombTime.Text = "季卡";
             this.cbCombTime.Visible = false;
@@ -2037,30 +2017,28 @@
             this.txtCombNum.IsPasswordChat = '\0';
             this.txtCombNum.IsSystemPasswordChar = false;
             this.txtCombNum.Lines = new string[0];
-            this.txtCombNum.Location = new System.Drawing.Point(503, 186);
+            this.txtCombNum.Location = new System.Drawing.Point(377, 149);
             this.txtCombNum.Margin = new System.Windows.Forms.Padding(0);
             this.txtCombNum.MaxLength = 32767;
-            this.txtCombNum.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtCombNum.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtCombNum.MouseBack = null;
             this.txtCombNum.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtCombNum.Multiline = true;
+            this.txtCombNum.Multiline = false;
             this.txtCombNum.Name = "txtCombNum";
             this.txtCombNum.NormlBack = null;
-            this.txtCombNum.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtCombNum.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtCombNum.ReadOnly = false;
             this.txtCombNum.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtCombNum.Size = new System.Drawing.Size(120, 35);
+            this.txtCombNum.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtCombNum.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCombNum.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCombNum.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtCombNum.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtCombNum.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtCombNum.SkinTxt.Multiline = true;
+            this.txtCombNum.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtCombNum.SkinTxt.Name = "BaseText";
-            this.txtCombNum.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtCombNum.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtCombNum.SkinTxt.TabIndex = 0;
             this.txtCombNum.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtCombNum.SkinTxt.WaterText = "";
@@ -2080,30 +2058,28 @@
             this.txtCombDetail.IsPasswordChat = '\0';
             this.txtCombDetail.IsSystemPasswordChar = false;
             this.txtCombDetail.Lines = new string[0];
-            this.txtCombDetail.Location = new System.Drawing.Point(503, 135);
+            this.txtCombDetail.Location = new System.Drawing.Point(377, 108);
             this.txtCombDetail.Margin = new System.Windows.Forms.Padding(0);
             this.txtCombDetail.MaxLength = 32767;
-            this.txtCombDetail.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtCombDetail.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtCombDetail.MouseBack = null;
             this.txtCombDetail.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtCombDetail.Multiline = true;
+            this.txtCombDetail.Multiline = false;
             this.txtCombDetail.Name = "txtCombDetail";
             this.txtCombDetail.NormlBack = null;
-            this.txtCombDetail.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtCombDetail.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtCombDetail.ReadOnly = false;
             this.txtCombDetail.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtCombDetail.Size = new System.Drawing.Size(120, 35);
+            this.txtCombDetail.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtCombDetail.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCombDetail.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCombDetail.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtCombDetail.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtCombDetail.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtCombDetail.SkinTxt.Multiline = true;
+            this.txtCombDetail.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtCombDetail.SkinTxt.Name = "BaseText";
-            this.txtCombDetail.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtCombDetail.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtCombDetail.SkinTxt.TabIndex = 0;
             this.txtCombDetail.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtCombDetail.SkinTxt.WaterText = "";
@@ -2119,7 +2095,8 @@
             this.labCombNum.BackColor = System.Drawing.Color.Transparent;
             this.labCombNum.BorderColor = System.Drawing.Color.White;
             this.labCombNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labCombNum.Location = new System.Drawing.Point(425, 190);
+            this.labCombNum.Location = new System.Drawing.Point(319, 152);
+            this.labCombNum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labCombNum.Name = "labCombNum";
             this.labCombNum.Size = new System.Drawing.Size(58, 21);
             this.labCombNum.TabIndex = 141;
@@ -2131,7 +2108,8 @@
             this.labCombUnit.BackColor = System.Drawing.Color.Transparent;
             this.labCombUnit.BorderColor = System.Drawing.Color.White;
             this.labCombUnit.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labCombUnit.Location = new System.Drawing.Point(627, 139);
+            this.labCombUnit.Location = new System.Drawing.Point(470, 111);
+            this.labCombUnit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labCombUnit.Name = "labCombUnit";
             this.labCombUnit.Size = new System.Drawing.Size(26, 21);
             this.labCombUnit.TabIndex = 140;
@@ -2143,7 +2121,8 @@
             this.labCombDetail.BackColor = System.Drawing.Color.Transparent;
             this.labCombDetail.BorderColor = System.Drawing.Color.White;
             this.labCombDetail.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labCombDetail.Location = new System.Drawing.Point(425, 139);
+            this.labCombDetail.Location = new System.Drawing.Point(319, 111);
+            this.labCombDetail.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labCombDetail.Name = "labCombDetail";
             this.labCombDetail.Size = new System.Drawing.Size(58, 21);
             this.labCombDetail.TabIndex = 139;
@@ -2155,7 +2134,8 @@
             this.skinLabel24.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel24.BorderColor = System.Drawing.Color.White;
             this.skinLabel24.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel24.Location = new System.Drawing.Point(380, 262);
+            this.skinLabel24.Location = new System.Drawing.Point(285, 210);
+            this.skinLabel24.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel24.Name = "skinLabel24";
             this.skinLabel24.Size = new System.Drawing.Size(90, 21);
             this.skinLabel24.TabIndex = 138;
@@ -2166,10 +2146,10 @@
             this.dtpCombCreate.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpCombCreate.Enabled = false;
             this.dtpCombCreate.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpCombCreate.Location = new System.Drawing.Point(504, 261);
-            this.dtpCombCreate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpCombCreate.Location = new System.Drawing.Point(378, 209);
+            this.dtpCombCreate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpCombCreate.Name = "dtpCombCreate";
-            this.dtpCombCreate.Size = new System.Drawing.Size(179, 24);
+            this.dtpCombCreate.Size = new System.Drawing.Size(135, 24);
             this.dtpCombCreate.TabIndex = 137;
             // 
             // txtCombPayNum
@@ -2182,31 +2162,29 @@
             this.txtCombPayNum.IsPasswordChat = '\0';
             this.txtCombPayNum.IsSystemPasswordChar = false;
             this.txtCombPayNum.Lines = new string[0];
-            this.txtCombPayNum.Location = new System.Drawing.Point(984, 272);
+            this.txtCombPayNum.Location = new System.Drawing.Point(738, 218);
             this.txtCombPayNum.Margin = new System.Windows.Forms.Padding(0);
             this.txtCombPayNum.MaxLength = 32767;
-            this.txtCombPayNum.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtCombPayNum.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtCombPayNum.MouseBack = null;
             this.txtCombPayNum.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtCombPayNum.Multiline = true;
+            this.txtCombPayNum.Multiline = false;
             this.txtCombPayNum.Name = "txtCombPayNum";
             this.txtCombPayNum.NormlBack = null;
-            this.txtCombPayNum.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtCombPayNum.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtCombPayNum.ReadOnly = true;
             this.txtCombPayNum.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtCombPayNum.Size = new System.Drawing.Size(120, 35);
+            this.txtCombPayNum.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtCombPayNum.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCombPayNum.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCombPayNum.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtCombPayNum.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtCombPayNum.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtCombPayNum.SkinTxt.Multiline = true;
+            this.txtCombPayNum.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtCombPayNum.SkinTxt.Name = "BaseText";
             this.txtCombPayNum.SkinTxt.ReadOnly = true;
-            this.txtCombPayNum.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtCombPayNum.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtCombPayNum.SkinTxt.TabIndex = 0;
             this.txtCombPayNum.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtCombPayNum.SkinTxt.WaterText = "";
@@ -2222,7 +2200,8 @@
             this.skinLabel17.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel17.BorderColor = System.Drawing.Color.White;
             this.skinLabel17.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel17.Location = new System.Drawing.Point(816, 278);
+            this.skinLabel17.Location = new System.Drawing.Point(612, 222);
+            this.skinLabel17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel17.Name = "skinLabel17";
             this.skinLabel17.Size = new System.Drawing.Size(122, 21);
             this.skinLabel17.TabIndex = 135;
@@ -2234,7 +2213,8 @@
             this.skinLabel23.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel23.BorderColor = System.Drawing.Color.White;
             this.skinLabel23.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel23.Location = new System.Drawing.Point(816, 222);
+            this.skinLabel23.Location = new System.Drawing.Point(612, 178);
+            this.skinLabel23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel23.Name = "skinLabel23";
             this.skinLabel23.Size = new System.Drawing.Size(122, 21);
             this.skinLabel23.TabIndex = 134;
@@ -2245,20 +2225,20 @@
             this.dtpCombLastPay.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpCombLastPay.Enabled = false;
             this.dtpCombLastPay.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpCombLastPay.Location = new System.Drawing.Point(984, 222);
-            this.dtpCombLastPay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpCombLastPay.Location = new System.Drawing.Point(738, 178);
+            this.dtpCombLastPay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpCombLastPay.Name = "dtpCombLastPay";
-            this.dtpCombLastPay.Size = new System.Drawing.Size(179, 24);
+            this.dtpCombLastPay.Size = new System.Drawing.Size(135, 24);
             this.dtpCombLastPay.TabIndex = 133;
             // 
             // lbPro
             // 
             this.lbPro.FormattingEnabled = true;
             this.lbPro.ItemHeight = 17;
-            this.lbPro.Location = new System.Drawing.Point(984, 81);
-            this.lbPro.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.lbPro.Location = new System.Drawing.Point(738, 65);
+            this.lbPro.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lbPro.Name = "lbPro";
-            this.lbPro.Size = new System.Drawing.Size(207, 89);
+            this.lbPro.Size = new System.Drawing.Size(156, 55);
             this.lbPro.TabIndex = 131;
             // 
             // btnEditProInComb
@@ -2267,12 +2247,11 @@
             this.btnEditProInComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnEditProInComb.DownBack = null;
             this.btnEditProInComb.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnEditProInComb.Location = new System.Drawing.Point(1215, 81);
-            this.btnEditProInComb.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEditProInComb.Location = new System.Drawing.Point(911, 65);
             this.btnEditProInComb.MouseBack = null;
             this.btnEditProInComb.Name = "btnEditProInComb";
             this.btnEditProInComb.NormlBack = null;
-            this.btnEditProInComb.Size = new System.Drawing.Size(113, 35);
+            this.btnEditProInComb.Size = new System.Drawing.Size(85, 28);
             this.btnEditProInComb.TabIndex = 126;
             this.btnEditProInComb.Text = "修改产品";
             this.btnEditProInComb.UseVisualStyleBackColor = false;
@@ -2284,7 +2263,8 @@
             this.skinLabel18.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel18.BorderColor = System.Drawing.Color.White;
             this.skinLabel18.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel18.Location = new System.Drawing.Point(845, 81);
+            this.skinLabel18.Location = new System.Drawing.Point(634, 65);
+            this.skinLabel18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel18.Name = "skinLabel18";
             this.skinLabel18.Size = new System.Drawing.Size(106, 21);
             this.skinLabel18.TabIndex = 125;
@@ -2301,31 +2281,30 @@
             this.txtCombDesc.IsPasswordChat = '\0';
             this.txtCombDesc.IsSystemPasswordChar = false;
             this.txtCombDesc.Lines = new string[0];
-            this.txtCombDesc.Location = new System.Drawing.Point(156, 216);
+            this.txtCombDesc.Location = new System.Drawing.Point(117, 173);
             this.txtCombDesc.Margin = new System.Windows.Forms.Padding(0);
             this.txtCombDesc.MaxLength = 32767;
-            this.txtCombDesc.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtCombDesc.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtCombDesc.MouseBack = null;
             this.txtCombDesc.MouseState = CCWin.SkinClass.ControlState.Normal;
             this.txtCombDesc.Multiline = true;
             this.txtCombDesc.Name = "txtCombDesc";
             this.txtCombDesc.NormlBack = null;
-            this.txtCombDesc.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtCombDesc.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtCombDesc.ReadOnly = false;
             this.txtCombDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtCombDesc.Size = new System.Drawing.Size(208, 92);
+            this.txtCombDesc.Size = new System.Drawing.Size(156, 74);
             // 
             // 
             // 
             this.txtCombDesc.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCombDesc.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCombDesc.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtCombDesc.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtCombDesc.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
+            this.txtCombDesc.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtCombDesc.SkinTxt.Multiline = true;
             this.txtCombDesc.SkinTxt.Name = "BaseText";
             this.txtCombDesc.SkinTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtCombDesc.SkinTxt.Size = new System.Drawing.Size(194, 80);
+            this.txtCombDesc.SkinTxt.Size = new System.Drawing.Size(146, 64);
             this.txtCombDesc.SkinTxt.TabIndex = 0;
             this.txtCombDesc.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtCombDesc.SkinTxt.WaterText = "";
@@ -2341,7 +2320,8 @@
             this.skinLabel19.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel19.BorderColor = System.Drawing.Color.White;
             this.skinLabel19.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel19.Location = new System.Drawing.Point(77, 216);
+            this.skinLabel19.Location = new System.Drawing.Point(58, 173);
+            this.skinLabel19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel19.Name = "skinLabel19";
             this.skinLabel19.Size = new System.Drawing.Size(58, 21);
             this.skinLabel19.TabIndex = 123;
@@ -2356,10 +2336,9 @@
             "次数型",
             "折扣型",
             "时间型"});
-            this.cbCombType.Location = new System.Drawing.Point(504, 86);
-            this.cbCombType.Margin = new System.Windows.Forms.Padding(4);
+            this.cbCombType.Location = new System.Drawing.Point(378, 69);
             this.cbCombType.Name = "cbCombType";
-            this.cbCombType.Size = new System.Drawing.Size(119, 24);
+            this.cbCombType.Size = new System.Drawing.Size(90, 24);
             this.cbCombType.TabIndex = 122;
             this.cbCombType.Text = "次数型";
             this.cbCombType.WaterText = "";
@@ -2375,30 +2354,28 @@
             this.txtCombName.IsPasswordChat = '\0';
             this.txtCombName.IsSystemPasswordChar = false;
             this.txtCombName.Lines = new string[0];
-            this.txtCombName.Location = new System.Drawing.Point(156, 140);
+            this.txtCombName.Location = new System.Drawing.Point(117, 112);
             this.txtCombName.Margin = new System.Windows.Forms.Padding(0);
             this.txtCombName.MaxLength = 32767;
-            this.txtCombName.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtCombName.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtCombName.MouseBack = null;
             this.txtCombName.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtCombName.Multiline = true;
+            this.txtCombName.Multiline = false;
             this.txtCombName.Name = "txtCombName";
             this.txtCombName.NormlBack = null;
-            this.txtCombName.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtCombName.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtCombName.ReadOnly = false;
             this.txtCombName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtCombName.Size = new System.Drawing.Size(120, 35);
+            this.txtCombName.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtCombName.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCombName.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCombName.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtCombName.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtCombName.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtCombName.SkinTxt.Multiline = true;
+            this.txtCombName.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtCombName.SkinTxt.Name = "BaseText";
-            this.txtCombName.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtCombName.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtCombName.SkinTxt.TabIndex = 0;
             this.txtCombName.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtCombName.SkinTxt.WaterText = "";
@@ -2418,31 +2395,29 @@
             this.txtCombNo.IsPasswordChat = '\0';
             this.txtCombNo.IsSystemPasswordChar = false;
             this.txtCombNo.Lines = new string[0];
-            this.txtCombNo.Location = new System.Drawing.Point(156, 79);
+            this.txtCombNo.Location = new System.Drawing.Point(117, 63);
             this.txtCombNo.Margin = new System.Windows.Forms.Padding(0);
             this.txtCombNo.MaxLength = 32767;
-            this.txtCombNo.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtCombNo.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtCombNo.MouseBack = null;
             this.txtCombNo.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtCombNo.Multiline = true;
+            this.txtCombNo.Multiline = false;
             this.txtCombNo.Name = "txtCombNo";
             this.txtCombNo.NormlBack = null;
-            this.txtCombNo.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtCombNo.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtCombNo.ReadOnly = true;
             this.txtCombNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtCombNo.Size = new System.Drawing.Size(120, 35);
+            this.txtCombNo.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtCombNo.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCombNo.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCombNo.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtCombNo.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtCombNo.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtCombNo.SkinTxt.Multiline = true;
+            this.txtCombNo.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtCombNo.SkinTxt.Name = "BaseText";
             this.txtCombNo.SkinTxt.ReadOnly = true;
-            this.txtCombNo.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtCombNo.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtCombNo.SkinTxt.TabIndex = 0;
             this.txtCombNo.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtCombNo.SkinTxt.WaterText = "";
@@ -2458,7 +2433,8 @@
             this.skinLabel20.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel20.BorderColor = System.Drawing.Color.White;
             this.skinLabel20.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel20.Location = new System.Drawing.Point(79, 81);
+            this.skinLabel20.Location = new System.Drawing.Point(59, 65);
+            this.skinLabel20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel20.Name = "skinLabel20";
             this.skinLabel20.Size = new System.Drawing.Size(58, 21);
             this.skinLabel20.TabIndex = 119;
@@ -2470,7 +2446,8 @@
             this.skinLabel21.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel21.BorderColor = System.Drawing.Color.White;
             this.skinLabel21.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel21.Location = new System.Drawing.Point(427, 86);
+            this.skinLabel21.Location = new System.Drawing.Point(320, 69);
+            this.skinLabel21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel21.Name = "skinLabel21";
             this.skinLabel21.Size = new System.Drawing.Size(58, 21);
             this.skinLabel21.TabIndex = 118;
@@ -2482,7 +2459,8 @@
             this.skinLabel22.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel22.BorderColor = System.Drawing.Color.White;
             this.skinLabel22.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel22.Location = new System.Drawing.Point(79, 142);
+            this.skinLabel22.Location = new System.Drawing.Point(59, 114);
+            this.skinLabel22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel22.Name = "skinLabel22";
             this.skinLabel22.Size = new System.Drawing.Size(58, 21);
             this.skinLabel22.TabIndex = 117;
@@ -2534,8 +2512,7 @@
             this.dgvComb.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.dgvComb.HeadFont = new System.Drawing.Font("宋体", 11F);
             this.dgvComb.HeadSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvComb.Location = new System.Drawing.Point(5, 370);
-            this.dgvComb.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvComb.Location = new System.Drawing.Point(4, 296);
             this.dgvComb.MultiSelect = false;
             this.dgvComb.Name = "dgvComb";
             this.dgvComb.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -2547,7 +2524,7 @@
             this.dgvComb.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dgvComb.RowTemplate.Height = 23;
             this.dgvComb.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvComb.Size = new System.Drawing.Size(1513, 450);
+            this.dgvComb.Size = new System.Drawing.Size(1135, 360);
             this.dgvComb.TabIndex = 112;
             this.dgvComb.TitleBack = null;
             this.dgvComb.TitleBackColorBegin = System.Drawing.Color.White;
@@ -2617,12 +2594,11 @@
             this.btnSearchComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnSearchComb.DownBack = null;
             this.btnSearchComb.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnSearchComb.Location = new System.Drawing.Point(803, 19);
-            this.btnSearchComb.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSearchComb.Location = new System.Drawing.Point(602, 15);
             this.btnSearchComb.MouseBack = null;
             this.btnSearchComb.Name = "btnSearchComb";
             this.btnSearchComb.NormlBack = null;
-            this.btnSearchComb.Size = new System.Drawing.Size(128, 35);
+            this.btnSearchComb.Size = new System.Drawing.Size(96, 28);
             this.btnSearchComb.TabIndex = 116;
             this.btnSearchComb.Text = "搜索";
             this.btnSearchComb.UseVisualStyleBackColor = false;
@@ -2634,12 +2610,11 @@
             this.btnEditComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnEditComb.DownBack = null;
             this.btnEditComb.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnEditComb.Location = new System.Drawing.Point(1363, 149);
-            this.btnEditComb.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEditComb.Location = new System.Drawing.Point(1022, 119);
             this.btnEditComb.MouseBack = null;
             this.btnEditComb.Name = "btnEditComb";
             this.btnEditComb.NormlBack = null;
-            this.btnEditComb.Size = new System.Drawing.Size(128, 35);
+            this.btnEditComb.Size = new System.Drawing.Size(96, 28);
             this.btnEditComb.TabIndex = 115;
             this.btnEditComb.Text = "修改";
             this.btnEditComb.UseVisualStyleBackColor = false;
@@ -2651,12 +2626,11 @@
             this.btnDelComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnDelComb.DownBack = null;
             this.btnDelComb.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnDelComb.Location = new System.Drawing.Point(1363, 216);
-            this.btnDelComb.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDelComb.Location = new System.Drawing.Point(1022, 173);
             this.btnDelComb.MouseBack = null;
             this.btnDelComb.Name = "btnDelComb";
             this.btnDelComb.NormlBack = null;
-            this.btnDelComb.Size = new System.Drawing.Size(128, 35);
+            this.btnDelComb.Size = new System.Drawing.Size(96, 28);
             this.btnDelComb.TabIndex = 114;
             this.btnDelComb.Text = "删除";
             this.btnDelComb.UseVisualStyleBackColor = false;
@@ -2672,30 +2646,28 @@
             this.txtSearchComb.IsPasswordChat = '\0';
             this.txtSearchComb.IsSystemPasswordChar = false;
             this.txtSearchComb.Lines = new string[0];
-            this.txtSearchComb.Location = new System.Drawing.Point(532, 19);
+            this.txtSearchComb.Location = new System.Drawing.Point(399, 15);
             this.txtSearchComb.Margin = new System.Windows.Forms.Padding(0);
             this.txtSearchComb.MaxLength = 32767;
-            this.txtSearchComb.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtSearchComb.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtSearchComb.MouseBack = null;
             this.txtSearchComb.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtSearchComb.Multiline = true;
+            this.txtSearchComb.Multiline = false;
             this.txtSearchComb.Name = "txtSearchComb";
             this.txtSearchComb.NormlBack = null;
-            this.txtSearchComb.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtSearchComb.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtSearchComb.ReadOnly = false;
             this.txtSearchComb.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtSearchComb.Size = new System.Drawing.Size(247, 35);
+            this.txtSearchComb.Size = new System.Drawing.Size(185, 28);
             // 
             // 
             // 
             this.txtSearchComb.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSearchComb.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchComb.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtSearchComb.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtSearchComb.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSearchComb.SkinTxt.Multiline = true;
+            this.txtSearchComb.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtSearchComb.SkinTxt.Name = "BaseText";
-            this.txtSearchComb.SkinTxt.Size = new System.Drawing.Size(233, 23);
+            this.txtSearchComb.SkinTxt.Size = new System.Drawing.Size(175, 18);
             this.txtSearchComb.SkinTxt.TabIndex = 0;
             this.txtSearchComb.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtSearchComb.SkinTxt.WaterText = "套餐编号/名称";
@@ -2711,12 +2683,11 @@
             this.btnAddComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnAddComb.DownBack = null;
             this.btnAddComb.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnAddComb.Location = new System.Drawing.Point(1363, 79);
-            this.btnAddComb.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAddComb.Location = new System.Drawing.Point(1022, 63);
             this.btnAddComb.MouseBack = null;
             this.btnAddComb.Name = "btnAddComb";
             this.btnAddComb.NormlBack = null;
-            this.btnAddComb.Size = new System.Drawing.Size(128, 35);
+            this.btnAddComb.Size = new System.Drawing.Size(96, 28);
             this.btnAddComb.TabIndex = 111;
             this.btnAddComb.Text = "添加套餐";
             this.btnAddComb.UseVisualStyleBackColor = false;
@@ -2724,13 +2695,15 @@
             // 
             // tabData
             // 
+            this.tabData.Controls.Add(this.lbBackDBs);
+            this.tabData.Controls.Add(this.skinLabel59);
             this.tabData.Controls.Add(this.btnBackupData);
             this.tabData.Controls.Add(this.btnRecoverData);
             this.tabData.Location = new System.Drawing.Point(4, 27);
-            this.tabData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabData.Name = "tabData";
-            this.tabData.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabData.Size = new System.Drawing.Size(1527, 828);
+            this.tabData.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabData.Size = new System.Drawing.Size(1143, 659);
             this.tabData.TabIndex = 3;
             this.tabData.Text = "数据管理";
             this.tabData.UseVisualStyleBackColor = true;
@@ -2741,12 +2714,11 @@
             this.btnBackupData.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnBackupData.DownBack = null;
             this.btnBackupData.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnBackupData.Location = new System.Drawing.Point(117, 72);
-            this.btnBackupData.Margin = new System.Windows.Forms.Padding(4);
+            this.btnBackupData.Location = new System.Drawing.Point(88, 58);
             this.btnBackupData.MouseBack = null;
             this.btnBackupData.Name = "btnBackupData";
             this.btnBackupData.NormlBack = null;
-            this.btnBackupData.Size = new System.Drawing.Size(113, 35);
+            this.btnBackupData.Size = new System.Drawing.Size(85, 28);
             this.btnBackupData.TabIndex = 128;
             this.btnBackupData.Text = "备份数据";
             this.btnBackupData.UseVisualStyleBackColor = false;
@@ -2758,12 +2730,11 @@
             this.btnRecoverData.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnRecoverData.DownBack = null;
             this.btnRecoverData.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnRecoverData.Location = new System.Drawing.Point(267, 70);
-            this.btnRecoverData.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRecoverData.Location = new System.Drawing.Point(384, 130);
             this.btnRecoverData.MouseBack = null;
             this.btnRecoverData.Name = "btnRecoverData";
             this.btnRecoverData.NormlBack = null;
-            this.btnRecoverData.Size = new System.Drawing.Size(128, 35);
+            this.btnRecoverData.Size = new System.Drawing.Size(96, 28);
             this.btnRecoverData.TabIndex = 127;
             this.btnRecoverData.Text = "恢复数据";
             this.btnRecoverData.UseVisualStyleBackColor = false;
@@ -2771,6 +2742,7 @@
             // 
             // tabShop
             // 
+            this.tabShop.Controls.Add(this.btnEditLogo);
             this.tabShop.Controls.Add(this.btnEditUser);
             this.tabShop.Controls.Add(this.txtShopWeixin);
             this.tabShop.Controls.Add(this.txtShopPhone);
@@ -2791,13 +2763,28 @@
             this.tabShop.Controls.Add(this.txtShopNo);
             this.tabShop.Controls.Add(this.skinLabel39);
             this.tabShop.Location = new System.Drawing.Point(4, 27);
-            this.tabShop.Margin = new System.Windows.Forms.Padding(4);
             this.tabShop.Name = "tabShop";
-            this.tabShop.Padding = new System.Windows.Forms.Padding(4);
-            this.tabShop.Size = new System.Drawing.Size(1527, 828);
+            this.tabShop.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabShop.Size = new System.Drawing.Size(1143, 659);
             this.tabShop.TabIndex = 4;
             this.tabShop.Text = "商铺信息";
             this.tabShop.UseVisualStyleBackColor = true;
+            // 
+            // btnEditLogo
+            // 
+            this.btnEditLogo.BackColor = System.Drawing.Color.Transparent;
+            this.btnEditLogo.ControlState = CCWin.SkinClass.ControlState.Normal;
+            this.btnEditLogo.DownBack = null;
+            this.btnEditLogo.Font = new System.Drawing.Font("宋体", 11F);
+            this.btnEditLogo.Location = new System.Drawing.Point(362, 264);
+            this.btnEditLogo.MouseBack = null;
+            this.btnEditLogo.Name = "btnEditLogo";
+            this.btnEditLogo.NormlBack = null;
+            this.btnEditLogo.Size = new System.Drawing.Size(96, 28);
+            this.btnEditLogo.TabIndex = 132;
+            this.btnEditLogo.Text = "修改Logo";
+            this.btnEditLogo.UseVisualStyleBackColor = false;
+            this.btnEditLogo.Click += new System.EventHandler(this.btnEditLogo_Click);
             // 
             // btnEditUser
             // 
@@ -2805,12 +2792,11 @@
             this.btnEditUser.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnEditUser.DownBack = null;
             this.btnEditUser.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnEditUser.Location = new System.Drawing.Point(1092, 64);
-            this.btnEditUser.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEditUser.Location = new System.Drawing.Point(819, 51);
             this.btnEditUser.MouseBack = null;
             this.btnEditUser.Name = "btnEditUser";
             this.btnEditUser.NormlBack = null;
-            this.btnEditUser.Size = new System.Drawing.Size(128, 35);
+            this.btnEditUser.Size = new System.Drawing.Size(96, 28);
             this.btnEditUser.TabIndex = 131;
             this.btnEditUser.Text = "修改";
             this.btnEditUser.UseVisualStyleBackColor = false;
@@ -2826,30 +2812,28 @@
             this.txtShopWeixin.IsPasswordChat = '\0';
             this.txtShopWeixin.IsSystemPasswordChar = false;
             this.txtShopWeixin.Lines = new string[0];
-            this.txtShopWeixin.Location = new System.Drawing.Point(771, 212);
+            this.txtShopWeixin.Location = new System.Drawing.Point(578, 170);
             this.txtShopWeixin.Margin = new System.Windows.Forms.Padding(0);
             this.txtShopWeixin.MaxLength = 32767;
-            this.txtShopWeixin.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtShopWeixin.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtShopWeixin.MouseBack = null;
             this.txtShopWeixin.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtShopWeixin.Multiline = true;
+            this.txtShopWeixin.Multiline = false;
             this.txtShopWeixin.Name = "txtShopWeixin";
             this.txtShopWeixin.NormlBack = null;
-            this.txtShopWeixin.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtShopWeixin.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtShopWeixin.ReadOnly = false;
             this.txtShopWeixin.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtShopWeixin.Size = new System.Drawing.Size(120, 35);
+            this.txtShopWeixin.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtShopWeixin.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtShopWeixin.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtShopWeixin.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtShopWeixin.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtShopWeixin.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtShopWeixin.SkinTxt.Multiline = true;
+            this.txtShopWeixin.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtShopWeixin.SkinTxt.Name = "BaseText";
-            this.txtShopWeixin.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtShopWeixin.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtShopWeixin.SkinTxt.TabIndex = 0;
             this.txtShopWeixin.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtShopWeixin.SkinTxt.WaterText = "";
@@ -2869,30 +2853,28 @@
             this.txtShopPhone.IsPasswordChat = '\0';
             this.txtShopPhone.IsSystemPasswordChar = false;
             this.txtShopPhone.Lines = new string[0];
-            this.txtShopPhone.Location = new System.Drawing.Point(771, 108);
+            this.txtShopPhone.Location = new System.Drawing.Point(578, 86);
             this.txtShopPhone.Margin = new System.Windows.Forms.Padding(0);
             this.txtShopPhone.MaxLength = 32767;
-            this.txtShopPhone.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtShopPhone.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtShopPhone.MouseBack = null;
             this.txtShopPhone.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtShopPhone.Multiline = true;
+            this.txtShopPhone.Multiline = false;
             this.txtShopPhone.Name = "txtShopPhone";
             this.txtShopPhone.NormlBack = null;
-            this.txtShopPhone.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtShopPhone.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtShopPhone.ReadOnly = false;
             this.txtShopPhone.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtShopPhone.Size = new System.Drawing.Size(204, 35);
+            this.txtShopPhone.Size = new System.Drawing.Size(153, 28);
             // 
             // 
             // 
             this.txtShopPhone.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtShopPhone.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtShopPhone.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtShopPhone.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtShopPhone.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtShopPhone.SkinTxt.Multiline = true;
+            this.txtShopPhone.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtShopPhone.SkinTxt.Name = "BaseText";
-            this.txtShopPhone.SkinTxt.Size = new System.Drawing.Size(190, 23);
+            this.txtShopPhone.SkinTxt.Size = new System.Drawing.Size(143, 18);
             this.txtShopPhone.SkinTxt.TabIndex = 0;
             this.txtShopPhone.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtShopPhone.SkinTxt.WaterText = "";
@@ -2912,30 +2894,28 @@
             this.txtShopAlipay.IsPasswordChat = '\0';
             this.txtShopAlipay.IsSystemPasswordChar = false;
             this.txtShopAlipay.Lines = new string[0];
-            this.txtShopAlipay.Location = new System.Drawing.Point(771, 268);
+            this.txtShopAlipay.Location = new System.Drawing.Point(578, 214);
             this.txtShopAlipay.Margin = new System.Windows.Forms.Padding(0);
             this.txtShopAlipay.MaxLength = 32767;
-            this.txtShopAlipay.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtShopAlipay.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtShopAlipay.MouseBack = null;
             this.txtShopAlipay.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtShopAlipay.Multiline = true;
+            this.txtShopAlipay.Multiline = false;
             this.txtShopAlipay.Name = "txtShopAlipay";
             this.txtShopAlipay.NormlBack = null;
-            this.txtShopAlipay.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtShopAlipay.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtShopAlipay.ReadOnly = false;
             this.txtShopAlipay.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtShopAlipay.Size = new System.Drawing.Size(120, 35);
+            this.txtShopAlipay.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtShopAlipay.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtShopAlipay.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtShopAlipay.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtShopAlipay.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtShopAlipay.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtShopAlipay.SkinTxt.Multiline = true;
+            this.txtShopAlipay.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtShopAlipay.SkinTxt.Name = "BaseText";
-            this.txtShopAlipay.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtShopAlipay.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtShopAlipay.SkinTxt.TabIndex = 0;
             this.txtShopAlipay.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtShopAlipay.SkinTxt.WaterText = "";
@@ -2951,7 +2931,8 @@
             this.skinLabel48.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel48.BorderColor = System.Drawing.Color.White;
             this.skinLabel48.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel48.Location = new System.Drawing.Point(664, 270);
+            this.skinLabel48.Location = new System.Drawing.Point(498, 216);
+            this.skinLabel48.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel48.Name = "skinLabel48";
             this.skinLabel48.Size = new System.Drawing.Size(74, 21);
             this.skinLabel48.TabIndex = 113;
@@ -2963,7 +2944,8 @@
             this.skinLabel45.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel45.BorderColor = System.Drawing.Color.White;
             this.skinLabel45.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel45.Location = new System.Drawing.Point(687, 216);
+            this.skinLabel45.Location = new System.Drawing.Point(515, 173);
+            this.skinLabel45.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel45.Name = "skinLabel45";
             this.skinLabel45.Size = new System.Drawing.Size(58, 21);
             this.skinLabel45.TabIndex = 115;
@@ -2975,7 +2957,8 @@
             this.skinLabel44.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel44.BorderColor = System.Drawing.Color.White;
             this.skinLabel44.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel44.Location = new System.Drawing.Point(643, 110);
+            this.skinLabel44.Location = new System.Drawing.Point(482, 88);
+            this.skinLabel44.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel44.Name = "skinLabel44";
             this.skinLabel44.Size = new System.Drawing.Size(90, 21);
             this.skinLabel44.TabIndex = 111;
@@ -2991,30 +2974,28 @@
             this.txtShopEmail.IsPasswordChat = '\0';
             this.txtShopEmail.IsSystemPasswordChar = false;
             this.txtShopEmail.Lines = new string[0];
-            this.txtShopEmail.Location = new System.Drawing.Point(771, 160);
+            this.txtShopEmail.Location = new System.Drawing.Point(578, 128);
             this.txtShopEmail.Margin = new System.Windows.Forms.Padding(0);
             this.txtShopEmail.MaxLength = 32767;
-            this.txtShopEmail.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtShopEmail.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtShopEmail.MouseBack = null;
             this.txtShopEmail.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtShopEmail.Multiline = true;
+            this.txtShopEmail.Multiline = false;
             this.txtShopEmail.Name = "txtShopEmail";
             this.txtShopEmail.NormlBack = null;
-            this.txtShopEmail.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtShopEmail.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtShopEmail.ReadOnly = false;
             this.txtShopEmail.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtShopEmail.Size = new System.Drawing.Size(120, 35);
+            this.txtShopEmail.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtShopEmail.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtShopEmail.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtShopEmail.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtShopEmail.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtShopEmail.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtShopEmail.SkinTxt.Multiline = true;
+            this.txtShopEmail.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtShopEmail.SkinTxt.Name = "BaseText";
-            this.txtShopEmail.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtShopEmail.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtShopEmail.SkinTxt.TabIndex = 0;
             this.txtShopEmail.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtShopEmail.SkinTxt.WaterText = "";
@@ -3030,7 +3011,8 @@
             this.skinLabel46.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel46.BorderColor = System.Drawing.Color.White;
             this.skinLabel46.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel46.Location = new System.Drawing.Point(687, 164);
+            this.skinLabel46.Location = new System.Drawing.Point(515, 131);
+            this.skinLabel46.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel46.Name = "skinLabel46";
             this.skinLabel46.Size = new System.Drawing.Size(58, 21);
             this.skinLabel46.TabIndex = 113;
@@ -3046,30 +3028,28 @@
             this.txtShopName.IsPasswordChat = '\0';
             this.txtShopName.IsSystemPasswordChar = false;
             this.txtShopName.Lines = new string[0];
-            this.txtShopName.Location = new System.Drawing.Point(771, 55);
+            this.txtShopName.Location = new System.Drawing.Point(578, 44);
             this.txtShopName.Margin = new System.Windows.Forms.Padding(0);
             this.txtShopName.MaxLength = 32767;
-            this.txtShopName.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtShopName.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtShopName.MouseBack = null;
             this.txtShopName.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtShopName.Multiline = true;
+            this.txtShopName.Multiline = false;
             this.txtShopName.Name = "txtShopName";
             this.txtShopName.NormlBack = null;
-            this.txtShopName.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtShopName.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtShopName.ReadOnly = false;
             this.txtShopName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtShopName.Size = new System.Drawing.Size(120, 35);
+            this.txtShopName.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtShopName.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtShopName.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtShopName.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtShopName.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtShopName.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtShopName.SkinTxt.Multiline = true;
+            this.txtShopName.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtShopName.SkinTxt.Name = "BaseText";
-            this.txtShopName.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtShopName.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtShopName.SkinTxt.TabIndex = 0;
             this.txtShopName.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtShopName.SkinTxt.WaterText = "";
@@ -3085,7 +3065,8 @@
             this.skinLabel43.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel43.BorderColor = System.Drawing.Color.White;
             this.skinLabel43.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel43.Location = new System.Drawing.Point(687, 59);
+            this.skinLabel43.Location = new System.Drawing.Point(515, 47);
+            this.skinLabel43.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel43.Name = "skinLabel43";
             this.skinLabel43.Size = new System.Drawing.Size(58, 21);
             this.skinLabel43.TabIndex = 105;
@@ -3101,30 +3082,28 @@
             this.txtAddress.IsPasswordChat = '\0';
             this.txtAddress.IsSystemPasswordChar = false;
             this.txtAddress.Lines = new string[0];
-            this.txtAddress.Location = new System.Drawing.Point(183, 540);
+            this.txtAddress.Location = new System.Drawing.Point(137, 432);
             this.txtAddress.Margin = new System.Windows.Forms.Padding(0);
             this.txtAddress.MaxLength = 32767;
-            this.txtAddress.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtAddress.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtAddress.MouseBack = null;
             this.txtAddress.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtAddress.Multiline = true;
+            this.txtAddress.Multiline = false;
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.NormlBack = null;
-            this.txtAddress.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtAddress.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtAddress.ReadOnly = false;
             this.txtAddress.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtAddress.Size = new System.Drawing.Size(271, 35);
+            this.txtAddress.Size = new System.Drawing.Size(203, 28);
             // 
             // 
             // 
             this.txtAddress.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtAddress.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtAddress.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtAddress.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtAddress.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtAddress.SkinTxt.Multiline = true;
+            this.txtAddress.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtAddress.SkinTxt.Name = "BaseText";
-            this.txtAddress.SkinTxt.Size = new System.Drawing.Size(257, 23);
+            this.txtAddress.SkinTxt.Size = new System.Drawing.Size(193, 18);
             this.txtAddress.SkinTxt.TabIndex = 0;
             this.txtAddress.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtAddress.SkinTxt.WaterText = "";
@@ -3140,7 +3119,8 @@
             this.skinLabel42.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel42.BorderColor = System.Drawing.Color.White;
             this.skinLabel42.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel42.Location = new System.Drawing.Point(99, 544);
+            this.skinLabel42.Location = new System.Drawing.Point(74, 435);
+            this.skinLabel42.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel42.Name = "skinLabel42";
             this.skinLabel42.Size = new System.Drawing.Size(58, 21);
             this.skinLabel42.TabIndex = 109;
@@ -3152,7 +3132,8 @@
             this.skinLabel41.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel41.BorderColor = System.Drawing.Color.White;
             this.skinLabel41.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel41.Location = new System.Drawing.Point(80, 330);
+            this.skinLabel41.Location = new System.Drawing.Point(60, 264);
+            this.skinLabel41.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel41.Name = "skinLabel41";
             this.skinLabel41.Size = new System.Drawing.Size(72, 21);
             this.skinLabel41.TabIndex = 108;
@@ -3162,10 +3143,9 @@
             // 
             this.picLogo.BackColor = System.Drawing.Color.Transparent;
             this.picLogo.Image = ((System.Drawing.Image)(resources.GetObject("picLogo.Image")));
-            this.picLogo.Location = new System.Drawing.Point(183, 330);
-            this.picLogo.Margin = new System.Windows.Forms.Padding(4);
+            this.picLogo.Location = new System.Drawing.Point(137, 264);
             this.picLogo.Name = "picLogo";
-            this.picLogo.Size = new System.Drawing.Size(271, 184);
+            this.picLogo.Size = new System.Drawing.Size(203, 147);
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picLogo.TabIndex = 107;
             this.picLogo.TabStop = false;
@@ -3176,7 +3156,8 @@
             this.skinLabel40.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel40.BorderColor = System.Drawing.Color.White;
             this.skinLabel40.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel40.Location = new System.Drawing.Point(56, 119);
+            this.skinLabel40.Location = new System.Drawing.Point(42, 95);
+            this.skinLabel40.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel40.Name = "skinLabel40";
             this.skinLabel40.Size = new System.Drawing.Size(90, 21);
             this.skinLabel40.TabIndex = 106;
@@ -3186,10 +3167,9 @@
             // 
             this.picLicence.BackColor = System.Drawing.Color.Transparent;
             this.picLicence.Image = ((System.Drawing.Image)(resources.GetObject("picLicence.Image")));
-            this.picLicence.Location = new System.Drawing.Point(183, 119);
-            this.picLicence.Margin = new System.Windows.Forms.Padding(4);
+            this.picLicence.Location = new System.Drawing.Point(137, 95);
             this.picLicence.Name = "picLicence";
-            this.picLicence.Size = new System.Drawing.Size(271, 184);
+            this.picLicence.Size = new System.Drawing.Size(203, 147);
             this.picLicence.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picLicence.TabIndex = 105;
             this.picLicence.TabStop = false;
@@ -3204,30 +3184,28 @@
             this.txtShopNo.IsPasswordChat = '\0';
             this.txtShopNo.IsSystemPasswordChar = false;
             this.txtShopNo.Lines = new string[0];
-            this.txtShopNo.Location = new System.Drawing.Point(183, 60);
+            this.txtShopNo.Location = new System.Drawing.Point(137, 48);
             this.txtShopNo.Margin = new System.Windows.Forms.Padding(0);
             this.txtShopNo.MaxLength = 32767;
-            this.txtShopNo.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtShopNo.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtShopNo.MouseBack = null;
             this.txtShopNo.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtShopNo.Multiline = true;
+            this.txtShopNo.Multiline = false;
             this.txtShopNo.Name = "txtShopNo";
             this.txtShopNo.NormlBack = null;
-            this.txtShopNo.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtShopNo.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtShopNo.ReadOnly = false;
             this.txtShopNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtShopNo.Size = new System.Drawing.Size(120, 35);
+            this.txtShopNo.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtShopNo.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtShopNo.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtShopNo.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtShopNo.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtShopNo.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtShopNo.SkinTxt.Multiline = true;
+            this.txtShopNo.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtShopNo.SkinTxt.Name = "BaseText";
-            this.txtShopNo.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtShopNo.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtShopNo.SkinTxt.TabIndex = 0;
             this.txtShopNo.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtShopNo.SkinTxt.WaterText = "";
@@ -3243,7 +3221,8 @@
             this.skinLabel39.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel39.BorderColor = System.Drawing.Color.White;
             this.skinLabel39.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel39.Location = new System.Drawing.Point(99, 64);
+            this.skinLabel39.Location = new System.Drawing.Point(74, 51);
+            this.skinLabel39.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel39.Name = "skinLabel39";
             this.skinLabel39.Size = new System.Drawing.Size(58, 21);
             this.skinLabel39.TabIndex = 103;
@@ -3275,10 +3254,9 @@
             this.tabPay.Controls.Add(this.txtPayPrice);
             this.tabPay.Controls.Add(this.skinLabel55);
             this.tabPay.Location = new System.Drawing.Point(4, 27);
-            this.tabPay.Margin = new System.Windows.Forms.Padding(4);
             this.tabPay.Name = "tabPay";
-            this.tabPay.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPay.Size = new System.Drawing.Size(1527, 832);
+            this.tabPay.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPay.Size = new System.Drawing.Size(1143, 659);
             this.tabPay.TabIndex = 5;
             this.tabPay.Text = "消费记录";
             this.tabPay.UseVisualStyleBackColor = true;
@@ -3293,31 +3271,29 @@
             this.txtPayVipComb.IsPasswordChat = '\0';
             this.txtPayVipComb.IsSystemPasswordChar = false;
             this.txtPayVipComb.Lines = new string[0];
-            this.txtPayVipComb.Location = new System.Drawing.Point(615, 146);
+            this.txtPayVipComb.Location = new System.Drawing.Point(461, 117);
             this.txtPayVipComb.Margin = new System.Windows.Forms.Padding(0);
             this.txtPayVipComb.MaxLength = 32767;
-            this.txtPayVipComb.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtPayVipComb.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtPayVipComb.MouseBack = null;
             this.txtPayVipComb.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtPayVipComb.Multiline = true;
+            this.txtPayVipComb.Multiline = false;
             this.txtPayVipComb.Name = "txtPayVipComb";
             this.txtPayVipComb.NormlBack = null;
-            this.txtPayVipComb.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtPayVipComb.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtPayVipComb.ReadOnly = true;
             this.txtPayVipComb.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtPayVipComb.Size = new System.Drawing.Size(164, 35);
+            this.txtPayVipComb.Size = new System.Drawing.Size(123, 28);
             // 
             // 
             // 
             this.txtPayVipComb.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPayVipComb.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPayVipComb.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtPayVipComb.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtPayVipComb.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtPayVipComb.SkinTxt.Multiline = true;
+            this.txtPayVipComb.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtPayVipComb.SkinTxt.Name = "BaseText";
             this.txtPayVipComb.SkinTxt.ReadOnly = true;
-            this.txtPayVipComb.SkinTxt.Size = new System.Drawing.Size(150, 23);
+            this.txtPayVipComb.SkinTxt.Size = new System.Drawing.Size(113, 18);
             this.txtPayVipComb.SkinTxt.TabIndex = 0;
             this.txtPayVipComb.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtPayVipComb.SkinTxt.WaterText = "";
@@ -3333,7 +3309,8 @@
             this.skinLabel57.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel57.BorderColor = System.Drawing.Color.White;
             this.skinLabel57.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel57.Location = new System.Drawing.Point(536, 149);
+            this.skinLabel57.Location = new System.Drawing.Point(402, 119);
+            this.skinLabel57.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel57.Name = "skinLabel57";
             this.skinLabel57.Size = new System.Drawing.Size(58, 21);
             this.skinLabel57.TabIndex = 153;
@@ -3346,8 +3323,7 @@
             this.cbFilterPayAt.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.cbFilterPayAt.DownBack = null;
             this.cbFilterPayAt.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbFilterPayAt.Location = new System.Drawing.Point(883, 29);
-            this.cbFilterPayAt.Margin = new System.Windows.Forms.Padding(4);
+            this.cbFilterPayAt.Location = new System.Drawing.Point(662, 23);
             this.cbFilterPayAt.MouseBack = null;
             this.cbFilterPayAt.Name = "cbFilterPayAt";
             this.cbFilterPayAt.NormlBack = null;
@@ -3364,10 +3340,10 @@
             this.dtpSearchPayAt.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpSearchPayAt.Enabled = false;
             this.dtpSearchPayAt.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpSearchPayAt.Location = new System.Drawing.Point(695, 29);
-            this.dtpSearchPayAt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpSearchPayAt.Location = new System.Drawing.Point(521, 23);
+            this.dtpSearchPayAt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpSearchPayAt.Name = "dtpSearchPayAt";
-            this.dtpSearchPayAt.Size = new System.Drawing.Size(179, 24);
+            this.dtpSearchPayAt.Size = new System.Drawing.Size(135, 24);
             this.dtpSearchPayAt.TabIndex = 168;
             // 
             // skinLabel56
@@ -3376,7 +3352,8 @@
             this.skinLabel56.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel56.BorderColor = System.Drawing.Color.White;
             this.skinLabel56.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel56.Location = new System.Drawing.Point(489, 286);
+            this.skinLabel56.Location = new System.Drawing.Point(367, 229);
+            this.skinLabel56.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel56.Name = "skinLabel56";
             this.skinLabel56.Size = new System.Drawing.Size(90, 21);
             this.skinLabel56.TabIndex = 167;
@@ -3387,10 +3364,10 @@
             this.dtpPayAt.CalendarFont = new System.Drawing.Font("宋体", 11F);
             this.dtpPayAt.Enabled = false;
             this.dtpPayAt.Font = new System.Drawing.Font("宋体", 11F);
-            this.dtpPayAt.Location = new System.Drawing.Point(615, 286);
-            this.dtpPayAt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtpPayAt.Location = new System.Drawing.Point(461, 229);
+            this.dtpPayAt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpPayAt.Name = "dtpPayAt";
-            this.dtpPayAt.Size = new System.Drawing.Size(179, 24);
+            this.dtpPayAt.Size = new System.Drawing.Size(135, 24);
             this.dtpPayAt.TabIndex = 166;
             // 
             // dgvPay
@@ -3437,8 +3414,7 @@
             this.dgvPay.GridColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.dgvPay.HeadFont = new System.Drawing.Font("宋体", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvPay.HeadSelectForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvPay.Location = new System.Drawing.Point(11, 354);
-            this.dgvPay.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvPay.Location = new System.Drawing.Point(8, 283);
             this.dgvPay.MultiSelect = false;
             this.dgvPay.Name = "dgvPay";
             this.dgvPay.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -3450,7 +3426,7 @@
             this.dgvPay.RowsDefaultCellStyle = dataGridViewCellStyle16;
             this.dgvPay.RowTemplate.Height = 23;
             this.dgvPay.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPay.Size = new System.Drawing.Size(1503, 470);
+            this.dgvPay.Size = new System.Drawing.Size(1127, 376);
             this.dgvPay.TabIndex = 165;
             this.dgvPay.TitleBack = null;
             this.dgvPay.TitleBackColorBegin = System.Drawing.Color.White;
@@ -3508,12 +3484,11 @@
             this.btnSearchPay.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.btnSearchPay.DownBack = null;
             this.btnSearchPay.Font = new System.Drawing.Font("宋体", 11F);
-            this.btnSearchPay.Location = new System.Drawing.Point(995, 25);
-            this.btnSearchPay.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSearchPay.Location = new System.Drawing.Point(746, 20);
             this.btnSearchPay.MouseBack = null;
             this.btnSearchPay.Name = "btnSearchPay";
             this.btnSearchPay.NormlBack = null;
-            this.btnSearchPay.Size = new System.Drawing.Size(128, 35);
+            this.btnSearchPay.Size = new System.Drawing.Size(96, 28);
             this.btnSearchPay.TabIndex = 164;
             this.btnSearchPay.Text = "搜索";
             this.btnSearchPay.UseVisualStyleBackColor = false;
@@ -3529,30 +3504,28 @@
             this.txtSearchPay.IsPasswordChat = '\0';
             this.txtSearchPay.IsSystemPasswordChar = false;
             this.txtSearchPay.Lines = new string[0];
-            this.txtSearchPay.Location = new System.Drawing.Point(479, 25);
+            this.txtSearchPay.Location = new System.Drawing.Point(359, 20);
             this.txtSearchPay.Margin = new System.Windows.Forms.Padding(0);
             this.txtSearchPay.MaxLength = 32767;
-            this.txtSearchPay.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtSearchPay.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtSearchPay.MouseBack = null;
             this.txtSearchPay.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtSearchPay.Multiline = true;
+            this.txtSearchPay.Multiline = false;
             this.txtSearchPay.Name = "txtSearchPay";
             this.txtSearchPay.NormlBack = null;
-            this.txtSearchPay.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtSearchPay.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtSearchPay.ReadOnly = false;
             this.txtSearchPay.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtSearchPay.Size = new System.Drawing.Size(203, 35);
+            this.txtSearchPay.Size = new System.Drawing.Size(152, 28);
             // 
             // 
             // 
             this.txtSearchPay.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSearchPay.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchPay.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtSearchPay.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtSearchPay.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSearchPay.SkinTxt.Multiline = true;
+            this.txtSearchPay.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtSearchPay.SkinTxt.Name = "BaseText";
-            this.txtSearchPay.SkinTxt.Size = new System.Drawing.Size(189, 23);
+            this.txtSearchPay.SkinTxt.Size = new System.Drawing.Size(142, 18);
             this.txtSearchPay.SkinTxt.TabIndex = 0;
             this.txtSearchPay.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtSearchPay.SkinTxt.WaterText = "会员卡号/姓名";
@@ -3566,10 +3539,10 @@
             // 
             this.lbPayPro.FormattingEnabled = true;
             this.lbPayPro.ItemHeight = 17;
-            this.lbPayPro.Location = new System.Drawing.Point(224, 205);
-            this.lbPayPro.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.lbPayPro.Location = new System.Drawing.Point(168, 164);
+            this.lbPayPro.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lbPayPro.Name = "lbPayPro";
-            this.lbPayPro.Size = new System.Drawing.Size(152, 89);
+            this.lbPayPro.Size = new System.Drawing.Size(115, 55);
             this.lbPayPro.TabIndex = 158;
             // 
             // skinLabel47
@@ -3578,7 +3551,8 @@
             this.skinLabel47.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel47.BorderColor = System.Drawing.Color.White;
             this.skinLabel47.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel47.Location = new System.Drawing.Point(105, 205);
+            this.skinLabel47.Location = new System.Drawing.Point(79, 164);
+            this.skinLabel47.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel47.Name = "skinLabel47";
             this.skinLabel47.Size = new System.Drawing.Size(90, 21);
             this.skinLabel47.TabIndex = 157;
@@ -3590,7 +3564,8 @@
             this.skinLabel49.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel49.BorderColor = System.Drawing.Color.White;
             this.skinLabel49.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel49.Location = new System.Drawing.Point(449, 108);
+            this.skinLabel49.Location = new System.Drawing.Point(337, 86);
+            this.skinLabel49.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel49.Name = "skinLabel49";
             this.skinLabel49.Size = new System.Drawing.Size(122, 21);
             this.skinLabel49.TabIndex = 153;
@@ -3606,31 +3581,29 @@
             this.txtPayVipName.IsPasswordChat = '\0';
             this.txtPayVipName.IsSystemPasswordChar = false;
             this.txtPayVipName.Lines = new string[0];
-            this.txtPayVipName.Location = new System.Drawing.Point(224, 151);
+            this.txtPayVipName.Location = new System.Drawing.Point(168, 121);
             this.txtPayVipName.Margin = new System.Windows.Forms.Padding(0);
             this.txtPayVipName.MaxLength = 32767;
-            this.txtPayVipName.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtPayVipName.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtPayVipName.MouseBack = null;
             this.txtPayVipName.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtPayVipName.Multiline = true;
+            this.txtPayVipName.Multiline = false;
             this.txtPayVipName.Name = "txtPayVipName";
             this.txtPayVipName.NormlBack = null;
-            this.txtPayVipName.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtPayVipName.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtPayVipName.ReadOnly = true;
             this.txtPayVipName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtPayVipName.Size = new System.Drawing.Size(120, 35);
+            this.txtPayVipName.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtPayVipName.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPayVipName.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPayVipName.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtPayVipName.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtPayVipName.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtPayVipName.SkinTxt.Multiline = true;
+            this.txtPayVipName.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtPayVipName.SkinTxt.Name = "BaseText";
             this.txtPayVipName.SkinTxt.ReadOnly = true;
-            this.txtPayVipName.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtPayVipName.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtPayVipName.SkinTxt.TabIndex = 0;
             this.txtPayVipName.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtPayVipName.SkinTxt.WaterText = "";
@@ -3650,31 +3623,29 @@
             this.txtPayVipNo.IsPasswordChat = '\0';
             this.txtPayVipNo.IsSystemPasswordChar = false;
             this.txtPayVipNo.Lines = new string[0];
-            this.txtPayVipNo.Location = new System.Drawing.Point(224, 101);
+            this.txtPayVipNo.Location = new System.Drawing.Point(168, 81);
             this.txtPayVipNo.Margin = new System.Windows.Forms.Padding(0);
             this.txtPayVipNo.MaxLength = 32767;
-            this.txtPayVipNo.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtPayVipNo.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtPayVipNo.MouseBack = null;
             this.txtPayVipNo.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtPayVipNo.Multiline = true;
+            this.txtPayVipNo.Multiline = false;
             this.txtPayVipNo.Name = "txtPayVipNo";
             this.txtPayVipNo.NormlBack = null;
-            this.txtPayVipNo.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtPayVipNo.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtPayVipNo.ReadOnly = true;
             this.txtPayVipNo.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtPayVipNo.Size = new System.Drawing.Size(120, 35);
+            this.txtPayVipNo.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtPayVipNo.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPayVipNo.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPayVipNo.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtPayVipNo.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtPayVipNo.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtPayVipNo.SkinTxt.Multiline = true;
+            this.txtPayVipNo.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtPayVipNo.SkinTxt.Name = "BaseText";
             this.txtPayVipNo.SkinTxt.ReadOnly = true;
-            this.txtPayVipNo.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtPayVipNo.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtPayVipNo.SkinTxt.TabIndex = 0;
             this.txtPayVipNo.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtPayVipNo.SkinTxt.WaterText = "";
@@ -3690,7 +3661,8 @@
             this.skinLabel50.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel50.BorderColor = System.Drawing.Color.White;
             this.skinLabel50.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel50.Location = new System.Drawing.Point(145, 105);
+            this.skinLabel50.Location = new System.Drawing.Point(109, 84);
+            this.skinLabel50.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel50.Name = "skinLabel50";
             this.skinLabel50.Size = new System.Drawing.Size(58, 21);
             this.skinLabel50.TabIndex = 150;
@@ -3702,7 +3674,8 @@
             this.skinLabel51.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel51.BorderColor = System.Drawing.Color.White;
             this.skinLabel51.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel51.Location = new System.Drawing.Point(145, 154);
+            this.skinLabel51.Location = new System.Drawing.Point(109, 123);
+            this.skinLabel51.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel51.Name = "skinLabel51";
             this.skinLabel51.Size = new System.Drawing.Size(58, 21);
             this.skinLabel51.TabIndex = 149;
@@ -3715,12 +3688,12 @@
             this.skinPanel2.Controls.Add(this.rbUseComb);
             this.skinPanel2.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.skinPanel2.DownBack = null;
-            this.skinPanel2.Location = new System.Drawing.Point(615, 101);
-            this.skinPanel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.skinPanel2.Location = new System.Drawing.Point(461, 81);
+            this.skinPanel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.skinPanel2.MouseBack = null;
             this.skinPanel2.Name = "skinPanel2";
             this.skinPanel2.NormlBack = null;
-            this.skinPanel2.Size = new System.Drawing.Size(153, 41);
+            this.skinPanel2.Size = new System.Drawing.Size(115, 33);
             this.skinPanel2.TabIndex = 154;
             // 
             // rbUnUseComb
@@ -3731,8 +3704,8 @@
             this.rbUnUseComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.rbUnUseComb.DownBack = null;
             this.rbUnUseComb.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.rbUnUseComb.Location = new System.Drawing.Point(72, 4);
-            this.rbUnUseComb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.rbUnUseComb.Location = new System.Drawing.Point(54, 3);
+            this.rbUnUseComb.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbUnUseComb.MouseBack = null;
             this.rbUnUseComb.Name = "rbUnUseComb";
             this.rbUnUseComb.NormlBack = null;
@@ -3752,8 +3725,8 @@
             this.rbUseComb.ControlState = CCWin.SkinClass.ControlState.Normal;
             this.rbUseComb.DownBack = null;
             this.rbUseComb.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.rbUseComb.Location = new System.Drawing.Point(11, 4);
-            this.rbUseComb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.rbUseComb.Location = new System.Drawing.Point(8, 3);
+            this.rbUseComb.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbUseComb.MouseBack = null;
             this.rbUseComb.Name = "rbUseComb";
             this.rbUseComb.NormlBack = null;
@@ -3771,7 +3744,8 @@
             this.skinLabel52.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel52.BorderColor = System.Drawing.Color.White;
             this.skinLabel52.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel52.Location = new System.Drawing.Point(744, 191);
+            this.skinLabel52.Location = new System.Drawing.Point(558, 153);
+            this.skinLabel52.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel52.Name = "skinLabel52";
             this.skinLabel52.Size = new System.Drawing.Size(26, 21);
             this.skinLabel52.TabIndex = 162;
@@ -3787,31 +3761,29 @@
             this.txtTotalPrice.IsPasswordChat = '\0';
             this.txtTotalPrice.IsSystemPasswordChar = false;
             this.txtTotalPrice.Lines = new string[0];
-            this.txtTotalPrice.Location = new System.Drawing.Point(615, 188);
+            this.txtTotalPrice.Location = new System.Drawing.Point(461, 150);
             this.txtTotalPrice.Margin = new System.Windows.Forms.Padding(0);
             this.txtTotalPrice.MaxLength = 32767;
-            this.txtTotalPrice.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtTotalPrice.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtTotalPrice.MouseBack = null;
             this.txtTotalPrice.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtTotalPrice.Multiline = true;
+            this.txtTotalPrice.Multiline = false;
             this.txtTotalPrice.Name = "txtTotalPrice";
             this.txtTotalPrice.NormlBack = null;
-            this.txtTotalPrice.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtTotalPrice.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtTotalPrice.ReadOnly = true;
             this.txtTotalPrice.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtTotalPrice.Size = new System.Drawing.Size(120, 35);
+            this.txtTotalPrice.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtTotalPrice.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtTotalPrice.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtTotalPrice.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtTotalPrice.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtTotalPrice.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtTotalPrice.SkinTxt.Multiline = true;
+            this.txtTotalPrice.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtTotalPrice.SkinTxt.Name = "BaseText";
             this.txtTotalPrice.SkinTxt.ReadOnly = true;
-            this.txtTotalPrice.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtTotalPrice.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtTotalPrice.SkinTxt.TabIndex = 0;
             this.txtTotalPrice.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtTotalPrice.SkinTxt.WaterText = "";
@@ -3827,7 +3799,8 @@
             this.skinLabel53.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel53.BorderColor = System.Drawing.Color.White;
             this.skinLabel53.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel53.Location = new System.Drawing.Point(536, 191);
+            this.skinLabel53.Location = new System.Drawing.Point(402, 153);
+            this.skinLabel53.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel53.Name = "skinLabel53";
             this.skinLabel53.Size = new System.Drawing.Size(58, 21);
             this.skinLabel53.TabIndex = 160;
@@ -3839,7 +3812,8 @@
             this.skinLabel54.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel54.BorderColor = System.Drawing.Color.White;
             this.skinLabel54.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel54.Location = new System.Drawing.Point(744, 238);
+            this.skinLabel54.Location = new System.Drawing.Point(558, 190);
+            this.skinLabel54.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel54.Name = "skinLabel54";
             this.skinLabel54.Size = new System.Drawing.Size(26, 21);
             this.skinLabel54.TabIndex = 159;
@@ -3855,31 +3829,29 @@
             this.txtPayPrice.IsPasswordChat = '\0';
             this.txtPayPrice.IsSystemPasswordChar = false;
             this.txtPayPrice.Lines = new string[0];
-            this.txtPayPrice.Location = new System.Drawing.Point(615, 234);
+            this.txtPayPrice.Location = new System.Drawing.Point(461, 187);
             this.txtPayPrice.Margin = new System.Windows.Forms.Padding(0);
             this.txtPayPrice.MaxLength = 32767;
-            this.txtPayPrice.MinimumSize = new System.Drawing.Size(37, 35);
+            this.txtPayPrice.MinimumSize = new System.Drawing.Size(28, 28);
             this.txtPayPrice.MouseBack = null;
             this.txtPayPrice.MouseState = CCWin.SkinClass.ControlState.Normal;
-            this.txtPayPrice.Multiline = true;
+            this.txtPayPrice.Multiline = false;
             this.txtPayPrice.Name = "txtPayPrice";
             this.txtPayPrice.NormlBack = null;
-            this.txtPayPrice.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.txtPayPrice.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.txtPayPrice.ReadOnly = true;
             this.txtPayPrice.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtPayPrice.Size = new System.Drawing.Size(120, 35);
+            this.txtPayPrice.Size = new System.Drawing.Size(90, 28);
             // 
             // 
             // 
             this.txtPayPrice.SkinTxt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtPayPrice.SkinTxt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPayPrice.SkinTxt.Font = new System.Drawing.Font("微软雅黑", 9.75F);
-            this.txtPayPrice.SkinTxt.Location = new System.Drawing.Point(7, 6);
-            this.txtPayPrice.SkinTxt.Margin = new System.Windows.Forms.Padding(4);
-            this.txtPayPrice.SkinTxt.Multiline = true;
+            this.txtPayPrice.SkinTxt.Location = new System.Drawing.Point(5, 5);
             this.txtPayPrice.SkinTxt.Name = "BaseText";
             this.txtPayPrice.SkinTxt.ReadOnly = true;
-            this.txtPayPrice.SkinTxt.Size = new System.Drawing.Size(106, 23);
+            this.txtPayPrice.SkinTxt.Size = new System.Drawing.Size(80, 18);
             this.txtPayPrice.SkinTxt.TabIndex = 0;
             this.txtPayPrice.SkinTxt.WaterColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(127)))), ((int)(((byte)(127)))));
             this.txtPayPrice.SkinTxt.WaterText = "";
@@ -3895,7 +3867,8 @@
             this.skinLabel55.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel55.BorderColor = System.Drawing.Color.White;
             this.skinLabel55.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel55.Location = new System.Drawing.Point(493, 238);
+            this.skinLabel55.Location = new System.Drawing.Point(370, 190);
+            this.skinLabel55.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel55.Name = "skinLabel55";
             this.skinLabel55.Size = new System.Drawing.Size(90, 21);
             this.skinLabel55.TabIndex = 155;
@@ -3906,9 +3879,8 @@
             this.panel2.Controls.Add(this.tabMain);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1535, 863);
+            this.panel2.Size = new System.Drawing.Size(1151, 690);
             this.panel2.TabIndex = 2;
             // 
             // skinLabel58
@@ -3917,7 +3889,8 @@
             this.skinLabel58.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel58.BorderColor = System.Drawing.Color.White;
             this.skinLabel58.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel58.Location = new System.Drawing.Point(15, 16);
+            this.skinLabel58.Location = new System.Drawing.Point(11, 13);
+            this.skinLabel58.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel58.Name = "skinLabel58";
             this.skinLabel58.Size = new System.Drawing.Size(138, 21);
             this.skinLabel58.TabIndex = 114;
@@ -3929,7 +3902,8 @@
             this.labNewVipNum.BackColor = System.Drawing.Color.Transparent;
             this.labNewVipNum.BorderColor = System.Drawing.Color.White;
             this.labNewVipNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labNewVipNum.Location = new System.Drawing.Point(204, 16);
+            this.labNewVipNum.Location = new System.Drawing.Point(153, 13);
+            this.labNewVipNum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labNewVipNum.Name = "labNewVipNum";
             this.labNewVipNum.Size = new System.Drawing.Size(28, 21);
             this.labNewVipNum.TabIndex = 115;
@@ -3941,7 +3915,8 @@
             this.skinLabel61.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel61.BorderColor = System.Drawing.Color.White;
             this.skinLabel61.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel61.Location = new System.Drawing.Point(291, 16);
+            this.skinLabel61.Location = new System.Drawing.Point(218, 13);
+            this.skinLabel61.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel61.Name = "skinLabel61";
             this.skinLabel61.Size = new System.Drawing.Size(138, 21);
             this.skinLabel61.TabIndex = 116;
@@ -3953,7 +3928,8 @@
             this.labelPayVipNum.BackColor = System.Drawing.Color.Transparent;
             this.labelPayVipNum.BorderColor = System.Drawing.Color.White;
             this.labelPayVipNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelPayVipNum.Location = new System.Drawing.Point(480, 16);
+            this.labelPayVipNum.Location = new System.Drawing.Point(360, 13);
+            this.labelPayVipNum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelPayVipNum.Name = "labelPayVipNum";
             this.labelPayVipNum.Size = new System.Drawing.Size(28, 21);
             this.labelPayVipNum.TabIndex = 117;
@@ -3965,7 +3941,8 @@
             this.skinLabel62.BackColor = System.Drawing.Color.Transparent;
             this.skinLabel62.BorderColor = System.Drawing.Color.White;
             this.skinLabel62.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.skinLabel62.Location = new System.Drawing.Point(573, 16);
+            this.skinLabel62.Location = new System.Drawing.Point(430, 13);
+            this.skinLabel62.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.skinLabel62.Name = "skinLabel62";
             this.skinLabel62.Size = new System.Drawing.Size(90, 21);
             this.skinLabel62.TabIndex = 118;
@@ -3977,7 +3954,8 @@
             this.labAllVipNum.BackColor = System.Drawing.Color.Transparent;
             this.labAllVipNum.BorderColor = System.Drawing.Color.White;
             this.labAllVipNum.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labAllVipNum.Location = new System.Drawing.Point(700, 16);
+            this.labAllVipNum.Location = new System.Drawing.Point(525, 13);
+            this.labAllVipNum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labAllVipNum.Name = "labAllVipNum";
             this.labAllVipNum.Size = new System.Drawing.Size(28, 21);
             this.labAllVipNum.TabIndex = 119;
@@ -3993,20 +3971,42 @@
             this.panel1.Controls.Add(this.labNewVipNum);
             this.panel1.Controls.Add(this.skinLabel58);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 863);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4);
+            this.panel1.Location = new System.Drawing.Point(0, 690);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1535, 61);
+            this.panel1.Size = new System.Drawing.Size(1151, 49);
             this.panel1.TabIndex = 1;
+            // 
+            // lbBackDBs
+            // 
+            this.lbBackDBs.FormattingEnabled = true;
+            this.lbBackDBs.ItemHeight = 17;
+            this.lbBackDBs.Location = new System.Drawing.Point(171, 130);
+            this.lbBackDBs.Margin = new System.Windows.Forms.Padding(2);
+            this.lbBackDBs.Name = "lbBackDBs";
+            this.lbBackDBs.Size = new System.Drawing.Size(187, 140);
+            this.lbBackDBs.TabIndex = 160;
+            // 
+            // skinLabel59
+            // 
+            this.skinLabel59.AutoSize = true;
+            this.skinLabel59.BackColor = System.Drawing.Color.Transparent;
+            this.skinLabel59.BorderColor = System.Drawing.Color.White;
+            this.skinLabel59.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.skinLabel59.Location = new System.Drawing.Point(78, 130);
+            this.skinLabel59.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.skinLabel59.Name = "skinLabel59";
+            this.skinLabel59.Size = new System.Drawing.Size(90, 21);
+            this.skinLabel59.TabIndex = 159;
+            this.skinLabel59.Text = "备份记录：";
             // 
             // Mains
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1535, 924);
+            this.ClientSize = new System.Drawing.Size(1151, 739);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Mains";
             this.Text = "Mains";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Mains_FormClosed);
@@ -4022,6 +4022,7 @@
             this.tabComb.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvComb)).EndInit();
             this.tabData.ResumeLayout(false);
+            this.tabData.PerformLayout();
             this.tabShop.ResumeLayout(false);
             this.tabShop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
@@ -4238,6 +4239,9 @@
         private CCWin.SkinControl.SkinLabel skinLabel62;
         private CCWin.SkinControl.SkinLabel labAllVipNum;
         private System.Windows.Forms.Panel panel1;
+        private CCWin.SkinControl.SkinButton btnEditLogo;
+        private System.Windows.Forms.ListBox lbBackDBs;
+        private CCWin.SkinControl.SkinLabel skinLabel59;
 
 
 

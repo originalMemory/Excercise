@@ -7,30 +7,30 @@ using System.Threading.Tasks;
 namespace CSharpTest.Model
 {
     /// <summary>
-    /// 四叉树
+    /// 四叉树查询使用
     /// </summary>
-    public class QuadtreeRoot
+    public class QuadtreeVisit
     {
         /// <summary>
         /// 根结点
         /// </summary>
-        public QuadtreeNode _root;
+        public QuadtreeNode node;
         /// <summary>
         /// x坐标左值
         /// </summary>
-        public double _x0;
+        public double x0;
         /// <summary>
         /// y坐标下值
         /// </summary>
-        public double _y0;
+        public double y0;
         /// <summary>
         /// x坐标右值
         /// </summary>
-        public double _x1;
+        public double x1;
         /// <summary>
         /// y坐标上值
         /// </summary>
-        public double _y1;
+        public double y1;
     }
 
     /// <summary>
@@ -55,5 +55,19 @@ namespace CSharpTest.Model
         /// 判断本节点是分支结点还是叶子结点
         /// </summary>
         public bool IsLeaf;
+        #region manyBody时全用
+        /// <summary>
+        /// 力强度
+        /// </summary>
+        public double value;
+        /// <summary>
+        /// x坐标
+        /// </summary>
+        public double x;
+        /// <summary>
+        /// y坐标
+        /// </summary>
+        public double y;
+        #endregion
     }
 }

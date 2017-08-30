@@ -14,6 +14,10 @@ namespace VipData.Model
 
         public ObjectId _id { get; set; }
         /// <summary>
+        /// 用户ID
+        /// </summary>
+        public ObjectId UserId { get; set; }
+        /// <summary>
         /// 文件流
         /// </summary>
         public byte[] Bytes { get; set; }

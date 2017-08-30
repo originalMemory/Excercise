@@ -14,6 +14,7 @@ using MongoDB.Driver;
 using VipManager.Helper;
 using VipManager.Model;
 using VipData.Model;
+using VipData.Helper;
 
 namespace VipManager.FormControl
 {
@@ -23,6 +24,9 @@ namespace VipManager.FormControl
         {
             InitializeComponent();
             txtPassword.KeyPress += new KeyPressEventHandler(this.txtPassword_KeyPress);
+            //读取用户Logo
+            string url = OperateIni.ReadIniData("Enveronment", "logoUrl", Commons.GetAppSetting("config"));
+            picLogo.ImageLocation = url;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -87,7 +91,7 @@ namespace VipManager.FormControl
         void RefreshLogo()
         {
             string logoUrl = Config.User.LogoUrl;
-            string iniPath = VipData.Helper.Commons.GetAppSetting("config");
+            string iniPath = Commons.GetAppSetting("config");
             OperateIni.WriteIniData("Enveronment", "logoUrl", logoUrl, iniPath);
         }
 

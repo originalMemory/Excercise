@@ -61,7 +61,9 @@
     <Compile Include="Helper\Commons.cs" />
     <Compile Include="Helper\MongoDBClass.cs" />
     <Compile Include="Helper\MongoDBHelper.cs" />
+    <Compile Include="Model\Post.cs" />
     <Compile Include="Model\Result.cs" />
+    <Compile Include="Model\UserCommand.cs" />
     <Compile Include="Model\UserImg.cs" />
     <Compile Include="Model\Enum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

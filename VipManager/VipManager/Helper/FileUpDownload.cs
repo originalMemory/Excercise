@@ -17,15 +17,15 @@ namespace VipManager.Helper
         /// <summary>  
         /// Ftp服务器ip  
         /// </summary>  
-        public static string FtpServerIP = string.Empty;  
+        public static string FtpServerIP = "101.200.43.118";
         /// <summary>  
         /// Ftp 指定用户名  
         /// </summary>  
-        public static string FtpUserID = string.Empty;  
+        public static string FtpUserID = "ftp"; 
         /// <summary>  
         /// Ftp 指定用户密码  
         /// </summary>  
-        public static string FtpPassword = string.Empty;  
+        public static string FtpPassword = "ftp2017";
  
         #endregion  
  

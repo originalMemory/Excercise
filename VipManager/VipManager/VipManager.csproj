@@ -119,8 +119,8 @@
     <Compile Include="Helper\ControlEvent.cs" />
     <Compile Include="Helper\EncryptHelper.cs" />
     <Compile Include="Helper\FileUpDownload.cs" />
+    <Compile Include="Helper\FTPClient.cs" />
     <Compile Include="Helper\IDHelper.cs" />
-    <Compile Include="Helper\ImgUpDown.cs" />
     <Compile Include="Helper\OperateIni.cs" />
     <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Model\CombSnap.cs" />

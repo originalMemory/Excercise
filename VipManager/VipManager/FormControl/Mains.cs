@@ -16,6 +16,7 @@ using System.IO;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using VipData.Model;
+using VipData.Helper;
 
 namespace VipManager.FormControl
 {
@@ -1084,15 +1085,64 @@ namespace VipManager.FormControl
         //备份数据
         private void btnBackupData_Click(object sender, EventArgs e)
         {
-            SaveFileDialog save = new SaveFileDialog();
-            save.Title = "备份数据";
-            save.Filter = "数据文件|*.mdb";
-            if (save.ShowDialog() == DialogResult.OK)
+            //SaveFileDialog save = new SaveFileDialog();
+            //save.Title = "备份数据";
+            //save.Filter = "数据文件|*.mdb";
+            //if (save.ShowDialog() == DialogResult.OK)
+            //{
+            //    string backupFilePath = save.FileName;
+            //    FileInfo file = new FileInfo(Config.DbPath);
+            //    file.CopyTo(backupFilePath, true);
+            //}
+
+            //备份文件名
+            string backupFloder = Application.StartupPath + "\\Backup\\";
+            if (!Directory.Exists(backupFloder))
             {
-                string backupFilePath = save.FileName;
-                FileInfo file = new FileInfo(Config.DbPath);
-                file.CopyTo(backupFilePath, true);
+                Directory.CreateDirectory(backupFloder);
             }
+            string backupfile = backupFloder + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ".mdb";
+            var files = System.IO.Directory.GetFiles(backupFloder);
+            //判断数量是否已满,需要删除原有备份文件
+            if (files.Length == 2)
+            {
+                DateTime time1 = new DateTime();
+                string file1 = Path.GetFileNameWithoutExtension(files[0]);
+                if (DateTime.TryParse(file1, out time1))
+                {
+                    DateTime time2 = new DateTime();
+                    string file2 = Path.GetFileNameWithoutExtension(files[1]);
+                    if (DateTime.TryParse(file2, out time2))
+                    {
+                        if (time1 > time2)
+                        {
+                            File.Delete(files[1]);
+                        }
+                        else
+                        {
+                            File.Delete(files[0]);
+                        }
+                    }
+                    else
+                    {
+                        File.Delete(files[1]);
+                    }
+                
+                }
+                else
+                {
+                    File.Delete(files[0]);
+                }
+            }
+            //备份文件
+            Config.Dispose();
+            File.Copy(Config.DbPath, backupfile, true);
+            Config.Init();
+
+            //更新备份文件列表
+            files = System.IO.Directory.GetFiles(backupFloder);
+            var backFiles = files.Select(x => Path.GetFileName(x)).ToList();
+            lbBackDBs.DataSource = backupfile;
         }
 
         //恢复数据
@@ -1117,6 +1167,7 @@ namespace VipManager.FormControl
         #endregion
 
         #region 商铺信息
+        //初始化
         void InitShop()
         {
             picLicence.ImageLocation = Config.User.PicLicenUrl;
@@ -1129,6 +1180,8 @@ namespace VipManager.FormControl
             txtShopWeixin.Text = Config.User.Weixin;
             txtAddress.Text = Config.User.Address;
         }
+
+        //修改用户信息
         private void btnEditUser_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtAddress.Text) || string.IsNullOrEmpty(txtShopNo.Text) || string.IsNullOrEmpty(txtShopName.Text) || string.IsNullOrEmpty(txtShopPhone.Text)
@@ -1159,6 +1212,56 @@ namespace VipManager.FormControl
                 MessageBoxEx.Show("网络不佳,请重试！", "提示");
             }
             
+        }
+
+        //更换Logo
+        private void btnEditLogo_Click(object sender, EventArgs e)
+        {
+            //获取要上传的本地Logo图片位置
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "打开图片";
+            dialog.Filter = "图片文件(*.BMP;*.JPG;*.JPEG;*.PNG;*.GIF)|*.BMP;*.JPG;*.JPEG;*.PNG;*.GIF";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    string logoPath = dialog.FileName;
+
+                    //上传图片
+                    string imgId = ObjectId.GenerateNewId().ToString();
+                    string baseUrl = Commons.GetAppSetting("imgSite");
+                    string upUrl = baseUrl + "/api/Img/UploadImg?imgId={0}&userId={1}&type={2}".FormatStr(imgId, Config.User._id.ToString(), (int)UserImgType.Logo);
+
+                    var wc = new System.Net.WebClient();
+                    byte[] sendData = System.Text.Encoding.UTF8.GetBytes(logoPath);
+                    wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                    wc.Headers.Add("ContentLength", sendData.Length.ToString());
+                    byte[] recData = wc.UploadFile(upUrl, "POST", logoPath);
+                    string success = (Encoding.GetEncoding("GB2312").GetString(recData));
+                    if (success == "true")
+                    {
+                        //更新原来的图片地址
+                        string newLogoUrl = baseUrl + "/api/Img/DownloadImg?imgId={0}".FormatStr(imgId);
+                        var update = new UpdateDocument { { "$set", new QueryDocument { { "LogoUrl", newLogoUrl } } } };
+                        MongoDBHelper.Instance.GetUserImg().UpdateOne(new QueryDocument { { "_id", Config.User._id } }, update);
+
+                        Config.User.LogoUrl = newLogoUrl;
+                        string iniPath = Commons.GetAppSetting("config");
+                        OperateIni.WriteIniData("Enveronment", "logoUrl", newLogoUrl, iniPath);
+
+                        picLogo.ImageLocation = newLogoUrl;
+                        MessageBox.Show("Logo更换成功！", "提示");
+                    }
+                    else
+                    {
+                        MessageBox.Show("网络不稳定，请重试！", "提示");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("网络不稳定，请重试！", "提示");
+                }
+            }
         }
         #endregion
 
@@ -1391,6 +1494,8 @@ namespace VipManager.FormControl
             }
         }
         #endregion
+
+       
 
     }
 }

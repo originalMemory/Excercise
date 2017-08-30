@@ -25,6 +25,7 @@ using NPOI.SS.Util;
 using Newtonsoft.Json.Linq;
 using System.Web.Script.Serialization;
 using System.Web;
+using NReadability;
 
 namespace CSharpTest.Tools
 {
@@ -1387,6 +1388,10 @@ namespace CSharpTest.Tools
             CommonTools.Log("全部迁移完毕！");
         }
 
+        /// <summary>
+        /// 输出标签数据
+        /// </summary>
+        /// <param name="keys"></param>
         public static void ExportData(List<string> keys)
         {
             //获取所有链接数据
@@ -1583,6 +1588,25 @@ namespace CSharpTest.Tools
                 workbook.Write(fs);
             }
             Console.WriteLine("计算完毕");
+        }
+
+        /// <summary>
+        /// 正文抽取
+        /// </summary>
+        /// <param name="url">网址</param>
+        public static void ExtractContent(string url)
+        {
+            var transcoder = new NReadabilityTranscoder();
+            string html;
+            using (var wc = new WebClient())
+            {
+                html = wc.DownloadString(url);
+            }
+            bool success;
+            TranscodingInput input = new TranscodingInput(html);
+            TranscodingResult result = transcoder.Transcode(input);
+            string content = result.ExtractedContent;
+            Console.WriteLine(content);
         }
     }
 

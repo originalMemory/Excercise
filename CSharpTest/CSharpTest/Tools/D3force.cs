@@ -11,6 +11,8 @@ using System.IO;
 
 namespace CSharpTest.Tools
 {
+    //回调函数
+    public delegate void CallBackHandler(QuadtreeNode quad);
     public class D3force
     {
         public D3force()
@@ -333,8 +335,10 @@ namespace CSharpTest.Tools
         public void forceManyBody()
         {
             int n = Nodes.Count;
-            D3quadtree quad = new D3quadtree();
-            quad.quadtree(Nodes);
+            D3quadtree tree = new D3quadtree(Nodes);
+            tree.visitAfter(new CallBackHandler(accumulate));
+
+            
         }
 
         public void initializeManyBody()
@@ -350,6 +354,40 @@ namespace CSharpTest.Tools
                 var node = Nodes[i];
                 strengthsManyBody[node.index] = +defaultStrengthManyBody;
             }
+        }
+
+
+        public void accumulate(QuadtreeNode quad)
+        {
+            double x = 0, y = 0, strength = 0, c;
+            QuadtreeNode q;
+            //对于内部节点，积累来自子象限的力。
+            if (quad.children != null)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (quad.children[i] != null)
+                    {
+                        q = quad.children[i];
+                        c = q.value;
+                        strength += c;
+                        x += c * q.x;
+                        y += c * q.y;
+                    }
+                    quad.x = x / strength;
+                    quad.y = y / strength;
+                }
+            }
+            //对叶结点，积累来自重合象限的力
+            else
+            {
+                q = quad;
+                q.x = q.data.x;
+                q.y = q.data.y;
+                strength += strengthsManyBody[q.data.index];
+            }
+            quad.value = strength;
+            
         }
         #endregion
 

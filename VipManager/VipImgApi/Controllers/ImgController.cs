@@ -22,12 +22,10 @@ namespace VipImgApi.Controllers
         /// <summary>
         /// 根据md5上传文件
         /// </summary>
-        /// <param name="fileId">文件唯一标识</param>
-        /// <param name="content_type">文件类型</param>
-        /// <param name="fileName">文件名</param>
+        /// <param name="imgId">图片唯一标识</param>
         /// <returns></returns>
         [HttpPost]
-        public bool UploadImg(string fileId)
+        public bool UploadImg(string imgId, string userId, UserImgType type)
         {
             try
             {
@@ -40,7 +38,7 @@ namespace VipImgApi.Controllers
                 ff.Bytes = bs;
                 ff.Extention = extension;
                 ff.Name = file.FileName;
-                ff._id = new ObjectId(fileId);
+                ff._id = new ObjectId(imgId);
                 ff.Size = bs.Length;
                 ff.CreateAt = DateTime.Now.AddHours(8);
                 
@@ -57,13 +55,13 @@ namespace VipImgApi.Controllers
         /// <summary>
         /// 根据md5下载文件
         /// </summary>
-        /// <param name="fileId">文件唯一标识</param>
+        /// <param name="imgId">文件唯一标识</param>
         /// <returns></returns>
         [HttpGet]
-        public HttpResponseMessage DownloadImg(string fileId)
+        public HttpResponseMessage DownloadImg(string imgId)
         {
             var builder = Builders<UserImgMongo>.Filter;
-            var filter = builder.Eq(x => x._id, new ObjectId(fileId));
+            var filter = builder.Eq(x => x._id, new ObjectId(imgId));
             var file = MongoDBHelper.Instance.GetUserImg().Find(filter).FirstOrDefault();
 
             if (file != null)

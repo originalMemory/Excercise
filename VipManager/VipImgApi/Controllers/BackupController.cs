@@ -12,16 +12,24 @@ namespace VipImgApi.Controllers
 {
     public class BackupController : ApiController
     {
+
         [HttpPost]
         public ResultDto BackupCommand(BackupPost data)
         {
             var result = new ResultDto();
             try
             {
-                //获取用户的数据存储位置
                 var userObjId = new ObjectId(data.userId);
+                //获取用户的数据存储位置
+                string backupFolder = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "BackUpDB\\" + data.userId + "\\";
+                //获取前两次命令
 
             }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
         }
     }
 }
