@@ -70,6 +70,13 @@ namespace VipManager.FormControl
             lbPayPro.ValueMember = "ID";
             lbPayPro.DataSource = DtPayPro;
             txtSearchPay.SkinTxt.KeyPress += new KeyPressEventHandler(this.txtSearchPay_KeyPress);
+
+            //数据备份文件位置初始设置
+            DtBackDBs.Columns.Add("FileName", System.Type.GetType("System.String"));
+            DtBackDBs.Columns.Add("Path", System.Type.GetType("System.String"));
+            lbBackDBs.DisplayMember = "FileName";
+            lbBackDBs.ValueMember = "Path";
+            lbBackDBs.DataSource = DtBackDBs;
         }
 
         /// <summary>
@@ -1041,6 +1048,7 @@ namespace VipManager.FormControl
         bool IsInitComb = false;
         bool IsInitShop = false;
         bool IsInitPay = false;
+        bool IsInitData = false;
         private void tabMain_Selected(object sender, TabControlEventArgs e)
         {
             if (e.TabPage == tabVip&&!IsInitVip)
@@ -1079,22 +1087,39 @@ namespace VipManager.FormControl
                 IsInitPay = true;
                 return;
             }
+
+            if (e.TabPage == tabData && !IsInitData)
+            {
+                InitData();
+                IsInitData = true;
+                return;
+            }
         }      
 
         #region 数据管理
+        DataTable DtBackDBs = new DataTable();
+        /// <summary>
+        /// 初始化备份文件列表
+        /// </summary>
+        private void InitData()
+        {
+            string backupFloder = Application.StartupPath + "\\Backup\\";
+            var files = Directory.GetFiles(backupFloder);
+            if (files.Length > 0)
+            {
+                DtBackDBs.Clear();
+                foreach (var item in files)
+                {
+                    var row = DtBackDBs.NewRow();
+                    row[0] = Path.GetFileName(item);
+                    row[1] = item;
+                    DtBackDBs.Rows.Add(row);
+                }
+            }
+        }
         //备份数据
         private void btnBackupData_Click(object sender, EventArgs e)
         {
-            //SaveFileDialog save = new SaveFileDialog();
-            //save.Title = "备份数据";
-            //save.Filter = "数据文件|*.mdb";
-            //if (save.ShowDialog() == DialogResult.OK)
-            //{
-            //    string backupFilePath = save.FileName;
-            //    FileInfo file = new FileInfo(Config.DbPath);
-            //    file.CopyTo(backupFilePath, true);
-            //}
-
             //备份文件名
             string backupFloder = Application.StartupPath + "\\Backup\\";
             if (!Directory.Exists(backupFloder))
@@ -1139,29 +1164,25 @@ namespace VipManager.FormControl
             File.Copy(Config.DbPath, backupfile, true);
             Config.Init();
 
-            //更新备份文件列表
-            files = System.IO.Directory.GetFiles(backupFloder);
-            var backFiles = files.Select(x => Path.GetFileName(x)).ToList();
-            lbBackDBs.DataSource = backupfile;
+            InitData();
         }
 
         //恢复数据
         private void btnRecoverData_Click(object sender, EventArgs e)
         {
-            OpenFileDialog recover = new OpenFileDialog();
-            recover.Title = "恢复数据";
-            recover.Filter = "数据文件|*.mdb";
-            recover.Multiselect = false;
-            if (recover.ShowDialog() == DialogResult.OK)
+            //获取当前选中的备份文件路径
+            string backPath = lbBackDBs.SelectedValue.ToString();
+            if (File.Exists(backPath))
             {
-                FileInfo oldFile = new FileInfo(Config.DbPath);
                 Config.Dispose();
-                oldFile.Delete();
-
-                string backupFilePath = recover.FileName;
-                FileInfo newFile = new FileInfo(backupFilePath);
-                newFile.CopyTo(Config.DbPath);
+                File.Delete(Config.DbPath);
+                File.Copy(backPath, Config.DbPath, true);
                 Config.Init();
+            }
+            else
+            {
+                InitData();
+                MessageBoxEx.Show("备份文件丢失，请选择其他备份！", "提示");
             }
         }
         #endregion
