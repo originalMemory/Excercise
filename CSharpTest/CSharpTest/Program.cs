@@ -47,8 +47,6 @@ namespace CSharpTest
             data.Add("anaProCateId", "59aa8236de93dc41ec3136c9");
             data.Add("tagIds", "59aa839ede93dc37647b7691");
             data.Add("projectIds", "588712927c08250b487fcfd1");
-            //data.Add("proParaIds", null);
-            //data.Add("paraLevel", "0");
             data.Add("sourceType", "0");
             //data.Add("startTime", null);
             //data.Add("endTime", null);
