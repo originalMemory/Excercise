@@ -1264,11 +1264,12 @@ namespace VipManager.FormControl
                         //更新原来的图片地址
                         string newLogoUrl = baseUrl + "/api/Img/DownloadImg?imgId={0}".FormatStr(imgId);
                         var update = new UpdateDocument { { "$set", new QueryDocument { { "LogoUrl", newLogoUrl } } } };
-                        MongoDBHelper.Instance.GetUserImg().UpdateOne(new QueryDocument { { "_id", Config.User._id } }, update);
+                        MongoDBHelper.Instance.GetUser().UpdateOne(new QueryDocument { { "_id", Config.User._id } }, update);
 
                         Config.User.LogoUrl = newLogoUrl;
                         string iniPath = Commons.GetAppSetting("config");
                         OperateIni.WriteIniData("Enveronment", "logoUrl", newLogoUrl, iniPath);
+                        
 
                         picLogo.ImageLocation = newLogoUrl;
                         MessageBox.Show("Logo更换成功！", "提示");
@@ -1278,9 +1279,9 @@ namespace VipManager.FormControl
                         MessageBox.Show("网络不稳定，请重试！", "提示");
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
-                    MessageBox.Show("网络不稳定，请重试！", "提示");
+                    MessageBox.Show(ex.Message, "提示");
                 }
             }
         }

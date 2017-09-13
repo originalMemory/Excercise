@@ -379,13 +379,13 @@ namespace CSharpTest.Tools
                 {
                     double x0 = q.x0, y0 = q.y0, x1 = q.x1, y1 = q.y1, xm = (x0 + x1) / 2, ym = (y0 + y1) / 2;
                     if (node.children[0] != null)
-                        quads.Push(quad(node.children[0], x0, y0, x1, y1));
+                        quads.Push(quad(node.children[0], x0, y0, xm, ym));
                     if (node.children[1] != null)
-                        quads.Push(quad(node.children[1], x0, y0, x1, y1));
+                        quads.Push(quad(node.children[1], xm, y0, x1, ym));
                     if (node.children[2] != null)
-                        quads.Push(quad(node.children[2], x0, y0, x1, y1));
+                        quads.Push(quad(node.children[2], x0, ym, xm, y1));
                     if (node.children[3] != null)
-                        quads.Push(quad(node.children[3], x0, y0, x1, y1));
+                        quads.Push(quad(node.children[3], xm, ym, x1, y1));
                 }
                 next.Push(q);
             }
@@ -400,7 +400,7 @@ namespace CSharpTest.Tools
             }
         }
 
-        public void visit(CallBackHandler callback)
+        public void visit(CallBackHandler5 callback)
         {
   //          var quads = [], q, node = this._root, child, x0, y0, x1, y1;
   //if (node) quads.push(new Quad(node, this._x0, this._y0, this._x1, this._y1));
@@ -423,7 +423,22 @@ namespace CSharpTest.Tools
             }
             while (quads.Count > 0)
             {
-                
+                q = quads.Pop();
+                x0 = q.x0; y0 = q.y0; x1 = q.x1; y1 = q.y1;
+                //var isSuccess = callback(q.node);
+                //if (isSuccess && !node.IsLeaf)
+                //{
+                //    double xm = (x0 + x1) / 2;
+                //    double ym = (y0 + y1) / 2;
+                //    if (node.children[0] != null)
+                //        quads.Push(quad(node.children[0], x0, y0, xm, ym));
+                //    if (node.children[1] != null)
+                //        quads.Push(quad(node.children[1], xm, y0, x1, ym));
+                //    if (node.children[2] != null)
+                //        quads.Push(quad(node.children[2], x0, ym, xm, y1));
+                //    if (node.children[3] != null)
+                //        quads.Push(quad(node.children[3], xm, ym, x1, y1));
+                //}
             }
         }
 

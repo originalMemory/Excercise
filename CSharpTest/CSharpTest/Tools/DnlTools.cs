@@ -840,17 +840,17 @@ namespace CSharpTest.Tools
             //string keyword = "真爱梦想";
             //string url = "http://www.5118.com/seo/words/真爱梦想";
             //string html = WebApiInvoke.GetHtml(url);
-            //HtmlDocument doc = new HtmlDocument();
-            //doc.LoadHtml(html);
-            //HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//span[@class=\"hoverToHide\"]");
-            //foreach (var node in nodes)
-            //{
-            //    Console.WriteLine(node.InnerText);
-            //}
-            string pw = "123456";
-            byte[] bytes = Encoding.UTF8.GetBytes(pw);
-            string base64 = Convert.ToBase64String(bytes);
-            Console.WriteLine(base64);
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//span[@class=\"hoverToHide\"]");
+            foreach (var node in nodes)
+            {
+                Console.WriteLine(node.InnerText);
+            }
+            //string pw = "123456";
+            //byte[] bytes = Encoding.UTF8.GetBytes(pw);
+            //string base64 = Convert.ToBase64String(bytes);
+            //Console.WriteLine(base64);
         }
 
         /// <summary>
@@ -1602,11 +1602,165 @@ namespace CSharpTest.Tools
             {
                 html = wc.DownloadString(url);
             }
-            bool success;
             TranscodingInput input = new TranscodingInput(html);
             TranscodingResult result = transcoder.Transcode(input);
             string content = result.ExtractedContent;
-            Console.WriteLine(content);
+            string str = content.SubAfter("</head>").SubBefore("</html>");
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(str);
+            str = doc.DocumentNode.InnerText;
+            Console.WriteLine(str);
+        }
+
+        /// <summary>
+        /// 提取词频
+        /// </summary>
+        /// <param name="projectIds"></param>
+        public static void ExportWordFreqency(string projectIds)
+        {
+            
+            var proObjIds = CommonTools.GetObjIdListFromStr(projectIds);
+
+            //获取项目名称
+            var queryPro = MongoDBHelper.Instance.GetIW2S_Projects().Find(Builders<IW2S_Project>.Filter.In(x => x._id, proObjIds)).Project(x => new
+            {
+                Id = x._id,
+                Name = x.Name
+            }).ToList();
+
+            JiebaHelper jieba = new JiebaHelper();
+            var transcoder = new NReadabilityTranscoder();
+
+            int index = 1;
+            foreach (var pro in queryPro)
+            {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                CommonTools.Log("计算项目 - {0}".FormatStr(pro.Name));
+                if (index < 5)
+                {
+                    index++;
+                    continue;
+                }
+                index++;
+                //获取关键词信息
+                var builderMap = Builders<Dnl_KeywordMapping>.Filter;
+                var filterMap = builderMap.Eq(x => x.ProjectId, pro.Id);
+                filterMap &= builderMap.Eq(x => x.CategoryId, ObjectId.Empty) & builderMap.Eq(x => x.IsDel, false);
+                var queryMap = MongoDBHelper.Instance.GetDnl_KeywordMapping().Find(filterMap).Project(x => new
+                {
+                    KeywordId = x.KeywordId.ToString(),
+                    ProjectId = x.ProjectId
+                }).ToList();
+
+                var dic = queryMap.ToLookup(x => x.KeywordId);
+                var keyIds = queryMap.Select(x => x.KeywordId).Distinct().ToList();
+                CommonTools.Log("获取百度关键词数 - {0}个".FormatStr(keyIds.Count));
+                //获取链接信息
+                ////获取项目内已删除的链接Id
+                //var builderLinkMap = Builders<Dnl_LinkMapping_Baidu>.Filter;
+                //var filterLinkMap = builderLinkMap.Eq(x => x.ProjectId, pro.Id) & builderLinkMap.Eq(x => x.DataCleanStatus, (byte)2);
+                //filterLinkMap &= builderLinkMap.Eq(x => x.Source, SourceType.Baidu);
+                //var exLinkObjIds = MongoDBHelper.Instance.GetDnl_LinkMapping_Baidu().Find(filterLinkMap).Project(x => x.LinkId).ToList();       //项目中已删除的链接ID列表
+
+                //以100个关键词为单位，循环获取所有链接信息
+                var buiderLink = Builders<Dnl_Link_Baidu>.Filter;
+                var colLink = MongoDBHelper.Instance.GetDnl_Link_Baidu();
+                var linkList = new List<TagLink>();
+                int page = 0, pagesize = 100;
+                while (true)
+                {
+                    var tempKeys = keyIds.Skip(page * pagesize).Take(pagesize).ToList();
+                    if (tempKeys.Count > 0)
+                    {
+                        //以500为单位，循环获取本批次链接信息
+                        var filterLink = buiderLink.In(x => x.SearchkeywordId, tempKeys);
+                        int pageLink = 0, pagesizeLink = 500;
+                        var allLinkNum = colLink.Find(filterLink).Count();      //本批次关键词对应链接总数
+                        int getNum = 0;     //本批关键词已获取链接数
+                        while (true)
+                        {
+                            var tempLink = colLink.Find(filterLink).Skip(pageLink * pagesizeLink).Limit(pagesizeLink).Project(x => new TagLink
+                            {
+                                Id = x._id,
+                                Title = x.Title,
+                                Html = x.Html,
+                                KeywordId = x.SearchkeywordId,
+                                Description = x.Description
+                            }).ToList();
+                            if (tempLink.Count > 0)
+                            {
+                                linkList.AddRange(tempLink);
+                                getNum += tempLink.Count;
+                            }
+                            else
+                                break;
+                            pageLink++;
+                            CommonTools.Log("获取当前百度链接[{0}/{1}]".FormatStr(getNum, allLinkNum));
+                        }
+                        page++;
+                        CommonTools.Log("获取百度[{0}/{1}]关键词对应链接".FormatStr(page * pagesize < keyIds.Count ? page * pagesize : keyIds.Count, keyIds.Count));
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                //合并标题、描述和正文，然后获取名词词频
+                string str = "";
+                if (linkList.Count > 0)
+                {
+                    double num = 1;
+                    foreach (var link in linkList)
+                    {
+                        try
+                        {
+                            TranscodingInput input = new TranscodingInput(link.Html);
+                            TranscodingResult result = transcoder.Transcode(input);
+                            if (result.ContentExtracted)
+                            {
+                                string htmlCon = result.ExtractedContent.SubAfter("</head>").SubBefore("</html>");
+                                HtmlDocument doc = new HtmlDocument();
+                                str += doc.DocumentNode.InnerText + System.Environment.NewLine;
+                            }
+                            else
+                            {
+                                str += link.Title + System.Environment.NewLine;
+                                str += link.Description + System.Environment.NewLine;
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            CommonTools.Log("错误：{0}".FormatStr(ex.Message));
+                            str += link.Title + System.Environment.NewLine;
+                            str += link.Description + System.Environment.NewLine;
+                        }
+                        CommonTools.Log("[{0}/{1}] - {2}".FormatStr(num, linkList.Count, link.Title));
+                        num++;
+
+                    }
+                    var frequecny = jieba.GetFrequency(str, new List<string>());
+                    var sheet = workbook.CreateSheet(pro.Name);
+                    var head = sheet.CreateRow(0);
+                    head.CreateCell(0).SetCellValue("词名");
+                    head.CreateCell(1).SetCellValue("词频");
+                    int j = 1;
+                    for (int i = 0; i < frequecny.noun.Count || i < 100; i++)
+                    {
+                        var row = sheet.CreateRow(j);
+                        row.CreateCell(0).SetCellValue(frequecny.noun[i]);
+                        row.CreateCell(1).SetCellValue(frequecny.nounCount[i]);
+                        j++;
+                    }
+                }
+                string filePath = "F:\\{0}.xls".FormatStr(pro.Name);
+                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                {
+                    workbook.Write(fs);
+                }
+            }
+            CommonTools.Log("词频统计完毕！");
+
         }
     }
 

@@ -370,6 +370,87 @@ namespace CSharpTest.Helper
         #endregion
         #endregion
 
+        //结巴分词初始化
+        PosSegmenter posSegementer = new PosSegmenter();
+
+        /// <summary>
+        /// 获取文章内名、动词词频
+        /// </summary>
+        /// <param name="text">要获取词频的文章</param>
+        /// <param name="stopWords">停用词列表</param>
+        /// <returns></returns>
+        public FrequencyResult GetFrequency(string text, List<string> stopWords)
+        {
+            //临时数据列表
+            List<string> noun = new List<string>();
+            List<int> nounCount = new List<int>();
+            List<string> verb = new List<string>();
+            List<int> verbCount = new List<int>();
+            int num = 0;
+            int i = 0, j = 0;
+
+            //对数据分词，并统计词频
+            var segment = posSegementer.Cut(text).ToList();
+            var wordList = segment.GroupBy(x => x.ToString()).Select(x => new { Word = x.Key.ToString(), Count = x.Count() }).OrderByDescending(x => x.Count).ToList();
+
+            //提取名、动词词频
+            Regex regN = new Regex("(?<word>[\u4E00-\u9FA5][\u4E00-\u9FA5]+?)/n[a-zA-Z]*");
+            Regex regV = new Regex("(?<word>[\u4E00-\u9FA5][\u4E00-\u9FA5]+?)/v[a-zA-Z]*");
+            foreach (var wordInfo in wordList)
+            {
+                if (num == 100) break;
+                string word = regN.Match(wordInfo.Word).Groups["word"].Value;
+                if (!string.IsNullOrEmpty(word) & i < 100)
+                {
+                    //排除已停用的词
+                    if (stopWords.Contains(word))
+                    {
+                        continue;
+                    }
+                    int nc = wordInfo.Count;
+                    noun.Add(word);
+                    nounCount.Add(nc);
+                    i++;
+                    num++;
+                }
+                //else
+                //{
+                //    word = regV.Match(wordInfo.Word).Groups["word"].Value;
+                //    if (!string.IsNullOrEmpty(word) & j < 10)
+                //    {
+                //        //排除已停用的词
+                //        if (stopWords.Contains(word))
+                //        {
+                //            continue;
+                //        }
+                //        int nc = wordInfo.Count;
+                //        verb.Add(word);
+                //        verbCount.Add(nc);
+                //        j++;
+                //        num++;
+                //    }
+                //}
+            }
+
+            FrequencyResult result = new FrequencyResult();
+            result.noun = noun;
+            result.nounCount = nounCount;
+            result.verb = verb;
+            result.verbCount = verbCount;
+            return result;
+        }
+
+        /// <summary>
+        /// 动、名词词频统计结果
+        /// </summary>
+        public class FrequencyResult
+        {
+            public List<string> noun { get; set; }
+            public List<int> nounCount { get; set; }
+            public List<string> verb { get; set; }
+            public List<int> verbCount { get; set; }
+        }
+
     }
 
 }

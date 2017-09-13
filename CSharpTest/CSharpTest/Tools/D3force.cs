@@ -13,6 +13,7 @@ namespace CSharpTest.Tools
 {
     //回调函数
     public delegate void CallBackHandler(QuadtreeNode quad);
+    public delegate bool CallBackHandler5(QuadtreeNode quad, int x0, int y0, int x1, int y1);
     public class D3force
     {
         public D3force()
@@ -387,7 +388,11 @@ namespace CSharpTest.Tools
                 strength += strengthsManyBody[q.data.index];
             }
             quad.value = strength;
-            
+        }
+
+        public bool apply(QuadtreeNode quad)
+        {
+            return true;
         }
         #endregion
 

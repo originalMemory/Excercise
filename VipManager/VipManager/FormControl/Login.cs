@@ -15,6 +15,10 @@ using VipManager.Helper;
 using VipManager.Model;
 using VipData.Model;
 using VipData.Helper;
+using System.Net.FtpClient;
+using System.Net;
+using System.IO;
+using System.Threading;
 
 namespace VipManager.FormControl
 {
@@ -25,7 +29,8 @@ namespace VipManager.FormControl
             InitializeComponent();
             txtPassword.KeyPress += new KeyPressEventHandler(this.txtPassword_KeyPress);
             //读取用户Logo
-            string url = OperateIni.ReadIniData("Enveronment", "logoUrl", Commons.GetAppSetting("config"));
+            string iniPath = AppDomain.CurrentDomain.BaseDirectory + "Config.ini";
+            string url = OperateIni.ReadIniData("Enveronment", "logoUrl", iniPath);
             picLogo.ImageLocation = url;
         }
 
@@ -71,7 +76,8 @@ namespace VipManager.FormControl
                     this.Hide();
 
                     sw2.Stop();
-                    
+                    Thread upload = new Thread(BackUpOnlineDB);
+                    upload.Start();
                 }
                 else
                 {
@@ -91,21 +97,51 @@ namespace VipManager.FormControl
         void RefreshLogo()
         {
             string logoUrl = Config.User.LogoUrl;
-            string iniPath = Commons.GetAppSetting("config");
+            string iniPath = AppDomain.CurrentDomain.BaseDirectory + "Config.ini";
             OperateIni.WriteIniData("Enveronment", "logoUrl", logoUrl, iniPath);
         }
 
         /// <summary>
-        /// 备份本地数据文件
+        /// 往服务器上传备份文件
         /// </summary>
-        void BackUpLocalDB()
+        void BackUpOnlineDB()
         {
             string backupFloder = Application.StartupPath + "\\Backup\\";
-            string backupfile = backupFloder + "backup.mdb";
-            var files = System.IO.Directory.GetFiles(backupFloder);
-            if (files.Length > 0)
+            if (!Directory.Exists(backupFloder))
             {
+                Directory.CreateDirectory(backupFloder);
+            }
+            string backupfile = backupFloder + "upload.mdb";
+            File.Copy(Config.DbPath, backupfile, true);
+            string uploadPath = "/" + Config.User._id.ToString() + "/";
+            FTPUpload(uploadPath, backupfile);
+            File.Delete(backupfile);
+        }
 
+        /// <summary>
+        /// FTP上传文件
+        /// </summary>
+        /// <param name="savepath">服务器用于保存的文件夹路径，不是服务器根路径,例如： "/UploadDocumentsSave/"</param>
+        /// <param name="filePath">本地文件全路径</param>
+        public void FTPUpload(string savepath, string filePath)
+        {
+            FtpClient ftp = new FtpClient();
+            ftp.Host = Config.FtpIP;
+            ftp.Credentials = new NetworkCredential(Config.FtpUser, Config.FtpPassword);
+            ftp.Connect();
+            if (!ftp.DirectoryExists(savepath))
+            {
+                ftp.CreateDirectory(savepath);
+            }
+            using (var fileStream = File.OpenRead(filePath))
+            using (var ftpStream = ftp.OpenWrite(savepath + Path.GetFileName(filePath)))
+            {
+                var buffer = new byte[8 * 1024];
+                int count;
+                while ((count = fileStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ftpStream.Write(buffer, 0, count);
+                }
             }
         }
 

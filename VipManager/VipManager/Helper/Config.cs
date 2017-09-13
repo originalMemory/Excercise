@@ -18,7 +18,22 @@ namespace VipManager.Helper
         /// 登陆商家信息
         /// </summary>
         public static UserMongo User;
+        /// <summary>
+        /// 数据本地文件路径
+        /// </summary>
         public static string DbPath = Application.StartupPath + "\\Database\\database.mdb";
+        /// <summary>
+        /// FTP地址
+        /// </summary>
+        public static string FtpIP = "101.200.43.118";
+        /// <summary>
+        /// FTP用户名
+        /// </summary>
+        public static string FtpUser = "Administrator";
+        /// <summary>
+        /// FTP密码
+        /// </summary>
+        public static string FtpPassword = "BhLaGakdi1994";
         /// <summary>
         /// 数据库连接
         /// </summary>
