@@ -14,7 +14,7 @@ public:
 	// 存储机器人指针和它的ArSonarDevice对象，如果没有声纳，停止动作
 	virtual void setRobot(ArRobot *robot);
 protected:
-	// 使用setRobot()从机器人中获取到的声纳对象
+	// 使用setRobot()从机器人中获取到的声纳对象 
 	ArRangeDevice *mySonar;
 
 
