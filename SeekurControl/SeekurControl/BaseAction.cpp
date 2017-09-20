@@ -12,6 +12,8 @@
  ******************************************************************/ 
 
 #include "BaseAction.h"
+#include <iostream>
+using namespace std;
 
 #pragma region 连接测试类
 ConnHandler::ConnHandler(ArRobot *robot) :
@@ -50,6 +52,50 @@ void ConnHandler::disconnected(void)
 {
 	printf("directMotionDemo connection handler: Lost connection, exiting program.\n");
 	Aria::exit(0);
+}
+#pragma endregion
+
+#pragma region 基础动作类
+BaseAction::BaseAction(ArRobot *robot){
+	myRobot=robot;
+}
+BaseAction::Move(double distacne){
+	myRobot->lock();
+	printf("移动 %f mm",distance);
+	myRobot->move(distance);
+	while(1){
+		if (IsMoveDone())
+		{
+			printf("移动结束");
+			break;
+		}
+		Sleep(50);
+	}
+	myRobot->unlock();
+}
+BaseAction::IsMoveDone(){
+	bool status;
+	myRobot->lock();
+	if(myRobot->isMoveDone()){
+		status= true;
+	}
+	else{
+		status= false;
+	}
+	myRobot->unlock();
+	return status;
+}
+BaseAction::IsHeadingDone(){
+	bool status;
+	myRobot->lock();
+	if(myRobot->isHeadingDone()){
+		status= true;
+	}
+	else{
+		status= false;
+	}
+	myRobot->unlock();
+	return status;
 }
 #pragma endregion
 
