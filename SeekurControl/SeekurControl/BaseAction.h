@@ -13,10 +13,11 @@
 
 #include "Aria.h"
 
+#ifndef BASEACTION
+#define BASEACTION
 /*
-这是一个连接处理程序类，用于演示如何在其中运行代码以
-   响应诸如连接或与机器人断开连接的程序等事件。
-   */
+连接处理程序，响应连接或与机器人断开连接的程序等事件。
+*/
 class ConnHandler
 {
 public:
@@ -39,7 +40,9 @@ protected:
 	ArFunctorC<ConnHandler> myDisconnectedCB;	//断开
 };
 
-
+/*
+基础动作类
+*/
 class BaseAction{
 public:
 	/*
@@ -54,7 +57,7 @@ public:
 	参数：无
 	返回值：无
 	*/
-	~BaseAction();
+	~BaseAction(void);
 	/*
 	描述：水平移动某一距离
 	参数：
@@ -89,16 +92,26 @@ public:
 	返回值：true表示已经结束，false表示尚未结束
 	*/
 	bool IsMoveDone();
-	// 设置航向
+	/*
+	描述：设置绝对航向
+	参数：
+		heading：旋转角度，单位为deg。正数为逆时针旋转
+	返回值：无
+	*/
 	void SetHeading(double heading);
 	/*
 	描述：设置旋转速度
 	参数：
-		velocity：旋转速度，单位为deg/sec。正数向前运动，负数向后运动
+		velocity：旋转速度，单位为deg/sec。正数为逆时针旋转
 	返回值：无
 	*/
 	void SetRotVel(double velocity);
-	// 设置delta航向
+	/*
+	描述：设置相对航向
+	参数：
+	heading：旋转角度，单位为deg。正数为逆时针旋转
+	返回值：无
+	*/
 	void SetDeltaHeading(double deltaHeading);
 	/*
 	描述：判断是否已旋转至预定航向
@@ -106,12 +119,50 @@ public:
 	返回值：true表示已经结束，false表示尚未结束
 	*/
 	bool IsHeadingDone();
-	// 设置横向速度
+	/*
+	描述：设置横向速度
+	参数：
+		velocity：速度，单位为deg/sec。
+	返回值：无
+	*/
 	void SetLatVel(double latVelocity);
-	// 休眠一段时间
-	// @ms 毫秒
+	/*
+	描述：休眠一段时间
+	参数：
+		ms：时间，单位为毫秒
+	返回值：无
+	*/
 	void Sleep(unsigned int ms);
+	/*
+	描述：设置水平加速度
+	参数：
+		acc：加速度，单位为mm/s2
+	返回值：无
+	*/
+	void SetTransAccel(double acc);
+	/*
+	描述：设置水平减速度
+	参数：
+		decel：减速度，单位为mm/s2
+	返回值：无
+	*/
+	void SetTransDecel(double decel);
+	/*
+	描述：设置旋转加速度
+	参数：
+		acc：加速度，单位为mm/s2
+	返回值：无
+	*/
+	void SetRotAccel(double acc);
+	/*
+	描述：设置旋转减速度
+	参数：
+		decel：减速度，单位为mm/s2
+	返回值：无
+	*/
+	void SetRotDecel(double decel);
 	private:
 		ArRobot *myRobot;
 
 };
+#endif

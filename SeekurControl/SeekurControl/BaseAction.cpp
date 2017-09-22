@@ -1,21 +1,21 @@
 /******************************************************************* 
- *  文件名称:基础动作类实现文件
- *  简要描述: Seekur机器人相关基础动作的类的实现文件
- *   
- *  创建日期: 2017/09/6
- *  作者: 吴厚波
- *  说明: 无
- *   
- *  修改日期: 
- *  作者: 
- *  说明: 
- ******************************************************************/ 
+*  文件名称:基础动作类实现文件
+*  简要描述: Seekur机器人相关基础动作的类的实现文件
+*   
+*  创建日期: 2017/09/6
+*  作者: 吴厚波
+*  说明: 无
+*   
+*  修改日期: 
+*  作者: 
+*  说明: 
+******************************************************************/ 
 
 #include "BaseAction.h"
 #include <iostream>
 using namespace std;
 
-#pragma region 连接测试类
+#pragma region 连接类
 ConnHandler::ConnHandler(ArRobot *robot) :
 myConnectedCB(this, &ConnHandler::connected),  
 	myConnFailCB(this, &ConnHandler::connFail),
@@ -32,7 +32,7 @@ myConnectedCB(this, &ConnHandler::connected),
 // 连接失败时调用
 void ConnHandler::connFail(void)
 {
-	printf("directMotionDemo connection handler: Failed to connect.\n");
+	printf("连接失败！\n");
 	myRobot->stopRunning();
 	Aria::exit(1);
 	return;
@@ -41,7 +41,7 @@ void ConnHandler::connFail(void)
 // 启动发动机，关闭声纳和amigobot
 void ConnHandler::connected(void)
 {
-	printf("directMotionDemo connection handler: Connected\n");
+	printf("连接成功！\n");
 	myRobot->comInt(ArCommands::SONAR, 0);
 	myRobot->comInt(ArCommands::ENABLE, 1);
 	myRobot->comInt(ArCommands::SOUNDTOG, 0);
@@ -50,7 +50,7 @@ void ConnHandler::connected(void)
 // 连接断开时结束程序
 void ConnHandler::disconnected(void)
 {
-	printf("directMotionDemo connection handler: Lost connection, exiting program.\n");
+	printf("断开连接，结束程序！\n");
 	Aria::exit(0);
 }
 #pragma endregion
@@ -59,21 +59,77 @@ void ConnHandler::disconnected(void)
 BaseAction::BaseAction(ArRobot *robot){
 	myRobot=robot;
 }
-BaseAction::Move(double distacne){
-	myRobot->lock();
-	printf("移动 %f mm",distance);
-	myRobot->move(distance);
-	while(1){
-		if (IsMoveDone())
-		{
-			printf("移动结束");
-			break;
-		}
-		Sleep(50);
+/*
+	描述：析构函数
+	参数：无
+	返回值：无
+	*/
+	BaseAction::~BaseAction(void){
+
 	}
+/*
+描述：水平移动某一距离
+参数：
+distacne：移动距离，单位为mm。正数向前运动，负数向后运动
+返回值：无
+*/
+void BaseAction::Move(double distacne){
+	myRobot->lock();
+	printf("移动 %.2f mm",distacne);
+	myRobot->move(distacne);
+	//while(1){
+	//	if (IsMoveDone())
+	//	{
+	//		printf("移动结束\n");
+	//		break;
+	//	}
+	//	//Sleep(50);
+	//}
 	myRobot->unlock();
 }
-BaseAction::IsMoveDone(){
+
+/*
+描述：设置速度
+参数：
+velocity：速度，单位为mm/s
+返回值：无
+*/
+void BaseAction::SetVelocity(double velocity){
+	myRobot->lock();
+	printf("速度设置为 %.2f mm/s\n",velocity);
+	myRobot->setVel(velocity);
+	myRobot->unlock();
+}
+/*
+描述：设置左右速度
+参数：
+leftVelocity：左速度，单位为mm/s
+rightVelocity：右速度，单位为mm/s
+返回值：无
+*/
+void BaseAction::SetVelocity(double leftVelocity,double rightVelocity){
+	myRobot->lock();
+	printf("左速度设置为 %.2f mm/s\t右速度设置为 %.2f mm/s",leftVelocity,rightVelocity);
+	myRobot->setVel2(leftVelocity,rightVelocity);
+	myRobot->unlock();
+}
+/*
+描述：令机器人停止运动
+参数：无
+返回值：无
+*/
+void BaseAction::Stop(){
+	myRobot->lock();
+	printf("机器人停止运动");
+	myRobot->stop();
+	myRobot->unlock();
+}
+/*
+描述：距离运动是否已经结束
+参数：无
+返回值：true表示已经结束，false表示尚未结束
+*/
+bool BaseAction::IsMoveDone(){
 	bool status;
 	myRobot->lock();
 	if(myRobot->isMoveDone()){
@@ -85,7 +141,48 @@ BaseAction::IsMoveDone(){
 	myRobot->unlock();
 	return status;
 }
-BaseAction::IsHeadingDone(){
+/*
+描述：设置航向
+参数：
+heading：旋转角度，单位为deg。正数为逆时针旋转
+返回值：无
+*/
+void BaseAction::SetHeading(double heading){
+	myRobot->lock();
+	printf("航向设置为 %.2f deg/s\n",heading);
+	myRobot->setHeading(heading);
+	myRobot->unlock();
+}
+/*
+描述：设置旋转速度
+参数：
+velocity：旋转速度，单位为deg/sec。正数向前运动，负数向后运动
+返回值：无
+*/
+void BaseAction::SetRotVel(double velocity){
+	myRobot->lock();
+	printf("旋转速度设置为 %.2f mm/s\n",velocity);
+	myRobot->setRotVel(velocity);
+	myRobot->unlock();
+}
+/*
+描述：设置相对航向
+参数：
+heading：旋转角度，单位为deg。正数为逆时针旋转
+返回值：无
+*/
+void BaseAction::SetDeltaHeading(double deltaHeading){
+	myRobot->lock();
+	printf("Delta航向设置为 %.2f deg/s\n",deltaHeading);
+	myRobot->setDeltaHeading(deltaHeading);
+	myRobot->unlock();
+}
+/*
+描述：判断是否已旋转至预定航向
+参数：无
+返回值：true表示已经结束，false表示尚未结束
+*/
+bool BaseAction::IsHeadingDone(){
 	bool status;
 	myRobot->lock();
 	if(myRobot->isHeadingDone()){
@@ -97,5 +194,79 @@ BaseAction::IsHeadingDone(){
 	myRobot->unlock();
 	return status;
 }
+/*
+描述：设置横向速度
+参数：
+velocity：速度，单位为deg/sec。
+返回值：无
+*/
+void BaseAction::SetLatVel(double latVelocity){
+	myRobot->lock();
+	printf("横向速度设置为 %.2f mm/s\n",latVelocity);
+	myRobot->setLatVel(latVelocity);
+	myRobot->unlock();
+}
+/*
+描述：休眠一段时间
+参数：
+ms：时间，单位为毫秒
+返回值：无
+*/
+void BaseAction::Sleep(unsigned int ms){
+	myRobot->lock();
+	printf("机器睡眠 %.2f mm\n",ms);
+	ArUtil::sleep(ms);
+	myRobot->unlock();
+}
+/*
+	描述：设置水平加速度
+	参数：
+		acc：加速度，单位为mm/s2
+	返回值：无
+	*/
+	void BaseAction::SetTransAccel(double acc){
+		myRobot->lock();
+		printf("水平加速度设置为 %.2f mm/s\n",acc);
+		myRobot->setTransAccel(acc);
+		myRobot->unlock();
+	}
+	/*
+	描述：设置水平减速度
+	参数：
+		decel：减速度，单位为mm/s2
+	返回值：无
+	*/
+	void BaseAction::SetTransDecel(double decel){
+		myRobot->lock();
+		printf("水平加速度设置为 %.2f mm/s\n",decel);
+		myRobot->setTransDecel(decel);
+		myRobot->unlock();
+	}
+	/*
+	描述：设置旋转加速度
+	参数：
+		acc：加速度，单位为mm/s2
+	返回值：无
+	*/
+	void BaseAction::SetRotAccel(double acc){
+		myRobot->lock();
+		printf("旋转加速度设置为 %.2f mm/s\n",acc);
+		myRobot->setRotAccel(acc);
+		myRobot->unlock();
+	}
+	/*
+	描述：设置旋转减速度
+	参数：
+		decel：减速度，单位为mm/s2
+	返回值：无
+	*/
+	void BaseAction::SetRotDecel(double decel){
+		myRobot->lock();
+		printf("旋转加速度设置为 %.2f mm/s\n",decel);
+		myRobot->setRotDecel(decel);
+		myRobot->unlock();
+	}
 #pragma endregion
+
+
 

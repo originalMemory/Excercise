@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 using System.IO;
 using System.Text.RegularExpressions;
+using AISSystem;
 
 namespace CSharpTest.Tools
 {
-    public static class Image
+    public static class MyTools
     {
         /// <summary>
         /// 排除yande图包中的编号重复图片
@@ -97,6 +98,20 @@ namespace CSharpTest.Tools
                 string newPath = path + "\\" + newName + " " + str;
                 dir.MoveTo(newPath);
             }
+        }
+        public static void AddPassword(string dirPath, string password)
+        {
+            var fileList = Directory.GetFiles(dirPath, "*.*", SearchOption.AllDirectories).ToList();
+            foreach (var filePath in fileList)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(filePath);
+                string extension = Path.GetExtension(filePath);
+                if (extension == ".txt")
+                    continue;
+                string newfileName = fileName + "[密码：{0}]".FormatStr(password);
+                File.Move(filePath, dirPath + newfileName + extension);
+            }
+            CommonTools.Log("重命名完毕！");
         }
     }
 }

@@ -1046,7 +1046,7 @@ namespace CSharpTest.Tools
                 PublishTime = x.PublishTime,
                 LinkUrl=x.LinkUrl
             }).ToList();
-            var links = new List<IW2S_Timelevel1linkDto>();
+            var links = new List<Timelevel1linkDto>();
             int years = int.MaxValue;
             int yeare = 0;
             foreach (var item in queryLink)
@@ -1060,7 +1060,7 @@ namespace CSharpTest.Tools
                     if (tpTime.Year < years)
                         years = tpTime.Year;
                 }
-                var link = new IW2S_Timelevel1linkDto
+                var link = new Timelevel1linkDto
                 {
                     Id = item.Id,
                     Domain = item.Domain,

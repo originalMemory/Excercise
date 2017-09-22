@@ -12,8 +12,8 @@ using System.IO;
 namespace CSharpTest.Tools
 {
     //回调函数
-    public delegate void CallBackHandler(QuadtreeNode quad);
-    public delegate bool CallBackHandler5(QuadtreeNode quad, int x0, int y0, int x1, int y1);
+    public delegate bool CallBackHandler3(QuadtreeNode quad, double x1, double x2);
+    public delegate void CallBackHandler5(QuadtreeNode quad, double x0, double y0, double x1, double y1);
     public class D3force
     {
         public D3force()
@@ -337,7 +337,7 @@ namespace CSharpTest.Tools
         {
             int n = Nodes.Count;
             D3quadtree tree = new D3quadtree(Nodes);
-            tree.visitAfter(new CallBackHandler(accumulate));
+            tree.visitAfter(new CallBackHandler5(accumulate));
 
             
         }
@@ -358,7 +358,7 @@ namespace CSharpTest.Tools
         }
 
 
-        public void accumulate(QuadtreeNode quad)
+        public void accumulate(QuadtreeNode quad, double x0, double y0, double x1, double y1)
         {
             double x = 0, y = 0, strength = 0, c;
             QuadtreeNode q;
@@ -390,10 +390,54 @@ namespace CSharpTest.Tools
             quad.value = strength;
         }
 
-        public bool apply(QuadtreeNode quad)
-        {
-            return true;
-        }
+        ForceNode applyNode;
+        //public bool apply(QuadtreeNode quad, double x1, double x2)
+        //{
+        //    if (quad.value == 0)
+        //        return true;
+
+        //    double x = quad.x - applyNode.x,
+        //     y = quad.y = applyNode.y,
+        //     w = x2 - x1,
+        //     l = x * x + y * y;
+
+        //    //如果可能则使用Barnes-Hut近似
+        //    //限制距离很近的节点，对重合的结点使用随机方向
+        //    if (w * w / theta2 < 1)
+        //    {
+        //        if (l < distanceMax2)
+        //        {
+        //            if (x == 0)
+        //            {
+        //                x = jiggle();
+        //                l += x * x;
+        //            }
+        //            if (y == 0)
+        //            {
+        //                y = jiggle();
+        //                l += y * y;
+        //            }
+        //            if (l < distanceMin2)
+        //            {
+        //                l = Math.Sqrt(distanceMin2 * l);
+        //            }
+        //            applyNode.vx += x * quad.value * alpha / l;
+        //            applyNode.vy += x * quad.value * alpha / l;
+        //        }
+        //        return true;
+        //    }
+        //    //否则，直接处理点
+        //    else if (quad.children != null || l >= distanceMax2)
+        //        return true;
+
+        //    //限制距离很近的节点，对重合的结点使用随机方向
+        //    if (quad.data != applyNode)
+        //    {
+
+        //    }
+
+            
+        //}
         #endregion
 
         #region center,计算中心点

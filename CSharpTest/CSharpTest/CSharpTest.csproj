@@ -123,20 +123,19 @@
     <Compile Include="Helper\MongoDBHelper.cs" />
     <Compile Include="Model\VipMaUser.cs" />
     <Compile Include="Model\WeiXinTimelinkDto.cs" />
-    <Compile Include="Tools\CommonDomainCate.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CommonTools.cs" />
-    <Compile Include="Tools\D3force.cs" />
-    <Compile Include="Tools\D3quadtree.cs" />
+    <Compile Include="Tools\D3Force\D3force.cs" />
+    <Compile Include="Tools\D3Force\D3quadtree.cs" />
     <Compile Include="Tools\GetMainContentHelper.cs" />
     <Compile Include="Tools\GSDataSDK.cs" />
     <Compile Include="Tools\MD5Tools.cs" />
     <Compile Include="Tools\Torrent.cs" />
     <Compile Include="Tools\DnlTools.cs" />
-    <Compile Include="Tools\Image.cs" />
+    <Compile Include="Tools\MyTools.cs" />
     <Compile Include="Tools\VipMaTools.cs" />
     <Compile Include="Tools\WebApiInvoke.cs" />
   </ItemGroup>
@@ -162,7 +161,7 @@
     <Content Include="Libs\Newtonsoft.Json.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Dataweco_N\IWSBot2\IWSData\IWSData.csproj">
+    <ProjectReference Include="..\..\..\GitHub\Dataweco_N\IWSBot2\IWSData\IWSData.csproj">
       <Project>{6969baf9-6ed1-4660-b4d4-a2403c55fdb4}</Project>
       <Name>IWSData</Name>
     </ProjectReference>
