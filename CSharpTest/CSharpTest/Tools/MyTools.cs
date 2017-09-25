@@ -101,7 +101,7 @@ namespace CSharpTest.Tools
         }
         public static void AddPassword(string dirPath, string password)
         {
-            var fileList = Directory.GetFiles(dirPath, "*.*", SearchOption.AllDirectories).ToList();
+            var fileList = Directory.GetFiles(dirPath, "*.*", SearchOption.TopDirectoryOnly).ToList();
             foreach (var filePath in fileList)
             {
                 string fileName = Path.GetFileNameWithoutExtension(filePath);

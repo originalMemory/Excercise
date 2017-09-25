@@ -50,7 +50,7 @@ namespace CSharpTest.Tools
             this._y0 = y0;
             this._x1 = x1;
             this._y1 = y1;
-            this._root = null;
+            //this._root = null;
         }
 
         /// <summary>
@@ -119,6 +119,7 @@ namespace CSharpTest.Tools
         /// <param name="y"></param>
         void cover(double x, double y)
         {
+            //忽略无效点
             if (x == 0.0 || y == 0.0)
                 return;
 
@@ -163,12 +164,10 @@ namespace CSharpTest.Tools
                     case 0:
                         do
                         {
-                            QuadtreeNode child = new QuadtreeNode();
-                            if (node.children == null)
-                            {
-                                node.children = new QuadtreeNode[4];
-                            }
-                            node.children[i] = child;
+                            QuadtreeNode parent = new QuadtreeNode();
+                            parent.children = new QuadtreeNode[4];
+                            parent.children[i] = node;
+                            node = parent;
                             z *= 2;
                             x1 = x0 + z;
                             y1 = y0 + z;
@@ -179,11 +178,9 @@ namespace CSharpTest.Tools
                         do
                         {
                             QuadtreeNode parent = new QuadtreeNode();
-                            if (node.children == null)
-                            {
-                                node.children = new QuadtreeNode[4];
-                            }
-                            node.children[i] = parent;
+                            parent.children = new QuadtreeNode[4];
+                            parent.children[i] = node;
+                            node = parent;
                             z *= 2;
                             x1 = x0 - z;
                             y1 = y0 + z;
@@ -193,11 +190,9 @@ namespace CSharpTest.Tools
                         do
                         {
                             QuadtreeNode parent = new QuadtreeNode();
-                            if (node.children == null)
-                            {
-                                node.children = new QuadtreeNode[4];
-                            }
-                            node.children[i] = parent;
+                            parent.children = new QuadtreeNode[4];
+                            parent.children[i] = node;
+                            node = parent;
                             z *= 2;
                             x1 = x0 + z;
                             y1 = y0 - z;
@@ -207,11 +202,9 @@ namespace CSharpTest.Tools
                         do
                         {
                             QuadtreeNode parent = new QuadtreeNode();
-                            if (node.children == null)
-                            {
-                                node.children = new QuadtreeNode[4];
-                            }
-                            node.children[i] = parent;
+                            parent.children = new QuadtreeNode[4];
+                            parent.children[i] = node;
+                            node = parent;
                             z *= 2;
                             x1 = x0 - z;
                             y1 = y0 - z;
@@ -220,7 +213,12 @@ namespace CSharpTest.Tools
                     default:
                         break;
                 }
-                this._root = node;
+                if (this._root != null && this._root.children != null)
+                    this._root = node;
+            }
+            else
+            {
+                return;
             }
             this._x0 = x0;
             this._x1 = x1;
@@ -236,7 +234,7 @@ namespace CSharpTest.Tools
         /// <param name="d">节点数据</param>
         void add(double x, double y, ForceNode d)
         {
-            if (x == 0.0 && y == 0.0)
+            if (x == null || y == null)
                 return;
             var node = this._root;
             QuadtreeNode parent = node;
@@ -248,114 +246,149 @@ namespace CSharpTest.Tools
             double x0 = this._x0, x1 = this._x1, y0 = this._y0, y1 = this._y1;
             double xm;      //四叉树当前区块x轴中点
             double ym;      //四叉树当前区块y轴中点
-            double xp;      //数据结点x坐标
-            double yp;      //数据结点y坐标
-            double right;
-            double bottom;
+            double xp = .0;      //数据结点x坐标
+            double yp = .0;      //数据结点y坐标
+            int right;
+            int bottom;
             int i = 0;      //新结点在四叉树子节点列表中的位置
             int j = 0;      //旧结点在四叉树子节点列表中的位置
 
             //如果根节点为空，初始化根节点为叶结点
-            if (node == null)
+            if (node.children == null && node.data == null)
             {
                 this._root = leaf;
                 return;
             }
 
             //找出新叶结点应在坐标，为其赋值
-            while (!node.IsLeaf)    //当未查找至叶子节点时，不断计算
+            while (node.children != null)    //当未查找至叶子节点时，不断计算
             {
                 //判断叶新节点位于四叉树哪一个区块
-                right = x;
                 xm = (x0 + x1) / 2;
-                if (right >= xm)
+                if (x >= xm)
+                {
                     x0 = xm;
+                    right = 1;
+                }
                 else
+                {
                     x1 = xm;
+                    right = 0;
+                }
 
-                bottom = y;
                 ym = (y0 + y1) / 2;
-                if (bottom >= ym)
+                if (y >= ym)
+                {
                     y0 = ym;
+                    bottom = 1;
+                }
                 else
+                {
                     y1 = ym;
+                    bottom = 0;
+                }
 
-                i = (int)bottom << 1 | (int)right;  //新结点在子节点中的排序
+                i = bottom << 1 | right;  //新结点在子节点中的排序
 
                 //当前坐标节点为空时，添加叶结点
-                if (node.children == null)
-                {
-                    node.children = new QuadtreeNode[4];
-                    node.children[i] = leaf;
-                    return;
-                }
                 parent = node;
                 node = node.children[i];
-            }
-
-            xp = node.data.x;
-            yp = node.data.y;
-
-            //判断新结点是否与已存在的节点的坐标完全一致
-            if (node.IsLeaf)
-            {
-                if (x == xp && y == yp)
+                if (node == null)
                 {
-                    if (parent != null)
-                    {
-                        if (parent.children == null)
-                            parent.children = new QuadtreeNode[4];
-                        parent.children[i] = leaf;
-                    }
-                    else
-                        this._root = leaf;
+                    parent.children[i] = leaf;
                     return;
                 }
+            }
+
+            if (node != null && node.data != null)
+            {
+                xp = node.data.x;
+                yp = node.data.y;
+            }
+
+            //判断新结点是否与已存在的节点的坐标完全一致
+            if (x == xp && y == yp)
+            {
+                if (parent.children != null || parent.data != null)
+                {
+                    if (parent.children == null)
+                        parent.children = new QuadtreeNode[4];
+                    parent.children[i] = leaf;
+                }
+                else
+                    this._root = leaf;
+                return;
             }
 
             //切割叶结点，直到新旧节点并存
+            var rootNode = parent;
+            if (rootNode.data == null)
+            {
+                int dfe = 0;
+            }
             do
             {
-                if (parent.children == null)
+                if (parent.children != null)
+                {
+                    parent.children[i] = new QuadtreeNode();
+                    parent = parent.children[i];
                     parent.children = new QuadtreeNode[4];
+                }
+                else
+                {
+                    this._root.children = new QuadtreeNode[4];
+                    //parent = this._root;
+                }
+                    
 
                 //判断叶新节点位于四叉树哪一个区块
-                right = x;
                 xm = (x0 + x1) / 2;
-                if (right >= xm)
+                if (x >= xm)
+                {
                     x0 = xm;
+                    right = 1;
+                }
                 else
+                {
                     x1 = xm;
+                    right = 0;
+                }
 
-                bottom = y;
                 ym = (y0 + y1) / 2;
-                if (bottom >= ym)
+                if (y >= ym)
+                {
                     y0 = ym;
+                    bottom = 1;
+                }
                 else
+                {
                     y1 = ym;
+                    bottom = 0;
+                }
 
-                i = (int)bottom << 1 | (int)right;  //新结点在子节点中的排序
+                i = bottom << 1 | right;  //新结点在子节点中的排序
                 bool isOldY = yp >= ym;
                 bool isOldX = xp >= xm;
                 if (isOldY)
-                    j = 1 << 1;
+                    if (isOldX)
+                        j = 1 << 1 | 1;
+                    else
+                        j = 1 << 1 | 0;
                 else
-                    j = 0 << 1;
-                if (isOldX)
-                    j = j | 1;
-                else
-                    j = j | 0;
+                    if (isOldX)
+                        j = 0 << 1 | 1;
+                    else
+                        j = 0 << 1 | 0;
 
             } while (i == j);
             //清除原有数据，并赋新值
-            parent = node;
             var oldNode = new QuadtreeNode
             {
-                IsLeaf = true,
-                data = node.data
+                data = node.data,
+                IsLeaf = true
             };
-            parent.data = null;
-            parent.IsLeaf = false;
+            rootNode.data = null;
+            rootNode.IsLeaf = false;
             parent.children[j] = oldNode;
             parent.children[i] = leaf;
         }
@@ -398,17 +431,6 @@ namespace CSharpTest.Tools
 
         public void visit(CallBackHandler3 callback)
         {
-  //          var quads = [], q, node = this._root, child, x0, y0, x1, y1;
-  //if (node) quads.push(new Quad(node, this._x0, this._y0, this._x1, this._y1));
-  //while (q = quads.pop()) {
-  //  if (!callback(node = q.node, x0 = q.x0, y0 = q.y0, x1 = q.x1, y1 = q.y1) && node.length) {
-  //    var xm = (x0 + x1) / 2, ym = (y0 + y1) / 2;
-  //    if (child = node[3]) quads.push(new Quad(child, xm, ym, x1, y1));
-  //    if (child = node[2]) quads.push(new Quad(child, x0, ym, xm, y1));
-  //    if (child = node[1]) quads.push(new Quad(child, xm, y0, x1, ym));
-  //    if (child = node[0]) quads.push(new Quad(child, x0, y0, xm, ym));
-  //  }
-  //}
             var quads = new Stack<QuadtreeVisit>();
             QuadtreeVisit q;
             var node = this._root;
@@ -421,19 +443,20 @@ namespace CSharpTest.Tools
             {
                 q = quads.Pop();
                 x0 = q.x0; y0 = q.y0; x1 = q.x1; y1 = q.y1;
-                var isSuccess = callback(q.node, q.x0, q.x1);
-                if (isSuccess && !node.IsLeaf)
+                bool isSuccess = callback(q.node, q.x0, q.x1);
+                node = q.node;
+                if (!isSuccess && node.children != null)
                 {
                     double xm = (x0 + x1) / 2;
                     double ym = (y0 + y1) / 2;
-                    if (node.children[0] != null)
-                        quads.Push(quad(node.children[0], x0, y0, xm, ym));
-                    if (node.children[1] != null)
-                        quads.Push(quad(node.children[1], xm, y0, x1, ym));
-                    if (node.children[2] != null)
-                        quads.Push(quad(node.children[2], x0, ym, xm, y1));
                     if (node.children[3] != null)
                         quads.Push(quad(node.children[3], xm, ym, x1, y1));
+                    if (node.children[2] != null)
+                        quads.Push(quad(node.children[2], x0, ym, xm, y1));
+                    if (node.children[1] != null)
+                        quads.Push(quad(node.children[1], xm, y0, x1, ym));
+                    if (node.children[0] != null)
+                        quads.Push(quad(node.children[0], x0, y0, xm, ym));
                 }
             }
         }
@@ -449,6 +472,7 @@ namespace CSharpTest.Tools
         /// <returns></returns>
         QuadtreeVisit quad(QuadtreeNode node, double x0, double y0, double x1, double y1)
         {
+            double x00 = x0, y00 = y0, x10 = x1, y10 = y1;
             QuadtreeVisit visit = new QuadtreeVisit
             {
                 node = node,
