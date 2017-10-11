@@ -75,16 +75,8 @@ distacne：移动距离，单位为mm。正数向前运动，负数向后运动
 */
 void BaseAction::Move(double distacne){
 	myRobot->lock();
-	printf("移动 %.2f mm",distacne);
+	printf("移动 %.2f mm\n",distacne);
 	myRobot->move(distacne);
-	//while(1){
-	//	if (IsMoveDone())
-	//	{
-	//		printf("移动结束\n");
-	//		break;
-	//	}
-	//	//Sleep(50);
-	//}
 	myRobot->unlock();
 }
 
@@ -120,7 +112,7 @@ void BaseAction::SetVelocity(double leftVelocity,double rightVelocity){
 */
 void BaseAction::Stop(){
 	myRobot->lock();
-	printf("机器人停止运动");
+	printf("机器人停止运动\n");
 	myRobot->stop();
 	myRobot->unlock();
 }
@@ -219,53 +211,53 @@ void BaseAction::Sleep(unsigned int ms){
 	myRobot->unlock();
 }
 /*
-	描述：设置水平加速度
-	参数：
-		acc：加速度，单位为mm/s2
-	返回值：无
-	*/
-	void BaseAction::SetTransAccel(double acc){
-		myRobot->lock();
-		printf("水平加速度设置为 %.2f mm/s\n",acc);
-		myRobot->setTransAccel(acc);
-		myRobot->unlock();
-	}
-	/*
-	描述：设置水平减速度
-	参数：
-		decel：减速度，单位为mm/s2
-	返回值：无
-	*/
-	void BaseAction::SetTransDecel(double decel){
-		myRobot->lock();
-		printf("水平加速度设置为 %.2f mm/s\n",decel);
-		myRobot->setTransDecel(decel);
-		myRobot->unlock();
-	}
-	/*
-	描述：设置旋转加速度
-	参数：
-		acc：加速度，单位为mm/s2
-	返回值：无
-	*/
-	void BaseAction::SetRotAccel(double acc){
-		myRobot->lock();
-		printf("旋转加速度设置为 %.2f mm/s\n",acc);
-		myRobot->setRotAccel(acc);
-		myRobot->unlock();
-	}
-	/*
-	描述：设置旋转减速度
-	参数：
-		decel：减速度，单位为mm/s2
-	返回值：无
-	*/
-	void BaseAction::SetRotDecel(double decel){
-		myRobot->lock();
-		printf("旋转加速度设置为 %.2f mm/s\n",decel);
-		myRobot->setRotDecel(decel);
-		myRobot->unlock();
-	}
+描述：设置水平加速度
+参数：
+acc：加速度，单位为mm/s2
+返回值：无
+*/
+void BaseAction::SetTransAccel(double acc){
+	myRobot->lock();
+	printf("水平加速度设置为 %.2f mm/s\n",acc);
+	myRobot->setTransAccel(acc);
+	myRobot->unlock();
+}
+/*
+描述：设置水平减速度
+参数：
+decel：减速度，单位为mm/s2
+返回值：无
+*/
+void BaseAction::SetTransDecel(double decel){
+	myRobot->lock();
+	printf("水平加速度设置为 %.2f mm/s\n",decel);
+	myRobot->setTransDecel(decel);
+	myRobot->unlock();
+}
+/*
+描述：设置旋转加速度
+参数：
+acc：加速度，单位为mm/s2
+返回值：无
+*/
+void BaseAction::SetRotAccel(double acc){
+	myRobot->lock();
+	printf("旋转加速度设置为 %.2f mm/s\n",acc);
+	myRobot->setRotAccel(acc);
+	myRobot->unlock();
+}
+/*
+描述：设置旋转减速度
+参数：
+decel：减速度，单位为mm/s2
+返回值：无
+*/
+void BaseAction::SetRotDecel(double decel){
+	myRobot->lock();
+	printf("旋转加速度设置为 %.2f mm/s\n",decel);
+	myRobot->setRotDecel(decel);
+	myRobot->unlock();
+}
 #pragma endregion
 
 
