@@ -1,17 +1,10 @@
 //////////////////////////////////////////////////////////////////////////  
-/// COPYRIGHT NOTICE  
-/// Copyright (c) 2009, 华中科技大学tickTick Group  （版权声明）  
-/// All rights reserved.  
 ///   
 /// @file    SerialPort.cpp    
 /// @brief   串口通信类的实现文件  
 ///  
 /// 本文件为串口通信类的实现代码  
 ///  
-/// @version 1.0     
-/// @author  卢俊    
-/// @E-mail：lujun.hust@gmail.com  
-/// @date    2010/03/19  
 ///   
 ///  
 ///  修订说明：  
