@@ -45,8 +45,15 @@ SeekurControl/SeekurControl/Debug/
 SeekurControl/SeekurControl.sdf
 SeekurControl/SeekurControl.opensdf
 SeekurControl/Debug/
+<<<<<<< HEAD
 MFCExcercise/MFCExcercise.sdf
 MFCTest/MFCTest.sdf
 SerialPort/SerialPort.sdf
 SerialPort/Debug/
 SerialPort/SerialPort/Debug/
+=======
+SerialPort/SerialPort.sdf
+SerialPort/Debug/
+SerialPort/SerialPort/Debug/
+SerialPort/SerialPort.opensdf
+>>>>>>> develop

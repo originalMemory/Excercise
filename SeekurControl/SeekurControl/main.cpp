@@ -46,8 +46,6 @@ int main(int argc, char **argv){
 	//激活基本处理类
 	BaseAction action(&robot);
 
-	robot.move(5000);
-
 	bool repeat=true;
 	while (repeat)
 	{
@@ -86,6 +84,7 @@ int main(int argc, char **argv){
 			break;
 		}
 	}
+	robot.disconnect();
 	Aria::exit();
 
 }
