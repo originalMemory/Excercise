@@ -225,8 +225,8 @@ namespace CSharpTest.Model
         public long Count { get; set; }
     }
 
-   
 
+    #region 网络关系图
     /// <summary>
     /// 链接关系词组
     /// </summary>
@@ -543,4 +543,5 @@ namespace CSharpTest.Model
         /// </summary>
         public int Count { get; set; }
     }
+#endregion
 }
