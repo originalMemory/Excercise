@@ -29,5 +29,8 @@
     <ClInclude Include="SerialPort.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="GPSTranslate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

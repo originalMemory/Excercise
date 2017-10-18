@@ -73,6 +73,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GPSTranslate.h" />
     <ClInclude Include="SerialPort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
