@@ -43,30 +43,36 @@ private:
 class GGAInfo:GPSInfo
 {
 public:
-	GGAInfo();
-	~GGAInfo();
-	tm UTCTime;
-	double Latitude;
-	char NSIndicator;
-	double Longitude;
-	char EWIndicator;
-	int GPSStatus;
-	int UseSatelliteNum;
-	double HDOP;
-	double Altitude;
-
-
-private:
-
+	tm UTCTime;				//UTC时间，仅有时分秒
+	double Latitude;		//纬度
+	char NSIndicator;		//纬度半球指示符
+	double Longitude;		//经度
+	char EWIndicator;		//经度半球指示符
+	int GPSStatus;			// GPS状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算
+	int UseSatelliteNum;	//正在使用解算位置的卫星数量（00~12）（前面的0也将被传输）
+	double HDOP;			//HDOP水平精度因子（0.5~99.9）
+	double Altitude;		//海拔高度（-9999.9~99999.9）
+	double Height;			//地球椭球面相对大地水准面的高度
+	double DiffTime;		//差分时间（从最近一次接收到差分信号开始的秒数，如果不是差分定位将为空）
+	int DiffId;				//差分站ID号0000~1023（前面的0也将被传输，如果不是差分定位将为空）
 };
 
-GGAInfo::GGAInfo()
+class RMCInfo :GPSInfo
 {
-}
-
-GGAInfo::~GGAInfo()
-{
-}
+public:
+	tm UTCTime;				//UTC时间，仅有时分秒
+	double Latitude;		//纬度
+	char NSIndicator;		//纬度半球指示符
+	double Longitude;		//经度
+	char EWIndicator;		//经度半球指示符
+	int GPSStatus;			// GPS状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算
+	int UseSatelliteNum;	//正在使用解算位置的卫星数量（00~12）（前面的0也将被传输）
+	double HDOP;			//HDOP水平精度因子（0.5~99.9）
+	double Altitude;		//海拔高度（-9999.9~99999.9）
+	double Height;			//地球椭球面相对大地水准面的高度
+	double DiffTime;		//差分时间（从最近一次接收到差分信号开始的秒数，如果不是差分定位将为空）
+	int DiffId;				//差分站ID号0000~1023（前面的0也将被传输，如果不是差分定位将为空）
+};
 
 class GPSTanslate
 {
