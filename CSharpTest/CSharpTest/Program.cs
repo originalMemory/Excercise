@@ -32,7 +32,7 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            DnlTools.TestGSSearch("耶稣");
+            DnlTools.TestGSSearch("四洛克酒");
             Console.ReadKey();
         }
 
