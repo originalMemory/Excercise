@@ -115,6 +115,7 @@
     <Compile Include="Model\ComputeClass.cs" />
     <Compile Include="Model\D3forceModel.cs" />
     <Compile Include="Model\D3quadtreeModel.cs" />
+    <Compile Include="Model\Foundation.cs" />
     <Compile Include="Model\OldWeiXinLink.cs" />
     <Compile Include="Model\PostClass.cs" />
     <Compile Include="Model\ReturnClass.cs" />
