@@ -20,6 +20,8 @@
 #include <time.h>
 #include <string>
 
+using namespace std;
+
 /*
 GPS语句类型
 */
@@ -44,7 +46,7 @@ private:
 /*
 解析后的GGA语句
 */
-class GGAInfo:GPSInfo
+class GGAInfo :public GPSInfo
 {
 public:
 	tm UTCTime;				//UTC时间，仅有时分秒
@@ -64,7 +66,7 @@ public:
 /*
 解析后的RMC语句
 */
-class RMCInfo :GPSInfo
+class RMCInfo :public GPSInfo
 {
 public:
 	tm UTCTime;				//UTC时间，仅有时分秒
@@ -84,7 +86,7 @@ public:
 /*
 解析后的VTG语句
 */
-class VTGInfo :GPSInfo
+class VTGInfo :public GPSInfo
 {
 public:
 	double TrueHeading;		//以真北为参考基准的地面航向（000~359度，前面的0也将被传输）
@@ -103,21 +105,12 @@ public:
 	/*
 	描述：构造函数
 	参数：
-		@robot：机器人指针
+		@line：GPS单行语句
 	返回值：GPS解析语句
 	*/
-	GPSInfo Tanslate(std::string str);
+	GPSInfo* Tanslate(std::string str);
 };
 
-/*
-描述：构造函数
-参数：
-	@robot：机器人指针
-返回值：GPS解析语句
-*/
-GPSInfo GPSTanslate::Tanslate(std::string str)
-{
 
-}
 
 #endif // !GPSTRANSLATE_H
