@@ -32,7 +32,12 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            DnlTools.TestGSSearch("四洛克酒");
+            string url = "http://localhost:2022/api/WxPublicPay/getCode";
+            Dictionary<string, string> para = new Dictionary<string, string>();
+            var response = WebApiInvoke.CreatePostHttpResponse(url, para);
+            StreamReader sr = new StreamReader(response.GetResponseStream());
+            Console.WriteLine(sr.ReadToEnd());
+
             Console.ReadKey();
         }
 
