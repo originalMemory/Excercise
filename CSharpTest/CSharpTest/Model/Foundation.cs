@@ -7,7 +7,7 @@ using MongoDB.Bson;
 
 namespace CSharpTest.Model
 {
-    public class Foundation
+    public class FoundationMongo
     {
         public ObjectId _id { get; set; }
         public Guid RepeatId { get; set; }
@@ -30,10 +30,10 @@ namespace CSharpTest.Model
         public string FoundationType { get; set; }
     }
 
-    public class Foundation_project
+    public class Foundation_projectMongo
     {
         public ObjectId _id { get; set; }
-        public Guid Fid { get; set; }
+        public ObjectId Fid { get; set; }
         public string ProjectName { get; set; }
         public string ExecutiveYear { get; set; }
         public string YearIncome { get; set; }
