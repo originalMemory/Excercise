@@ -49,7 +49,7 @@ private:
 class GGAInfo :public GPSInfo
 {
 public:
-	tm UTCTime;				//UTC时间，仅有时分秒
+	tm UTCHms;				//UTC时间，仅有时分秒
 	double Latitude;		//纬度
 	char NSIndicator;		//纬度半球指示符
 	double Longitude;		//经度
@@ -59,7 +59,7 @@ public:
 	double HDOP;			//HDOP水平精度因子（0.5~99.9）
 	double Altitude;		//海拔高度（-9999.9~99999.9）
 	double Height;			//地球椭球面相对大地水准面的高度
-	double DiffTime;		//差分时间（从最近一次接收到差分信号开始的秒数，如果不是差分定位将为空）
+	double DiffSecs;		//差分时间（从最近一次接收到差分信号开始的秒数，如果不是差分定位将为空）
 	int DiffId;				//差分站ID号0000~1023（前面的0也将被传输，如果不是差分定位将为空）
 };
 
@@ -69,7 +69,7 @@ public:
 class RMCInfo :public GPSInfo
 {
 public:
-	tm UTCTime;				//UTC时间，仅有时分秒
+	tm UTCHms;				//UTC时间，仅有时分秒
 	char PosStatus;			//定位状态，A=有效定位，V=无效定位
 	double Latitude;		//纬度
 	char NSIndicator;		//纬度半球指示符

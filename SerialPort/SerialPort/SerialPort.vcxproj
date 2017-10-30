@@ -68,13 +68,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GPSTranslate.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SerialPort.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="TestFun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GPSTranslate.h" />
     <ClInclude Include="SerialPort.h" />
+    <ClInclude Include="TestFun.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
