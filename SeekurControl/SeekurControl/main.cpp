@@ -33,21 +33,26 @@ int main(int argc, char **argv){
 	if(!con.connectRobot()){
 		ArLog::log(ArLog::Normal,"无法连接机器人");
 		if(argParser.checkHelpAndWarnUnparsed()){
-			Aria::logOptions();
+			ArLog::log(ArLog::Terse, "无法连接机器人");
 		}
 		Aria::exit(1);
 		return 1;
 	}
 
+	robot.com2Bytes(116,6,1);
+	robot.com2Bytes(116,7,1);
+
 	// 异步运行机器人处理循环
+
 	robot.enableMotors();
 	robot.runAsync(false);
+	robot.comInt(ArCommands::ENABLE, 1);
 
 	//激活基本处理类
 	BaseAction action(&robot);
 
 	bool repeat=true;
-	while (repeat)
+	while (repeat) 
 	{
 		printf("输入运行指令:0、停止运动\t1、直线前进一段距离\t2、直线前进速度\n\
 			   3、设置绝对航向\t4、设置相对航向\t5、旋转速度\n");
