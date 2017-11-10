@@ -836,7 +836,7 @@ namespace CSharpTest.Tools
         public static void Craw5118(string keyword)
         {
             string url = "http://www.5118.com/seo/words/{0}".FormatStr(keyword);
-            string html = WebApiInvoke.GetHtml(url);
+            string html = WebApiInvoke.GetHtml(url,"utf-8");
             //string keyword = "真爱梦想";
             //string url = "http://www.5118.com/seo/words/真爱梦想";
             //string html = WebApiInvoke.GetHtml(url);

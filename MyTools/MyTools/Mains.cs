@@ -58,5 +58,11 @@ namespace MyTools
             MyTools.CrawTorrent.CrawTorrentPanel torrent = new CrawTorrent.CrawTorrentPanel();
             torrent.Show();
         }
+
+        private void btn_CrawNovel_Click(object sender, EventArgs e)
+        {
+            CrawNovel.CrawNovelPanel novel = new CrawNovel.CrawNovelPanel();
+            novel.Show();
+        }
     }
 }

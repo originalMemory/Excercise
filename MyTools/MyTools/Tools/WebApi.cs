@@ -19,7 +19,7 @@ namespace MyTools.Tools
         /// </summary>
         /// <param name="url">网页链接</param>
         /// <returns></returns>
-        public static string GetHtml(string url)
+        public static string GetHtml(string url, string htmlCharset)
         {
             //Http请求
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
@@ -56,7 +56,6 @@ namespace MyTools.Tools
                 break;
             }
             //使用utf-8去解码网页
-            string htmlCharset = "utf-8";
             Encoding htmlEncoding = Encoding.GetEncoding(htmlCharset);
             System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream(), htmlEncoding);
             //读取返回的网页

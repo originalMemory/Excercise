@@ -34,6 +34,7 @@
             this.btn_SelectImg = new System.Windows.Forms.Button();
             this.btn_RelistImg = new System.Windows.Forms.Button();
             this.btn_dmhyCraw = new System.Windows.Forms.Button();
+            this.btn_CrawNovel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_CrawImg
@@ -86,11 +87,22 @@
             this.btn_dmhyCraw.UseVisualStyleBackColor = true;
             this.btn_dmhyCraw.Click += new System.EventHandler(this.btn_dmhyCraw_Click);
             // 
+            // btn_CrawNovel
+            // 
+            this.btn_CrawNovel.Location = new System.Drawing.Point(274, 166);
+            this.btn_CrawNovel.Name = "btn_CrawNovel";
+            this.btn_CrawNovel.Size = new System.Drawing.Size(105, 23);
+            this.btn_CrawNovel.TabIndex = 5;
+            this.btn_CrawNovel.Text = "小说抓取";
+            this.btn_CrawNovel.UseVisualStyleBackColor = true;
+            this.btn_CrawNovel.Click += new System.EventHandler(this.btn_CrawNovel_Click);
+            // 
             // Mains
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 313);
+            this.Controls.Add(this.btn_CrawNovel);
             this.Controls.Add(this.btn_dmhyCraw);
             this.Controls.Add(this.btn_RelistImg);
             this.Controls.Add(this.btn_SelectImg);
@@ -113,5 +125,6 @@
         private System.Windows.Forms.Button btn_SelectImg;
         private System.Windows.Forms.Button btn_RelistImg;
         private System.Windows.Forms.Button btn_dmhyCraw;
+        private System.Windows.Forms.Button btn_CrawNovel;
     }
 }

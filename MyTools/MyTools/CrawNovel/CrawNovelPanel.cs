@@ -7,49 +7,102 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using System.Text.RegularExpressions;
+using MyTools.Tools;
+using HtmlAgilityPack;
+using System.IO;
 
-using System.Threading;
-
-namespace MyTools.TextEdit
+namespace MyTools.CrawNovel
 {
-    public partial class TextEditPanel : Form
+    public partial class CrawNovelPanel : Form
     {
-        public TextEditPanel()
+        public CrawNovelPanel()
         {
             InitializeComponent();
         }
 
-        private void btn_merge_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 网页中解析到的小说信息
+        /// </summary>
+        NovelInfo novel = new NovelInfo();
+
+        private void btn_GetNovel_Click(object sender, EventArgs e)
         {
-            new Thread(Merge).Start();
-            BtnState(false);
+            var getNovel = new GetNovel();
+            string url = txt_Url.Text;
+            novel = getNovel.GetNovelUrls(url);
+            //判断抓取中是否遇到错误！
+            if (!string.IsNullOrEmpty(novel.Error))
+            {
+                MessageBox.Show(novel.Error);
+                return;
+            }
+            //获取标题并居中
+            Title.Text = Regex.Replace(novel.Title + " - " + novel.Author, @"&", @"&&") + "（" + novel.Urls.Count + "章）";
+            Title.Location = new Point((this.Width - 20 - Title.Width) / 2, Title.Location.Y);
+            //重置打开文件夹按钮状态
+            btn_OpenFloder.Enabled = false;
+
+            //检查目录和文件名，将不能使用字符替换为“_”
+            //正则表达式"[\\u005C/:\\u002A\\u003F\"<>\'\\u007C’‘“”：？]"还包含中文的字符（实际上中文字符是可以使用的）
+            string fileNameCheck = "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]";
+            string pathCheck = "";
+            string path = "";
+            switch (novel.Kind)
+            {
+                case NovelWebKind.Diyibanzhu:
+                    pathCheck = Regex.Replace(novel.Title + " - " + novel.Author, fileNameCheck, "_");
+                    path = @"D:\Program Files (x86)\DAEMON Tools Lite\bin\和谐文\新建文件夹\" + pathCheck;
+                    break;
+            }
+            txt_FloderPath.Text = path;
+
+            //获取章节正文
+            string txtMain = "";
+            for (int i = 0; i < novel.Urls.Count; i++)
+            {
+                txtMain += novel.ChapterNames[i] + System.Environment.NewLine + GetChapter(novel.Urls[i]) + System.Environment.NewLine + System.Environment.NewLine;
+                
+            }
+            foreach (var x in novel.Urls)
+            {
+            }
+            txt_main.Text = txtMain;
         }
 
-        /// <summary>
-        /// 合并文章
-        /// </summary>
-        void Merge()
-        {            
-            string source = txt_main.Text;
-            //匹配章节名
-            List<string> chapterName = new List<string>();
-            //if (checkEspide.Checked)
-            //{
-            //    MatchCollection mc = regChapter.Matches(source);
-            //    foreach (Match x in mc)
-            //    {
-            //        string temp = x.Groups["chapter"].Value;
-            //        chapterName.Add(temp);
-
-            //    }
-            //    if (chapterName.Count <= 0) MessageBox.Show("章节正则表达式错误，未匹配上章节名", "提示", MessageBoxButtons.OK);
-            //}
+        string GetChapter(string url)
+        {
+            string novel = "";
+            int num = 0;
+            while (true)
+            {
+                //获取网页
+                string respHtml = WebApi.GetHtml(url, "utf-8");
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(respHtml);
+                HtmlNode task = doc.DocumentNode.SelectSingleNode("//div[@class=\"box_box\"]");
+                if (task == null)
+                    break;
+                string temp = task.InnerText;
+                if (string.IsNullOrEmpty(temp))
+                    break;
+                else
+                {
+                    novel += temp;
+                    //获取下一分页列表
+                    HtmlNodeCollection tasks = doc.DocumentNode.SelectNodes("//div[@class=\"list_box\"]/ul/li");
+                    if (tasks == null || num >= tasks.Count)
+                        break;
+                    string name = tasks[num].Attributes["href"].Value;
+                    url = Path.GetDirectoryName(url) + name;
+                    num++;
+                }
+            }
             //将文章按行分列
-            source = RemoveTarget(source).Replace("\r", "");
+            var source = novel.Replace("\r", "");
             var txtList = source.Split('\n').Select(x => x.Trim()).Where(x => !String.IsNullOrEmpty(x)).ToList();
             //合并异常换行
-            Regex regChapter = new Regex(txt_regChapter.Text);
             //Regex regChapter = new Regex("(?<chapter>" + txt_regChapter.Text + ")\r\n");
             for (int i = 0; i < txtList.Count; )
             {
@@ -59,16 +112,9 @@ namespace MyTools.TextEdit
                     i++;
                     continue;
                 }
-                var publishAt=new DateTime();
+                var publishAt = new DateTime();
                 bool isTime = DateTime.TryParse(txt, out publishAt);
                 if (isTime)
-                {
-                    i++;
-                    continue;
-                }
-
-                Match mt = regChapter.Match(txt);
-                if (mt.Success)
                 {
                     i++;
                     continue;
@@ -97,7 +143,7 @@ namespace MyTools.TextEdit
                     if (oldpos > (txtList[i].Length - 1))
                         oldpos = 0;
                     int index = txtList[i].IndexOf('。', oldpos);
-                    if (index == -1||index == (txtList[i].Length - 1))
+                    if (index == -1 || index == (txtList[i].Length - 1))
                     {
                         i++;
                         continue;
@@ -212,137 +258,13 @@ namespace MyTools.TextEdit
                     }
                 }
             }
-            //章节名单独一行
             string str = "";
-            int num = 0;
-            for (int i = 0; i < txtList.Count;i++ )
+            for (int i = 0; i < txtList.Count; i++)
             {
-                if (chapterName.Count > 0 && txtList[i].Contains(chapterName[num]))
-                {
-                    txtList[i]=txtList[i].Replace(chapterName[num], "");
-                    if (num == 0) str += chapterName[num] + Environment.NewLine + "    " + txtList[i] + Environment.NewLine;
-                    else str += Environment.NewLine + Environment.NewLine + chapterName[num] + Environment.NewLine + "    " + txtList[i] + Environment.NewLine;
-                    if (num < chapterName.Count - 1) num++;
-                }
-                else { str += "    " + txtList[i] + Environment.NewLine + Environment.NewLine; }
-                bar.Value = (int)((float)i / (txtList.Count - 1) * 90 + 10);
-             //   bar.Value = (int)((float)i / (txtList.Count - 1) * 90 + 10);
+                str += "    " + txtList[i] + Environment.NewLine + Environment.NewLine;
             }
-            txt_main.Text = null;
-            txt_main.Text = str;
-            BtnState(true);
-        }
 
-        /// <summary>
-        /// 移除网页标签
-        /// </summary>
-        /// <param name="source">原文</param>
-        /// <returns></returns>
-        string RemoveTarget(string source)
-        {
-            Regex reg = new Regex("<div.+>{1}|</div>|<DIV.+>{1}|</DIV>|<BODY.+>{1}|</BODY>|<FONT.+>{1}|</FONT>");
-            string result = reg.Replace(source, "");
-            Regex reg2 = new Regex("<br>|<BR/>|<BR>|<br/>|<br />|<p>|</P>|<P>|</p>");
-            result = reg2.Replace(result, "\r\n");
-            result = result.Replace(" ", "");
-            return result;
-        }
-
-        /// <summary>
-        /// 替换功能
-        /// </summary>
-        /// <param name="search">查找字符串</param>
-        /// <param name="replace">替换字符串</param>
-        /// <param name="isReg">true为正则替换，false字符串替换</param>
-        void ReplaceText(string search, string replace, bool isReg)
-        {
-            if (replace.Contains(@"\n"))
-            {
-                replace = replace.Replace(@"\n", Environment.NewLine);
-            }
-            string text = txt_main.Text;
-            if (isReg)
-            {
-                Regex reg = new Regex(search);
-                text = reg.Replace(text, replace);
-            }
-            else
-            {
-                text = text.Replace(search, replace);
-            }
-            txt_main.Text = null;
-            txt_main.Text = text;
-        }
-
-        /// <summary>
-        /// 添加空行
-        /// </summary>
-        /// <param name="source">原文</param>
-        /// <returns></returns>
-        string AddSpaceLine(string source)
-        {
-            source = RemoveTarget(source).Replace("\r", "");
-            var txtList = source.Split('\n').Select(x => x.Trim()).Where(x => !String.IsNullOrEmpty(x)).ToList();
-            for (int i = 1; i < txtList.Count; i++)
-            {
-                if (!string.IsNullOrEmpty(txtList[i]))
-                {
-                    string temp = Environment.NewLine;
-                    txtList.Insert(i, temp);
-                    i++;
-                }
-            }
-            string result = "";
-            foreach (var x in txtList)
-            {
-                if (x.Equals(Environment.NewLine))
-                    result += x;
-                else
-                {
-                    result += x + Environment.NewLine;
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 设置按钮状态
-        /// </summary>
-        /// <param name="finish"></param>
-        void BtnState(bool finish)
-        {
-            if (finish)
-            {
-                btn_merge.Enabled = true;
-                btn_regex.Enabled = true;
-                btn_replace.Enabled = true;
-            }
-            else
-            {
-                btn_merge.Enabled = false;
-                btn_regex.Enabled = false;
-                btn_replace.Enabled = false;
-            }
-        }
-
-        private void txtEdit_Load(object sender, EventArgs e)
-        {
-            Control.CheckForIllegalCrossThreadCalls = false;
-        }
-
-        private void btn_replace_Click(object sender, EventArgs e)
-        {
-            ReplaceText(txt_Search.Text, txt_replace.Text, false);
-        }
-
-        private void btn_regex_Click(object sender, EventArgs e)
-        {
-            ReplaceText(txt_Search.Text, txt_replace.Text, true);
-        }
-
-        private void btn_addSpaceLine_Click(object sender, EventArgs e)
-        {
-            txt_main.Text = AddSpaceLine(txt_main.Text);
+            return str;
         }
     }
 }
