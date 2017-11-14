@@ -267,6 +267,16 @@ namespace CSharpTest.Helper
         {
             return base.GetCollection<VipMaUserMongo>("User");
         }
+
+        public IMongoCollection<FoundationMongo> GetFoundation()
+        {
+            return base.GetCollection<FoundationMongo>("Foundation");
+        }
+
+        public IMongoCollection<Foundation_projectMongo> GetFoundation_project()
+        {
+            return base.GetCollection<Foundation_projectMongo>("Foundation_project");
+        }
     }
 
     public static class MongoExtension

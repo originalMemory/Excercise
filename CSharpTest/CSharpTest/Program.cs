@@ -25,6 +25,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using AISSystem;
 
+
 namespace CSharpTest
 {
     class Program
@@ -32,12 +33,22 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            //DnlTools.GetLinkReference("598e893df4b87d0b5055ccb6", 0);
-            D3force force = new D3force("test.json", 900 / 2, 600 / 2);
-            force.StartCompute();
+            string url = "http://localhost:2022/api/Keyword/DelLinkShareComment";
+            Dictionary<string, string> para = new Dictionary<string, string>();
+            para.Add("id", "5a084a77c37a3c28cc0a7ba3");
+            para.Add("userId", "58845bed1e5318078cb01b1a");
+            //para.Add("replyId", "5a084a77c37a3c28cc0a7ba3");
+            //para.Add("content", "测试回复");
+            //para.Add("level", "1");
+            var response = WebApiInvoke.CreatePostHttpResponse(url, para);
+            StreamReader sr = new StreamReader(response.GetResponseStream());
+            Console.WriteLine(sr.ReadToEnd());
+
+
             Console.ReadKey();
         }
 
     }
+
 
 }

@@ -8,6 +8,9 @@ using CSharpTest.Model;
 using CSharpTest.Helper;
 using MongoDB.Bson;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
+using System.Configuration;
+using AISSystem;
 
 namespace CSharpTest.Tools
 {
@@ -130,6 +133,62 @@ namespace CSharpTest.Tools
                 s += str.Substring(r.Next(0, str.Length - 1), 1);
             }
             return s;
+        }
+
+        /// <summary>
+        /// 发送错误邮件
+        /// </summary>
+        /// <param name="proName">出错程序名称</param>
+        /// <param name="stack">出错代码位置</param>
+        /// <param name="msg">错误内容</param>
+        /// <param name="recivers">收件人列表</param>
+        /// <param name="ccs">抄送人列表</param>
+        public static void SendErrorMail(string proName, string stack, string msg, List<string> recivers = null, List<string> ccs = null)
+        {
+            var emailAcount = ConfigurationManager.AppSettings["ems_usr_acc"];
+            var emailPassword = ConfigurationManager.AppSettings["ems_usr_pwd"];
+            MailMessage message = new MailMessage();
+            //设置发件人,发件人需要与设置的邮件发送服务器的邮箱一致
+            MailAddress fromAddr = new MailAddress(emailAcount);
+            message.From = fromAddr;
+            //设置收件人,可添加多个,添加方法与下面的一样
+            if (recivers != null)
+            {
+                foreach (var item in recivers)
+                {
+                    message.To.Add(item);
+                }
+            }
+            else
+            {
+                message.To.Add("kdi1994@163.com");
+            }
+            //设置抄送人
+            if (ccs != null)
+            {
+                foreach (var item in ccs)
+                {
+                    message.CC.Add(item);
+                }
+            }
+            //设置邮件标题
+            message.Subject = "BOT错误";
+            //设置邮件内容
+            string content = @"{0}程序出错！
+错误位置：{1}
+错误原因：{2}";
+            content = content.FormatStr(proName, stack, msg);
+            message.Body = content;
+            //设置邮件发送服务器,服务器根据你使用的邮箱而不同,可以到相应的 邮箱管理后台查看,下面是QQ的
+            var smtp = ConfigurationManager.AppSettings["ems_smtp"];
+            int smtpPort = Convert.ToInt32(ConfigurationManager.AppSettings["ems_smtp_port"]);
+            SmtpClient client = new SmtpClient(smtp, smtpPort);
+            //设置发送人的邮箱账号和密码
+            client.Credentials = new System.Net.NetworkCredential(emailAcount, emailPassword);
+            //启用ssl,也就是安全发送
+            client.EnableSsl = true;
+            //发送邮件
+            client.Send(message);
         }
     }
 }

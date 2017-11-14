@@ -73,6 +73,14 @@
     <Compile Include="CrawImg\CrawImgPanel.designer.cs">
       <DependentUpon>CrawImgPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="CrawNovel\CrawNovelPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrawNovel\CrawNovelPanel.Designer.cs">
+      <DependentUpon>CrawNovelPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrawNovel\GetNovel.cs" />
+    <Compile Include="CrawNovel\NovelInfo.cs" />
     <Compile Include="CrawTorrent\CrawTorrentPanel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CrawImg\CrawImgPanel.resx">
       <DependentUpon>CrawImgPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrawNovel\CrawNovelPanel.resx">
+      <DependentUpon>CrawNovelPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CrawTorrent\CrawTorrentPanel.resx">
       <DependentUpon>CrawTorrentPanel.cs</DependentUpon>

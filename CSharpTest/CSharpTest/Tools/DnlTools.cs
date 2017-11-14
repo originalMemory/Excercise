@@ -810,7 +810,7 @@ namespace CSharpTest.Tools
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
         /// <param name="startNum">搜索起始位置</param>
-        public static void TestGSSearch(string keyword, string startTime = "2016-11-01", string endTime = "2017-07-01",int startNum=0)
+        public static void TestGSSearch(string keyword, string startTime = "2016-11-01", string endTime = "2017-10-15",int startNum=0)
         {
             //搜索关键词
             string baseUrl = "http://open.gsdata.cn/";
@@ -822,7 +822,7 @@ namespace CSharpTest.Tools
             postData.Add("keyword", keyword);
             postData.Add("sortname", "likenum");
             postData.Add("sort", "desc");
-            postData.Add("start", startNum);
+            //postData.Add("start", startNum);
             postData.Add("startdate", startTime);
             postData.Add("enddate", endTime);
             string LinkStr = api.Call(postData, linkUrl);       //调用接口，获取返回数据
@@ -836,7 +836,7 @@ namespace CSharpTest.Tools
         public static void Craw5118(string keyword)
         {
             string url = "http://www.5118.com/seo/words/{0}".FormatStr(keyword);
-            string html = WebApiInvoke.GetHtml(url);
+            string html = WebApiInvoke.GetHtml(url,"utf-8");
             //string keyword = "真爱梦想";
             //string url = "http://www.5118.com/seo/words/真爱梦想";
             //string html = WebApiInvoke.GetHtml(url);
@@ -2084,6 +2084,121 @@ namespace CSharpTest.Tools
             json.Add(jRefer);
             result.Json = json.ToString();
             return result;
+        }
+
+        /// <summary>
+        /// 导出基金数据
+        /// </summary>
+        public static void ExportFoundation()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheetFound = workbook.CreateSheet("基金");
+            int page = 0, pagesize = 500;
+            var colFound = MongoDBHelper.Instance.GetFoundation();
+            var founds = new List<FoundationMongo>();
+            while (true)
+            {
+                var temp = colFound.Find(Builders<FoundationMongo>.Filter.Empty).Skip(page * pagesize).Limit(pagesize).ToList();
+                if (temp.Count == 0)
+                    break;
+                CommonTools.Log("获取基金数据 - {0}".FormatStr(temp.Count));
+                founds.AddRange(temp);
+                page++;
+            }
+            CommonTools.Log("总计获取基金数据 - {0}".FormatStr(founds.Count));
+            var rowHead = sheetFound.CreateRow(0);
+            rowHead.CreateCell(0).SetCellValue("Id");
+            rowHead.CreateCell(1).SetCellValue("FoundName");
+            rowHead.CreateCell(2).SetCellValue("Location");
+            rowHead.CreateCell(3).SetCellValue("NetAssets");
+            rowHead.CreateCell(4).SetCellValue("OpenPolitics");
+            rowHead.CreateCell(5).SetCellValue("Website");
+            rowHead.CreateCell(6).SetCellValue("CreditCode");
+            rowHead.CreateCell(7).SetCellValue("Chairman");
+            rowHead.CreateCell(8).SetCellValue("Secretary");
+            rowHead.CreateCell(9).SetCellValue("EstablishTime");
+            rowHead.CreateCell(10).SetCellValue("Tel");
+            rowHead.CreateCell(11).SetCellValue("OriginalFund");
+            rowHead.CreateCell(12).SetCellValue("RegisterDepart");
+            rowHead.CreateCell(13).SetCellValue("Email");
+            rowHead.CreateCell(14).SetCellValue("Adress");
+            rowHead.CreateCell(15).SetCellValue("Purpose");
+            rowHead.CreateCell(16).SetCellValue("CreadAt");
+            rowHead.CreateCell(17).SetCellValue("FoundationType");
+            int i = 1;
+            foreach (var item in founds)
+            {
+                var row = sheetFound.CreateRow(i);
+                row.CreateCell(0).SetCellValue(item._id.ToString());
+                row.CreateCell(1).SetCellValue(item.FoundName);
+                row.CreateCell(2).SetCellValue(item.Location);
+                row.CreateCell(3).SetCellValue(item.NetAssets);
+                row.CreateCell(4).SetCellValue(item.OpenPolitics);
+                row.CreateCell(5).SetCellValue(item.Website);
+                row.CreateCell(6).SetCellValue(item.CreditCode);
+                row.CreateCell(7).SetCellValue(item.Chairman);
+                row.CreateCell(8).SetCellValue(item.Secretary);
+                row.CreateCell(9).SetCellValue(item.EstablishTime);
+                row.CreateCell(10).SetCellValue(item.Tel);
+                row.CreateCell(11).SetCellValue(item.OriginalFund);
+                row.CreateCell(12).SetCellValue(item.RegisterDepart);
+                row.CreateCell(13).SetCellValue(item.Email);
+                row.CreateCell(14).SetCellValue(item.Adress);
+                row.CreateCell(15).SetCellValue(item.Purpose);
+                row.CreateCell(16).SetCellValue(item.CreadAt);
+                row.CreateCell(17).SetCellValue(item.FoundationType);
+                i++;
+            }
+
+            ISheet sheetProject = workbook.CreateSheet("项目");
+            page = 0;
+            var colPro = MongoDBHelper.Instance.GetFoundation_project();
+            var projects = new List<Foundation_projectMongo>();
+            while (true)
+            {
+                var temp = colPro.Find(Builders<Foundation_projectMongo>.Filter.Empty).Skip(page * pagesize).Limit(pagesize).ToList();
+                if (temp.Count == 0)
+                    break;
+                CommonTools.Log("获取项目数据 - {0}".FormatStr(temp.Count));
+                projects.AddRange(temp);
+                page++;
+            }
+            CommonTools.Log("总计获取项目数据 - {0}".FormatStr(projects.Count));
+            var rowHead2 = sheetProject.CreateRow(0);
+            rowHead2.CreateCell(0).SetCellValue("Id");
+            rowHead2.CreateCell(1).SetCellValue("FoundId");
+            rowHead2.CreateCell(1).SetCellValue("FoundName");
+            rowHead2.CreateCell(2).SetCellValue("ProjectName");
+            rowHead2.CreateCell(3).SetCellValue("ExecutiveYear");
+            rowHead2.CreateCell(4).SetCellValue("YearIncome");
+            rowHead2.CreateCell(5).SetCellValue("YearExpenditure");
+            rowHead2.CreateCell(6).SetCellValue("AttentionField");
+            rowHead2.CreateCell(7).SetCellValue("FundUse");
+            rowHead2.CreateCell(8).SetCellValue("BenefitGroup");
+            rowHead2.CreateCell(9).SetCellValue("ProjectBrief");
+            i = 1;
+            foreach (var item in projects)
+            {
+                var row = sheetProject.CreateRow(i);
+                row.CreateCell(0).SetCellValue(item._id.ToString());
+                row.CreateCell(1).SetCellValue(item.Fid.ToString());
+                row.CreateCell(1).SetCellValue(founds.Find(x => x._id == item.Fid).FoundName.ToString());
+                row.CreateCell(2).SetCellValue(item.ProjectName);
+                row.CreateCell(3).SetCellValue(item.ExecutiveYear);
+                row.CreateCell(4).SetCellValue(item.YearIncome);
+                row.CreateCell(5).SetCellValue(item.YearExpenditure);
+                row.CreateCell(6).SetCellValue(item.AttentionField);
+                row.CreateCell(7).SetCellValue(item.FundUse);
+                row.CreateCell(8).SetCellValue(item.BenefitGroup);
+                row.CreateCell(9).SetCellValue(item.ProjectBrief);
+                i++;
+            }
+
+            using (FileStream fs = new FileStream("found.xls", FileMode.Create))
+            {
+                workbook.Write(fs);
+            }
+            CommonTools.Log("输出完毕");
         }
     }
 

@@ -108,7 +108,7 @@ namespace MyTools.CrawTorrent
             int num = 2;
             while (true)
             {
-                var html = WebApi.GetHtml(url);
+                var html = WebApi.GetHtml(url, "utf-8");
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(html);
                 /* 解析源代码 */
@@ -235,7 +235,7 @@ namespace MyTools.CrawTorrent
                     break;
                 }
                 //解析下载页源码
-                string html = WebApi.GetHtml(tor.Url);
+                string html = WebApi.GetHtml(tor.Url, "utf-8");
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(html);
                 HtmlNode tasks = doc.DocumentNode.SelectSingleNode("//*[@id=\"tabs-1\"]/a");                      //搜索结果数组

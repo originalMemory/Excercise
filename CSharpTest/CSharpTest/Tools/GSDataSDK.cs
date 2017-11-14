@@ -51,7 +51,7 @@ namespace CSharpTest.Tools
             byte[] bytes = Encoding.UTF8.GetBytes(jsonStr);
             //将字符串的字节数组通过base64加密成字节数组，以post的方式发送
             string base64Str = Convert.ToBase64String(bytes);
-            string response = HttpPost(url, base64Str);
+            string response = HttpPost(url, " " + base64Str);
             return response;
         }
 
