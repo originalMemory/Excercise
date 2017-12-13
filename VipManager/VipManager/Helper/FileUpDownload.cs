@@ -21,11 +21,11 @@ namespace VipManager.Helper
         /// <summary>  
         /// Ftp 指定用户名  
         /// </summary>  
-        public static string FtpUserID = "ftp"; 
+        public static string FtpUserID = "FTPUser"; 
         /// <summary>  
         /// Ftp 指定用户密码  
         /// </summary>  
-        public static string FtpPassword = "ftp2017";
+        public static string FtpPassword = "OpgEtT9gXLm1n";
  
         #endregion  
  

@@ -40,7 +40,8 @@ int main(int argc, char **argv){
 	}
 
 	robot.com2Bytes(116,6,1);
-	robot.com2Bytes(116,7,1);
+	robot.com2Bytes(116, 7, 1);
+	robot.com2Bytes(116, 28, 1);
 
 	// 异步运行机器人处理循环
 

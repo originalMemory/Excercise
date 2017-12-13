@@ -31,5 +31,17 @@ namespace WebExcercise.Controllers
             context.Response.End();
             return context;
         }
+
+        [HttpPost]
+        public string PostTest(tempC s)
+        {
+            return s.a + s.b;
+        }
+    }
+
+    public class tempC
+    {
+        public string a { get; set; }
+        public string b { get; set; }
     }
 }

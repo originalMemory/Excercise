@@ -207,10 +207,21 @@ namespace CSharpTest.Helper
             return base.GetCollection<WXNameMongo>("WXName");
         }
         #endregion
-        public IMongoCollection<BaiduLinkMongo> GetBaiduLink()
+
+        #region 百度链接库
+        public IMongoCollection<BaiduLinkMainMongo> GetBaiduLinkMain()
         {
-            return base.GetCollection<BaiduLinkMongo>("BaiduLink");
+            return base.GetCollection<BaiduLinkMainMongo>("BaiduLinkMain");
         }
+        public IMongoCollection<BaiduLinkOtherMongo> GetBaiduLinkOther()
+        {
+            return base.GetCollection<BaiduLinkOtherMongo>("BaiduLinkOther");
+        }
+        public IMongoCollection<BaiduLinkContentMongo> GetBaiduLinkContent()
+        {
+            return base.GetCollection<BaiduLinkContentMongo>("BaiduLinkContent");
+        }
+        #endregion
 
         public IMongoCollection<BaiduLinkMappingMongo> GetBaiduLinkMapping()
         {
@@ -219,9 +230,9 @@ namespace CSharpTest.Helper
 
         
 
-        public IMongoCollection<PojectChartMongo> GetPojectChart()
+        public IMongoCollection<ProjectChartMongo> GetPojectChart()
         {
-            return base.GetCollection<PojectChartMongo>("PojectChart");
+            return base.GetCollection<ProjectChartMongo>("PojectChart");
         }
 
         public IMongoCollection<ProductMongo> GetProduct()

@@ -113,5 +113,53 @@ namespace CSharpTest.Tools
             }
             CommonTools.Log("重命名完毕！");
         }
+
+        /// <summary>
+        /// 整理本子文件夹路径
+        /// </summary>
+        /// <param name="path"></param>
+        public static void SortDir(string path)
+        {
+            string errfile=path+@"\error.txt";
+            string[] dirs = Directory.GetDirectories(path);
+            int i = 1;
+            foreach (var x in dirs)
+            {
+                var files = Directory.GetFiles(path).ToList();
+                Regex reg=new Regex("rar|txt|zip");
+                if (files.Count > 5)
+                {
+                    var errorFiles = files.FindAll(s => reg.IsMatch(s));
+                    foreach (var item in errorFiles)
+                    {
+                        File.Delete(item);
+                    }
+                }
+                else
+                {
+                    string[] temp = Directory.GetDirectories(x);
+                    if (temp.Length > 1)
+                    {
+                        string name = Path.GetFileName(x);
+                        File.AppendAllText(errfile, name + System.Environment.NewLine);
+                        i++;
+                        continue;
+                    }
+                    if (temp.Length > 0)
+                    {
+                        string childDir = temp[0];
+                        string name = Path.GetFileName(childDir);
+                        string newDir = path + "\\" + name;
+                        if (!Directory.Exists(newDir))
+                            Directory.Move(childDir, newDir);
+                        Directory.Delete(x, true);
+                        CommonTools.Log("[{0}/{1}] - {2}".FormatStr(i, dirs.LongLength, name));
+                    }
+                }
+
+                i++;
+            }
+            CommonTools.Log("处理完毕！");
+        }
     }
 }

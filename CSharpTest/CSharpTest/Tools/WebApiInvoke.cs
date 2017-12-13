@@ -15,7 +15,7 @@ namespace CSharpTest.Tools
         /// <summary>  
         /// 创建GET方式的HTTP请求  
         /// </summary>  
-        public static HttpWebResponse CreateGetHttpResponse(string url, int timeout, string userAgent, CookieCollection cookies)
+        public static HttpWebResponse CreateGetHttpResponse(string url, int timeout = 5, string userAgent = null, CookieCollection cookies = null)
         {
             HttpWebRequest request = null;
             if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))

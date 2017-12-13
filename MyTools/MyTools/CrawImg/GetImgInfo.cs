@@ -83,7 +83,7 @@ namespace MyTools.CrawImg
             img.Kind = ImgKind.Cosplay;
             img.Urls = new List<string>();
             //获取图片归属作品名称
-            Match ACGWork = Regex.Match(respHtml, @"<meta name=""keywords"" content="".+,.+,(?<info>.+?),.+,.+,.+,.+,.+,.+,.+"" />");
+            Match ACGWork = Regex.Match(respHtml, @"<meta name=""keywords"" content="".+,(?<info>.+?),.+,.+,.+,.+,.+,.+,.+"" />");
             img.ACGWork = ACGWork.Groups["info"].Value;
             //获取Author信息
             Regex cnReg = new Regex(@"cn:&nbsp;&nbsp;<h3><a href="".*"" class=""blue1"">(?<info>.+?)</a></h3>");

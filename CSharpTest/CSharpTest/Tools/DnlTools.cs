@@ -2200,6 +2200,13 @@ namespace CSharpTest.Tools
             }
             CommonTools.Log("输出完毕");
         }
+
+        public static void SplitBaiduData()
+        {
+            int page = 0, pagesize = 500;
+            var keywords = new List<Dnl_Keyword>();
+            var colKey = MongoDBHelper.Instance.GetDnl_Keyword();
+        }
     }
 
 
