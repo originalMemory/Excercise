@@ -38,7 +38,7 @@ namespace MyTools.Tools
             objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
             req.CookieContainer = objcok;
             //设置超时
-            req.Timeout = 3000;
+            //req.Timeout = 3000;
             //Http响应
             HttpWebResponse resp;
             int time = 0;   //服务器无响应时重试次数

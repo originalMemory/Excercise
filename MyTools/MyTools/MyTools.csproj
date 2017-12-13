@@ -94,6 +94,7 @@
       <DependentUpon>FormatConvertPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\ControlEvent.cs" />
+    <Compile Include="Helper\StringExtension.cs" />
     <Compile Include="Mains.cs">
       <SubType>Form</SubType>
     </Compile>

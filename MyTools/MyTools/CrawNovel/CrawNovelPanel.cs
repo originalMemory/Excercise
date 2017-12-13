@@ -12,6 +12,8 @@ using System.Text.RegularExpressions;
 using MyTools.Tools;
 using HtmlAgilityPack;
 using System.IO;
+using MyTools.Helper;
+using System.Threading;
 
 namespace MyTools.CrawNovel
 {
@@ -20,6 +22,8 @@ namespace MyTools.CrawNovel
         public CrawNovelPanel()
         {
             InitializeComponent();
+            Control.CheckForIllegalCrossThreadCalls = false;
+            new Thread(DownNovels).Start();
         }
 
         /// <summary>
@@ -59,46 +63,83 @@ namespace MyTools.CrawNovel
             txt_FloderPath.Text = path;
 
             //获取章节正文
-            string txtMain = "";
-            for (int i = 0; i < novel.Urls.Count; i++)
+            bar.Value = 0;
+            DownStart = true;
+        }
+
+        /// <summary>
+        /// 判断是否开始获取文章
+        /// </summary>
+        bool DownStart = false;
+
+        /// <summary>
+        /// 下载小说正文
+        /// </summary>
+        void DownNovels()
+        {
+            
+            while (true)
             {
-                txtMain += novel.ChapterNames[i] + System.Environment.NewLine + GetChapter(novel.Urls[i]) + System.Environment.NewLine + System.Environment.NewLine;
-                
+                if (DownStart)
+                {
+                    txt_main.Text = "";
+                    for (int i = 0; i < novel.Urls.Count; i++)
+                    {
+                        txt_main.Text += novel.ChapterNames[i] + System.Environment.NewLine + GetChapter(novel.Urls[i]) + System.Environment.NewLine + System.Environment.NewLine;
+                        int percent = (int)((float)(i + 1) / novel.Urls.Count * 100);
+                        bar.Value = percent;
+                    }
+                    DownStart = false;
+                    Thread.Sleep(1000);
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
             }
-            foreach (var x in novel.Urls)
-            {
-            }
-            txt_main.Text = txtMain;
+            
         }
 
         string GetChapter(string url)
         {
             string novel = "";
-            int num = 0;
+            int num = 1;
             while (true)
             {
                 //获取网页
-                string respHtml = WebApi.GetHtml(url, "utf-8");
+                string respHtml = WebApi.GetHtml(url, "gb2312");
                 var doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(respHtml);
                 HtmlNode task = doc.DocumentNode.SelectSingleNode("//div[@class=\"box_box\"]");
                 if (task == null)
-                    break;
-                string temp = task.InnerText;
+                    return "";
+                string temp = task.InnerHtml;
                 if (string.IsNullOrEmpty(temp))
-                    break;
+                    return "";
                 else
                 {
+                    //移除无用标签
+                    Regex regDel1 = new Regex(@"<script.*</script>|【第一版主.*】|【第壹版主.*】");
+                    temp = regDel1.Replace(temp, "");
+                    temp = temp.HtmlDiscode();
+                    
                     novel += temp;
                     //获取下一分页列表
-                    HtmlNodeCollection tasks = doc.DocumentNode.SelectNodes("//div[@class=\"list_box\"]/ul/li");
+                    HtmlNodeCollection tasks = doc.DocumentNode.SelectNodes("//div[@class=\"chapterPages\"]/a");
                     if (tasks == null || num >= tasks.Count)
                         break;
-                    string name = tasks[num].Attributes["href"].Value;
-                    url = Path.GetDirectoryName(url) + name;
+                    string newName = tasks[num].Attributes["href"].Value;
+                    string oldName = Path.GetFileName(url);
+                    url = url.Replace(oldName, "") + newName;
                     num++;
+                    //Thread.Sleep(500);
                 }
             }
+
+            Regex regDel2 = new Regex(@"= 第壹版主([\s\S]*) ｑｑ.ｃōｍ|= 第壹版主([\s\S]*)īn");
+            novel = regDel2.Replace(novel, "");
+            
+
             //将文章按行分列
             var source = novel.Replace("\r", "");
             var txtList = source.Split('\n').Select(x => x.Trim()).Where(x => !String.IsNullOrEmpty(x)).ToList();
@@ -131,133 +172,8 @@ namespace MyTools.CrawNovel
                     txtList[i] += txtList[i + 1];
                     txtList.Remove(txtList[i + 1]);
                 }
-                bar.Value = i / (txtList.Count - 1) * 10;
-
             }
-            //分行
-            if (checkLine.Checked)
-            {
-                int oldpos = 0;
-                for (int i = 0; i < txtList.Count; )
-                {
-                    if (oldpos > (txtList[i].Length - 1))
-                        oldpos = 0;
-                    int index = txtList[i].IndexOf('。', oldpos);
-                    if (index == -1 || index == (txtList[i].Length - 1))
-                    {
-                        i++;
-                        continue;
-                    }
-                    if (txtList[i][index + 1] != '”' && txtList[i][index + 1] != '\'' && txtList[i][index + 1] != '」')
-                    {
-                        string newline = txtList[i].Substring(index + 1);
-                        txtList[i] = txtList[i].Substring(0, index + 1);
-                        txtList.Insert(++i, newline);
-                        oldpos = 0;
-                    }
-                    else
-                    {
-                        if (index >= (txtList[i].Length - 2))
-                        {
-                            oldpos = 0;
-                            i++;
-                        }
-                        else
-                        {
-                            oldpos = index + 1;
-                        }
-                    }
-
-                }
-                oldpos = 0;
-                for (int i = 0; i < txtList.Count; )
-                {
-                    int index = txtList[i].IndexOf('”', oldpos);
-                    if (index == -1 || index == (txtList[i].Length - 1))
-                    {
-                        i++;
-                        continue;
-                    }
-                    if (txtList[i][index + 1] != '”' && txtList[i][index + 1] != '\'')
-                    {
-                        string newline = txtList[i].Substring(index + 1);
-                        txtList[i] = txtList[i].Substring(0, index + 1);
-                        txtList.Insert(++i, newline);
-                        oldpos = 0;
-                    }
-                    else
-                    {
-                        if (index >= (txtList[i].Length - 2))
-                        {
-                            oldpos = 0;
-                            i++;
-                        }
-                        else
-                        {
-                            oldpos = index + 1;
-                        }
-                    }
-                }
-                oldpos = 0;
-                for (int i = 0; i < txtList.Count; )
-                {
-                    int index = txtList[i].IndexOf('’', oldpos);
-                    if (index == -1 || index == (txtList[i].Length - 1))
-                    {
-                        i++;
-                        continue;
-                    }
-                    if (txtList[i][index + 1] != '”' && txtList[i][index + 1] != '\'')
-                    {
-                        string newline = txtList[i].Substring(index + 1);
-                        txtList[i] = txtList[i].Substring(0, index + 1);
-                        txtList.Insert(++i, newline);
-                        oldpos = 0;
-                    }
-                    else
-                    {
-                        if (index >= (txtList[i].Length - 2))
-                        {
-                            oldpos = 0;
-                            i++;
-                        }
-                        else
-                        {
-                            oldpos = index + 1;
-                        }
-                    }
-                }
-
-                oldpos = 0;
-                for (int i = 0; i < txtList.Count; )
-                {
-                    int index = txtList[i].IndexOf('」', oldpos);
-                    if (index == -1 || index == (txtList[i].Length - 1))
-                    {
-                        i++;
-                        continue;
-                    }
-                    if (txtList[i][index + 1] != '”' && txtList[i][index + 1] != '\'')
-                    {
-                        string newline = txtList[i].Substring(index + 1);
-                        txtList[i] = txtList[i].Substring(0, index + 1);
-                        txtList.Insert(++i, newline);
-                        oldpos = 0;
-                    }
-                    else
-                    {
-                        if (index >= (txtList[i].Length - 2))
-                        {
-                            oldpos = 0;
-                            i++;
-                        }
-                        else
-                        {
-                            oldpos = index + 1;
-                        }
-                    }
-                }
-            }
+            
             string str = "";
             for (int i = 0; i < txtList.Count; i++)
             {

@@ -161,8 +161,6 @@
             // checkLine
             // 
             this.checkLine.AutoSize = true;
-            this.checkLine.Checked = true;
-            this.checkLine.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkLine.Location = new System.Drawing.Point(762, 29);
             this.checkLine.Name = "checkLine";
             this.checkLine.Size = new System.Drawing.Size(48, 16);

@@ -30,7 +30,7 @@ namespace MyTools.CrawNovel
                 switch (novel.Kind)
                 {
                     case NovelWebKind.Diyibanzhu:
-                        novel = ExtractDiyi(url, respHtml);
+                        novel = ExtractDiyiChapter(url, respHtml);
                         break;
                 }
 
@@ -43,7 +43,13 @@ namespace MyTools.CrawNovel
             }
         }
 
-        NovelInfo ExtractDiyi(string url,string html)
+        /// <summary>
+        /// 抽取第一版主章节列表
+        /// </summary>
+        /// <param name="url">网页链接</param>
+        /// <param name="html">网页源码</param>
+        /// <returns></returns>
+        NovelInfo ExtractDiyiChapter(string url,string html)
         {
             var novel = new NovelInfo();
             //获取文章名称与作者
@@ -61,13 +67,22 @@ namespace MyTools.CrawNovel
             if (tasks == null)
                 return null;
 
-            string fileName = System.IO.Path.GetFileName(url);
+            string fileName = System.IO.Path.GetFileName(url);      //原页面名
             novel.Urls = new List<string>();
             novel.ChapterNames = new List<string>();
             foreach (var x in tasks)
             {
                 var info = HtmlNode.CreateNode(x.OuterHtml);
-                string chapterUrl = url.Replace(fileName,"") + info.FirstChild.Attributes["href"].Value;
+                //<li><a title=【我的性奴家族】（1-3） href="108732.html">【我的性奴家族】（1-3）</a></li>
+                string chapterUrl = url.Replace(fileName,"") + info.FirstChild.Attributes["href"].Value;    //下一章节页面名称
+                //<li><a href="javascript:;" onclick="tourl('114593.html')">【我的性奴家族】（5）</a></li>
+                if (chapterUrl.Contains("javascript"))
+                {
+                    string temp = info.FirstChild.Attributes["onclick"].Value;
+                    Regex reg = new Regex("[0-9]*.html");
+                    var str = reg.Match(temp);
+                    chapterUrl = url.Replace(fileName, "") + str.Value;
+                }
                 novel.Urls.Add(chapterUrl);
                 novel.ChapterNames.Add(info.InnerText);
             }
