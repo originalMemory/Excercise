@@ -47,6 +47,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.dtpStart = new System.Windows.Forms.DateTimePicker();
             this.checkTime = new System.Windows.Forms.CheckBox();
+            this.checkMove = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picRunning)).BeginInit();
             this.SuspendLayout();
             // 
@@ -187,11 +188,11 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(306, 131);
+            this.btnStart.Location = new System.Drawing.Point(280, 128);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(103, 30);
             this.btnStart.TabIndex = 16;
-            this.btnStart.Text = "开始复制";
+            this.btnStart.Text = "开始";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btn_Start_Click);
             // 
@@ -222,11 +223,22 @@
             this.checkTime.Text = "是否筛选时间";
             this.checkTime.UseVisualStyleBackColor = true;
             // 
+            // checkMove
+            // 
+            this.checkMove.AutoSize = true;
+            this.checkMove.Location = new System.Drawing.Point(391, 135);
+            this.checkMove.Name = "checkMove";
+            this.checkMove.Size = new System.Drawing.Size(72, 16);
+            this.checkMove.TabIndex = 21;
+            this.checkMove.Text = "是否剪切";
+            this.checkMove.UseVisualStyleBackColor = true;
+            // 
             // SelectImgPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(744, 515);
+            this.Controls.Add(this.checkMove);
             this.Controls.Add(this.checkTime);
             this.Controls.Add(this.dtpStart);
             this.Controls.Add(this.label6);
@@ -275,5 +287,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DateTimePicker dtpStart;
         private System.Windows.Forms.CheckBox checkTime;
+        private System.Windows.Forms.CheckBox checkMove;
     }
 }

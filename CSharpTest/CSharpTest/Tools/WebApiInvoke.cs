@@ -122,30 +122,48 @@ namespace CSharpTest.Tools
             objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
             req.CookieContainer = objcok;
             //设置超时
-            req.Timeout = 3000;
+            req.Timeout = 5000;
             //Http响应
             HttpWebResponse resp;
-            int time = 0;   //服务器无响应时重试次数
-            while (true)
+
+            try
             {
-                time++;
                 resp = (HttpWebResponse)req.GetResponse();
-                if (resp.StatusCode != HttpStatusCode.OK)
-                {
-                    if (time < 5)
-                        continue;
-                    else
-                        break;
-                }
-                break;
+                Encoding htmlEncoding = Encoding.GetEncoding(htmlCharset);
+                System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream(), htmlEncoding);
+                //读取返回的网页
+                string respHtml = sr.ReadToEnd();
+                resp.Close();
+                return respHtml;
             }
+            catch (Exception ex)
+            {
+                CommonTools.Log(ex.Message);
+                return null;
+            }
+            //int time = 0;   //服务器无响应时重试次数
+            //while (true)
+            //{
+            //    time++;
+            //    try
+            //    {
+            //        resp = (HttpWebResponse)req.GetResponse();
+            //    }
+            //    catch(Exception ex)
+            //    {
+            //        CommonTools.Log(ex.Message);
+            //    }
+            //    if (resp.StatusCode != HttpStatusCode.OK)
+            //    {
+            //        if (time < 5)
+            //            continue;
+            //        else
+            //            break;
+            //    }
+            //    break;
+            //}
             //使用utf-8去解码网页
-            Encoding htmlEncoding = Encoding.GetEncoding(htmlCharset);
-            System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream(), htmlEncoding);
-            //读取返回的网页
-            string respHtml = sr.ReadToEnd();
-            resp.Close();
-            return respHtml;
+            
         }
 
         /// <summary>

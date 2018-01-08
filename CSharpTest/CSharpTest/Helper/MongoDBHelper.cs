@@ -223,9 +223,9 @@ namespace CSharpTest.Helper
         }
         #endregion
 
-        public IMongoCollection<BaiduLinkMappingMongo> GetBaiduLinkMapping()
+        public IMongoCollection<LinkMappingMongo> GetLinkMapping()
         {
-            return base.GetCollection<BaiduLinkMappingMongo>("BaiduLinkMapping");
+            return base.GetCollection<LinkMappingMongo>("LinkMapping");
         }
 
         
@@ -288,6 +288,44 @@ namespace CSharpTest.Helper
         {
             return base.GetCollection<Foundation_projectMongo>("Foundation_project");
         }
+
+        #region 分析项目
+        public IMongoCollection<AnaProCateMongo> GetAnaProCate()
+        {
+            return base.GetCollection<AnaProCateMongo>("AnaProCate");
+        }
+        public IMongoCollection<AnaProMappingMongo> GetAnaProMapping()
+        {
+            return base.GetCollection<AnaProMappingMongo>("AnaProMapping");
+        }
+        public IMongoCollection<AnaProBindTagMongo> GetAnaProBind()
+        {
+            return base.GetCollection<AnaProBindTagMongo>("AnaProBind");
+        }
+        #endregion
+
+        #region 标签
+        public IMongoCollection<TagMongo> GetTag()
+        {
+            return base.GetCollection<TagMongo>("Tag");
+        }
+        public IMongoCollection<TagLinkMappingMongo> GetTagLinkMapping()
+        {
+            return base.GetCollection<TagLinkMappingMongo>("TagLinkMapping");
+        }
+        public IMongoCollection<TagCategoryMongo> GetTagCategory()
+        {
+            return base.GetCollection<TagCategoryMongo>("TagCategory");
+        }
+        public IMongoCollection<TagMappingMongo> GetTagMapping()
+        {
+            return base.GetCollection<TagMappingMongo>("TagMapping");
+        }
+        public IMongoCollection<TagChartMongo> GetTagChart()
+        {
+            return base.GetCollection<TagChartMongo>("TagChart");
+        }
+        #endregion
     }
 
     public static class MongoExtension

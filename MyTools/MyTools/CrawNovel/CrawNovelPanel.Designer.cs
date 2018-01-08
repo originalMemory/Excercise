@@ -49,7 +49,7 @@
             this.txt_Url.Name = "txt_Url";
             this.txt_Url.Size = new System.Drawing.Size(364, 21);
             this.txt_Url.TabIndex = 13;
-            this.txt_Url.Text = "https://www.diyibanzhu.in/6/6766/0.html";
+            this.txt_Url.Text = "https://www.diyibanzhu.in/7/7426/";
             // 
             // label1
             // 
@@ -105,6 +105,7 @@
             this.btn_OpenFloder.TabIndex = 20;
             this.btn_OpenFloder.Text = "打开文件夹";
             this.btn_OpenFloder.UseVisualStyleBackColor = true;
+            this.btn_OpenFloder.Click += new System.EventHandler(this.btn_OpenFloder_Click);
             // 
             // btn_SaveNovel
             // 
@@ -115,6 +116,7 @@
             this.btn_SaveNovel.TabIndex = 19;
             this.btn_SaveNovel.Text = "保存小说";
             this.btn_SaveNovel.UseVisualStyleBackColor = true;
+            this.btn_SaveNovel.Click += new System.EventHandler(this.btn_SaveNovel_Click);
             // 
             // FloderPathInfo
             // 

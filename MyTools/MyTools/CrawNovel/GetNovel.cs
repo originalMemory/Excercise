@@ -68,20 +68,29 @@ namespace MyTools.CrawNovel
                 return null;
 
             string fileName = System.IO.Path.GetFileName(url);      //原页面名
+            string newBaseUrl = "";
+            if (string.IsNullOrEmpty(fileName))
+            {
+                newBaseUrl = url;
+            }
+            else
+            {
+                newBaseUrl = url.Replace(fileName, "");
+            }
             novel.Urls = new List<string>();
             novel.ChapterNames = new List<string>();
             foreach (var x in tasks)
             {
                 var info = HtmlNode.CreateNode(x.OuterHtml);
                 //<li><a title=【我的性奴家族】（1-3） href="108732.html">【我的性奴家族】（1-3）</a></li>
-                string chapterUrl = url.Replace(fileName,"") + info.FirstChild.Attributes["href"].Value;    //下一章节页面名称
+                string chapterUrl = newBaseUrl + info.FirstChild.Attributes["href"].Value;    //下一章节页面名称
                 //<li><a href="javascript:;" onclick="tourl('114593.html')">【我的性奴家族】（5）</a></li>
                 if (chapterUrl.Contains("javascript"))
                 {
                     string temp = info.FirstChild.Attributes["onclick"].Value;
                     Regex reg = new Regex("[0-9]*.html");
                     var str = reg.Match(temp);
-                    chapterUrl = url.Replace(fileName, "") + str.Value;
+                    chapterUrl = newBaseUrl + str.Value;
                 }
                 novel.Urls.Add(chapterUrl);
                 novel.ChapterNames.Add(info.InnerText);

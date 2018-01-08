@@ -815,6 +815,8 @@ namespace CSharpTest.Tools
             //搜索关键词
             string baseUrl = "http://open.gsdata.cn/";
             string linkUrl = baseUrl + "api/wx/opensearchapi/content_keyword_search";       //关键词获取文章接口地址
+            //string baseUrl = "http://api.gsdata.cn/";
+            //string linkUrl = baseUrl + "weixin/v1/articles";       //关键词获取文章接口地址
             string appid = "JVEvKn7ghegw984neooX";
             string appkey = "n0TWOaX9gta1dpfVF07hpkKr2";
             GSDataSDK api = new GSDataSDK(appid, appkey);           //接口函数
@@ -2201,12 +2203,329 @@ namespace CSharpTest.Tools
             CommonTools.Log("输出完毕");
         }
 
+        /// <summary>
+        /// 拆分百度数据
+        /// </summary>
         public static void SplitBaiduData()
         {
-            int page = 0, pagesize = 500;
+            Console.Write("起始页数（从0开始）：");
+            int page = Convert.ToInt32(Console.ReadLine());
+            Console.Write("结束页数：");
+            int pageEnd = Convert.ToInt32(Console.ReadLine());
+            int  pagesize = 10;
             var keywords = new List<Dnl_Keyword>();
             var colKey = MongoDBHelper.Instance.GetDnl_Keyword();
+            var filterKey = Builders<Dnl_Keyword>.Filter.Empty;
+            var keyNum = colKey.Find(filterKey).Count();
+            int usedNum = page * pagesize;        //已拆分关键词数
+            bool IsAllNotMove = false;
+            while (usedNum < keyNum && page < pageEnd)
+            {
+                //获取关键词ID
+                var tpKeyIds = colKey.Find(filterKey).SortBy(x => x.CreatedAt).Skip(page * pagesize).Limit(pagesize).Project(x => x._id).ToList();
+                usedNum += tpKeyIds.Count;
+                page++;
+                CommonTools.Log("当前拆分关键词[{0}/{1}/{2}]".FormatStr(usedNum, pageEnd * pagesize, keyNum));
+                var keyIds = new List<string>();
+                var colLinkMain = MongoDBHelper.Instance.GetBaiduLinkMain();
+                var builderLinkMain = Builders<BaiduLinkMainMongo>.Filter;
+                if (!IsAllNotMove)
+                {
+                    foreach (var tpId in tpKeyIds)
+                    {
+                        var filterLinkMain = builderLinkMain.Eq(x => x.KeywordId, tpId);
+                        var count = colLinkMain.Find(filterLinkMain).Count();
+                        if (count == 0)
+                        {
+                            keyIds.Add(tpId.ToString());
+                        }
+                    }
+                    if (keyIds.Count == tpKeyIds.Count)
+                    {
+                        IsAllNotMove = true;
+                    }
+                    if (keyIds.Count == 0)
+                    {
+                        CommonTools.Log("本批已全部拆分！");
+                        continue;
+                    }
+                }
+                else
+                {
+                    keyIds = tpKeyIds.Select(x => x.ToString()).ToList();
+                }
+
+                //获取链接及映射详情
+                var filterLink = Builders<Dnl_Link_Baidu>.Filter.In(x => x.SearchkeywordId, keyIds);
+                var links = MongoDBHelper.Instance.GetDnl_Link_Baidu().Find(filterLink).ToList();
+
+                if (links.Count == 0)
+                {
+                    CommonTools.Log("本批次无链接");
+                    continue;
+                }
+                else
+                {
+                    CommonTools.Log("本次链接数 - {0}".FormatStr(links.Count));
+                }
+                var builderLinkMap=Builders<Dnl_LinkMapping_Baidu>.Filter;
+                var filterLinkMap = builderLinkMap.In(x => x.LinkId, links.Select(x => x._id));
+                var linkMaps = MongoDBHelper.Instance.GetDnl_LinkMapping_Baidu().Find(filterLinkMap).ToList();
+
+                //拆分并转换格式
+                var colLinkContent = MongoDBHelper.Instance.GetBaiduLinkContent();
+                var colLinkOther = MongoDBHelper.Instance.GetBaiduLinkOther();
+
+                int i = 0;
+                var linkMains = new List<BaiduLinkMainMongo>();
+                var linkOthers = new List<BaiduLinkOtherMongo>();
+                var linkContents = new List<BaiduLinkContentMongo>();
+                var newLinkMaps = new List<LinkMappingMongo>();
+                foreach (var oldLink in links)
+                {
+                    i++;
+
+                    var keyObjId=new ObjectId(oldLink.SearchkeywordId);
+                    var linkMain = new BaiduLinkMainMongo
+                    {
+                        _id = ObjectId.GenerateNewId(),
+                        DCNum = oldLink.DCNum,
+                        CreatedAt = oldLink.CreatedAt,
+                        Description = oldLink.Description,
+                        Domain = oldLink.Domain,
+                        Keyword = oldLink.Keywords,
+                        KeywordId = keyObjId,
+                        LinkUrl = oldLink.LinkUrl,
+                        Title = oldLink.Title,
+                    };
+                    DateTime publishAt = new DateTime();
+                    if (DateTime.TryParse(oldLink.PublishTime, out publishAt))
+                    {
+                        linkMain.PublishAt = publishAt;
+                    }
+                    linkMains.Add(linkMain);
+
+                    var linkOther = new BaiduLinkOtherMongo
+                    {
+                        TopDomain = oldLink.TopDomain,
+                        BaiduVStar = oldLink.BaiduVStar,
+                        IsPromotion = oldLink.IsPromotion,
+                        KeywordId = keyObjId,
+                        LinkId = linkMain._id,
+                        MatchAt = oldLink.MatchAt
+                    };
+                    linkOthers.Add(linkOther);
+
+                    var linkContent = new BaiduLinkContentMongo
+                    {
+                        KeywordId = keyObjId,
+                        LinkId = linkMain._id,
+                    };
+
+                    //判断网页是否过大
+                    if (oldLink.Html.Length > 262144)
+                    {
+                        CommonTools.Log("网页大小超出5M - {0} - {1}".FormatStr(oldLink.Title, oldLink.LinkUrl));
+                    }
+                    else
+                    {
+                        //判断网页编码是否错误，错误则重新获取
+                        string html = oldLink.Html;
+                        int length = html.Length;
+                        if (!Regex.IsMatch(html, "charset=\"utf-8|charset=\"UTF-8|charset=utf-8|charset=UTF-8"))
+                        {
+                            if (Regex.IsMatch(html, "charset=\"gb2312|charset=\"GB2312|charset=gb2312|charset=GB2312"))
+                            {
+                                html = WebApiInvoke.GetHtml(oldLink.LinkUrl, "gb2312");
+                            }
+                            else if (Regex.IsMatch(html, "charset=\"gbk|charset=\"GBK|charset=gbk|charset=GBK"))
+                            {
+                                html = WebApiInvoke.GetHtml(oldLink.LinkUrl, "gbk");
+                            }
+                        }
+                        if (html == null)
+                        {
+                            html = oldLink.Html;
+                        }
+
+                        if (html.Length > 262144)
+                        {
+                            CommonTools.Log("网页大小超出5M - {0} - {1}".FormatStr(oldLink.Title, oldLink.LinkUrl));
+                        }
+                        else
+                        {
+                            linkContent.Html = html;
+                            length = html.Length;
+
+                            //获取网页中文正文
+                            string content = "";
+                            try
+                            {
+                                var transcoder = new NReadabilityTranscoder();
+                                TranscodingInput input = new TranscodingInput(html);
+                                TranscodingResult result = transcoder.Transcode(input);
+                                if (result.ContentExtracted)
+                                {
+                                    string htmlCon = result.ExtractedContent.SubAfter("</head>").SubBefore("</html>");
+                                    content = Regex.Replace(htmlCon, "</p>|<br/>|<br>|</h[0-9]>", System.Environment.NewLine);
+                                    content = Regex.Replace(content, "<.+?>", "");
+                                    content = Regex.Replace(content, " ", " ");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                CommonTools.Log("正文提取错误，错误原因：{0}".FormatStr(ex.Message));
+                                CommonTools.Log("错误链接[{0}/{1}] - {2}".FormatStr(i, links.Count, oldLink.Title));
+                            }
+                            linkContent.Content = content;
+                            linkContents.Add(linkContent);
+                        }
+                    }
+
+                    var oldMap = linkMaps.Find(x => x.LinkId == oldLink._id);
+                    if (oldMap != null)
+                    {
+                        var newMap = new LinkMappingMongo
+                        {
+                            DataCleanStatus = oldMap.DataCleanStatus,
+                            CreatedAt = oldMap.CreatedAt,
+                            InfriLawCode = oldMap.InfriLawCode,
+                            LinkId = oldMap.LinkId,
+                            ProjectId = oldMap.ProjectId,
+                            Source = SourceType.Baidu,
+                            UserId = oldMap.UserId
+                        };
+                        newLinkMaps.Add(newMap);
+                    }
+                }
+                //int inserNum = 0;
+                //int insertSize=1;
+                //while (inserNum<linkMains.Count)
+                //{
+                    colLinkMain.InsertMany(linkMains);
+                    colLinkOther.InsertMany(linkOthers);
+                    //var temp = linkContents.Skip(inserNum).Take(insertSize).ToList();
+                    colLinkContent.InsertMany(linkContents);
+                    //inserNum += insertSize;
+                    //CommonTools.Log("保存拆分链接[{0}/{1}]".FormatStr(inserNum, linkMains.Count));
+                //}
+                if (newLinkMaps.Count > 0)
+                {
+                    MongoDBHelper.Instance.GetLinkMapping().InsertMany(newLinkMaps);
+                }
+                CommonTools.Log("本批拆分完毕");
+            }
         }
+
+        /// <summary>
+        /// 拆分百度数据
+        /// </summary>
+        public static void DelBaiduData()
+        {
+            Console.Write("起始页数（从0开始）：");
+            int page = Convert.ToInt32(Console.ReadLine());
+            Console.Write("结束页数：");
+            int pageEnd = Convert.ToInt32(Console.ReadLine());
+            int pagesize = 10;
+            var keywords = new List<Dnl_Keyword>();
+            var colKey = MongoDBHelper.Instance.GetDnl_Keyword();
+            var filterKey = Builders<Dnl_Keyword>.Filter.Empty;
+            var keyNum = colKey.Find(filterKey).Count();
+            int usedNum = page * pagesize;        //已拆分关键词数
+            while (page < pageEnd)
+            {
+                //获取关键词ID
+                var keyIds = colKey.Find(filterKey).SortBy(x => x.CreatedAt).Skip(page * pagesize).Limit(pagesize).Project(x => x._id).ToList();
+                usedNum += keyIds.Count;
+                page++;
+                CommonTools.Log("当前拆分关键词[{0}/{1}/{2}]".FormatStr(usedNum, pageEnd * pagesize, keyNum));
+                //获取拆分链接
+                //var filterLink = Builders<BaiduLinkMainMongo>.Filter.In(x => x.KeywordId, keyIds);
+                //var linkIds = MongoDBHelper.Instance.GetBaiduLinkMain().Find(filterLink).Project(x => x._id).ToList();
+                var filterLink = Builders<Dnl_Link_Baidu>.Filter.In(x => x.SearchkeywordId, keyIds.Select(x => x.ToString()));
+                var linkIds = MongoDBHelper.Instance.GetDnl_Link_Baidu().Find(filterLink).Project(x => x._id).ToList();
+                CommonTools.Log("本次链接数 - {0}".FormatStr(linkIds.Count));
+                if (linkIds.Count == 0)
+                {
+                    break;
+                }
+
+                ////拆分并转换格式
+                //var colLinkMain = MongoDBHelper.Instance.GetBaiduLinkMain();
+                //var colLinkContent = MongoDBHelper.Instance.GetBaiduLinkContent();
+                //var colLinkOther = MongoDBHelper.Instance.GetBaiduLinkOther();
+
+                //colLinkMain.DeleteMany(filterLink);
+                //colLinkOther.DeleteMany(Builders<BaiduLinkOtherMongo>.Filter.In(x => x.KeywordId, keyIds));
+                //colLinkContent.DeleteMany(Builders<BaiduLinkContentMongo>.Filter.In(x => x.KeywordId, keyIds));
+
+                //MongoDBHelper.Instance.GetBaiduLinkMapping().DeleteMany(Builders<BaiduLinkMappingMongo>.Filter.In(x => x.LinkId, linkIds));
+                CommonTools.Log("本批已拆分完毕");
+            }
+            CommonTools.Log("全部已拆分完毕");
+        }
+
+        public static void DeletePro()
+        {
+            var filterPro = Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, true);
+            var pros = MongoDBHelper.Instance.GetIW2S_Projects().Find(filterPro).ToList();
+            int i = 0;
+            foreach (var pro in pros)
+            {
+                i++;
+                CommonTools.Log("{0}/{1} - {2}".FormatStr(i, pros.Count, pro.Name));
+                var builder = Builders<Dnl_KeywordCategory>.Filter;
+                var filterBdCate = builder.Eq(x => x.ProjectId, pro._id);
+                DateTime now = DateTime.Now.AddHours(8);
+                var update = new UpdateDocument { { "$set", new QueryDocument { { "IsDel", true }, { "DelAt", now } } } };
+                //删除项目内所有百度关键词及词组
+
+                MongoDBHelper.Instance.GetDnl_KeywordCategory().UpdateMany(filterBdCate, update);
+                var filterBdMap = Builders<Dnl_KeywordMapping>.Filter.Eq(x => x.ProjectId, pro._id);
+                MongoDBHelper.Instance.GetDnl_KeywordMapping().UpdateMany(filterBdMap, update);
+
+                //删除项目内所有微信关键词及词组
+                var filterWxCate = Builders<MediaKeywordCategoryMongo>.Filter.Eq(x => x.ProjectId, pro._id);
+                MongoDBHelper.Instance.GetMediaKeywordCategory().UpdateMany(filterWxCate, update);
+                var filterWxMap = Builders<MediaKeywordMappingMongo>.Filter.Eq(x => x.ProjectId, pro._id);
+                MongoDBHelper.Instance.GetMediaKeywordMapping().UpdateMany(filterWxMap, update);
+            }
+        }
+        //public static void MoveLink()
+        //{
+        //    var bindIds = MongoDBHelper.Instance.GetAnaProBind().Find(Builders<AnaProBindTagMongo>.Filter.Empty).Project(x => x._id).ToList();
+        //    int i = 0;
+        //    foreach (var bindId in bindIds)
+        //    {
+        //        i++;
+        //        CommonTools.Log("[{0}/{1}]".FormatStr(i, bindIds.Count));
+        //        var builderMap = Builders<TagLinkMappingMongo>.Filter;
+        //        var filterMap = builderMap.Eq(x => x.BindId, bindId);
+        //        var colMap = MongoDBHelper.Instance.GetTagLinkMapping();
+        //        var oldLinkIds = colMap.Find(filterMap).Project(x => x.LinkId).ToList();
+        //        foreach (var oldLinkId in oldLinkIds)
+        //        {
+        //            var oldLink=MongoDBHelper.Instance.GetDnl_Link_Baidu().Find(new QueryDocument{{"_id",oldLinkId}}).Project(x=>new{
+        //                Id=x._id,
+        //                KeywordId=x.SearchkeywordId,
+        //                Url=x.LinkUrl
+        //            }).FirstOrDefault();
+        //            if (oldLink != null)
+        //            {
+        //                var builderLink = Builders<BaiduLinkMainMongo>.Filter;
+        //                var filterLink = builderLink.Eq(x => x.KeywordId, new ObjectId(oldLink.KeywordId));
+        //                filterLink &= builderLink.Eq(x => x.LinkUrl, oldLink.Url);
+        //                var newLinkId = MongoDBHelper.Instance.GetBaiduLinkMain().Find(filterLink).Project(x => x._id).FirstOrDefault();
+        //                if (newLinkId != null)
+        //                {
+        //                    var update = Builders<TagLinkMappingMongo>.Update.Set(x => x.LinkId, newLinkId);
+        //                    filterMap = builderMap.Eq(x => x.LinkId, oldLinkId);
+        //                    colMap.UpdateOne(filterMap, update);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 
 

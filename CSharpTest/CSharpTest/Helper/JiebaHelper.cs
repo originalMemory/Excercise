@@ -14,6 +14,7 @@ using JiebaNet.Segmenter;
 using JiebaNet.Segmenter.PosSeg;
 using System.Text.RegularExpressions;
 using CSharpTest.Tools;
+using CSharpTest.Model;
 
 namespace CSharpTest.Helper
 {

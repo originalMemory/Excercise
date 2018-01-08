@@ -50,14 +50,14 @@ namespace MyTools.CrawNovel
 
             //检查目录和文件名，将不能使用字符替换为“_”
             //正则表达式"[\\u005C/:\\u002A\\u003F\"<>\'\\u007C’‘“”：？]"还包含中文的字符（实际上中文字符是可以使用的）
-            string fileNameCheck = "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]";
-            string pathCheck = "";
+            //string fileNameCheck = "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]";
+            //string pathCheck = "";
             string path = "";
             switch (novel.Kind)
             {
                 case NovelWebKind.Diyibanzhu:
-                    pathCheck = Regex.Replace(novel.Title + " - " + novel.Author, fileNameCheck, "_");
-                    path = @"D:\Program Files (x86)\DAEMON Tools Lite\bin\和谐文\新建文件夹\" + pathCheck;
+                    //pathCheck = Regex.Replace(novel.Title + " - " + novel.Author, fileNameCheck, "_");
+                    path = @"D:\Program Files (x86)\DAEMON Tools Lite\bin\和谐文\新建文件夹\";
                     break;
             }
             txt_FloderPath.Text = path;
@@ -100,6 +100,11 @@ namespace MyTools.CrawNovel
             
         }
 
+        /// <summary>
+        /// 获取章节内容
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         string GetChapter(string url)
         {
             string novel = "";
@@ -119,7 +124,7 @@ namespace MyTools.CrawNovel
                 else
                 {
                     //移除无用标签
-                    Regex regDel1 = new Regex(@"<script.*</script>|【第一版主.*】|【第壹版主.*】");
+                    Regex regDel1 = new Regex("<script.*?</script>|<tr([\\s\\S]*?)</tr>|<div.*?>|</div.*?>");
                     temp = regDel1.Replace(temp, "");
                     temp = temp.HtmlDiscode();
                     
@@ -136,7 +141,7 @@ namespace MyTools.CrawNovel
                 }
             }
 
-            Regex regDel2 = new Regex(@"= 第壹版主([\s\S]*) ｑｑ.ｃōｍ|= 第壹版主([\s\S]*)īn");
+            Regex regDel2 = new Regex(@"= 第壹版主([\s\S]*?) ｑｑ.ｃōｍ|= 第壹版主([\s\S]*?)īn|【第[一壹]版主.*?】|<font.*>|</font.*>");
             novel = regDel2.Replace(novel, "");
             
 
@@ -160,7 +165,31 @@ namespace MyTools.CrawNovel
                     i++;
                     continue;
                 }
+
+                if (Regex.IsMatch(txt, "第.+章.{0,50}"))
+                {
+                    i++;
+                    continue;
+                }
+
+                if (Regex.IsMatch(txt, "＊＊＊　"))
+                {
+                    i++;
+                    continue;
+                }
+                
                 if (i == txtList.Count - 1) break;
+
+                //╮找?回╘网ξ址?请ㄨ百喥▼索∴弟?—╮板?zんù¤综╝合◆社╕区
+                Regex regDel3 = new Regex("网.+址.+.社.区|地.+址.+.社.区|第.一.版.主|小.说.+版.主|０１ｂｚ|快.看.更.新|〇１Вｚ．ｎеｔ|ｄｉｙｉｂａｎｚｈｕ|最.新.地.址");
+                string nextTxt = txtList[i + 1];
+                if (regDel3.IsMatch(txt))
+                {
+                    txtList.RemoveAt(i);
+                    continue;
+                }
+
+                //判断是否为一句结束符
                 char end = txtList[i][txtList[i].Length - 1];
                 if (end == '。' || end == '」' || end == '】' || end == '！' || end == '”' || end == '…' || end == '？')
                 {
@@ -170,7 +199,7 @@ namespace MyTools.CrawNovel
                 else
                 {
                     txtList[i] += txtList[i + 1];
-                    txtList.Remove(txtList[i + 1]);
+                    txtList.RemoveAt(i + 1);
                 }
             }
             
@@ -181,6 +210,38 @@ namespace MyTools.CrawNovel
             }
 
             return str;
+        }
+
+        //保存小说
+        private void btn_SaveNovel_Click(object sender, EventArgs e)
+        {
+            //替换无法作为文件名的字符
+            Regex regName = new Regex("[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]");
+            string fileName = "{0} - {1}.txt".FormatStr(novel.Title, novel.Author);
+            fileName = regName.Replace(fileName, "_");
+
+            string dir = txt_FloderPath.Text;
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            FileStream fs = new FileStream(dir+fileName, FileMode.OpenOrCreate);
+            StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+            sw.Write(txt_main.Text);
+            sw.Flush();
+            sw.Close();
+            fs.Close();
+
+            MessageBox.Show("保存完毕！", "提示");
+            //重置打开文件夹按钮状态
+            btn_OpenFloder.Enabled = true;
+
+        }
+
+        private void btn_OpenFloder_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", txt_FloderPath.Text);
         }
     }
 }

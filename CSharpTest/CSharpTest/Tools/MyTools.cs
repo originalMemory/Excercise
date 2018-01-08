@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using AISSystem;
+using System.Security.Cryptography;
 
 namespace CSharpTest.Tools
 {
@@ -126,7 +127,8 @@ namespace CSharpTest.Tools
             foreach (var x in dirs)
             {
                 var files = Directory.GetFiles(path).ToList();
-                Regex reg=new Regex("rar|txt|zip");
+                Regex reg = new Regex(".txt|.url|.torrent");
+                //Regex reg = new Regex(".rar|.txt|.zip|.url|.torrent");
                 if (files.Count > 5)
                 {
                     var errorFiles = files.FindAll(s => reg.IsMatch(s));
@@ -138,22 +140,26 @@ namespace CSharpTest.Tools
                 else
                 {
                     string[] temp = Directory.GetDirectories(x);
-                    if (temp.Length > 1)
-                    {
-                        string name = Path.GetFileName(x);
-                        File.AppendAllText(errfile, name + System.Environment.NewLine);
-                        i++;
-                        continue;
-                    }
+                    //if (temp.Length > 1)
+                    //{
+                    //    string name = Path.GetFileName(x);
+                    //    File.AppendAllText(errfile, name + System.Environment.NewLine);
+                    //    i++;
+                    //    continue;
+                    //}
                     if (temp.Length > 0)
                     {
-                        string childDir = temp[0];
-                        string name = Path.GetFileName(childDir);
-                        string newDir = path + "\\" + name;
-                        if (!Directory.Exists(newDir))
-                            Directory.Move(childDir, newDir);
+                        int j = 0;
+                        foreach (var childDir in temp)
+                        {
+                            j++;
+                            string name = Path.GetFileName(childDir);
+                            string newDir = path + "\\" + name;
+                            if (!Directory.Exists(newDir))
+                                Directory.Move(childDir, newDir);
+                            CommonTools.Log("[{0}/{1}] - [{2}/{3}]{4}".FormatStr(i, dirs.Length, j, temp.Length, name));
+                        }
                         Directory.Delete(x, true);
-                        CommonTools.Log("[{0}/{1}] - {2}".FormatStr(i, dirs.LongLength, name));
                     }
                 }
 
@@ -161,5 +167,25 @@ namespace CSharpTest.Tools
             }
             CommonTools.Log("处理完毕！");
         }
+
+        public static string GetSHA256HashFromString(string strData)
+        {
+            byte[] bytValue = System.Text.Encoding.UTF8.GetBytes(strData);
+            try
+            {
+                SHA256 sha256 = new SHA256CryptoServiceProvider();
+                byte[] retVal = sha256.ComputeHash(bytValue);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < retVal.Length; i++)
+                {
+                    sb.Append(retVal[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetSHA256HashFromString() fail,error:" + ex.Message);
+            }
+        } 
     }
 }

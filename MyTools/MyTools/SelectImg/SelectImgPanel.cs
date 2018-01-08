@@ -121,7 +121,7 @@ namespace MyTools.SelectImg
             }
             OperateIni.WriteIniData(IniSection, "imgType", (int)type);
             OperateIni.WriteIniData(IniSection, "minImgWidth", txtMinImgWidth.Text);
-            OperateIni.WriteIniData(IniSection, "startAt", dtpStart.Value);
+            OperateIni.WriteIniData(IniSection, "startAt", DateTime.Now);
             OperateIni.WriteIniData(IniSection, "checkTime", checkTime.Checked);
         }
 
@@ -194,10 +194,17 @@ namespace MyTools.SelectImg
                     }
                     string fileName = regFileName.Match(imgPath).Groups["info"].Value;
                     string fileNovel = regFileNovel.Match(imgPath).Groups["name"].Value;
-                    CopyImg(imgPath, TargetPath, fileName, 0);
+                    if (string.IsNullOrEmpty(fileNovel))
+                    {
+                        fileNovel = Path.GetDirectoryName(imgPath);
+                    }
+                    bool isCopy = CopyImg(imgPath, TargetPath, fileName, 0);
                     int percent = i * 100 / count;
                     pbCopy.Value = percent + 1;
-                    rtxtPicList.Text = rtxtPicList.Text.Insert(0, fileNovel + Environment.NewLine);
+                    if (isCopy)
+                    {
+                        rtxtPicList.Text = rtxtPicList.Text.Insert(0, fileNovel + Environment.NewLine);
+                    }
                 }
             }
             MessageBox.Show("图片复制完毕!", "提示");
@@ -210,7 +217,8 @@ namespace MyTools.SelectImg
         /// <param name="TargetPath">目标文件夹</param>
         /// <param name="fileName">文件名</param>
         /// <param name="no">编号</param>
-        void CopyImg(string imgPath,string TargetPath,string fileName,int no)
+        /// <returns>true表示图片已存在</returns>
+        bool CopyImg(string imgPath,string TargetPath,string fileName,int no)
         {
             FileInfo file = new FileInfo(imgPath);
             string newName;
@@ -225,23 +233,53 @@ namespace MyTools.SelectImg
                 newName = TargetPath + "\\" + fileName.Insert(fileName.LastIndexOf('.'), append);
             }
             //判断目标文件名是否已存在
-            if (File.Exists(newName))
+            bool isExist = false;
+            while (true)
             {
-                //比对二者大小，如果不一致则改名存储
-                FileInfo comp = new FileInfo(newName);
-                if (file.Length != comp.Length)
+                if (!File.Exists(newName))
                 {
-                    no++;
-                    CopyImg(imgPath, TargetPath, fileName, no);
+                    break;
                 }
                 else
                 {
-                    return;
+                    //比对二者大小，如果不一致则改名存储
+                    FileInfo comp = new FileInfo(newName);
+                    if (file.Length != comp.Length)
+                    {
+                        no++;
+                        if (no == 0)
+                        {
+                            newName = TargetPath + "\\" + fileName;
+                        }
+                        else
+                        {
+                            string append = "-" + no;
+                            newName = TargetPath + "\\" + fileName.Insert(fileName.LastIndexOf('.'), append);
+                        }
+                    }
+                    else
+                    {
+                        //一致则跳过该图片
+                        isExist = true;
+                        break;
+                    }
                 }
+            }
+            if (!isExist)
+            {
+                if (checkMove.Checked)
+                {
+                    file.MoveTo(newName);
+                }
+                else
+                {
+                    file.CopyTo(newName, false);
+                }
+                return true;
             }
             else
             {
-                file.CopyTo(newName, false);
+                return false;
             }
         }
     }

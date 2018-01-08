@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace MyTools.Helper
 {
+    /// <summary>
+    /// 字符串扩展类
+    /// </summary>
     public static class StringExtension
     {
         /// <summary>
@@ -39,6 +42,17 @@ namespace MyTools.Helper
             theString = theString.Replace("<br/>", "\n");
             theString = theString.Replace("<br>", "\n");
             return theString;
+        }
+
+        /// <summary>
+        /// 格式化字符串
+        /// </summary>
+        /// <param name="format">符合格式的字符串</param>
+        /// <param name="objs">参数数组</param>
+        /// <returns></returns>
+        public static string FormatStr(this string format, params object[] objs)
+        {
+            return string.Format(format, objs);
         }
     }
 }
