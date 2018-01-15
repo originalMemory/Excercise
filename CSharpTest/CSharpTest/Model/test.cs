@@ -116,7 +116,7 @@ namespace CSharpTest.Model
         /// <summary>
         /// 数据清洗状态：1，收藏;2,排除
         /// </summary>
-        public Nullable<byte> DataCleanStatus { get; set; }
+        public int DataCleanStatus { get; set; }
         /// <summary>
         /// 数据类型Id
         /// </summary>

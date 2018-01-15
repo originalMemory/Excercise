@@ -26,7 +26,7 @@ namespace MyTools.CrawImg
             try
             {
                 //获取网页
-                string respHtml = WebApi.GetHtml(url, "utf-8");
+                string respHtml = WebApi.GetHtml(url);
                 //对网页进行分类
                 Regex kindReg = new Regex(@"bcy.net/(?<info>.+?)/");
                 Match kindMat = kindReg.Match(url);

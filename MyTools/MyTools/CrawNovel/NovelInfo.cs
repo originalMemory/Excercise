@@ -15,6 +15,7 @@ namespace MyTools.CrawNovel
         /// 作者信息
         /// </summary>
         public string Author { get; set; }
+        #region 对分章节小说网站
         /// <summary>
         /// 章节链接
         /// </summary>
@@ -23,6 +24,17 @@ namespace MyTools.CrawNovel
         /// 章节名
         /// </summary>
         public List<string> ChapterNames { get; set; }
+        #endregion
+        #region 对论坛贴子
+        /// <summary>
+        /// 楼主名称
+        /// </summary>
+        public string Poster { get; set; }
+        /// <summary>
+        /// 总页数
+        /// </summary>
+        public int PageCount { get; set; }
+        #endregion
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -42,7 +54,9 @@ namespace MyTools.CrawNovel
     /// </summary>
     public enum NovelWebKind
     {
-        Diyibanzhu
+        Diyibanzhu,
+        Sexinsex,
+        CaoLiu,
     }
 
 

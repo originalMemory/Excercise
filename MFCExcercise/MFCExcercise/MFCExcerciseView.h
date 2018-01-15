@@ -1,19 +1,19 @@
 
-// MFCTestView.h : CMFCTestView 类的接口
+// MFCExcerciseView.h : CMFCExcerciseView 类的接口
 //
 
 #pragma once
 
 
-class CMFCTestView : public CView
+class CMFCExcerciseView : public CView
 {
 protected: // 仅从序列化创建
-	CMFCTestView();
-	DECLARE_DYNCREATE(CMFCTestView)
+	CMFCExcerciseView();
+	DECLARE_DYNCREATE(CMFCExcerciseView)
 
 // 特性
 public:
-	CMFCTestDoc* GetDocument() const;
+	CMFCExcerciseDoc* GetDocument() const;
 
 // 操作
 public:
@@ -29,7 +29,7 @@ protected:
 
 // 实现
 public:
-	virtual ~CMFCTestView();
+	virtual ~CMFCExcerciseView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -45,8 +45,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // MFCTestView.cpp 中的调试版本
-inline CMFCTestDoc* CMFCTestView::GetDocument() const
-   { return reinterpret_cast<CMFCTestDoc*>(m_pDocument); }
+#ifndef _DEBUG  // MFCExcerciseView.cpp 中的调试版本
+inline CMFCExcerciseDoc* CMFCExcerciseView::GetDocument() const
+   { return reinterpret_cast<CMFCExcerciseDoc*>(m_pDocument); }
 #endif
 

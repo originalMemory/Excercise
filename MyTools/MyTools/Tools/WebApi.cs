@@ -19,7 +19,7 @@ namespace MyTools.Tools
         /// </summary>
         /// <param name="url">网页链接</param>
         /// <returns></returns>
-        public static string GetHtml(string url, string htmlCharset)
+        public static string GetHtml(string url)
         {
             //Http请求
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
@@ -55,13 +55,66 @@ namespace MyTools.Tools
                 }
                 break;
             }
-            //使用utf-8去解码网页
-            Encoding htmlEncoding = Encoding.GetEncoding(htmlCharset);
-            System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream(), htmlEncoding);
-            //读取返回的网页
-            string respHtml = sr.ReadToEnd();
+
+            //字节读取网页内容
+            MemoryStream memStream = new MemoryStream();
+            using (Stream stream = resp.GetResponseStream())
+            {
+
+                byte[] buffer = new byte[1024];
+                int byteCount;
+                do
+                {
+                    byteCount = stream.Read(buffer, 0, buffer.Length);
+                    memStream.Write(buffer, 0, byteCount);
+                } while (byteCount > 0);
+            }
+
+            //默认以UTF8格式解析
+            Encoding encoding = Encoding.UTF8;
+            string html = "";       //网页内容
+            var charset = GetEncoding(resp.CharacterSet);
+            if (charset == null)
+            {
+                html = Encoding.UTF8.GetString(memStream.ToArray());
+                //判断是否的确为UTF-8格式
+                var charsetStr = "";
+                var charsetReg = new System.Text.RegularExpressions.Regex("<meta [^>]*charset=(.*?)(?=(;|\b|\"))");
+                var match = charsetReg.Match(html);
+                if (match.Groups.Count > 1)
+                {
+                    charsetStr = match.Groups[1].Value;
+                    if (charsetStr.Trim().ToLower() == "gbk" || charsetStr.Trim().ToLower() == "gb2312")
+                    {
+                        html = Encoding.GetEncoding("gb2312").GetString(memStream.ToArray());
+                        encoding = Encoding.GetEncoding("gb2312");
+                    }
+                }
+            }
+            else
+            {
+                html = charset.GetString(memStream.ToArray());
+                //encoding = Encoding.GetEncoding("utf-8");
+            }
             resp.Close();
-            return respHtml;
+            return html;
+        }
+
+        /// <summary>
+        /// 根据字符串返回编码格式
+        /// </summary>
+        /// <param name="CharacterSet">编码字符串</param>
+        /// <returns>编码格式</returns>
+        public static Encoding GetEncoding(string CharacterSet)
+        {
+            switch (CharacterSet.ToLower())
+            {
+                case "gb2312": return Encoding.GetEncoding("gb2312");
+                case "utf-8": return Encoding.UTF8;
+                case "iso-8859-1": return Encoding.GetEncoding("gb2312");
+
+                default: return null;
+            }
         }
 
         /// <summary>

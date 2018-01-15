@@ -3,7 +3,7 @@
 #include "MainFrm.h"
 #include "ClassView.h"
 #include "Resource.h"
-#include "MFCTest.h"
+#include "MFCExcercise.h"
 
 class CClassViewMenuButton : public CMFCToolBarMenuButton
 {
@@ -71,7 +71,7 @@ int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
 
-	// 创建视图:
+	// 创建视图: 
 	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 
 	if (!m_wndClassView.Create(dwViewStyle, rectDummy, this, 2))
@@ -80,7 +80,7 @@ int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // 未能创建
 	}
 
-	// 加载图像:
+	// 加载图像: 
 	m_wndToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_SORT);
 	m_wndToolBar.LoadToolBar(IDR_SORT, 0, 0, TRUE /* 已锁定*/);
 
@@ -91,7 +91,7 @@ int CClassView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndToolBar.SetOwner(this);
 
-	// 所有命令将通过此控件路由，而不是通过主框架路由:
+	// 所有命令将通过此控件路由，而不是通过主框架路由: 
 	m_wndToolBar.SetRouteCommandsViaFrame(FALSE);
 
 	CMenu menuSort;
@@ -172,7 +172,7 @@ void CClassView::OnContextMenu(CWnd* pWnd, CPoint point)
 
 	if (point != CPoint(-1, -1))
 	{
-		// 选择已单击的项:
+		// 选择已单击的项: 
 		CPoint ptTree = point;
 		pWndTree->ScreenToClient(&ptTree);
 
@@ -254,17 +254,17 @@ void CClassView::OnClassAddMemberFunction()
 
 void CClassView::OnClassAddMemberVariable()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CClassView::OnClassDefinition()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CClassView::OnClassProperties()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CClassView::OnNewFolder()
@@ -300,7 +300,7 @@ void CClassView::OnChangeVisualStyle()
 	CBitmap bmp;
 	if (!bmp.LoadBitmap(uiBmpId))
 	{
-		TRACE(_T("无法加载位图: %x\n"), uiBmpId);
+		TRACE(_T("无法加载位图:  %x\n"), uiBmpId);
 		ASSERT(FALSE);
 		return;
 	}

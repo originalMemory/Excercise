@@ -32,7 +32,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btn_GetNovel = new System.Windows.Forms.Button();
             this.bar = new System.Windows.Forms.ProgressBar();
-            this.txt_main = new System.Windows.Forms.TextBox();
             this.btn_OpenFloder = new System.Windows.Forms.Button();
             this.btn_SaveNovel = new System.Windows.Forms.Button();
             this.FloderPathInfo = new System.Windows.Forms.Label();
@@ -40,6 +39,7 @@
             this.txt_FloderPath = new System.Windows.Forms.TextBox();
             this.Title = new System.Windows.Forms.Label();
             this.checkLine = new System.Windows.Forms.CheckBox();
+            this.txt_main = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // txt_Url
@@ -49,7 +49,7 @@
             this.txt_Url.Name = "txt_Url";
             this.txt_Url.Size = new System.Drawing.Size(364, 21);
             this.txt_Url.TabIndex = 13;
-            this.txt_Url.Text = "https://www.diyibanzhu.in/7/7426/";
+            this.txt_Url.Text = "http://cl.soze.pw/htm_data/20/1604/1920038.html";
             // 
             // label1
             // 
@@ -81,20 +81,6 @@
             this.bar.Size = new System.Drawing.Size(1029, 23);
             this.bar.TabIndex = 15;
             // 
-            // txt_main
-            // 
-            this.txt_main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_main.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txt_main.Location = new System.Drawing.Point(12, 132);
-            this.txt_main.MaxLength = 0;
-            this.txt_main.Multiline = true;
-            this.txt_main.Name = "txt_main";
-            this.txt_main.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_main.Size = new System.Drawing.Size(1029, 555);
-            this.txt_main.TabIndex = 14;
-            // 
             // btn_OpenFloder
             // 
             this.btn_OpenFloder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
@@ -110,6 +96,7 @@
             // btn_SaveNovel
             // 
             this.btn_SaveNovel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btn_SaveNovel.Enabled = false;
             this.btn_SaveNovel.Location = new System.Drawing.Point(419, 735);
             this.btn_SaveNovel.Name = "btn_SaveNovel";
             this.btn_SaveNovel.Size = new System.Drawing.Size(75, 23);
@@ -154,11 +141,11 @@
             this.Title.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.Title.AutoSize = true;
             this.Title.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Title.Location = new System.Drawing.Point(415, 64);
+            this.Title.Location = new System.Drawing.Point(426, 64);
             this.Title.Name = "Title";
-            this.Title.Size = new System.Drawing.Size(224, 22);
+            this.Title.Size = new System.Drawing.Size(171, 22);
             this.Title.TabIndex = 21;
-            this.Title.Text = "原作名 标题 - 作者（图片数）";
+            this.Title.Text = "标题 - 作者（章节数）";
             // 
             // checkLine
             // 
@@ -170,11 +157,21 @@
             this.checkLine.Text = "分行";
             this.checkLine.UseVisualStyleBackColor = true;
             // 
+            // txt_main
+            // 
+            this.txt_main.Location = new System.Drawing.Point(13, 133);
+            this.txt_main.Name = "txt_main";
+            this.txt_main.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.txt_main.Size = new System.Drawing.Size(1028, 562);
+            this.txt_main.TabIndex = 23;
+            this.txt_main.Text = "";
+            // 
             // CrawNovelPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1053, 770);
+            this.Controls.Add(this.txt_main);
             this.Controls.Add(this.checkLine);
             this.Controls.Add(this.Title);
             this.Controls.Add(this.btn_OpenFloder);
@@ -183,7 +180,6 @@
             this.Controls.Add(this.btn_SaveFolder);
             this.Controls.Add(this.txt_FloderPath);
             this.Controls.Add(this.bar);
-            this.Controls.Add(this.txt_main);
             this.Controls.Add(this.txt_Url);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_GetNovel);
@@ -200,7 +196,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btn_GetNovel;
         private System.Windows.Forms.ProgressBar bar;
-        private System.Windows.Forms.TextBox txt_main;
         private System.Windows.Forms.Button btn_OpenFloder;
         private System.Windows.Forms.Button btn_SaveNovel;
         private System.Windows.Forms.Label FloderPathInfo;
@@ -208,5 +203,6 @@
         private System.Windows.Forms.TextBox txt_FloderPath;
         private System.Windows.Forms.Label Title;
         private System.Windows.Forms.CheckBox checkLine;
+        private System.Windows.Forms.RichTextBox txt_main;
     }
 }

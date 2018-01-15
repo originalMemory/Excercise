@@ -54,12 +54,14 @@ namespace MyTools.TextEdit
             for (int i = 0; i < txtList.Count; )
             {
                 string txt = txtList[i];
-                if (txt.Contains("字数") || txt.Contains("作者"))
+                Regex saveReg = new Regex("字数|作者|排版|首发|发表|日期");
+                Regex dateReg = new Regex("(20\\d{2}[-/]\\d{1,2}[-/]\\d{1,2})|(20\\d{2}年\\d{1,2}月\\d{1,2}日)");
+                if (i < 10 && (saveReg.IsMatch(txt) || dateReg.IsMatch(txt)))
                 {
                     i++;
                     continue;
                 }
-                var publishAt=new DateTime();
+                var publishAt = new DateTime();
                 bool isTime = DateTime.TryParse(txt, out publishAt);
                 if (isTime)
                 {
@@ -67,24 +69,76 @@ namespace MyTools.TextEdit
                     continue;
                 }
 
-                Match mt = regChapter.Match(txt);
-                if (mt.Success)
+                if (Regex.IsMatch(txt, "第.+章.{0,50}"))
                 {
                     i++;
                     continue;
                 }
-                if (i == txtList.Count - 1) break;
-                char end = txtList[i][txtList[i].Length - 1];
-                if (end == '。' || end == '」' || end == '】' || end == '！' || end == '”' || end == '…' || end == '？')
+
+                if (Regex.IsMatch(txt, "[＊*]"))
                 {
                     i++;
                     continue;
+                }
+
+                //switch (kind)
+                //{
+                //    case NovelWebKind.Diyibanzhu:
+                //        {
+                //            //╮找?回╘网ξ址?请ㄨ百喥▼索∴弟?—╮板?zんù¤综╝合◆社╕区
+                //            Regex regDel3 = new Regex("网.+址.+.社.区|地.+址.+.社.区|第.一.版.主|小.说.+版.主|０１ｂｚ|快.看.更.新|〇１Вｚ．ｎеｔ|ｄｉｙｉｂａｎｚｈｕ|最.新.地.址");
+                //            if (regDel3.IsMatch(txt))
+                //            {
+                //                txtList.RemoveAt(i);
+                //                continue;
+                //            }
+                //        }
+                //        break;
+                //    case NovelWebKind.Sexinsex:
+                //        {
+                //            Regex regDel = new Regex("本帖最后由.+编辑");
+                //            if (regDel.IsMatch(txt))
+                //            {
+                //                txtList.RemoveAt(i);
+                //                continue;
+                //            }
+                //        }
+                //        break;
+                //    default:
+                //        break;
+                //}
+
+                //判断是否为一句结束符
+                char end = txtList[i][txtList[i].Length - 1];
+                if (end == '。' || end == '」' || end == '】' || end == '！' || end == '”' || end == '…' || end == '？')
+                {
+                    if (end == '…')
+                    {
+                        string temp = txtList[i];
+                        Regex reg = new Regex("「|“|【");
+                        if (!reg.IsMatch(temp))
+                        {
+                            i++;
+                            continue;
+                        }
+                        else
+                        {
+                            txtList[i] += txtList[i + 1];
+                            txtList.RemoveAt(i + 1);
+                        }
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
                 }
                 else
                 {
                     txtList[i] += txtList[i + 1];
-                    txtList.Remove(txtList[i + 1]);
+                    txtList.RemoveAt(i + 1);
                 }
+
                 bar.Value = i / (txtList.Count - 1) * 10;
 
             }
@@ -215,18 +269,18 @@ namespace MyTools.TextEdit
             //章节名单独一行
             string str = "";
             int num = 0;
-            for (int i = 0; i < txtList.Count;i++ )
+            for (int i = 0; i < txtList.Count; i++)
             {
                 if (chapterName.Count > 0 && txtList[i].Contains(chapterName[num]))
                 {
-                    txtList[i]=txtList[i].Replace(chapterName[num], "");
+                    txtList[i] = txtList[i].Replace(chapterName[num], "");
                     if (num == 0) str += chapterName[num] + Environment.NewLine + "    " + txtList[i] + Environment.NewLine;
                     else str += Environment.NewLine + Environment.NewLine + chapterName[num] + Environment.NewLine + "    " + txtList[i] + Environment.NewLine;
                     if (num < chapterName.Count - 1) num++;
                 }
                 else { str += "    " + txtList[i] + Environment.NewLine + Environment.NewLine; }
                 bar.Value = (int)((float)i / (txtList.Count - 1) * 90 + 10);
-             //   bar.Value = (int)((float)i / (txtList.Count - 1) * 90 + 10);
+                //   bar.Value = (int)((float)i / (txtList.Count - 1) * 90 + 10);
             }
             txt_main.Text = null;
             txt_main.Text = str;

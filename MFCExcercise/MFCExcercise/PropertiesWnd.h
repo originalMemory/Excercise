@@ -56,5 +56,7 @@ protected:
 
 	void InitPropList();
 	void SetPropListFont();
+
+	int m_nComboHeight;
 };
 

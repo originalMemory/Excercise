@@ -35,14 +35,14 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
 
-	// 创建选项卡窗口:
+	// 创建选项卡窗口: 
 	if (!m_wndTabs.Create(CMFCTabCtrl::STYLE_FLAT, rectDummy, this, 1))
 	{
 		TRACE0("未能创建输出选项卡窗口\n");
 		return -1;      // 未能创建
 	}
 
-	// 创建输出窗格:
+	// 创建输出窗格: 
 	const DWORD dwStyle = LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
 
 	if (!m_wndOutputBuild.Create(dwStyle, rectDummy, &m_wndTabs, 2) ||
@@ -58,7 +58,7 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CString strTabName;
 	BOOL bNameValid;
 
-	// 将列表窗口附加到选项卡:
+	// 将列表窗口附加到选项卡: 
 	bNameValid = strTabName.LoadString(IDS_BUILD_TAB);
 	ASSERT(bNameValid);
 	m_wndTabs.AddTab(&m_wndOutputBuild, strTabName, (UINT)0);
@@ -81,7 +81,7 @@ void COutputWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);
 
-	// 选项卡控件应覆盖整个工作区:
+	// 选项卡控件应覆盖整个工作区: 
 	m_wndTabs.SetWindowPos (NULL, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
@@ -97,7 +97,7 @@ void COutputWnd::AdjustHorzScroll(CListBox& wndListBox)
 		CString strItem;
 		wndListBox.GetText(i, strItem);
 
-		cxExtentMax = max(cxExtentMax, dc.GetTextExtent(strItem).cx);
+		cxExtentMax = max(cxExtentMax, (int)dc.GetTextExtent(strItem).cx);
 	}
 
 	wndListBox.SetHorizontalExtent(cxExtentMax);

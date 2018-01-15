@@ -3,7 +3,7 @@
 #include "mainfrm.h"
 #include "FileView.h"
 #include "Resource.h"
-#include "MFCTest.h"
+#include "MFCExcercise.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -48,7 +48,7 @@ int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
 
-	// 创建视图:
+	// 创建视图: 
 	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS;
 
 	if (!m_wndFileView.Create(dwViewStyle, rectDummy, this, 4))
@@ -57,7 +57,7 @@ int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // 未能创建
 	}
 
-	// 加载视图图像:
+	// 加载视图图像: 
 	m_FileViewImages.Create(IDB_FILE_VIEW, 16, 0, RGB(255, 0, 255));
 	m_wndFileView.SetImageList(&m_FileViewImages, TVSIL_NORMAL);
 
@@ -72,7 +72,7 @@ int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndToolBar.SetOwner(this);
 
-	// 所有命令将通过此控件路由，而不是通过主框架路由:
+	// 所有命令将通过此控件路由，而不是通过主框架路由: 
 	m_wndToolBar.SetRouteCommandsViaFrame(FALSE);
 
 	// 填入一些静态树视图数据(此处只需填入虚拟代码，而不是复杂的数据)
@@ -136,7 +136,7 @@ void CFileView::OnContextMenu(CWnd* pWnd, CPoint point)
 
 	if (point != CPoint(-1, -1))
 	{
-		// 选择已单击的项:
+		// 选择已单击的项: 
 		CPoint ptTree = point;
 		pWndTree->ScreenToClient(&ptTree);
 
@@ -176,32 +176,32 @@ void CFileView::OnProperties()
 
 void CFileView::OnFileOpen()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CFileView::OnFileOpenWith()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CFileView::OnDummyCompile()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CFileView::OnEditCut()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CFileView::OnEditCopy()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CFileView::OnEditClear()
 {
-	// TODO: 在此处添加命令处理程序代码
+	// TODO:  在此处添加命令处理程序代码
 }
 
 void CFileView::OnPaint()
@@ -235,7 +235,7 @@ void CFileView::OnChangeVisualStyle()
 	CBitmap bmp;
 	if (!bmp.LoadBitmap(uiBmpId))
 	{
-		TRACE(_T("无法加载位图: %x\n"), uiBmpId);
+		TRACE(_T("无法加载位图:  %x\n"), uiBmpId);
 		ASSERT(FALSE);
 		return;
 	}

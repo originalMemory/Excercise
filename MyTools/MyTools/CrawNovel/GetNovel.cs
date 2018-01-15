@@ -8,6 +8,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using MyTools.Tools;
 using HtmlAgilityPack;
+using MyTools.Helper;
 
 namespace MyTools.CrawNovel
 {
@@ -23,17 +24,30 @@ namespace MyTools.CrawNovel
             var novel = new NovelInfo();
             try
             {
-                //获取网页
-                string respHtml = WebApi.GetHtml(url, "gb2312");
                 //对网页进行分类
-                novel.Kind = NovelWebKind.Diyibanzhu;
-                switch (novel.Kind)
+                Regex kindReg = new Regex(@"//.*?/");
+                var match = kindReg.Match(url);
+                string kindStr = match.Value;
+                kindStr = kindStr.Replace("/", "");
+                //获取网页
+                string respHtml = WebApi.GetHtml(url);
+                switch (kindStr)
                 {
-                    case NovelWebKind.Diyibanzhu:
+                    case "www.diyibanzhu.in":
                         novel = ExtractDiyiChapter(url, respHtml);
+                        novel.Kind = NovelWebKind.Diyibanzhu;
+                        break;
+                    case "sexinsex.net":
+                        novel = ExtractSisChapter(url, respHtml);
+                        novel.Kind = NovelWebKind.Sexinsex;
+                        break;
+                    case "cl.soze.pw":
+                        novel = ExtractCLChapter(url, respHtml);
+                        novel.Kind = NovelWebKind.CaoLiu;
+                        break;
+                    default:
                         break;
                 }
-
                 return novel;
             }
             catch (Exception ex)
@@ -96,6 +110,138 @@ namespace MyTools.CrawNovel
                 novel.ChapterNames.Add(info.InnerText);
             }
             
+
+            return novel;
+        }
+
+        /// <summary>
+        /// 抽取色中色小说
+        /// </summary>
+        /// <param name="url">网页链接</param>
+        /// <param name="html">网页源码</param>
+        /// <returns></returns>
+        NovelInfo ExtractSisChapter(string url, string html)
+        {
+            var novel = new NovelInfo();
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            novel.Author = "";
+
+            //获取文章名称
+            novel.Title = doc.DocumentNode.SelectSingleNode("//div[@class=\"postmessage defaultpost\"]/h2").InnerText.Trim();
+
+            //获取楼主
+            HtmlNode authorNode = doc.DocumentNode.SelectSingleNode("//td[@class=\"postauthor\"]/cite/a");
+            string firstPoster = authorNode.InnerText;
+            novel.Poster = firstPoster;
+            //string uid = authorNode.GetAttributeValue("href", "");
+            //uid = uid.Replace("space.php?uid=", "");
+
+            //遍历获取小说正文
+            //获取楼主
+            string poster = doc.DocumentNode.SelectSingleNode("//td[@class=\"postauthor\"]").InnerText;
+            HtmlNode conNode = doc.DocumentNode.SelectSingleNode("//div[@class=\"t_msgfont\"]/div[@class=\"t_msgfont\"]");
+            string firstNovel = conNode.InnerText;
+
+
+            //获取总页数
+            novel.Urls = new List<string>();
+            novel.Urls.Add(url);
+            HtmlNode pagesNode = doc.DocumentNode.SelectSingleNode("//*[@id=\"wrapper\"]/div[1]/div[5]/div[2]");
+            if (pagesNode != null)
+            {
+                //存在多页情况
+                int totalCount = pagesNode.ChildNodes.Count;
+                for (int i = totalCount - 1; i < totalCount; i--)
+                {
+                    var pageNode = pagesNode.ChildNodes[i];
+                    string temp = pageNode.InnerText;
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        temp = temp.Replace(".", "").Trim();
+                        if (temp.IsNum())
+                        {
+                            novel.PageCount = Convert.ToInt32(temp);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                novel.PageCount = 0;
+            }
+
+            //匹配作者
+            var authorMatch = Regex.Match(firstNovel, "作者[：:](?<info>.+)");
+            if (authorMatch.Success)
+            {
+                string author = authorMatch.Groups[0].Value;
+                author = author.Replace("\r", "");
+                novel.Author = author;
+            }
+
+            return novel;
+        }
+
+        /// <summary>
+        /// 抽取草榴小说
+        /// </summary>
+        /// <param name="url">网页链接</param>
+        /// <param name="html">网页源码</param>
+        /// <returns></returns>
+        NovelInfo ExtractCLChapter(string url, string html)
+        {
+            var novel = new NovelInfo();
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            novel.Author = "";
+
+            //获取文章名称
+            novel.Title = doc.DocumentNode.SelectSingleNode("//tr[@class=\"tr1 do_not_catch\"]//h4").InnerText.Trim();
+
+            //获取楼主
+            HtmlNode authorNode = doc.DocumentNode.SelectSingleNode("//th[@class=\"r_two\"]/b");
+            string firstPoster = authorNode.InnerText;
+            novel.Poster = firstPoster;
+            //string uid = authorNode.GetAttributeValue("href", "");
+            //uid = uid.Replace("space.php?uid=", "");
+
+            //遍历获取小说正文
+            //获取楼主
+            HtmlNode conNode = doc.DocumentNode.SelectSingleNode("//div[@class=\"tpc_content do_not_catch\"]");
+            string firstNovel = conNode.InnerText;
+
+
+            //获取总页数
+            novel.Urls = new List<string>();
+            novel.Urls.Add(url);
+            HtmlNode pagesNode = doc.DocumentNode.SelectSingleNode("//*[@class=\"pages\"]");
+            if (pagesNode != null)
+            {
+                //存在多页情况
+                var lastpageNode = doc.DocumentNode.SelectSingleNode("//*[@class=\"pages\"]//input");
+                string lastpageStr = lastpageNode.GetAttributeValue("value","");
+                lastpageStr = lastpageStr.Replace("1/", "");
+                novel.PageCount = Convert.ToInt32(lastpageStr);
+            }
+            else
+            {
+                novel.PageCount = 0;
+            }
+
+            //匹配作者
+            var authorMatch = Regex.Match(firstNovel, "作者[：:](?<info>.+)");
+            if (authorMatch.Success)
+            {
+                string author = authorMatch.Groups[0].Value;
+                author = author.Replace("\r", "");
+                novel.Author = author;
+            }
+            else
+            {
+                novel.Author = firstPoster;
+            }
 
             return novel;
         }

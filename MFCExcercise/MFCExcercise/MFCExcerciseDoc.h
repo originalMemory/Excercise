@@ -1,16 +1,16 @@
 
-// MFCTestDoc.h : CMFCTestDoc 类的接口
+// MFCExcerciseDoc.h : CMFCExcerciseDoc 类的接口
 //
 
 
 #pragma once
 
 
-class CMFCTestDoc : public CDocument
+class CMFCExcerciseDoc : public CDocument
 {
 protected: // 仅从序列化创建
-	CMFCTestDoc();
-	DECLARE_DYNCREATE(CMFCTestDoc)
+	CMFCExcerciseDoc();
+	DECLARE_DYNCREATE(CMFCExcerciseDoc)
 
 // 特性
 public:
@@ -29,7 +29,7 @@ public:
 
 // 实现
 public:
-	virtual ~CMFCTestDoc();
+	virtual ~CMFCExcerciseDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

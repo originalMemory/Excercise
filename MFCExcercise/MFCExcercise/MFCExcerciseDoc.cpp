@@ -1,15 +1,15 @@
 
-// MFCTestDoc.cpp : CMFCTestDoc 类的实现
+// MFCExcerciseDoc.cpp : CMFCExcerciseDoc 类的实现
 //
 
 #include "stdafx.h"
 // SHARED_HANDLERS 可以在实现预览、缩略图和搜索筛选器句柄的
 // ATL 项目中进行定义，并允许与该项目共享文档代码。
 #ifndef SHARED_HANDLERS
-#include "MFCTest.h"
+#include "MFCExcercise.h"
 #endif
 
-#include "MFCTestDoc.h"
+#include "MFCExcerciseDoc.h"
 
 #include <propkey.h>
 
@@ -17,32 +17,32 @@
 #define new DEBUG_NEW
 #endif
 
-// CMFCTestDoc
+// CMFCExcerciseDoc
 
-IMPLEMENT_DYNCREATE(CMFCTestDoc, CDocument)
+IMPLEMENT_DYNCREATE(CMFCExcerciseDoc, CDocument)
 
-BEGIN_MESSAGE_MAP(CMFCTestDoc, CDocument)
+BEGIN_MESSAGE_MAP(CMFCExcerciseDoc, CDocument)
 END_MESSAGE_MAP()
 
 
-// CMFCTestDoc 构造/析构
+// CMFCExcerciseDoc 构造/析构
 
-CMFCTestDoc::CMFCTestDoc()
+CMFCExcerciseDoc::CMFCExcerciseDoc()
 {
-	// TODO: 在此添加一次性构造代码
+	// TODO:  在此添加一次性构造代码
 
 }
 
-CMFCTestDoc::~CMFCTestDoc()
+CMFCExcerciseDoc::~CMFCExcerciseDoc()
 {
 }
 
-BOOL CMFCTestDoc::OnNewDocument()
+BOOL CMFCExcerciseDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: 在此添加重新初始化代码
+	// TODO:  在此添加重新初始化代码
 	// (SDI 文档将重用该文档)
 
 	return TRUE;
@@ -51,24 +51,24 @@ BOOL CMFCTestDoc::OnNewDocument()
 
 
 
-// CMFCTestDoc 序列化
+// CMFCExcerciseDoc 序列化
 
-void CMFCTestDoc::Serialize(CArchive& ar)
+void CMFCExcerciseDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: 在此添加存储代码
+		// TODO:  在此添加存储代码
 	}
 	else
 	{
-		// TODO: 在此添加加载代码
+		// TODO:  在此添加加载代码
 	}
 }
 
 #ifdef SHARED_HANDLERS
 
 // 缩略图的支持
-void CMFCTestDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
+void CMFCExcerciseDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 {
 	// 修改此代码以绘制文档数据
 	dc.FillSolidRect(lprcBounds, RGB(255, 255, 255));
@@ -89,17 +89,17 @@ void CMFCTestDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 }
 
 // 搜索处理程序的支持
-void CMFCTestDoc::InitializeSearchContent()
+void CMFCExcerciseDoc::InitializeSearchContent()
 {
 	CString strSearchContent;
 	// 从文档数据设置搜索内容。
 	// 内容部分应由“;”分隔
 
-	// 例如:  strSearchContent = _T("point;rectangle;circle;ole object;")；
+	// 例如:     strSearchContent = _T("point;rectangle;circle;ole object;")；
 	SetSearchContent(strSearchContent);
 }
 
-void CMFCTestDoc::SetSearchContent(const CString& value)
+void CMFCExcerciseDoc::SetSearchContent(const CString& value)
 {
 	if (value.IsEmpty())
 	{
@@ -119,19 +119,19 @@ void CMFCTestDoc::SetSearchContent(const CString& value)
 
 #endif // SHARED_HANDLERS
 
-// CMFCTestDoc 诊断
+// CMFCExcerciseDoc 诊断
 
 #ifdef _DEBUG
-void CMFCTestDoc::AssertValid() const
+void CMFCExcerciseDoc::AssertValid() const
 {
 	CDocument::AssertValid();
 }
 
-void CMFCTestDoc::Dump(CDumpContext& dc) const
+void CMFCExcerciseDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
 
-// CMFCTestDoc 命令
+// CMFCExcerciseDoc 命令

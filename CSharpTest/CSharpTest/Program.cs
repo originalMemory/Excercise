@@ -49,7 +49,17 @@ namespace CSharpTest
             //var response = WebApiInvoke.CreateGetHttpResponse(url);
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
-            MyTools.SortDir(@"C:\新建文件夹");
+
+            WebClient wc = new WebClient();
+            string upload_file_url = "http://localhost:2022/api/Export/UpLoadFile";
+            string path = @"E:\00.jpg";
+            byte[] sendData = System.Text.Encoding.UTF8.GetBytes(path);
+            wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            wc.Headers.Add("ContentLength", sendData.Length.ToString());
+            byte[] recData = wc.UploadFile(upload_file_url, "POST", path);
+            var success = (Encoding.GetEncoding("GB2312").GetString(recData));
+            Console.WriteLine(success);
+
             Console.ReadKey();
         }
 
