@@ -2465,67 +2465,153 @@ namespace CSharpTest.Tools
             CommonTools.Log("全部已拆分完毕");
         }
 
-        public static void DeletePro()
+        /// <summary>
+        /// 合并域名分组
+        /// </summary>
+        public static void CombineDomainCate()
         {
-            var filterPro = Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, true);
-            var pros = MongoDBHelper.Instance.GetIW2S_Projects().Find(filterPro).ToList();
-            int i = 0;
-            foreach (var pro in pros)
+            var builderCate = Builders<IW2S_DomainCategory>.Filter;
+            var colCate = MongoDBHelper.Instance.GetIW2S_DomainCategorys();
+            var builder = Builders<IW2S_DomainCategoryData>.Filter;
+            var col = MongoDBHelper.Instance.GetIW2S_DomainCategoryDatas();
+
+            //获取公用分组及域名
+            var filterCate = builderCate.Eq(x => x.UsrId, ObjectId.Empty) & builderCate.Eq(x => x.IsDel, false);
+            var publicCates = colCate.Find(filterCate).Project(x => new IdAndName
             {
-                i++;
-                CommonTools.Log("{0}/{1} - {2}".FormatStr(i, pros.Count, pro.Name));
-                var builder = Builders<Dnl_KeywordCategory>.Filter;
-                var filterBdCate = builder.Eq(x => x.ProjectId, pro._id);
-                DateTime now = DateTime.Now.AddHours(8);
-                var update = new UpdateDocument { { "$set", new QueryDocument { { "IsDel", true }, { "DelAt", now } } } };
-                //删除项目内所有百度关键词及词组
+                Id = x._id,
+                Name = x.Name
+            }).ToList();
+            var filter = builder.In(x => x.DomainCategoryId, publicCates.Select(x => x.Id));
+            var publicDomains = col.Find(filter).Project(x => new IdAndName
+            {
+                Id = x._id,
+                Name = x.DomainName,
+                CateId = x.DomainCategoryId
+            }).ToList();
 
-                MongoDBHelper.Instance.GetDnl_KeywordCategory().UpdateMany(filterBdCate, update);
-                var filterBdMap = Builders<Dnl_KeywordMapping>.Filter.Eq(x => x.ProjectId, pro._id);
-                MongoDBHelper.Instance.GetDnl_KeywordMapping().UpdateMany(filterBdMap, update);
+            //获取所有用户信息
+            var users = MongoDBHelper.Instance.Get_IW2SUser().Find(Builders<IW2SUser>.Filter.Eq(x => x.IsDel, false)).Project(x => new IdAndName
+            {
+                Id = x._id,
+                Name = x.LoginName
+            }).ToList();
 
-                //删除项目内所有微信关键词及词组
-                var filterWxCate = Builders<MediaKeywordCategoryMongo>.Filter.Eq(x => x.ProjectId, pro._id);
-                MongoDBHelper.Instance.GetMediaKeywordCategory().UpdateMany(filterWxCate, update);
-                var filterWxMap = Builders<MediaKeywordMappingMongo>.Filter.Eq(x => x.ProjectId, pro._id);
-                MongoDBHelper.Instance.GetMediaKeywordMapping().UpdateMany(filterWxMap, update);
+            for (int i = 0; i < users.Count; i++)
+            {
+                var user=users[i];
+                CommonTools.Log("当前合并用户[{0}/{1}] - {2}".FormatStr(i + 1, users.Count, user.Name));
+                //获取当前用户分组及域名
+                filterCate = builderCate.Eq(x => x.UsrId, user.Id) & builderCate.Eq(x => x.IsDel, false);
+                var privateCates = colCate.Find(filterCate).Project(x => new IdAndName
+                {
+                    Id = x._id,
+                    Name = x.Name,
+                    Weight=x.Weight
+                }).ToList();
+                if (privateCates.Count == 0)
+                {
+                    CommonTools.Log("该用户无分组！");
+                    continue;
+                }
+                filter = builder.In(x => x.DomainCategoryId, privateCates.Select(x => x.Id));
+                var privateDomains = col.Find(filter).Project(x => new IdAndName
+                {
+                    Id = x._id,
+                    Name = x.DomainName,
+                    CateId = x.DomainCategoryId
+                }).ToList();
+
+                var newCates = new List<IW2S_DomainCategory>();
+                var newDomains = new List<IW2S_DomainCategoryData>();
+                //先合并分有分组
+                foreach (var item in publicCates)
+                {
+                    var cate = new IW2S_DomainCategory
+                    {
+                        _id = ObjectId.GenerateNewId(),
+                        Name = item.Name,
+                        UsrId = user.Id,
+                        Weight = item.Weight
+                    };
+                    var tpDomains = publicDomains.Where(x => x.CateId == item.Id).Select(x => new IW2S_DomainCategoryData
+                    {
+                        _id = ObjectId.GenerateNewId(),
+                        DomainCategoryId = cate._id,
+                        DomainName = x.Name,
+                        UsrId = user.Id
+                    }).ToList();
+                    if (tpDomains.Count > 0)
+                    {
+                        newDomains.AddRange(tpDomains);
+                    }
+
+                    newCates.Add(cate);
+                }
+
+                //合并私有分组
+                foreach (var item in privateCates)
+                {
+                    //判断是有否同名分组
+                    if (!newCates.Exists(x => x.Name == item.Name))
+                    {
+                        var cate = new IW2S_DomainCategory
+                        {
+                            _id = ObjectId.GenerateNewId(),
+                            Name = item.Name,
+                            UsrId = user.Id,
+                            Weight = item.Weight
+                        };
+                        var tpDomains = publicDomains.Where(x => x.CateId == item.Id).Select(x => new IW2S_DomainCategoryData
+                        {
+                            _id = ObjectId.GenerateNewId(),
+                            DomainCategoryId = cate._id,
+                            DomainName = x.Name,
+                            UsrId = user.Id
+                        }).ToList();
+                        if (tpDomains.Count > 0)
+                        {
+                            newDomains.AddRange(tpDomains);
+                        }
+
+                        newCates.Add(cate);
+                    }
+                    else
+                    {
+                        //新分组的Id
+                        var newCate = newCates.Find(x => x.Name == item.Name);
+                        newCates.Remove(newCate);
+                        //获取新分组内域名
+                        var tpNewDomains = newDomains.FindAll(x => x.DomainCategoryId == newCate._id);
+                        if (tpNewDomains.Count > 0)
+                        {
+                            tpNewDomains.ForEach(x => x.DomainCategoryId = item.Id);
+                            var temp = privateDomains.FindAll(x => x.CateId == item.Id);
+                            if (temp.Count > 0)
+                            {
+                                var tpOldDomains = temp.Select(x => x.Name).ToList();//用户本分组下已存在的域名
+                                //删除已存在的域名
+                                newDomains.RemoveAll(x => x.DomainCategoryId == item.Id && tpOldDomains.Contains(x.DomainName));
+                            }
+                        }
+                    }
+                }
+                if (newDomains.Count > 0)
+                {
+                    col.InsertMany(newDomains);
+                }
+                if (newCates.Count > 0)
+                    colCate.InsertMany(newCates);
             }
         }
-        //public static void MoveLink()
-        //{
-        //    var bindIds = MongoDBHelper.Instance.GetAnaProBind().Find(Builders<AnaProBindTagMongo>.Filter.Empty).Project(x => x._id).ToList();
-        //    int i = 0;
-        //    foreach (var bindId in bindIds)
-        //    {
-        //        i++;
-        //        CommonTools.Log("[{0}/{1}]".FormatStr(i, bindIds.Count));
-        //        var builderMap = Builders<TagLinkMappingMongo>.Filter;
-        //        var filterMap = builderMap.Eq(x => x.BindId, bindId);
-        //        var colMap = MongoDBHelper.Instance.GetTagLinkMapping();
-        //        var oldLinkIds = colMap.Find(filterMap).Project(x => x.LinkId).ToList();
-        //        foreach (var oldLinkId in oldLinkIds)
-        //        {
-        //            var oldLink=MongoDBHelper.Instance.GetDnl_Link_Baidu().Find(new QueryDocument{{"_id",oldLinkId}}).Project(x=>new{
-        //                Id=x._id,
-        //                KeywordId=x.SearchkeywordId,
-        //                Url=x.LinkUrl
-        //            }).FirstOrDefault();
-        //            if (oldLink != null)
-        //            {
-        //                var builderLink = Builders<BaiduLinkMainMongo>.Filter;
-        //                var filterLink = builderLink.Eq(x => x.KeywordId, new ObjectId(oldLink.KeywordId));
-        //                filterLink &= builderLink.Eq(x => x.LinkUrl, oldLink.Url);
-        //                var newLinkId = MongoDBHelper.Instance.GetBaiduLinkMain().Find(filterLink).Project(x => x._id).FirstOrDefault();
-        //                if (newLinkId != null)
-        //                {
-        //                    var update = Builders<TagLinkMappingMongo>.Update.Set(x => x.LinkId, newLinkId);
-        //                    filterMap = builderMap.Eq(x => x.LinkId, oldLinkId);
-        //                    colMap.UpdateOne(filterMap, update);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+    }
+
+    public class IdAndName
+    {
+        public ObjectId Id { get; set; }
+        public string Name { get; set; }
+        public ObjectId CateId { get; set; }
+        public int Weight { get; set; }
     }
 
 

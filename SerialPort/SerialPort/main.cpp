@@ -4,12 +4,13 @@
 #include <iostream>  
 #include <fstream>
 #include "GPSTranslate.h"
+#include "TestFun.h"
 
 using namespace std;
 
 int main(int argc, char* argv[])
 {
-	GPSTanslate tran;
+	/*GPSTanslate tran;
 	ifstream is("data.txt");
 	string line;
 	getline(is, line);
@@ -18,6 +19,10 @@ int main(int argc, char* argv[])
 	GPSInfo* info = tran.Tanslate(line);
 
 	cout << ((RMCInfo*)info)->Longitude << endl;
-	system("pause");
+	system("pause");*/
+
+	TestFun *test = new TestFun();
+	test->ConnectPort(2);
+
 	return 0;
 }

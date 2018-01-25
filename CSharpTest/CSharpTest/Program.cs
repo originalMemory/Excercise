@@ -34,11 +34,14 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            //string url = "http://localhost:2022/api/Keyword/RecoverKeyword";
+            //string url = "http://localhost:2022/api/ProCategory/InsertProjectMaDataCate";
             //Dictionary<string, string> para = new Dictionary<string, string>();
             //para.Add("userId", "58845bed1e5318078cb01b1a");
-            //para.Add("id", "");
-            //para.Add("projectId", "59c1d4f5f4b87d02ac45c92e");
+            //para.Add("id", "5a5ca4228e2bd623004f6170");
+            ////para.Add("name", "项目管理组");
+            ////para.Add("description", "测试");
+            //para.Add("type", "0");
+            //para.Add("projectIds", "59c1d4f5f4b87d02ac45c92e");
             //var response = WebApiInvoke.CreatePostHttpResponse(url, para);
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
@@ -50,15 +53,14 @@ namespace CSharpTest
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
 
-            WebClient wc = new WebClient();
-            string upload_file_url = "http://localhost:2022/api/Export/UpLoadFile";
-            string path = @"E:\00.jpg";
-            byte[] sendData = System.Text.Encoding.UTF8.GetBytes(path);
-            wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            wc.Headers.Add("ContentLength", sendData.Length.ToString());
-            byte[] recData = wc.UploadFile(upload_file_url, "POST", path);
-            var success = (Encoding.GetEncoding("GB2312").GetString(recData));
-            Console.WriteLine(success);
+            string str = "January 25, 2018";
+            string regStr = "(Jan\\.|January|Feb\\.|February|Mar\\.|March|Apr\\.|April|May\\.?|May|June\\.?|July\\.?|Aug\\.|Aguest|Sept\\.|September|Oct\\.|October|Nov\\.|November|Dec\\.|December) {0,2}\\d{1,2}, {0,2}\\d{2,4}";
+            Regex reg = new Regex(regStr);
+            string tp = reg.Match(str).Value;
+            Console.WriteLine(tp);
+            DateTime dt = new DateTime();
+            DateTime.TryParse(tp, out dt);
+            Console.WriteLine(dt.ToString());
 
             Console.ReadKey();
         }

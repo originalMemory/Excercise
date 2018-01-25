@@ -46,52 +46,52 @@ int main(int argc, char **argv){
 
 	// 异步运行机器人处理循环
 
-	robot.enableMotors();
-	robot.runAsync(false);
-	robot.comInt(ArCommands::ENABLE, 1);
+	//robot.enableMotors();
+	//robot.runAsync(false);
+	//robot.comInt(ArCommands::ENABLE, 1);
 
-	//激活基本处理类
-	BaseAction action(&robot);
+	////激活基本处理类
+	//BaseAction action(&robot);
 
-	bool repeat=true;
-	while (repeat) 
-	{
-		printf("输入运行指令:0、停止运动\t1、直线前进一段距离\t2、直线前进速度\n\
-			   3、设置绝对航向\t4、设置相对航向\t5、旋转速度\n");
-		printf("指令:");
-		int com;
-		double value;
-		scanf("%d",&com);
-		if (com!=0)
-		{
-			printf("数值:");
-			scanf("%lf",&value);
-		}
-		switch(com){
-		case 0:
-			action.Stop();
-			break;
-		case 1:
-			action.Move(value);
-			break;
-		case 2:
-			action.SetVelocity(value);
-			break;
-		case 3:
-			action.SetHeading(value);
-			break;
-		case 4:
-			action.SetDeltaHeading(value);
-			break;
-		case 5:
-			action.SetRotVel(value);
-			break;
-		default:
-			repeat=false;
-			break;
-		}
-	}
-	robot.disconnect();
+	//bool repeat=true;
+	//while (repeat) 
+	//{
+	//	printf("输入运行指令:0、停止运动\t1、直线前进一段距离\t2、直线前进速度\n\
+	//		   3、设置绝对航向\t4、设置相对航向\t5、旋转速度\n");
+	//	printf("指令:");
+	//	int com;
+	//	double value;
+	//	scanf("%d",&com);
+	//	if (com!=0)
+	//	{
+	//		printf("数值:");
+	//		scanf("%lf",&value);
+	//	}
+	//	switch(com){
+	//	case 0:
+	//		action.Stop();
+	//		break;
+	//	case 1:
+	//		action.Move(value);
+	//		break;
+	//	case 2:
+	//		action.SetVelocity(value);
+	//		break;
+	//	case 3:
+	//		action.SetHeading(value);
+	//		break;
+	//	case 4:
+	//		action.SetDeltaHeading(value);
+	//		break;
+	//	case 5:
+	//		action.SetRotVel(value);
+	//		break;
+	//	default:
+	//		repeat=false;
+	//		break;
+	//	}
+	//}
+	//robot.disconnect();
 	Aria::exit();
 
 }

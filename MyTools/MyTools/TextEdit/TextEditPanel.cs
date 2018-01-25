@@ -278,7 +278,14 @@ namespace MyTools.TextEdit
                     else str += Environment.NewLine + Environment.NewLine + chapterName[num] + Environment.NewLine + "    " + txtList[i] + Environment.NewLine;
                     if (num < chapterName.Count - 1) num++;
                 }
-                else { str += "    " + txtList[i] + Environment.NewLine + Environment.NewLine; }
+                else 
+                {
+                    str += "    " + txtList[i] + Environment.NewLine;
+                    if (checkMoreSpace.Checked)
+                    {
+                        str += Environment.NewLine;
+                    }
+                }
                 bar.Value = (int)((float)i / (txtList.Count - 1) * 90 + 10);
                 //   bar.Value = (int)((float)i / (txtList.Count - 1) * 90 + 10);
             }

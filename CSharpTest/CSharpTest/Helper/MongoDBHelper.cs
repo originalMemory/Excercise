@@ -326,6 +326,11 @@ namespace CSharpTest.Helper
             return base.GetCollection<TagChartMongo>("TagChart");
         }
         #endregion
+
+        public IMongoCollection<ProjectChartMongo> GetProjectChart()
+        {
+            return base.GetCollection<ProjectChartMongo>("ProjectChart");
+        }
     }
 
     public static class MongoExtension

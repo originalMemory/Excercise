@@ -487,7 +487,11 @@ namespace MyTools.CrawNovel
             string str = "";
             for (int i = 0; i < txtList.Count; i++)
             {
-                str += "    " + txtList[i] + Environment.NewLine + Environment.NewLine;
+                str += "    " + txtList[i] + Environment.NewLine;
+                if (checkMoreSpace.Checked)
+                {
+                    str += Environment.NewLine;
+                }
             }
 
             return str;
