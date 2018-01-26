@@ -32,6 +32,7 @@ enum GPSType
 	GGA,
 	RMC,
 	VTG,
+	PSAT_HPR,
 };
 
 /*
@@ -96,6 +97,34 @@ public:
 	double SpeedKnot;		//地面速率（000.0~999.9节，前面的0也将被传输）
 	double SpeedKm;			//地面速率（0000.0~1851.8公里/小时，前面的0也将被传输）
 	char ModeIndication;	//模式指示（仅NMEA0183 3.00版本输出，A=自主定位，D=差分，E=估算，N=数据无效）
+};
+
+//$PSAT,HPR,102143.00,356.881,-0.387,-0.4,N*1E
+/*
+解析后的PSAT,HPR语句
+*/
+class PSAT_HPRInfo :public GPSInfo
+{
+public:
+	tm UTCHms;				//UTC时间，仅有时分秒
+	double Heading;			//航向
+	double member1;
+	double member2;
+	string member3;
+};
+
+/*
+我使用的GPS信息
+*/
+class MyGPSInfo
+{
+public:
+	double Latitude;		//纬度
+	double Longitude;		//经度
+	double Heading;			//航向
+	//char NSIndicator;		//纬度半球指示符
+	//char EWIndicator;		//经度半球指示符
+	//int GPSStatus;			//GPS状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算
 };
 
 /*

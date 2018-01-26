@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(CMFCTestView, CFormView)
 //	ON_WM_SIZE()
 ON_MESSAGE(WM_COMM_RXCHAR, &CMFCTestView::OnCommunication)
 ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestView::OnClickedButton1)
+ON_COMMAND(ID_FILE_SAVE, &CMFCTestView::OnFileSave)
 END_MESSAGE_MAP()
 
 
@@ -262,8 +263,17 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 				x.Format(_T("%lf"), ((GGAInfo*)info)->Longitude);
 				CString y;
 				y.Format(_T("%lf"), ((GGAInfo*)info)->Latitude);
-					m_editLongitude->SetWindowText(x);
-					m_editLatitude->SetWindowText(y);
+				m_editLongitude->SetWindowText(x);
+				m_editLatitude->SetWindowText(y);
+
+				myGPSInfo.Longitude = ((GGAInfo*)info)->Longitude;
+				myGPSInfo.Latitude = ((GGAInfo*)info)->Latitude;
+			}
+
+			//判断是不是GPS经纬度坐标
+			if (info->InfoType == PSAT_HPR)
+			{
+				myGPSInfo.Heading= ((PSAT_HPRInfo*)info)->Heading;
 			}
 		}
 
@@ -283,33 +293,18 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 
 void CMFCTestView::OnClickedButton1()
 {
-	//// TODO:  在此添加控件通知处理程序代码
-	//m_editLongitude = (CEdit *)GetDlgItem(IDC_EDIT1);
-	//m_editLatitude = (CEdit *)GetDlgItem(IDC_EDIT2);
-	//CString lonStr;
-	//m_editLongitude->GetWindowTextW(lonStr);
-	//CString latStr;
-	//m_editLatitude->GetWindowTextW(latStr);
-	//double lon = _ttof(lonStr);
-	//double lat = _ttof(latStr);
+	IPointPtr point1;
+	HRESULT hr1 = point1.CreateInstance(CLSID_Point);
+	point1->PutCoords(114.068188,22.531326);
+	//point1->PutCoords(12698012.6530, 2575437.9373);
 
-	/*IPointPtr pt;
-	IPointPtr p2;
-	p2 = m_ipMapControl->ToMapPoint(lon, lat, &pt);
-	double x;
-	int ad = 3;*/
-
-	OnTestMarkerStyle();
-
-	/*pt = axMapControl1.ToMapPoint(e.x, e.y);
-	IMarkerElement pMarkerElement;
-	pMarkerElement = new MarkerElementClass();
-	IElement pElement;
-	pElement = pMarkerElement as IElement;
-	pElement.Geometry = pt;
-	pGraphicsContainer = pMap as IGraphicsContainer;
-	pGraphicsContainer.AddElement((IElement)pMarkerElement, 0);
-	pActiveView.Refresh();*/
+	point1 = geoToProj(point1);
+	double x, y;
+	point1->get_X(&x);
+	point1->get_Y(&y);
+	CString str;
+	str.Format(_T("X=%lf,Y=%lf"), x, y);
+	MessageBox(str);
 	
 }
 
@@ -392,6 +387,39 @@ void CMFCTestView::AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactive
 
 }
 
+
+IPoint* CMFCTestView::geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType, long toGeoType)
+{
+	long geoType = toGeoType;//4326;
+	IPoint* points = point;
+	ISpatialReference* spatialRf;
+	ISpatialReference* spatialRf1;
+	IGeographicCoordinateSystem* geograpicsys;
+	IProjectedCoordinateSystem*projCoordSystem;
+	ISpatialReferenceFactoryPtr originalSpecialReference;
+	ISpatialReferenceFactoryPtr newReferenceSystem;
+
+	HRESULT hr = originalSpecialReference.CreateInstance(CLSID_SpatialReferenceEnvironment);
+	HRESULT hr1 = originalSpecialReference->CreateProjectedCoordinateSystem(fromProjType, &projCoordSystem);
+	spatialRf = (ISpatialReference*)projCoordSystem;
+	//HRESULT hr2 = points->putref_SpatialReference(spatialRf);
+
+
+	newReferenceSystem.CreateInstance(CLSID_SpatialReferenceEnvironment);
+	newReferenceSystem->CreateGeographicCoordinateSystem(geoType, &geograpicsys);
+	spatialRf1 = (ISpatialReference*)geograpicsys;
+	points->putref_SpatialReference(spatialRf1);//这句不能要，是设置原始 空间参考的。
+
+	points->Project(spatialRf);
+	////测试输出而已////////////////////////
+	//double x,y;
+	//points->get_X(&x);
+	//points->get_Y(&y);
+	//printf("x=%lf,y=%lf\n",x,y);
+	///////////////////////////////////////
+	return points;
+};
+
 void CMFCTestView::OnDoubleClickMapcontrol1(long button, long shift, long X, long Y, double mapX, double mapY)
 {
 	// TODO: 在此处添加消息处理程序代码
@@ -400,13 +428,13 @@ void CMFCTestView::OnDoubleClickMapcontrol1(long button, long shift, long X, lon
 			  IPolylinePtr ipolyline;
 			  if (m_pNewLineFeedback == NULL) return;
 			  if (m_isymbol != NULL) m_pNewLineFeedback->putref_Symbol(m_isymbol);
-			  m_pNewLineFeedback->Stop(&ipolyline);
+			  //m_pNewLineFeedback->Stop(&ipolyline);
 			  
-			  m_pgeometry = ipolyline;
-			  if (ipolyline != NULL)
-				  AddCreateElement(m_pgeometry, iActiveView);
-			  m_pNewLineFeedback = NULL;
-			  iActiveView->Refresh();
+			  //m_pgeometry = ipolyline;
+			 /* if (ipolyline != NULL)
+				  AddCreateElement(m_pgeometry, iActiveView);*/
+			  /*m_pNewLineFeedback = NULL;
+			  iActiveView->Refresh();*/
 
 }
 
@@ -426,4 +454,54 @@ void CMFCTestView::OnMouseMoveMapcontrol1(long button, long shift, long X, long 
 	//	break;
 	//}
 	//// TODO: 在此处添加消息处理程序代码
+}
+
+
+void CMFCTestView::OnFileSave()
+{
+	// TODO:  在此添加命令处理程序代码
+	CFileDialog dlg(FALSE, //TRUE为OPEN对话框，FALSE为SAVE AS对话框  
+		_T("shp"),
+		_T("newFile"),
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		(LPCTSTR)_TEXT("Shape files(*.shp)|*.shp|mxd文档(*.mxd)|*.mxd|"),
+		NULL);
+	CString m_strFileName;
+	if (dlg.DoModal() == IDOK)
+	{
+		//m_MapControl=new CMapControl2();  
+
+
+		m_strFileName = dlg.GetPathName();//全路径名  
+		//CString filepath=dlg.GetFolderPath();//路径名称，不带文件名  
+		//CString filename=dlg.GetFileName();//文件名，不带路径  
+		CString strExt = dlg.GetFileExt();//后缀名，不带点  
+		if (strExt == "shp")
+		{
+			CComBSTR MX_DATAFILE;
+			//MX_DATAFILE = "F:\\测试mxd文档\\shenzhen.mxd" ;  
+			MX_DATAFILE = dlg.GetPathName();
+			BSTR filePath = dlg.GetFolderPath().AllocSysString();
+			BSTR fileName = dlg.GetFileName().AllocSysString();
+			m_ipMapControl->AddShapeFile(filePath, fileName);
+		}
+		else if (strExt == "mxd")
+		{
+			CComBSTR MX_DATAFILE;
+			//MX_DATAFILE = "F:\\测试mxd文档\\shenzhen.mxd" ;  
+			MX_DATAFILE = dlg.GetPathName();
+			VARIANT_BOOL bValidDoc;
+			//m_MapControlView.CheckMxFile( MX_DATAFILE );  
+			m_ipMapControl->CheckMxFile(MX_DATAFILE, &bValidDoc);
+			//VARIANT vt = 0;  
+			if (bValidDoc)
+				m_ipMapControl->LoadMxFile(MX_DATAFILE);
+		}
+		else
+		{
+			AfxMessageBox(_T("请选择合适的文件!"));
+			return;
+		}
+		m_ipMapControl->Refresh(esriViewAll);
+	}
 }

@@ -174,7 +174,30 @@ vector<GPSInfo*> GPSTranslate::Tanslate(string line)
 				}
 				info = vtg;
 			}
-
+			//$PSAT,HPR,102143.00,356.881,-0.387,-0.4,N*1E
+			//PSAT,HPR解析
+			else if (tag.find("PSAT") != string::npos&&arr2[1] == "HPR")
+			{
+				PSAT_HPRInfo* hpr = new PSAT_HPRInfo();
+				hpr->InfoType = PSAT_HPR;
+				//解析时分秒
+				tm utcHms;		//时分秒时间
+				string hourStr = arr2[2];
+				int hour = atoi(hourStr.substr(0, 2).data());
+				int min = atoi(hourStr.substr(2, 2).data());
+				int second = atoi(hourStr.substr(4, 2).data());
+				utcHms.tm_hour = hour;
+				utcHms.tm_min = min;
+				utcHms.tm_sec = second;
+				
+				hpr->UTCHms = utcHms;
+				//解析航向
+				hpr->Heading = atof(arr2[3].data());
+				hpr->member1 = atof(arr2[4].data());
+				hpr->member2 = atof(arr2[5].data());
+				hpr->member3 = arr2[6];
+				info = hpr;
+			}
 			infos.push_back(info);
 		}
 		catch (int){

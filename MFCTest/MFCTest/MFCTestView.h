@@ -57,11 +57,13 @@ protected:
 	GPSTranslate gpsTran;	/*GPS语句解析类*/
 	string gpsStr;	//获取到的完整的一句GPS语句
 	vector<GPSInfo*> gpsInfos;		//解析后的GPS语句组
+	MyGPSInfo myGPSInfo;		//我实际使用的GPS信息
 	bool testBool;
 
 private:
 	void AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactiveview);
 	void OnTestMarkerStyle();
+	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType = 3857, long toGeoType = 4326);
 	ISymbolPtr m_isymbol;
 	
 // 生成的消息映射函数
@@ -87,6 +89,7 @@ public:
 	afx_msg void OnMouseDownMapcontrol1(long button, long shift, long x, long y, double mapX, double mapY);
 	afx_msg void OnDoubleClickMapcontrol1(long button, long shift, long X, long Y, double mapX, double mapY);
 	afx_msg	void OnMouseMoveMapcontrol1(long button, long shift, long X, long Y, double mapX, double mapY);
+	afx_msg void OnFileSave();
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本
