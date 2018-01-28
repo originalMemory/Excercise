@@ -33,7 +33,7 @@ namespace MyTools.CrawNovel
                 string respHtml = WebApi.GetHtml(url);
                 switch (kindStr)
                 {
-                    case "www.diyibanzhu.in":
+                    case "www.diyibanzhu.xyz":
                         novel = ExtractDiyiChapter(url, respHtml);
                         novel.Kind = NovelWebKind.Diyibanzhu;
                         break;
@@ -77,7 +77,7 @@ namespace MyTools.CrawNovel
             novel.Author = authInfo.SelectSingleNode("/div/div[2]/ul/li[1]/a").InnerText.Trim();
 
             //获取章节列表
-            HtmlNodeCollection tasks = doc.DocumentNode.SelectNodes("//div[@class=\"list_box\"]/ul/li");
+            HtmlNodeCollection tasks = doc.DocumentNode.SelectNodes("//div[@class=\"dd\"]//a");
             if (tasks == null)
                 return null;
 
@@ -93,15 +93,14 @@ namespace MyTools.CrawNovel
             }
             novel.Urls = new List<string>();
             novel.ChapterNames = new List<string>();
-            foreach (var x in tasks)
+            foreach (var info in tasks)
             {
-                var info = HtmlNode.CreateNode(x.OuterHtml);
                 //<li><a title=【我的性奴家族】（1-3） href="108732.html">【我的性奴家族】（1-3）</a></li>
-                string chapterUrl = newBaseUrl + info.FirstChild.Attributes["href"].Value;    //下一章节页面名称
+                string chapterUrl = newBaseUrl + info.Attributes["href"].Value;    //下一章节页面名称
                 //<li><a href="javascript:;" onclick="tourl('114593.html')">【我的性奴家族】（5）</a></li>
                 if (chapterUrl.Contains("javascript"))
                 {
-                    string temp = info.FirstChild.Attributes["onclick"].Value;
+                    string temp = info.Attributes["onclick"].Value;
                     Regex reg = new Regex("[0-9]*.html");
                     var str = reg.Match(temp);
                     chapterUrl = newBaseUrl + str.Value;
