@@ -53,14 +53,13 @@ namespace CSharpTest
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
 
-            string str = "January 25, 2018";
-            string regStr = "(Jan\\.|January|Feb\\.|February|Mar\\.|March|Apr\\.|April|May\\.?|May|June\\.?|July\\.?|Aug\\.|Aguest|Sept\\.|September|Oct\\.|October|Nov\\.|November|Dec\\.|December) {0,2}\\d{1,2}, {0,2}\\d{2,4}";
-            Regex reg = new Regex(regStr);
-            string tp = reg.Match(str).Value;
-            Console.WriteLine(tp);
-            DateTime dt = new DateTime();
-            DateTime.TryParse(tp, out dt);
-            Console.WriteLine(dt.ToString());
+            var builder = Builders<IW2SUser>.Filter;
+            var filter1 = builder.Eq(x => x.LoginName, "focuscope");
+            var filter2 = builder.Eq(x => x.Gender, "邢神");
+            var filter4 = builder.Eq(x => x.UsrEmail, "43680948@qq.com");
+            var tp = new List<FilterDefinition<IW2SUser>> { filter1, filter2 };
+            var filter3 = builder.Or(tp);
+            var users = MongoDBHelper.Instance.Get_IW2SUser().Find(filter4 & filter3).ToList();
 
             Console.ReadKey();
         }

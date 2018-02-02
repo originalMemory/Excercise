@@ -51,6 +51,8 @@
 #endif
 #endif
 
+
+#pragma region ArcEngine 头文件 
 #pragma warning(push) 
 #pragma warning(disable : 4192) 
 #pragma warning(disable : 4146) 
@@ -67,5 +69,10 @@
 #import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriCarto.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR","UINT_PTR") rename("ITableDefinition","esriITableDefinition") 
 
 #import "D:\Program Files (x86)\ArcGIS\Desktop10.2\com\esriDisplayUI.olb" raw_interfaces_only raw_native_types no_namespace named_guids exclude("OLE_COLOR", "OLE_HANDLE", "VARTYPE")
-
 #pragma warning(pop)
+
+#pragma endregion
+
+
+////Seekur 驱动
+//#include <Aria.h>

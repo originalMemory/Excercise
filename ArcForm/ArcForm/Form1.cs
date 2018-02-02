@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using ESRI.ArcGIS.Display;
+using ESRI.ArcGIS.Geometry;
+using ESRI.ArcGIS.GlobeCore;
+using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.Geodatabase;
 
 namespace ArcForm
 {
@@ -17,7 +21,11 @@ namespace ArcForm
         public Form1()
         {
             InitializeComponent();
-            ISymbol
-        }
+            IFeature dsf;
+            IPoint ds;
+            IFeatureLayer lay=axMapControl1.get_Layer(0)as IFeatureLayer;
+            var cla=lay.FeatureClass;
+            cla.ShapeType
+            
     }
 }

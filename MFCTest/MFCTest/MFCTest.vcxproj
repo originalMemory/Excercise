@@ -43,7 +43,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\PROJ\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\MobileRobots\Aria\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\MobileRobots\Aria\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -59,6 +60,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>AriaDebugVC12.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -102,6 +104,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseAction.h" />
     <ClInclude Include="GPSTranslate.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFCTest.h" />
@@ -113,6 +116,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseAction.cpp" />
     <ClCompile Include="GPSTranslate.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFCTest.cpp" />

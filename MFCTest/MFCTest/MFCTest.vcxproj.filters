@@ -45,6 +45,9 @@
     <ClInclude Include="GPSTranslate.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BaseAction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCTest.cpp">
@@ -66,6 +69,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GPSTranslate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseAction.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

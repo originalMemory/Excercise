@@ -10,63 +10,48 @@
 *  作者: 
 *  说明: 
 ******************************************************************/ 
+#include "stdafx.h"
 
 #include "BaseAction.h"
 #include <iostream>
 using namespace std;
 
-#pragma region 连接类
-ConnHandler::ConnHandler(ArRobot *robot) :
-myConnectedCB(this, &ConnHandler::connected),  
-	myConnFailCB(this, &ConnHandler::connFail),
-	myDisconnectedCB(this, &ConnHandler::disconnected)
-
-{
-	myRobot = robot;
-	myRobot->addConnectCB(&myConnectedCB, ArListPos::FIRST);
-	myRobot->addFailedConnectCB(&myConnFailCB, ArListPos::FIRST);
-	myRobot->addDisconnectNormallyCB(&myDisconnectedCB, ArListPos::FIRST);
-	myRobot->addDisconnectOnErrorCB(&myDisconnectedCB, ArListPos::FIRST);
-}
-
-// 连接失败时调用
-void ConnHandler::connFail(void)
-{
-	printf("连接失败！\n");
-	myRobot->stopRunning();
-	Aria::exit(1);
-	return;
-}
-
-// 启动发动机，关闭声纳和amigobot
-void ConnHandler::connected(void)
-{
-	printf("连接成功！\n");
-	myRobot->comInt(ArCommands::SONAR, 0);
-	myRobot->comInt(ArCommands::ENABLE, 1);
-	myRobot->comInt(ArCommands::SOUNDTOG, 0);
-}
-
-// 连接断开时结束程序
-void ConnHandler::disconnected(void)
-{
-	printf("断开连接，结束程序！\n");
-	Aria::exit(0);
-}
-#pragma endregion
-
 #pragma region 基础动作类
+BaseAction::BaseAction(){
+}
 BaseAction::BaseAction(ArRobot *robot){
-	myRobot=robot;
+	myRobot = robot;
 }
 /*
 	描述：析构函数
 	参数：无
 	返回值：无
 	*/
-	BaseAction::~BaseAction(void){
+BaseAction::~BaseAction(void){
 
-	}
+}
+
+
+/*
+描述：初始化机器人指针
+参数：
+robot：机器人指针
+返回值：无
+*/
+void BaseAction::SetRobot(ArRobot *robot){
+	myRobot = robot;
+}
+
+
+/*
+描述：获取机器人指针
+参数：
+返回值：机器人指针
+*/
+ArRobot* BaseAction::GetRobot(){
+	return myRobot;
+}
+
 /*
 描述：水平移动某一距离
 参数：

@@ -2483,6 +2483,7 @@ namespace CSharpTest.Tools
                 Name = x.Name
             }).ToList();
             var filter = builder.In(x => x.DomainCategoryId, publicCates.Select(x => x.Id));
+            
             var publicDomains = col.Find(filter).Project(x => new IdAndName
             {
                 Id = x._id,
