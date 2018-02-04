@@ -544,4 +544,51 @@ namespace CSharpTest.Model
         public int Count { get; set; }
     }
 #endregion
+
+    /// <summary>
+    /// d3力导向图数据
+    /// </summary>
+    public class D3ForceTableDto
+    {
+        /// <summary>
+        /// 链接标题
+        /// </summary>
+        public string Title;
+        /// <summary>
+        /// 关键词
+        /// </summary>
+        public List<string> Keyword;
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public string Category;
+        /// <summary>
+        /// 归属百分比，1为在10%之内，2为在10%到20%之内，以此类推
+        /// </summary>
+        public int Percent;
+        /// <summary>
+        /// 链接地址
+        /// </summary>
+        public string Url;
+        /// <summary>
+        /// 域名加权影响力
+        /// </summary>
+        public double LinkReferByDo;
+        /// <summary>
+        /// 图层
+        /// </summary>
+        public string Level;
+        /// <summary>
+        /// 域名分组
+        /// </summary>
+        public string DomainCate;
+        /// <summary>
+        /// 标签列表
+        /// </summary>
+        public List<string> Tag;
+        /// <summary>
+        /// 分析项目组列表
+        /// </summary>
+        public List<string> AnaProCate;
+    }
 }

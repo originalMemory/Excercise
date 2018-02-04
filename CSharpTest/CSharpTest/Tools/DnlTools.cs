@@ -2605,6 +2605,125 @@ namespace CSharpTest.Tools
                     colCate.InsertMany(newCates);
             }
         }
+
+        public static void GetMultiContent(ObjectId proObjId)
+        {
+            //获取图表数据
+            var builderChart = Builders<ProjectChartMongo>.Filter;
+            var filterChart = builderChart.Eq(x => x.ProjectId, proObjId) & builderChart.Eq(x => x.Type, ChartType.D3ForceTable);
+            filterChart &= builderChart.Eq(x => x.Source, SourceType.Baidu) & builderChart.Eq(x => x.Name, "默认");
+            var colChart = MongoDBHelper.Instance.GetProjectChart();
+            var queryChart = colChart.Find(filterChart).FirstOrDefault();
+            if (queryChart != null)
+            {
+                JavaScriptSerializer serializer = new JavaScriptSerializer();       //Json序列化与反序列化
+                var datas = serializer.Deserialize<List<D3ForceTableDto>>(queryChart.DataJson); 
+
+                //获取核心区结点
+                var centers = datas.FindAll(x => x.Percent <= 25);
+                //按关键词数排序
+                centers = centers.OrderByDescending(x => x.Keyword.Count).ToList();
+
+                var contents = new List<string>();
+                //foreach (var link in contents)
+                //{
+                //    try
+                //    {
+                //        string content = "";
+                //        var transcoder = new NReadabilityTranscoder();
+                //        TranscodingInput input = new TranscodingInput(htmldetail);
+                //        TranscodingResult result = transcoder.Transcode(input);
+                //        if (result.ContentExtracted)
+                //        {
+                //            string htmlCon = result.ExtractedContent.SubAfter("</head>").SubBefore("</html>");
+                //            content = Regex.Replace(htmlCon, "</p>|<br/>|<br>|</h[0-9]>", System.Environment.NewLine);
+                //            content = Regex.Replace(content, "<.+?>", "");
+                //            content = Regex.Replace(content, " ", " ");
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        CommonHelper.Log("正文提取错误，错误原因：{0}".FormatStr(ex.Message));
+                //    }
+                //}
+            }
+        }
+
+        /// <summary>
+        /// 重置项目图表预计算状态
+        /// </summary>
+        /// <param name="projectId">项目Id</param>
+        public static void ResetChartPreCompute(ObjectId projectId, SourceType sourceType)
+        {
+            //获取当前项目预计算状态
+            var colPro = MongoDBHelper.Instance.GetIW2S_Projects();
+            var filterPro = new QueryDocument { { "_id", projectId } };
+            var pro = colPro.Find(filterPro).Project(x => new IW2S_Project
+            {
+                BDPreStatus = x.BDPreStatus,
+                BDPreUp = x.BDPreUp,
+                BingPreStatus = x.BingPreStatus,
+                BingPreUp = x.BingPreUp
+            }).FirstOrDefault();
+
+            switch (sourceType)
+            {
+                case SourceType.Baidu:
+                    {
+                        //判断项目是否已经在计算中
+                        switch (pro.BDPreStatus)
+                        {
+                            case 1:
+                                {
+                                    //通知计算程序项目出现新的变动
+                                    var updateAdd = Builders<IW2S_Project>.Update.Set(x => x.BDPreUp, 1);
+                                    colPro.UpdateOne(filterPro, updateAdd);
+                                }
+                                break;
+                            case 2:
+                                {
+                                    //删除原有预计算数据将项目标记为需要计算
+                                    MongoDBHelper.Instance.GetProjectChart().DeleteMany(Builders<ProjectChartMongo>.Filter.Eq(x => x.ProjectId, projectId));
+                                    var updateAdd = Builders<IW2S_Project>.Update.Set(x => x.BDPreStatus, 0);
+                                    colPro.UpdateOne(filterPro, updateAdd);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case SourceType.Weixin:
+                    break;
+                case SourceType.Bing:
+                    {
+                        //判断项目是否已经在计算中
+                        switch (pro.BingPreStatus)
+                        {
+                            case 1:
+                                {
+                                    //通知计算程序项目出现新的变动
+                                    var updateAdd = Builders<IW2S_Project>.Update.Set(x => x.BingPreUp, 1);
+                                    colPro.UpdateOne(filterPro, updateAdd);
+                                }
+                                break;
+                            case 2:
+                                {
+                                    //删除原有预计算数据将项目标记为需要计算
+                                    MongoDBHelper.Instance.GetProjectChart().DeleteMany(Builders<ProjectChartMongo>.Filter.Eq(x => x.ProjectId, projectId));
+                                    var updateAdd = Builders<IW2S_Project>.Update.Set(x => x.BingPreStatus, 0);
+                                    colPro.UpdateOne(filterPro, updateAdd);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public class IdAndName

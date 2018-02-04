@@ -53,18 +53,17 @@ namespace CSharpTest
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
 
-            var builder = Builders<IW2SUser>.Filter;
-            var filter1 = builder.Eq(x => x.LoginName, "focuscope");
-            var filter2 = builder.Eq(x => x.Gender, "邢神");
-            var filter4 = builder.Eq(x => x.UsrEmail, "43680948@qq.com");
-            var tp = new List<FilterDefinition<IW2SUser>> { filter1, filter2 };
-            var filter3 = builder.Or(tp);
-            var users = MongoDBHelper.Instance.Get_IW2SUser().Find(filter4 & filter3).ToList();
+            var pros = MongoDBHelper.Instance.GetIW2S_Projects().Find(Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, false)).SortByDescending(x => x.CreatedAt).Limit(10).Project(x => x._id).ToList();
+            foreach (var item in pros)
+            {
+                DnlTools.ResetChartPreCompute(item, SourceType.Baidu);
+            }
 
             Console.ReadKey();
         }
 
         
+
     }
 
 
