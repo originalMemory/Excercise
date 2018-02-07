@@ -551,6 +551,10 @@ namespace CSharpTest.Model
     public class D3ForceTableDto
     {
         /// <summary>
+        /// 链接Id
+        /// </summary>
+        public string Id;
+        /// <summary>
         /// 链接标题
         /// </summary>
         public string Title;

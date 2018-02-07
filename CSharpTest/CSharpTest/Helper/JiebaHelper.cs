@@ -46,12 +46,12 @@ namespace CSharpTest.Helper
         {
             List<string> result = new List<string>();
 
-            //拆分projectId，判断是否为多项目
-            var proObjIds = CommonTools.GetObjIdListFromStr(projectId);
 
             string text = "";       //自动摘要使用文本
             if (source == null)
             {
+                //拆分projectId，判断是否为多项目
+                var proObjIds = CommonTools.GetObjIdListFromStr(projectId);
                 //获取起止时间
                 DateTime endTime = new DateTime();
                 DateTime.TryParse(time, out endTime);
@@ -126,6 +126,7 @@ namespace CSharpTest.Helper
         /// </summary>
         /// <param name="text">文本</param>
         /// <param name="num">核心句数</param>
+        /// <param name="type">抽取类型</param>
         public void GetList(string text, int num, int type)
         {
             keywordList.Clear();

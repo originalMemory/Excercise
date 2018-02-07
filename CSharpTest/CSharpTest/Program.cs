@@ -53,7 +53,11 @@ namespace CSharpTest
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
 
-            MyTools.SortDir(@"C:\新建文件夹");
+            var pros = MongoDBHelper.Instance.GetIW2S_Projects().Find(Builders<IW2S_Project>.Filter.Eq(x => x.IsDel, false)).SortByDescending(x => x.CreatedAt).Limit(15).Project(x => x._id).ToList();
+            foreach (var item in pros)
+            {
+                DnlTools.ResetChartPreCompute(item, SourceType.Baidu);
+            }
 
             Console.ReadKey();
         }

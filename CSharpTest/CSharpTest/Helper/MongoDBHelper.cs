@@ -165,6 +165,20 @@ namespace CSharpTest.Helper
             return base.GetCollection<Dnl_Link_Baidu>("Dnl_Link_Baidu");
         }
 
+        public IMongoCollection<BingLinkMainMongo> GetBingLinkMain()
+        {
+            return base.GetCollection<BingLinkMainMongo>("BingLinkMain");
+        }
+
+        public IMongoCollection<BingLinkContentMongo> GetBingLinkContent()
+        {
+            return base.GetCollection<BingLinkContentMongo>("BingLinkContent");
+        }
+
+        public IMongoCollection<BingLinkOtherMongo> GetBingLinkOther()
+        {
+            return base.GetCollection<BingLinkOtherMongo>("BingLinkOther");
+        }
         public IMongoCollection<Dnl_LinkMapping_Baidu> GetDnl_LinkMapping_Baidu()
         {
             return base.GetCollection<Dnl_LinkMapping_Baidu>("Dnl_LinkMapping_Baidu");

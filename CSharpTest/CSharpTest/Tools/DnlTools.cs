@@ -2621,10 +2621,49 @@ namespace CSharpTest.Tools
 
                 //获取核心区结点
                 var centers = datas.FindAll(x => x.Percent <= 25);
-                //按关键词数排序
-                centers = centers.OrderByDescending(x => x.Keyword.Count).ToList();
-
+                var temp = new List<MultiLinkInfo>();
+                double totalInflNum = centers.Sum(x => x.LinkReferByDo);
+                double totalKeyNum = centers.Sum(x => x.Keyword.Count);
+                //var keys = new List<string>();
+                //foreach (var item in centers)
+                //{
+                //    keys.AddRange(item.Keyword);
+                //}
+                //totalKeyNum = keys.Distinct().Count();
+                foreach (var item in centers)
+                {
+                    var info = new MultiLinkInfo
+                    {
+                        Id = item.Id,
+                    };
+                    info.TotalNum = item.Keyword.Count / totalKeyNum + item.LinkReferByDo / totalInflNum;
+                    temp.Add(info);
+                }
+                temp = temp.OrderByDescending(x => x.TotalNum).ToList();
                 var contents = new List<string>();
+
+                int i = 1;
+                JiebaHelper jieba = new JiebaHelper();
+                foreach (var link in temp)
+                {
+                    var content = MongoDBHelper.Instance.GetBaiduLinkContent().Find(Builders<BaiduLinkContentMongo>.Filter.Eq(x => x.LinkId, new ObjectId(link.Id))).Project(x => x.Content).FirstOrDefault();
+                    if (content == null)
+                    {
+                        content = MongoDBHelper.Instance.GetBingLinkContent().Find(Builders<BingLinkContentMongo>.Filter.Eq(x => x.LinkId, new ObjectId(link.Id))).Project(x => x.Content).FirstOrDefault();
+                    }
+                    if (content == null || content.Length < 100)
+                    {
+                        continue;
+                    }
+                    var abs = jieba.GetSummary(null,null,null,content);
+                    foreach (var item in abs)
+                    {
+                        Console.WriteLine(item);
+                    }
+                    Console.WriteLine();
+                }
+
+                
                 //foreach (var link in contents)
                 //{
                 //    try
@@ -2732,6 +2771,26 @@ namespace CSharpTest.Tools
         public string Name { get; set; }
         public ObjectId CateId { get; set; }
         public int Weight { get; set; }
+    }
+
+    /// <summary>
+    /// 多文本摘要中链接信息
+    /// </summary>
+    public class MultiLinkInfo
+    {
+        public string Id { get; set; }
+        /// <summary>
+        /// 关键词占比
+        /// </summary>
+        public double KeywordPercent { get; set; }
+        /// <summary>
+        /// 链接影响力点比
+        /// </summary>
+        public double LinkInflPercent { get; set; }
+        /// <summary>
+        /// 最终权重
+        /// </summary>
+        public double TotalNum { get; set; }
     }
 
 
