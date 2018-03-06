@@ -11,6 +11,13 @@
 #include <vector>
 #include "BaseAction.h"
 #include "afxwin.h"
+#include <windows.h>
+
+//seekur控制参数
+typedef struct seekurPara{
+	double distance;	//距离
+	double heading;		//航向
+}*seekurParaPtr;
 
 
 class CMFCTestView : public CFormView
@@ -45,13 +52,15 @@ public:
 #endif
 
 //控件对象
-protected:
+public:
 	IMapControl2Ptr m_ipMapControl;/*指向当前地图文档的指针*/
 	ITOCControl2Ptr m_ipTocControl;/*指向当前地图管理的指针*/
 	//CEdit m_editLongitude;		//经度文本框
 	//CEdit m_editLatitude;		//纬度文本框
 	INewLineFeedbackPtr m_pNewLineFeedback;
-	IGeometryPtr m_pgeometry;
+	IPolylinePtr m_trackPath;	//追踪路径
+	bool isTracked;		//是否正在追踪
+	MyGPSInfo myGPSInfo;		//我实际使用的GPS信息
 
 //成员对象
 protected:
@@ -59,15 +68,17 @@ protected:
 	GPSTranslate gpsTran;	/*GPS语句解析类*/
 	string gpsStr;	//获取到的完整的一句GPS语句
 	vector<GPSInfo*> gpsInfos;		//解析后的GPS语句组
-	MyGPSInfo myGPSInfo;		//我实际使用的GPS信息
 	CWinThread* seekur_thread;		//Seekur线程句柄
+	CWinThread* track_thread;		//追踪线程句柄
 
-	ILayerPtr m_currentLayer;		//当前图层
-	IMapPtr m_map;		//地图控件中的地图
-	IFeaturePtr m_editFeature;	//编辑中的要素
-	IDisplayFeedbackPtr m_feedback;		//用于地图显示
-	bool m_bInUse;		//判断是否正在使用
-	IPointCollectionPtr m_pointCollection;	//当前要素的点集
+	//ILayerPtr m_currentLayer;		//当前图层
+	//IMapPtr m_map;		//地图控件中的地图
+	//IFeaturePtr m_editFeature;	//编辑中的要素
+	//IDisplayFeedbackPtr m_feedback;		//用于地图显示
+	//bool m_bInUse;		//判断是否正在使用
+	//IPointCollectionPtr m_pointCollection;	//当前要素的点集
+
+	IElementPtr lastPointElement;
 
 private:
 	void AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactiveview);
@@ -75,7 +86,10 @@ private:
 	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType = 3857, long toGeoType = 4326);
 	ISymbolPtr m_isymbol;
 	static UINT SeekurFuc(LPVOID lParam);		//Seekur控制线程函数
-	HRESULT CreateShapeFile(esriGeometryType type, CString layerPath, CString layerName, IFeatureClass** ppFeatureClass);
+	//HRESULT CreateShapeFile(esriGeometryType type, CString layerPath, CString layerName, IFeatureClass** ppFeatureClass);
+	void CreateShapeFile();
+	static UINT TrackFuc(LPVOID lParam);		//追踪线程函数
+
 	
 // 生成的消息映射函数
 protected:
@@ -118,6 +132,14 @@ public:
 	afx_msg void OnBnClickedButton3();
 	// 点线切换绘制
 	CButton m_cPointLine;
+	// Seekur当前速度
+	CEdit m_editSeekurVel;
+	// Seekur当前航向
+	CEdit m_editSeekurHeading;
+	// P控制法K1参数，与距离有关
+	CEdit m_editKDis;
+	// P控制法K2参数，与航向差值相关
+	CEdit m_editKSubHead;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

@@ -45,7 +45,7 @@ namespace CSharpTest.Tools
         /// <summary>  
         /// 创建POST方式的HTTP请求  
         /// </summary>  
-        public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters, int timeout=5000, string userAgent=null, CookieCollection cookies=null)
+        public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters, CookieCollection cookies = null, int timeout = 5000, string userAgent = null)
         {
             HttpWebRequest request = null;
             //如果是发送HTTPS请求  
@@ -103,66 +103,65 @@ namespace CSharpTest.Tools
         /// </summary>
         /// <param name="url">网页链接</param>
         /// <returns></returns>
-        public static string GetHtml(string url, string htmlCharset)
+        public static string GetHtml(string url, string htmlCharset, int type = 0, IDictionary<string, string> parameters = null, CookieCollection cookies = null)
         {
             //Http请求
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-            //使用GET方法获取链接指向的网页
-            req.Method = "GET";
             //设置用户代理，防止网站判定为用户代理
             req.UserAgent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; BOIE9;ZHCN)";
             //如果方法验证网页来源就加上这一句如果不验证那就可以不写了
             //req.Referer = "http://sufei.cnblogs.com";
-            //添加Cookie，用来抓取需登陆可见的网页
-            CookieContainer objcok = new CookieContainer();
-            Cookie cook1 = new Cookie();
-            //cook1.Name = "CNZZDATA1257708097";
-            //cook1.Value = "1167517418-1479817270-%7C1488717892";
-            //objcok.Add(cook1);
-            objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
-            req.CookieContainer = objcok;
-            //设置超时
-            req.Timeout = 5000;
-            //Http响应
-            HttpWebResponse resp;
-
+            string html = "";
+            
             try
             {
-                resp = (HttpWebResponse)req.GetResponse();
-                Encoding htmlEncoding = Encoding.GetEncoding(htmlCharset);
-                System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream(), htmlEncoding);
-                //读取返回的网页
-                string respHtml = sr.ReadToEnd();
-                resp.Close();
-                return respHtml;
+                switch (type)
+                {
+                    case 0:
+                        {
+                            //使用GET方法获取链接指向的网页
+                            req.Method = "GET";
+                            //添加Cookie，用来抓取需登陆可见的网页
+                            CookieContainer objcok = new CookieContainer();
+                            Cookie cook1 = new Cookie();
+                            //cook1.Name = "CNZZDATA1257708097";
+                            //cook1.Value = "1167517418-1479817270-%7C1488717892";
+                            //objcok.Add(cook1);
+                            objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
+                            req.CookieContainer = objcok;
+                            //设置超时
+                            req.Timeout = 5000;
+                            //Http响应
+                            HttpWebResponse resp;
+                            resp = (HttpWebResponse)req.GetResponse();
+                            Encoding htmlEncoding = Encoding.GetEncoding(htmlCharset);
+                            System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream(), htmlEncoding);
+                            //读取返回的网页
+                            html = sr.ReadToEnd();
+                            resp.Close();
+                        }
+                        break;
+                    case 1:
+                        {
+                            HttpWebResponse resp = CreatePostHttpResponse(url, parameters, cookies);
+                            Encoding htmlEncoding = Encoding.GetEncoding(htmlCharset);
+                            System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream(), htmlEncoding);
+                            //读取返回的网页
+                            html = sr.ReadToEnd();
+                            resp.Close();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                return html;
             }
             catch (Exception ex)
             {
                 CommonTools.Log(ex.Message);
                 return null;
             }
-            //int time = 0;   //服务器无响应时重试次数
-            //while (true)
-            //{
-            //    time++;
-            //    try
-            //    {
-            //        resp = (HttpWebResponse)req.GetResponse();
-            //    }
-            //    catch(Exception ex)
-            //    {
-            //        CommonTools.Log(ex.Message);
-            //    }
-            //    if (resp.StatusCode != HttpStatusCode.OK)
-            //    {
-            //        if (time < 5)
-            //            continue;
-            //        else
-            //            break;
-            //    }
-            //    break;
-            //}
-            //使用utf-8去解码网页
             
         }
 

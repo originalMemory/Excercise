@@ -10,13 +10,17 @@
 #define IDC_MAPCONTROL1                 1000
 #define IDC_EDIT1                       1001
 #define IDC_EDIT2                       1002
+#define IDC_EDIT3                       1003
 #define IDC_BUTTON1                     1004
+#define IDC_EDIT4                       1005
 #define IDC_TOCCONTROL1                 1008
 #define IDC_BUTTON2                     1009
 #define IDC_EDIT5                       1014
 #define IDC_EDIT6                       1015
 #define IDC_BUTTON3                     1016
 #define IDC_CHECK1                      1017
+#define IDC_EDIT7                       1018
+#define IDC_EDIT8                       1019
 
 // Next default values for new objects
 // 

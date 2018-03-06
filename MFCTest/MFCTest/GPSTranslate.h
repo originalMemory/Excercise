@@ -122,6 +122,7 @@ public:
 	double Latitude;		//纬度
 	double Longitude;		//经度
 	double Heading;			//航向
+	double SpeedKm;			//地面速率（0000.0~1851.8公里/小时，前面的0也将被传输）
 	//char NSIndicator;		//纬度半球指示符
 	//char EWIndicator;		//经度半球指示符
 	//int GPSStatus;			//GPS状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算

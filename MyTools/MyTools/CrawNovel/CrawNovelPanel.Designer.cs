@@ -47,7 +47,7 @@
             // 
             this.txt_Url.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txt_Url.Location = new System.Drawing.Point(415, 30);
-            this.txt_Url.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_Url.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Url.Name = "txt_Url";
             this.txt_Url.Size = new System.Drawing.Size(484, 25);
             this.txt_Url.TabIndex = 13;
@@ -68,7 +68,7 @@
             // 
             this.btn_GetNovel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btn_GetNovel.Location = new System.Drawing.Point(908, 30);
-            this.btn_GetNovel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_GetNovel.Margin = new System.Windows.Forms.Padding(4);
             this.btn_GetNovel.Name = "btn_GetNovel";
             this.btn_GetNovel.Size = new System.Drawing.Size(100, 29);
             this.btn_GetNovel.TabIndex = 11;
@@ -81,7 +81,7 @@
             this.bar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bar.Location = new System.Drawing.Point(16, 129);
-            this.bar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.bar.Margin = new System.Windows.Forms.Padding(4);
             this.bar.Name = "bar";
             this.bar.Size = new System.Drawing.Size(1372, 29);
             this.bar.TabIndex = 15;
@@ -90,8 +90,8 @@
             // 
             this.btn_OpenFloder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btn_OpenFloder.Enabled = false;
-            this.btn_OpenFloder.Location = new System.Drawing.Point(739, 919);
-            this.btn_OpenFloder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_OpenFloder.Location = new System.Drawing.Point(770, 804);
+            this.btn_OpenFloder.Margin = new System.Windows.Forms.Padding(4);
             this.btn_OpenFloder.Name = "btn_OpenFloder";
             this.btn_OpenFloder.Size = new System.Drawing.Size(100, 29);
             this.btn_OpenFloder.TabIndex = 20;
@@ -103,8 +103,8 @@
             // 
             this.btn_SaveNovel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btn_SaveNovel.Enabled = false;
-            this.btn_SaveNovel.Location = new System.Drawing.Point(559, 919);
-            this.btn_SaveNovel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_SaveNovel.Location = new System.Drawing.Point(590, 804);
+            this.btn_SaveNovel.Margin = new System.Windows.Forms.Padding(4);
             this.btn_SaveNovel.Name = "btn_SaveNovel";
             this.btn_SaveNovel.Size = new System.Drawing.Size(100, 29);
             this.btn_SaveNovel.TabIndex = 19;
@@ -118,7 +118,7 @@
             this.FloderPathInfo.AutoSize = true;
             this.FloderPathInfo.BackColor = System.Drawing.Color.Transparent;
             this.FloderPathInfo.Font = new System.Drawing.Font("宋体", 10F);
-            this.FloderPathInfo.Location = new System.Drawing.Point(375, 889);
+            this.FloderPathInfo.Location = new System.Drawing.Point(406, 774);
             this.FloderPathInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.FloderPathInfo.Name = "FloderPathInfo";
             this.FloderPathInfo.Size = new System.Drawing.Size(93, 17);
@@ -128,8 +128,8 @@
             // btn_SaveFolder
             // 
             this.btn_SaveFolder.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_SaveFolder.Location = new System.Drawing.Point(936, 885);
-            this.btn_SaveFolder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_SaveFolder.Location = new System.Drawing.Point(967, 770);
+            this.btn_SaveFolder.Margin = new System.Windows.Forms.Padding(4);
             this.btn_SaveFolder.Name = "btn_SaveFolder";
             this.btn_SaveFolder.Size = new System.Drawing.Size(100, 29);
             this.btn_SaveFolder.TabIndex = 17;
@@ -139,8 +139,8 @@
             // txt_FloderPath
             // 
             this.txt_FloderPath.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.txt_FloderPath.Location = new System.Drawing.Point(479, 885);
-            this.txt_FloderPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_FloderPath.Location = new System.Drawing.Point(510, 770);
+            this.txt_FloderPath.Margin = new System.Windows.Forms.Padding(4);
             this.txt_FloderPath.Name = "txt_FloderPath";
             this.txt_FloderPath.Size = new System.Drawing.Size(448, 25);
             this.txt_FloderPath.TabIndex = 16;
@@ -160,9 +160,10 @@
             // 
             // checkLine
             // 
+            this.checkLine.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.checkLine.AutoSize = true;
             this.checkLine.Location = new System.Drawing.Point(1016, 36);
-            this.checkLine.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkLine.Margin = new System.Windows.Forms.Padding(4);
             this.checkLine.Name = "checkLine";
             this.checkLine.Size = new System.Drawing.Size(59, 19);
             this.checkLine.TabIndex = 22;
@@ -171,16 +172,20 @@
             // 
             // txt_main
             // 
+            this.txt_main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_main.Location = new System.Drawing.Point(17, 166);
-            this.txt_main.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_main.Margin = new System.Windows.Forms.Padding(4);
             this.txt_main.Name = "txt_main";
             this.txt_main.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.txt_main.Size = new System.Drawing.Size(1369, 702);
+            this.txt_main.Size = new System.Drawing.Size(1369, 579);
             this.txt_main.TabIndex = 23;
             this.txt_main.Text = "";
             // 
             // checkMoreSpace
             // 
+            this.checkMoreSpace.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.checkMoreSpace.AutoSize = true;
             this.checkMoreSpace.Checked = true;
             this.checkMoreSpace.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -196,7 +201,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1404, 962);
+            this.ClientSize = new System.Drawing.Size(1404, 853);
             this.Controls.Add(this.checkMoreSpace);
             this.Controls.Add(this.txt_main);
             this.Controls.Add(this.checkLine);
@@ -210,7 +215,7 @@
             this.Controls.Add(this.txt_Url);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_GetNovel);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "CrawNovelPanel";
             this.Text = "CrawNovelPanel";
             this.ResumeLayout(false);

@@ -19,12 +19,7 @@
 基础动作类
 */
 class BaseAction{
-public:/*
-	描述：默认构造函数
-	参数：
-	返回值：无
-	*/
-	BaseAction();
+public:
 	/*
 	描述：构造函数
 	参数：
@@ -157,5 +152,12 @@ public:/*
 	private:
 		ArRobot *myRobot;
 
+public:
+	/*
+	描述：获取当前速度(mm/s2)
+	参数：无
+	返回值：当前速度(mm/s2)
+	*/
+	double GetVel();
 };
 #endif

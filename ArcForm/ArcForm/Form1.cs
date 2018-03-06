@@ -8,11 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using ESRI.ArcGIS.Display;
-using ESRI.ArcGIS.Geometry;
-using ESRI.ArcGIS.GlobeCore;
-using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.DataSourcesFile;
+using ESRI.ArcGIS.Geometry;
+using ESRI.ArcGIS.Display;
+using System.IO;
 
 namespace ArcForm
 {
@@ -21,11 +22,225 @@ namespace ArcForm
         public Form1()
         {
             InitializeComponent();
-            IFeature dsf;
-            IPoint ds;
-            IFeatureLayer lay=axMapControl1.get_Layer(0)as IFeatureLayer;
-            var cla=lay.FeatureClass;
-            cla.ShapeType
+            //IFeature dsf;
+            //IPoint ds;
+            //IFeatureLayer lay = axMapControl1.get_Layer(0) as IFeatureLayer;
+            //var cla = lay.FeatureClass;
+        }
+
+        private void btn_open_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog xjOpenShpFileDialog = new OpenFileDialog();
+            xjOpenShpFileDialog.Title = "打开矢量数据";
+            xjOpenShpFileDialog.Filter = "矢量文件(*.shp)|*.shp";
+
+
+            if (xjOpenShpFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string xjShpPath = xjOpenShpFileDialog.FileName;
+                string xjShpFolder = System.IO.Path.GetDirectoryName(xjShpPath);
+                string xjShpFileName = System.IO.Path.GetFileName(xjShpPath);
+                //工作工厂+工作空间
+                IWorkspaceFactory xjShpWsF = new ShapefileWorkspaceFactory();
+                IFeatureWorkspace xjShpFWs = (IFeatureWorkspace)xjShpWsF.OpenFromFile(xjShpFolder, 0);
+                //新建矢量图层：要素+名称
+                IWorkspace xjShpWs = xjShpWsF.OpenFromFile(xjShpFolder, 0);
+                IFeatureClass xjShpFeatureClass = xjShpFWs.OpenFeatureClass(xjShpFileName);
+                IFeatureLayer xjShpFeatureLayer = new FeatureLayer();
+                xjShpFeatureLayer.FeatureClass = xjShpFeatureClass;
+                xjShpFeatureLayer.Name = xjShpFeatureClass.AliasName;
+                //加载刷新
+                this.axMapControl1.AddLayer(xjShpFeatureLayer);
+                this.axMapControl1.ActiveView.Refresh();
+            }
+        }
+
+        private void btn_save_Click(object sender, EventArgs e)
+        {
+            string strFolder = @"F:\arcMap";
+            string strFile = "path" + ".shp";
+            FileInfo fFile = new FileInfo(strFolder + @"\" + strFile);
+
+            string shapeFullName = strFolder + @"\" + strFile;
+            IWorkspaceFactory pWorkspaceFactory = new ShapefileWorkspaceFactory();
+            IFeatureWorkspace pFeatureWorkspace = (IFeatureWorkspace)pWorkspaceFactory.OpenFromFile(strFolder, 0);
+
+            IFeatureClass pFeatureClass;
+
+            //创建不同类型的字段
+            int i;
+            double tmpLongitude;
+            double tmpLatitude;
+            IPoint pPoint;
+
+            IFields pFields = new Fields();
+            IFieldsEdit pFieldsEdit = (IFieldsEdit)pFields;
+            IField pFiled = new Field();
+            IFieldEdit pFieldEdit = (IFieldEdit)pFiled;
+
+            //设置坐标系并定义几何类型
+            ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
+            IGeographicCoordinateSystem pGCS;
+            pGCS = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            pFieldEdit.Name_2 = "SHAPE";
+            pFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
+
+            #region 点创建
+            //IGeometryDef pGeoDef = new GeometryDef();
+            //IGeometryDefEdit pGeoDefEdit = pGeoDef as IGeometryDefEdit;
+            //pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPoint;
+
+            //pGeoDefEdit.SpatialReference_2 = pGCS;
+            //pFieldEdit.GeometryDef_2 = pGeoDef;
+            //pFieldsEdit.AddField(pFiled);
+
+            ////pFiled = new Field();
+            ////pFieldEdit = (IFieldEdit)pFiled; 
+            ////pFieldEdit.Name_2 = "经度";
+            ////pFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            ////pFieldsEdit.AddField(pFiled);
+            ////创建shp
+            //pFeatureClass = pFeatureWorkspace.CreateFeatureClass(strFile, pFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+
+            //tmpLongitude = 11616.61347551;
+            //tmpLatitude = 3956.63814757;
+            //pPoint = new ESRI.ArcGIS.Geometry.Point();
+            //pPoint.X = tmpLongitude;
+            //pPoint.Y = tmpLatitude;
+            //IFeature pFeature = pFeatureClass.CreateFeature();
+            //pFeature.Shape = pPoint;
+            //pFeature.Store();
+
+            //pPoint = new ESRI.ArcGIS.Geometry.Point();
+            //pPoint.X = tmpLongitude - 100;
+            //pPoint.Y = tmpLatitude - 100;
+            //pFeature = pFeatureClass.CreateFeature();
+            //pFeature.Shape = pPoint;
+            ////pFeature.set_Value(pFeature.Fields.FindField("经度"), tmpLongitude.ToString("F4"));
+
+            //pFeature.Store();
+            #endregion
+
+            #region 线创建
+            IGeometryDef pGeoDef = new GeometryDef();
+            IGeometryDefEdit pGeoDefEdit = pGeoDef as IGeometryDefEdit;
+            pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolyline;
+
+            pGeoDefEdit.SpatialReference_2 = pGCS;
+            pFieldEdit.GeometryDef_2 = pGeoDef;
+            pFieldsEdit.AddField(pFiled);
+
+            //创建shp
+            pFeatureClass = pFeatureWorkspace.CreateFeatureClass(strFile, pFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+
+            tmpLongitude = 11616.61347551;
+            tmpLatitude = 3956.63814757;
+            pPoint = new ESRI.ArcGIS.Geometry.Point();
+            pPoint.X = tmpLongitude;
+            pPoint.Y = tmpLatitude;
+
+            //定义一个多义线对象
+            IPolyline pPolyline = new ESRI.ArcGIS.Geometry.PolylineClass();
+            //定义一个点的集合
+            IPointCollection ptclo = pPolyline as IPointCollection;
+            //定义一系列要添加到多义线上的点对象，并赋初始值
             
+            ptclo.AddPoint(pPoint);
+
+            pPoint = new ESRI.ArcGIS.Geometry.Point();
+            pPoint.X = tmpLongitude - 10;
+            pPoint.Y = tmpLatitude - 10;
+
+            ptclo.AddPoint(pPoint);
+
+            IFeature pFeature = pFeatureClass.CreateFeature();
+            pFeature.Shape = pPolyline as IPolyline;
+            pFeature.Store();
+            #endregion
+
+            IGeometry polyline;
+            polyline = axMapControl1.TrackLine();
+            
+        }
+            
+    }
+
+    public class EditTool
+    {
+        private ILayer m_pCurrentLayer;     //当前编辑图层
+        private IMap m_pMap;                //地图控件中地图
+        private IFeature m_pFeature;        //当前编辑要素
+        private IPoint m_pPoint;            //鼠标点击位置
+        private IDisplayFeedback m_pFeedback;   //用于地图显示
+        private bool m_bInUse;              //判断是否编辑
+        private IPointCollection m_pPointCollection;    //当前要素的点集
+
+        public void StartEditing()
+        {
+            try
+            {
+                if (m_pCurrentLayer == null)
+                    return;
+                //判断图层类型
+                if (!(m_pCurrentLayer is IGeoFeatureLayer))
+                    return;
+                IFeatureLayer pFeatureLayer = m_pCurrentLayer as IFeatureLayer;
+                //获取编辑的要素类
+                IDataset pDataset = pFeatureLayer.FeatureClass as IDataset;
+                if (pDataset == null)
+                    return;
+                //获取WorkspaceEdit
+                IWorkspaceEdit pWorkspaceEdit = pDataset.Workspace as IWorkspaceEdit;
+                if (!pWorkspaceEdit.IsBeingEdited())
+                {
+                    pWorkspaceEdit.StartEditing(true);      //开启编辑流程
+                    pWorkspaceEdit.EnableUndoRedo();        //设置Undo/Redo为可用
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void SaveEdit()
+        {
+            try
+            {
+                if (m_pCurrentLayer == null)
+                    return;
+                //判断图层类型
+                if (!(m_pCurrentLayer is IGeoFeatureLayer))
+                    return;
+                IFeatureLayer pFeatureLayer = m_pCurrentLayer as IFeatureLayer;
+                //获取编辑的要素类
+                IDataset pDataset = pFeatureLayer.FeatureClass as IDataset;
+                if (pDataset == null)
+                    return;
+                //获取WorkspaceEdit
+                IWorkspaceEdit pWorkspaceEdit = pDataset.Workspace as IWorkspaceEdit;
+                if (pWorkspaceEdit.IsBeingEdited())
+                {
+                    bool hasEdit = false;
+                    pWorkspaceEdit.HasEdits(ref hasEdit);
+                    bool bSave = false;
+                    if (hasEdit)
+                    {
+                        pWorkspaceEdit.StopEditing(bSave);
+                    }
+                }
+                if (!pWorkspaceEdit.IsBeingEdited())
+                {
+                    pWorkspaceEdit.StartEditing(true);      //开启编辑流程
+                    pWorkspaceEdit.EnableUndoRedo();        //设置Undo/Redo为可用
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        
     }
 }

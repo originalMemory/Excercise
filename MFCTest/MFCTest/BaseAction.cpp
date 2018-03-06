@@ -16,9 +16,13 @@
 #include <iostream>
 using namespace std;
 
-#pragma region 基础动作类
-BaseAction::BaseAction(){
-}
+//#pragma region 基础动作类
+/*
+描述：构造函数
+参数：
+robot：机器人指针
+返回值：无
+*/
 BaseAction::BaseAction(ArRobot *robot){
 	myRobot = robot;
 }
@@ -32,15 +36,15 @@ BaseAction::~BaseAction(void){
 }
 
 
-/*
-描述：初始化机器人指针
-参数：
-robot：机器人指针
-返回值：无
-*/
-void BaseAction::SetRobot(ArRobot *robot){
-	myRobot = robot;
-}
+///*
+//描述：初始化机器人指针
+//参数：
+//robot：机器人指针
+//返回值：无
+//*/
+//void BaseAction::SetRobot(ArRobot *robot){
+//	myRobot = robot;
+//}
 
 
 /*
@@ -243,7 +247,18 @@ void BaseAction::SetRotDecel(double decel){
 	myRobot->setRotDecel(decel);
 	myRobot->unlock();
 }
-#pragma endregion
+//#pragma endregion
 
 
 
+
+
+/*
+描述：获取当前速度(mm/s2)
+参数：无
+返回值：当前速度(mm/s2)
+*/
+double BaseAction::GetVel()
+{
+	return myRobot->getVel();
+}

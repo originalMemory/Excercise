@@ -186,6 +186,8 @@ namespace CSharpTest.Tools
             {
                 throw new Exception("GetSHA256HashFromString() fail,error:" + ex.Message);
             }
-        } 
+        }
+
+
     }
 }

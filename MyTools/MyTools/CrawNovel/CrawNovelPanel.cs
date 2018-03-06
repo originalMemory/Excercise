@@ -460,10 +460,14 @@ namespace MyTools.CrawNovel
                             i++;
                             continue;
                         }
-                        else
+                        else if (i < txtList.Count - 1)
                         {
                             txtList[i] += txtList[i + 1];
                             txtList.RemoveAt(i + 1);
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                     else
