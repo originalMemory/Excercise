@@ -56,18 +56,18 @@
 #pragma warning(disable : 4192) 
 #pragma warning(disable : 4146) 
 #import "libid:6FCCEDE0-179D-4D12-B586-58C88D26CA78" raw_interfaces_only no_implementation 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriSystem.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids, exclude("OLE_COLOR", "OLE_HANDLE", "VARTYPE") rename("min", "esriMin") rename("max", "esriMax") 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriSystemUI.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR","IProgressDialog") rename("ICommand", "esriICommand") 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriControls.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriGeometry.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriDisplay.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") rename("RGB", "esriRGB") rename("CMYK", "esriCMYK") rename("ResetDC", "esriResetDC") rename("GetMessage", "esriGetMessage") 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriOutput.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriGeoDatabase.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR"), rename("GetMessage", "esriGetMessage") ,rename("ICursor", "esriICursor"),rename("IRow", "esriIRow") 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriDataSourcesFile.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriDataSourcesRaster.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") 
-#import "D:\Program Files (x86)\ArcGIS\Engine10.2\com\esriCarto.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR","UINT_PTR") rename("ITableDefinition","esriITableDefinition") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriSystem.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids, exclude("OLE_COLOR", "OLE_HANDLE", "VARTYPE") rename("min", "esriMin") rename("max", "esriMax") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriSystemUI.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR","IProgressDialog") rename("ICommand", "esriICommand") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriControls.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriGeometry.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriDisplay.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") rename("RGB", "esriRGB") rename("CMYK", "esriCMYK") rename("ResetDC", "esriResetDC") rename("GetMessage", "esriGetMessage") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriOutput.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriGeoDatabase.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR"), rename("GetMessage", "esriGetMessage") ,rename("ICursor", "esriICursor"),rename("IRow", "esriIRow") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriDataSourcesFile.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriDataSourcesRaster.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR") 
+#import "C:\Program Files (x86)\ArcGIS\Engine10.2\com\esriCarto.olb" raw_interfaces_only, raw_native_types, no_namespace, named_guids,exclude("OLE_COLOR","UINT_PTR") rename("ITableDefinition","esriITableDefinition") 
 
-#import "D:\Program Files (x86)\ArcGIS\Desktop10.2\com\esriDisplayUI.olb" raw_interfaces_only raw_native_types no_namespace named_guids exclude("OLE_COLOR", "OLE_HANDLE", "VARTYPE")
+#import "C:\Program Files (x86)\ArcGIS\Desktop10.2\com\esriDisplayUI.olb" raw_interfaces_only raw_native_types no_namespace named_guids exclude("OLE_COLOR", "OLE_HANDLE", "VARTYPE")
 #pragma warning(pop)
 
 #pragma endregion

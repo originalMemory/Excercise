@@ -161,6 +161,34 @@ namespace CSharpTest.Tools
                         }
                         Directory.Delete(x, true);
                     }
+                    else
+                    {
+                        Directory.Delete(x, true);
+                    }
+                }
+
+                i++;
+            }
+            CommonTools.Log("处理完毕！");
+        }
+
+        /// <summary>
+        /// 整理本子文件夹路径
+        /// </summary>
+        /// <param name="path"></param>
+        public static void SortFile(string path)
+        {
+            string errfile = path + @"\error.txt";
+            string[] files = Directory.GetFiles(path,"*.*",SearchOption.AllDirectories);
+            int i = 1;
+            foreach (var file in files)
+            {
+                var name = Path.GetFileName(file);
+                var newPath = path + name;
+                if (!File.Exists(newPath))
+                {
+                    File.Move(file, newPath);
+                    CommonTools.Log("[{0}/{1}] - {2}".FormatStr(i, files.Length, name));
                 }
 
                 i++;
@@ -188,6 +216,24 @@ namespace CSharpTest.Tools
             }
         }
 
-
+        public static void SortOutGal()
+        {
+            string folderPath = @"C:\新建文件夹\样本\";
+            var filePaths = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly);
+            int i = 0;
+            foreach (var filePath in filePaths)
+            {
+                /*
+                 * (18禁ゲーム) [160610] [アパタイト] アナル＊ティーチャー～感度良肛！？逆レッスン～ DL版 (files)[密码：终点]
+                 * (18禁ゲーム) [170825] [include] モブ催眠 DL版 (files) ※自炊
+                 * (同人ゲーム) [131101][RJ123844][ピンポイント／キングピン] 純情アイドル どすけべプロデュース～星空ゆずの種付け搾乳計画書～ DL版 (files)
+                 * [149314081@1234567][091225] [MBS TRUTH] 世界に男は自分だけ、全世界の女性を妊娠させて人類を救え！～ザーメンキャラバン認定ソフト～
+                 * 叔母寝取り ～夫の知らない淫らな関係～[密码：终点]
+                 */
+                var fileName = Path.GetFileNameWithoutExtension(filePath);
+                //(?P<comments>.*?\[(?P<author>(?:(?!汉化|漢化|ROC_1112出品|風的工房)[^\[\]])*)\](?:\s*(?:\[[^\(\)]+\]|\([^\[\]\(\)]+\))\s*)*(?P<title>[^\[\]\(\)]+).*)
+                Regex reg = new Regex("(?:(?!");
+            }
+        }
     }
 }

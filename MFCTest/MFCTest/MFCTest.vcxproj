@@ -44,7 +44,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files\MobileRobots\Aria\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\MobileRobots\Aria\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files\MobileRobots\Aria\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

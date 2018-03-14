@@ -421,7 +421,9 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 				vel.Format(_T("%lf"), ((VTGInfo*)info)->SpeedKm);
 				m_editSeekurVel.SetWindowText(vel);
 			}
+			delete info;
 		}
+		gpsInfos.shrink_to_fit();
 	}
 
 	return 0;
