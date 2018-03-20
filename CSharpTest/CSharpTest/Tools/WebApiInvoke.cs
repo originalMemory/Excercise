@@ -45,7 +45,7 @@ namespace CSharpTest.Tools
         /// <summary>  
         /// 创建POST方式的HTTP请求  
         /// </summary>  
-        public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters, CookieCollection cookies = null, int timeout = 5000, string userAgent = null)
+        public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, object> parameters, CookieCollection cookies = null, int timeout = 5000, string userAgent = null)
         {
             HttpWebRequest request = null;
             //如果是发送HTTPS请求  
@@ -103,7 +103,7 @@ namespace CSharpTest.Tools
         /// </summary>
         /// <param name="url">网页链接</param>
         /// <returns></returns>
-        public static string GetHtml(string url, string htmlCharset, int type = 0, IDictionary<string, string> parameters = null, CookieCollection cookies = null)
+        public static string GetHtml(string url, string htmlCharset, int type = 0, IDictionary<string, object> parameters = null, CookieCollection cookies = null)
         {
             //Http请求
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);

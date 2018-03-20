@@ -150,20 +150,27 @@ namespace CSharpTest.Tools
                     if (temp.Length > 0)
                     {
                         int j = 0;
+                        string childName="";
                         foreach (var childDir in temp)
                         {
+                            
                             j++;
                             string name = Path.GetFileName(childDir);
+                            if (temp.Length == 1)
+                                childName = name;
                             string newDir = path + "\\" + name;
                             if (!Directory.Exists(newDir))
                                 Directory.Move(childDir, newDir);
                             CommonTools.Log("[{0}/{1}] - [{2}/{3}]{4}".FormatStr(i, dirs.Length, j, temp.Length, name));
                         }
-                        Directory.Delete(x, true);
-                    }
-                    else
-                    {
-                        Directory.Delete(x, true);
+                        if(string.IsNullOrEmpty(childName))
+                            Directory.Delete(x, true);
+                        else
+                        {
+                            string name = Path.GetFileName(x);
+                            if(name!=childName)
+                                Directory.Delete(x, true);
+                        }
                     }
                 }
 

@@ -13,6 +13,8 @@
 #define IDC_EDIT3                       1003
 #define IDC_BUTTON1                     1004
 #define IDC_EDIT4                       1005
+#define IDC_EDIT9                       1006
+#define IDC_EDIT10                      1007
 #define IDC_TOCCONTROL1                 1008
 #define IDC_BUTTON2                     1009
 #define IDC_EDIT5                       1014
@@ -21,6 +23,7 @@
 #define IDC_CHECK1                      1017
 #define IDC_EDIT7                       1018
 #define IDC_EDIT8                       1019
+#define IDC_CHECK2                      1020
 
 // Next default values for new objects
 // 

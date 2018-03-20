@@ -16,10 +16,75 @@ void* work_thread(ArRobot* robot)
 	return 0;
 }
 
+class JoydriveAction : public ArAction
+{
+public:
+	// constructor
+	JoydriveAction(void);
+	// empty destructor
+	virtual ~JoydriveAction(void);
+	//the fire which will actually tell the resolver what to do
+	virtual ArActionDesired *fire(ArActionDesired currentDesired);
+	// whether the joystick is initalized or not
+	bool joystickInited(void);
+protected:
+	// action desired
+	ArActionDesired myDesired;
+	// joystick handler
+	ArJoyHandler myJoyHandler;
+};
+/*
+Note the use of constructor chaining with ArAction.
+*/
+JoydriveAction::JoydriveAction(void) :
+ArAction("Joydrive Action", "This action reads the joystick and sets the translational and rotational velocity based on this.")
+{
+	// initialize the joystick
+	myJoyHandler.init();
+	// set up the speed parameters on the joystick
+	myJoyHandler.setSpeeds(50, 700);
+}
+JoydriveAction::~JoydriveAction(void)
+{
+}
+// whether the joystick is there or not
+bool JoydriveAction::joystickInited(void)
+{
+	return myJoyHandler.haveJoystick();
+}
+// the guts of the thing
+ArActionDesired *JoydriveAction::fire(ArActionDesired currentDesired)
+{
+	int rot, trans;
+	// print out some info about hte robot
+	printf("\rx %6.1f  y %6.1f  tth  %6.1f vel %7.1f mpacs %3d", myRobot->getX(),
+		myRobot->getY(), myRobot->getTh(), myRobot->getVel(),
+		myRobot->getMotorPacCount());
+	fflush(stdout);
+	// see if one of the buttons is pushed, if so drive
+	if (myJoyHandler.haveJoystick() && (myJoyHandler.getButton(1) ||
+		myJoyHandler.getButton(2)))
+	{
+		// get the readings from the joystick
+		myJoyHandler.getAdjusted(&rot, &trans);
+		// set what we want to do
+		myDesired.setVel(trans);
+		myDesired.setDeltaHeading(-rot);
+		// return the actionDesired
+		return &myDesired;
+	}
+	else
+	{
+		// set what we want to do
+		myDesired.setVel(0);
+		myDesired.setDeltaHeading(0);
+		// return the actionDesired
+		return &myDesired;
+	}
+}
+
 int main(int argc, char **argv){
-	cout << argv[0] << endl;
-	cout << argv[1] << endl;
-	cout << argv[2] << endl;
+	
 
 
 	Aria::init();
@@ -61,6 +126,16 @@ int main(int argc, char **argv){
 	//激活基本处理类
 	BaseAction action(robot);
 
+	//手柄操纵类
+	//JoydriveAction jdAct;
+	//// if the joydrive action couldn't find the joystick, then exit.
+	//if (!jdAct.joystickInited())
+	//{
+	//	printf("Do not have a joystick, set up the joystick then rerun the program\n\n");
+	//	Aria::exit(1);
+	//	return 1;
+	//}
+
 	bool repeat=true;
 	while (repeat) 
 	{
@@ -86,7 +161,7 @@ int main(int argc, char **argv){
 			action.SetVelocity(value);
 			break;
 		case 3:
-			action.SetHeading(value);
+			//robot->addAction(&jdAct, 100);
 			break;
 		case 4:
 			action.SetDeltaHeading(value);

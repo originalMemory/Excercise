@@ -126,6 +126,9 @@ public:
 	//char NSIndicator;		//纬度半球指示符
 	//char EWIndicator;		//经度半球指示符
 	//int GPSStatus;			//GPS状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算
+
+	double BJ54_X;		//BJ54 X坐标
+	double BJ54_Y;		//BJ54_Y坐标
 };
 
 /*

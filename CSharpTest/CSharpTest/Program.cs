@@ -34,15 +34,18 @@ namespace CSharpTest
         
         static void Main(string[] args)
         {
-            //string url = "http://localhost:11763/api/HtmlEdit/InsertNewsHtml";
-            //Dictionary<string, string> para = new Dictionary<string, string>();
-            //para.Add("title", "测试标题");
-            //para.Add("sourceType", "0");
-            //para.Add("tags", "测试，临时");
-            //para.Add("content", "森远股份分手顶替有封建时代村夺有夺");
-            //var response = WebApiInvoke.CreatePostHttpResponse(url, para);
+            //string url = "http://localhost:2022/api/News/SaveNews";
+            //Dictionary<string, object> postData = new Dictionary<string, object>();
+            //postData.Add("id", null);
+            //postData.Add("userId", "58845bed1e5318078cb01b1a");
+            //postData.Add("title", "测试标题2232");
+            //postData.Add("sourceType", 0);
+            //postData.Add("tags", "标签1;标签2");
+            //postData.Add("content", "sdfjeifhskdfhojfilsdjflsdijfilejflsijfi;");
+            //var response = WebApiInvoke.CreatePostHttpResponse(url, postData);
             //StreamReader sr = new StreamReader(response.GetResponseStream());
-            //Console.WriteLine(sr.ReadToEnd());
+            //string reStr = sr.ReadToEnd();
+            //Console.WriteLine(reStr);
 
 
             //string url = "http://localhost:2022/api/AnaPro/ReStartTagBindSearch?anaProCateId=5a445dc5f4b87d04984d4aec&sourceType=0";
@@ -51,7 +54,7 @@ namespace CSharpTest
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
 
-            MyTools.SortDir(@"C:\baidudown\绯月");
+            MyTools.SortDir(@"G:\新建文件夹 (2)\本子");
            
 
             Console.ReadKey();

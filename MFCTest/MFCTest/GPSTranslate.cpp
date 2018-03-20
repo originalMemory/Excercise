@@ -79,7 +79,7 @@ vector<GPSInfo*> GPSTranslate::Tanslate(string line)
 			info->InfoType = Zero;
 			string tag = arr2[0];
 			//GGA解析
-			if (tag.find("GPGGA") != string::npos)
+			if (tag.find("GPGGA") != string::npos&&arr2.size() >= 14)
 			{
 				GGAInfo* gga = new GGAInfo();
 				gga->InfoType = GGA;
@@ -94,10 +94,16 @@ vector<GPSInfo*> GPSTranslate::Tanslate(string line)
 				utcHms.tm_sec = second;
 				gga->UTCHms = utcHms;
 				//解析纬度
-				gga->Latitude = atof(arr2[2].data()) / 100;
+				double d1 = atof(arr2[2].data());
+				int d2 = d1 / 100;
+				double d3 = d2 + (d1 - d2 * 100) / 60;
+				gga->Latitude = d3;
 				gga->NSIndicator = arr2[3][0];
 				//解析经度
-				gga->Longitude = atof(arr2[4].data()) / 100;
+				d1 = atof(arr2[4].data());
+				d2 = d1 / 100;
+				d3 = d2 + (d1 - d2 * 100) / 60;
+				gga->Longitude = d3;
 				gga->EWIndicator = arr2[5][0];
 
 				gga->GPSStatus = atoi(arr2[6].data());
@@ -114,7 +120,7 @@ vector<GPSInfo*> GPSTranslate::Tanslate(string line)
 				info = gga;
 			}
 			//RMC解析
-			else if (tag.find("GPRMC") != string::npos)
+			else if (tag.find("GPRMC") != string::npos&&arr2.size() >= 13)
 			{
 				RMCInfo* rmc = new RMCInfo();
 				rmc->InfoType = RMC;
@@ -159,7 +165,7 @@ vector<GPSInfo*> GPSTranslate::Tanslate(string line)
 				}
 			}
 			//VTG解析
-			else if (tag.find("GPVTG") != string::npos)
+			else if (tag.find("GPVTG") != string::npos&&arr2.size() >= 10)
 			{
 				VTGInfo* vtg = new VTGInfo();
 				vtg->InfoType = VTG;
@@ -176,7 +182,7 @@ vector<GPSInfo*> GPSTranslate::Tanslate(string line)
 			}
 			//$PSAT,HPR,102143.00,356.881,-0.387,-0.4,N*1E
 			//PSAT,HPR解析
-			else if (tag.find("PSAT") != string::npos&&arr2[1] == "HPR")
+			else if (tag.find("PSAT") != string::npos&&arr2[1] == "HPR"&&arr2.size() >= 7)
 			{
 				PSAT_HPRInfo* hpr = new PSAT_HPRInfo();
 				hpr->InfoType = PSAT_HPR;

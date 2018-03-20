@@ -140,6 +140,15 @@ public:
 	CEdit m_editKDis;
 	// P控制法K2参数，与航向差值相关
 	CEdit m_editKSubHead;
+	// 追踪开始/停止按钮
+	CButton m_btnTrack;
+	afx_msg void OnEnChangeEdit8();
+	// 北京54，X坐标
+	CEdit m_editBJ54_x;
+	// 北京54，Y坐标
+	CEdit m_editBJ54_y;
+	// 是否在地图上显示GPS坐标
+	CButton m_checkShowGPS;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本
