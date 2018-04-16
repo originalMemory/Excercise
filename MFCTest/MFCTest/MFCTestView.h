@@ -17,6 +17,7 @@
 typedef struct seekurPara{
 	double distance;	//距离
 	double heading;		//航向
+	double veloctiy;	//速度
 }*seekurParaPtr;
 
 
@@ -67,7 +68,7 @@ protected:
 	CSerialPort serialPort;		//串口通信类
 	GPSTranslate gpsTran;	/*GPS语句解析类*/
 	string gpsStr;	//获取到的完整的一句GPS语句
-	vector<GPSInfo*> gpsInfos;		//解析后的GPS语句组
+	GPSInfo* gpsInfo;		//解析后的GPS语句指针
 	CWinThread* seekur_thread;		//Seekur线程句柄
 	CWinThread* track_thread;		//追踪线程句柄
 
@@ -142,13 +143,16 @@ public:
 	CEdit m_editKSubHead;
 	// 追踪开始/停止按钮
 	CButton m_btnTrack;
-	afx_msg void OnEnChangeEdit8();
 	// 北京54，X坐标
 	CEdit m_editBJ54_x;
 	// 北京54，Y坐标
 	CEdit m_editBJ54_y;
 	// 是否在地图上显示GPS坐标
 	CButton m_checkShowGPS;
+	// Seekur运动速度
+	CEdit m_editVelocity;
+	// 追踪时的速度
+	double m_velocity;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

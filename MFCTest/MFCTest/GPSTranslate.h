@@ -140,10 +140,10 @@ public:
 	/*
 	描述：构造函数
 	参数：
-		@line：一组GPS语句
-	返回值：一组GPS解析语句指针
+		@line：GPS单行语句
+	返回值：GPS解析语句指针
 	*/
-	vector<GPSInfo*> Tanslate(std::string str);
+	GPSInfo* Tanslate(std::string str);
 };
 
 

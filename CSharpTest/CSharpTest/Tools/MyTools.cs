@@ -129,7 +129,7 @@ namespace CSharpTest.Tools
                 var files = Directory.GetFiles(path).ToList();
                 Regex reg = new Regex(".txt|.url|.torrent");
                 //Regex reg = new Regex(".rar|.txt|.zip|.url|.torrent");
-                if (files.Count > 5)
+                if (files.Count > 1)
                 {
                     var errorFiles = files.FindAll(s => reg.IsMatch(s));
                     foreach (var item in errorFiles)

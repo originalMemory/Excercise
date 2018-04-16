@@ -53,9 +53,24 @@ namespace ArcForm
                 this.axMapControl1.AddLayer(xjShpFeatureLayer);
                 this.axMapControl1.ActiveView.Refresh();
             }
+
+            IPoint p = new ESRI.ArcGIS.Geometry.Point();
         }
 
         private void btn_save_Click(object sender, EventArgs e)
+        {
+            //ILayer layer = axMapControl1.get_Layer(0);
+            //IGeoDataset dataset = layer as IGeoDataset;
+            //var ren = dataset.SpatialReference;
+            //var name = ren.Name;
+            //int edf = 234;
+
+            IPoint pPoint = new ESRI.ArcGIS.Geometry.Point();
+            
+            
+        }
+
+        void CreateShape()
         {
             string strFolder = @"F:\arcMap";
             string strFile = "path" + ".shp";
@@ -136,8 +151,7 @@ namespace ArcForm
             tmpLongitude = 116.276984;
             tmpLatitude = 39.9445685;
             pPoint = new ESRI.ArcGIS.Geometry.Point();
-            pPoint.X = 12943936.104345;
-            pPoint.Y = 4857881.546671;
+            pPoint.PutCoords(12943884.706671, 4857804.266050);
 
             //定义一个多义线对象
             IPolyline pPolyline = new ESRI.ArcGIS.Geometry.PolylineClass();
@@ -148,8 +162,7 @@ namespace ArcForm
             ptclo.AddPoint(pPoint);
 
             pPoint = new ESRI.ArcGIS.Geometry.Point();
-            pPoint.X = 12943895.916135;
-            pPoint.Y = 4857884.957404;
+            pPoint.PutCoords(12943885.463977, 4857805.079523);
 
             ptclo.AddPoint(pPoint);
 
@@ -160,7 +173,6 @@ namespace ArcForm
 
             IGeometry polyline;
             polyline = axMapControl1.TrackLine();
-            
         }
             
     }
