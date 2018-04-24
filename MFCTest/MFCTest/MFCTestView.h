@@ -78,6 +78,7 @@ protected:
 	//IDisplayFeedbackPtr m_feedback;		//用于地图显示
 	//bool m_bInUse;		//判断是否正在使用
 	//IPointCollectionPtr m_pointCollection;	//当前要素的点集
+	IPolylinePtr pPath;			//创建的路径
 
 	IElementPtr lastPointElement;
 
@@ -153,6 +154,9 @@ public:
 	CEdit m_editVelocity;
 	// 追踪时的速度
 	double m_velocity;
+	// 路径选择按钮
+	CButton m_btnPathSelect;
+	afx_msg void OnBtnPathCreate();
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

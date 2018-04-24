@@ -121,8 +121,8 @@ def get_gal_basic_info(filename, base_dir):
         if '后宫' in info:
             print('后宫：是')
             gal_info['harem'] = '是'
-    gal_info['pw'] = '⑨'
-    gal_info['source'] = '灵梦御所'
+    # gal_info['pw'] = '⑨'
+    gal_info['source'] = '绯月'
 
     return gal_info
 
@@ -179,8 +179,8 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         print(item_url)
         break
 
-    if '巨乳ファンタジー' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=851228&gc=gc'
+    if 'てにおはっ' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=792515&gc=gc'
     if not len(item_url):
         print('该Galgame在Getchu上没有信息！')
         return False
@@ -215,6 +215,7 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
 
     # 写入上传信息
     source_title = item_tree.xpath('//*[@id="soft-title"]/text()')[0].strip()
+    print(source_title)
     unname_str = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
     true_title = re.sub(unname_str, "_", source_title)  # 替换为下划线
     if 'ブランド' in sale_info:
@@ -227,16 +228,17 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
     # 创建整理后的文件夹
     if os.path.exists(target_dir):
         # 循环遍历，确认已存在安装文件
-        for x in os.listdir(target_dir):
-            if re.search(r'.zip|.rar|.7z|.iso|.mds|.mdf', x) or os.path.isdir(x):
-                print('该Gal已存在')
-                os.system('pause')
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
-                else:
-                    shutil.rmtree(file_path)
-                    # os.removedirs(file_path)
-        return False
+        for root, dirs, files in os.walk(target_dir):
+            for x in files:
+                if re.search(r'.zip|.rar|.7z|.iso|.mds|.mdf', x) or os.path.isdir(x):
+                    print('该Gal已存在')
+                    os.system('pause')
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+                    else:
+                        shutil.rmtree(file_path)
+                        # os.removedirs(file_path)
+                    return True
     else:
         os.makedirs(target_dir)
     with open(target_dir + '上传信息.txt', 'w', encoding="utf-8") as f:
@@ -265,7 +267,7 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         for key, value in sale_info.items():
             f.write('{}：{}\n'.format(key, value))
         f.write('\n\n')
-    print(sale_info)
+    # print(sale_info)
 
     # 摘要
     story_node = item_tree.xpath('//*[@class="tablebody"]')
@@ -286,6 +288,8 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
             cg_url = node.replace('/brandnew', base_url + 'brandnew')
         else:
             cg_url = node
+        if '.http' in cg_url:
+            cg_url=cg_url.replace('.http','http')
         print(cg_url)
         cg_name = os.path.basename(cg_url)
         new_url_path = target_dir + cg_name
@@ -392,14 +396,17 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
     # 创建整理后的文件夹
     if os.path.exists(target_dir):
         # 循环遍历，确认已存在安装文件
-        for x in os.listdir(target_dir):
-            if re.search(r'.zip|.rar|.7z|.iso|.mds|.mdf', x):
-                print('该Gal已存在')
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
-                else:
-                    shutil.rmtree(file_path)
-        return False
+        for root, dirs, files in os.walk(target_dir):
+            for x in files:
+                if re.search(r'.zip|.rar|.7z|.iso|.mds|.mdf', x) or os.path.isdir(x):
+                    print('该Gal已存在')
+                    os.system('pause')
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+                    else:
+                        shutil.rmtree(file_path)
+                        # os.removedirs(file_path)
+                    return True
     else:
         os.makedirs(target_dir)
     with open(target_dir + '上传信息.txt', 'w', encoding="utf-8") as f:
