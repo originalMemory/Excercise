@@ -121,8 +121,8 @@ def get_gal_basic_info(filename, base_dir):
         if '后宫' in info:
             print('后宫：是')
             gal_info['harem'] = '是'
-    # gal_info['pw'] = '⑨'
-    gal_info['source'] = '绯月'
+    gal_info['pw'] = '⑨'
+    gal_info['source'] = '灵梦御所'
 
     return gal_info
 

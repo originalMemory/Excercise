@@ -16,9 +16,10 @@
 #include "MainFrm.h"
 
 #define WM_SEEKUR_RET WM_USER+100		 //Seekur返回消息
-#define WM_SEEKUR_MOVE WM_USER+101		//Seekur操作消息（正值）
+#define WM_SEEKUR_MOVE WM_USER+101		//Seekur操作消息（开始）
 //#define WM_SEEKUR_SUB WM_USER+102		//Seekur操作消息（负值）
 #define WM_SEEKUR_END WM_USER+103		//Seekur操作消息（结束）
+#define WM_SEEKUR_STOP WM_USER+104		//Seekur操作消息（停止）
 
 #define WM_TRACK_START WM_USER+104		//开始追踪
 #define WM_TRACK_STOP WM_USER+105		//停止追踪
@@ -90,7 +91,7 @@ CMFCTestView::CMFCTestView()
 CMFCTestView::~CMFCTestView()
 {
 	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_END, 0, 0);
-	PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
+	//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
 }
 
 void CMFCTestView::DoDataExchange(CDataExchange* pDX)
@@ -111,6 +112,8 @@ void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK2, m_checkShowGPS);
 	DDX_Control(pDX, IDC_EDIT11, m_editVelocity);
 	DDX_Control(pDX, IDC_BUTTON4, m_btnPathSelect);
+	DDX_Control(pDX, IDC_EDIT12, m_editSubHeading);
+	DDX_Control(pDX, IDC_EDIT13, m_editDis);
 }
 
 BOOL CMFCTestView::PreCreateWindow(CREATESTRUCT& cs)
@@ -167,11 +170,13 @@ void CMFCTestView::OnInitialUpdate()
 		MessageBox(_T("GPS串口通信失败！"), _T("提示"), MB_OK);
 	}
 
-	
+	CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
+	CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
+	PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
 
-	m_editKDis.SetWindowTextW(_T("7"));
-	m_editKSubHead.SetWindowTextW(_T("0.1"));
-	m_editVelocity.SetWindowTextW(_T("200"));
+	m_editKDis.SetWindowTextW(_T("25"));
+	m_editKSubHead.SetWindowTextW(_T("0.5"));
+	m_editVelocity.SetWindowTextW(_T("500"));
 	m_velocity = 500;
 	isTracked = false;
 }
@@ -561,9 +566,9 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 	while (true)
 	{
 		GetMessage(&msg, NULL, 0, 0);
-		seekurParaPtr pPara = (seekurParaPtr)msg.wParam;
 		if (msg.message==WM_SEEKUR_MOVE)
 		{
+			seekurParaPtr pPara = (seekurParaPtr)msg.wParam;
 			//直线移动距离
 			if (pPara->distance != 0)
 				action.Move(pPara->distance);
@@ -572,13 +577,19 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			//直线移动距离
 			if (pPara->veloctiy != 0)
 				action.SetVelocity(pPara->veloctiy);
+			delete pPara;
+		}
+
+		if (msg.message == WM_SEEKUR_STOP)
+		{
+			action.Stop();
 		}
 		if (msg.message==WM_SEEKUR_END)
 		{
+			action.Stop();
 			break;
 		}
-		::PostMessage((HWND)lParam,WM_SEEKUR_RET, 0, 0);//发出自定义消息
-		delete pPara;
+		//::PostMessage((HWND)lParam,WM_SEEKUR_RET, 0, 0);//发出自定义消息
 	}
 	//robot->comInt(ArCommands::ENABLE, 1);
 	robot->disconnect();
@@ -590,31 +601,31 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 UINT CMFCTestView::TrackFuc(LPVOID lParam){
 	
 	MSG msg;
-	bool isStart = false;
+	//bool isStart = false;
 	bool isFirst = true;	//是否为刚开始追踪
+	GetMessage(&msg, NULL, 0, 0);
+	CMFCTestView* pView = (CMFCTestView*)msg.wParam;
 	while (true){
-		bool isGet = PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+		//bool isGet = PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
 		//判断是开始还是停止追踪
-		if (isGet){
-			if (msg.message = WM_TRACK_START){
-				isStart = true;
-			}
-			else if (msg.message = WM_TRACK_STOP){
-				isStart = false;
-				isFirst = true;
-				CMFCTestView* pView = (CMFCTestView*)msg.wParam;
-				PostThreadMessage(pView->seekur_thread->m_nThreadID, WM_SEEKUR_END, NULL, NULL);
-				//切换为手柄操纵模式
-			}
-			else if (msg.message = WM_TRACK_END){
-				break;
-			}
+		if (!pView->isTracked){
+			//if (msg.message = WM_TRACK_START){
+			//	isStart = true;
+			//}
+			//else if (msg.message = WM_TRACK_STOP){
+			//	isStart = false;
+			//	isFirst = true;
+			//	PostThreadMessage(pView->seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
+			//	////切换为手柄操纵模式
+			//}
+			//else if (msg.message = WM_TRACK_END){
+			//	break;
+			//}
+			isFirst = false;
+			Sleep(1000);
 		}
-
-		if (isStart)
+		else
 		{
-			CMFCTestView* pView = (CMFCTestView*)msg.wParam;
-
 			::CoInitialize(NULL);
 			IPolylinePtr pPolyline;
 			pPolyline = pView->m_trackPath;
@@ -713,10 +724,30 @@ UINT CMFCTestView::TrackFuc(LPVOID lParam){
 			double kSubHead = _ttof(cKSubHead);
 
 			distFromCurve *= 100000;
-			double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000;	//Seekur到路径距离
+			double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000;	//Seekur到路径距离（米）
 			double subHeading = lineHeading - pView->myGPSInfo.Heading;	//路径航向与Seekur航向差值
-			double turnHeading = kDis*dis + abs(kSubHead*subHeading);	//转向角
+			if (!isRightSide){
+				dis = -dis;
+			}
+			CString str;
+			str.Format(_T("%lf"), subHeading);
+			pView->m_editSubHeading.SetWindowText(str);
+			str.Format(_T("%lf"), dis);
+			pView->m_editDis.SetWindowText(str);
+
+			double turnHeading = 0;	//转向角
+			//double turnHeading = kDis*dis + abs(kSubHead*subHeading);	//转向角
 			double maxTrun = 20;	//最大转向角
+			if (dis > 2){
+				maxTrun = 30;
+			}
+			else if (dis > 0.5){
+				maxTrun = 20;
+			}
+			else
+			{
+				maxTrun = 10;
+			}
 			double diffDis = 0.5;	//缓冲距离，当进入该距离时转向角限制减半
 			//判断机器车在路径右侧还是左侧
 			if (turnHeading > maxTrun){
@@ -724,52 +755,55 @@ UINT CMFCTestView::TrackFuc(LPVOID lParam){
 			}
 			if (isRightSide)
 			{
+				//dis += 0.1;
+				turnHeading = kDis*dis - kSubHead*subHeading;
 				//调整转角，使转角不得令转向后的航向差值大于最大转向角
 				if ((subHeading + turnHeading) >= maxTrun)
 				{
-					if (subHeading>0)
-					{
-						turnHeading = maxTrun - subHeading;
-					} 
-					else
-					{
-						turnHeading = maxTrun;
-					}
+					turnHeading = maxTrun - subHeading;
 				}
-				//在右侧时航向差值大于等于最大转向角时不再转角
-				if (subHeading >= maxTrun)
+				//防止在右侧时外偏
+				if ((subHeading + turnHeading) <= -maxTrun)
 				{
-					turnHeading= 0;
+					turnHeading = -maxTrun - subHeading;
 				}
-				if (dis <= diffDis&&subHeading >= (maxTrun / 2))
+
+				////在右侧时航向差值大于等于最大转向角时不再转角
+				//if (subHeading >= maxTrun)
+				//{
+				//	turnHeading= 0;
+				//}
+				/*if (dis <= diffDis&&subHeading >= (maxTrun / 2))
 				{
 					turnHeading = turnHeading/ - 2;
-				}
+				}*/
 			}
 			else
 			{
+				//dis -= 0.1;
+				turnHeading = kDis*dis + kSubHead*subHeading;
 				//调整转角，使转角不得令转向后的航向差值大于最大转向角
-				if ((subHeading - turnHeading) <= -maxTrun)
+				if ((subHeading + turnHeading) <= -maxTrun)
 				{
-					if (subHeading < 0)
-					{
-						turnHeading = maxTrun + subHeading;
-					}
-					else
-					{
-						turnHeading = maxTrun;
-					}
+					turnHeading = -maxTrun - subHeading;
 				}
-				//在左侧时航向差值小于等于负的最大转向角时不再转角
-				if (subHeading <= -maxTrun)
+
+
+				//防止在右侧时外偏
+				if ((subHeading + turnHeading) >= maxTrun)
 				{
-					turnHeading = 0;
+					turnHeading = maxTrun - subHeading;
 				}
-				if (dis <= diffDis&&subHeading <=( -maxTrun / 2))
-				{
-					turnHeading = turnHeading /- 2;
-				}
-				turnHeading = -turnHeading;
+				////在左侧时航向差值小于等于负的最大转向角时不再转角
+				//if (subHeading <= -maxTrun)
+				//{
+				//	turnHeading = 0;
+				//}
+				//if (dis <= diffDis&&subHeading <=( -maxTrun / 2))
+				//{
+				//	turnHeading = turnHeading /- 2;
+				//}
+				//turnHeading = -turnHeading;
 			}
 			
 
@@ -799,7 +833,7 @@ UINT CMFCTestView::TrackFuc(LPVOID lParam){
 
 			//::PostMessage((HWND)lParam, WM_SEEKUR_RET, 0, 0);//发出自定义消息
 		}
-		Sleep(300);
+		Sleep(20);
 	}
 	return 0;
 }
@@ -1180,14 +1214,14 @@ void CMFCTestView::OnBnClickedButton3()
 		if (!isTracked)
 		{
 			//通知线程开始追踪
-			CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
-			CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
-			PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
+			//CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
+			//CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
+			//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
 			isTracked = true;
 			m_btnTrack.SetWindowTextW(_T("停止追踪"));
 		}
 		else{
-			PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
+			//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
 			isTracked = false;
 			m_btnTrack.SetWindowTextW(_T("开始追踪"));
 		}

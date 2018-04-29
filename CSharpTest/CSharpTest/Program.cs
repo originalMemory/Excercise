@@ -54,7 +54,7 @@ namespace CSharpTest
             //Console.WriteLine(reStr);
 
 
-            //string url = "http://www.dataweco.com/api/Keyword/GetLinkContent?linkId=5a617023b4433812fcb5dc11&sourceType=0";
+            //string url = "http://localhost:2022/api/Media/GetLevelLinks?user_id=587b5379cba12d035c51ce23&categoryId=&projectId=59242f261037d47990e7b6d3&keywordId=593fa6c21037d43f1038a586&Title=&domain=&infriLawCode=&status=&page=0&pagesize=2";
             //Dictionary<string, string> para = new Dictionary<string, string>();
             //var response = WebApiInvoke.CreateGetHttpResponse(url);
             //StreamReader sr = new StreamReader(response.GetResponseStream());

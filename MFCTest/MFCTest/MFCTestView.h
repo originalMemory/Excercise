@@ -157,6 +157,10 @@ public:
 	// 路径选择按钮
 	CButton m_btnPathSelect;
 	afx_msg void OnBtnPathCreate();
+	// 航向差值
+	CEdit m_editSubHeading;
+	// 距离差值
+	CEdit m_editDis;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

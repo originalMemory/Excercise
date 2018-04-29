@@ -17,6 +17,8 @@
 #define IDC_EDIT10                      1007
 #define IDC_TOCCONTROL1                 1008
 #define IDC_BUTTON2                     1009
+#define IDC_EDIT12                      1010
+#define IDC_EDIT13                      1011
 #define IDC_EDIT5                       1014
 #define IDC_EDIT6                       1015
 #define IDC_BUTTON3                     1016
