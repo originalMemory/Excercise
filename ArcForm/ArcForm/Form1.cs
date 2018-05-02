@@ -65,9 +65,42 @@ namespace ArcForm
             //var name = ren.Name;
             //int edf = 234;
 
-            IPoint pPoint = new ESRI.ArcGIS.Geometry.Point();
-            
-            
+            //获取路径
+
+            IFeatureLayer layer = axMapControl1.get_Layer(0) as IFeatureLayer;
+            IFeatureClass pFeatCla=layer.FeatureClass;
+            IFeature pFeature=pFeatCla.GetFeature(0);
+            IGeometry pGeometry=pFeature.Shape;
+            IPolyline pPoly=pGeometry as IPolyline;
+
+            IPoint test = new PointClass();
+            test.PutCoords(12943885.463977, 4857805.079523);
+
+            ISegmentCollection pSegCol = pPoly as ISegmentCollection;
+            for (int i = 0; i < pSegCol.SegmentCount; i++)
+            {
+                ISegment pSeg = pSegCol.get_Segment(i);
+                IPoint start = pSeg.FromPoint;
+                double x1 = start.X, y1 = start.Y;
+                IPoint end = pSeg.ToPoint;
+                double x2 = end.X, y2 = end.Y;
+
+                ISegmentCollection pcol2 = new PathClass();
+                pcol2.AddSegment(pSeg);
+                IGeometryCollection  pPol2 = new PolylineClass();
+                pPol2.AddGeometry(pcol2 as IGeometry);
+
+                ITopologicalOperator topo = test as ITopologicalOperator;
+                IGeometry buffer = topo.Buffer(0.01); //缓冲一个极小的距离  
+                topo = buffer as ITopologicalOperator;
+                //IPoint tpPoint = topo as IPoint;
+                //double x3 = tpPoint.X, y3 = tpPoint.Y;
+                IGeometryCollection pgeo = topo.Intersect(pSeg as IGeometry, esriGeometryDimension.esriGeometry0Dimension) as IGeometryCollection;
+                bool result = false;
+                if (pgeo.GeometryCount > 0)
+                    MessageBox.Show("点在直线上");
+                
+            }
         }
 
         void CreateShape()

@@ -59,14 +59,14 @@ IMPLEMENT_DYNCREATE(CMFCTestView, CFormView)
 BEGIN_MESSAGE_MAP(CMFCTestView, CFormView)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_FILE_OPEN, &CMFCTestView::OnFileOpen)
-//	ON_WM_SIZE()
-ON_MESSAGE(WM_COMM_RXCHAR, &CMFCTestView::OnCommunication)
-ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestView::OnClickedButton1)
-ON_COMMAND(ID_FILE_SAVE, &CMFCTestView::OnFileSave)
-ON_BN_CLICKED(IDC_BUTTON2, &CMFCTestView::OnBnClickedButton2)
-ON_MESSAGE(WM_SEEKUR_RET, &CMFCTestView::OnSeekur)
-ON_BN_CLICKED(IDC_BUTTON3, &CMFCTestView::OnBnClickedButton3)
-ON_BN_CLICKED(IDC_BUTTON4, &CMFCTestView::OnBtnPathCreate)
+	//	ON_WM_SIZE()
+	ON_MESSAGE(WM_COMM_RXCHAR, &CMFCTestView::OnCommunication)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestView::OnClickedButton1)
+	ON_COMMAND(ID_FILE_SAVE, &CMFCTestView::OnFileSave)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFCTestView::OnBnClickedButton2)
+	ON_MESSAGE(WM_SEEKUR_RET, &CMFCTestView::OnSeekur)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCTestView::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMFCTestView::OnBtnPathCreate)
 END_MESSAGE_MAP()
 
 
@@ -81,8 +81,8 @@ END_EVENTSINK_MAP()
 // CMFCTestView 构造/析构
 
 CMFCTestView::CMFCTestView()
-	: CFormView(CMFCTestView::IDD)
-	, m_velocity(0)
+: CFormView(CMFCTestView::IDD)
+, m_velocity(0)
 {
 	// TODO:  在此处添加构造代码
 
@@ -132,9 +132,9 @@ void CMFCTestView::OnInitialUpdate()
 
 	//初始化控件
 	//MapControl控件
-	CWnd* pWndCal=GetDlgItem(IDC_MAPCONTROL1);
-	LPUNKNOWN pUnk=pWndCal->GetControlUnknown();
-	pUnk->QueryInterface(IID_IMapControl2,(LPVOID *)&m_ipMapControl);
+	CWnd* pWndCal = GetDlgItem(IDC_MAPCONTROL1);
+	LPUNKNOWN pUnk = pWndCal->GetControlUnknown();
+	pUnk->QueryInterface(IID_IMapControl2, (LPVOID *)&m_ipMapControl);
 
 	CWnd* pWndCal2 = GetDlgItem(IDC_TOCCONTROL1);
 	LPUNKNOWN pUnk2 = pWndCal2->GetControlUnknown();
@@ -153,11 +153,6 @@ void CMFCTestView::OnInitialUpdate()
 		this->GetSafeHwnd()   // 传递窗体的句柄
 		);
 
-	track_thread = AfxBeginThread(
-		TrackFuc,
-		this->GetSafeHwnd()   // 传递窗体的句柄
-		);
-
 	//调用串口程序，打开与GPS的通信
 	CMainFrame *p = (CMainFrame*)AfxGetMainWnd();
 	CMFCTestView *m_CView = (CMFCTestView *)p->GetActiveView();//获取View类的指针
@@ -170,9 +165,7 @@ void CMFCTestView::OnInitialUpdate()
 		MessageBox(_T("GPS串口通信失败！"), _T("提示"), MB_OK);
 	}
 
-	CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
-	CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
-	PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
+
 
 	m_editKDis.SetWindowTextW(_T("25"));
 	m_editKSubHead.SetWindowTextW(_T("0.5"));
@@ -297,7 +290,7 @@ int CMFCTestView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	esriLicenseStatus ls;
 	HRESULT h = m_AoInit->Initialize(esriLicenseProductCode::esriLicenseProductCodeEngineGeoDB, &ls);
 
-	
+
 
 	return 0;
 }
@@ -454,7 +447,7 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 				point1->putref_SpatialReference(ipSRef);
 				point2->PutCoords(bj_x, bj_y);*/
 
-				
+
 			}
 			//刷新GPS位置
 			IActiveViewPtr iActiveView;
@@ -566,7 +559,7 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 	while (true)
 	{
 		GetMessage(&msg, NULL, 0, 0);
-		if (msg.message==WM_SEEKUR_MOVE)
+		if (msg.message == WM_SEEKUR_MOVE)
 		{
 			seekurParaPtr pPara = (seekurParaPtr)msg.wParam;
 			//直线移动距离
@@ -584,7 +577,7 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 		{
 			action.Stop();
 		}
-		if (msg.message==WM_SEEKUR_END)
+		if (msg.message == WM_SEEKUR_END)
 		{
 			action.Stop();
 			break;
@@ -599,242 +592,230 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 }
 
 UINT CMFCTestView::TrackFuc(LPVOID lParam){
-	
+
 	MSG msg;
 	//bool isStart = false;
 	bool isFirst = true;	//是否为刚开始追踪
 	GetMessage(&msg, NULL, 0, 0);
 	CMFCTestView* pView = (CMFCTestView*)msg.wParam;
-	while (true){
-		//bool isGet = PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
-		//判断是开始还是停止追踪
-		if (!pView->isTracked){
-			//if (msg.message = WM_TRACK_START){
-			//	isStart = true;
-			//}
-			//else if (msg.message = WM_TRACK_STOP){
-			//	isStart = false;
-			//	isFirst = true;
-			//	PostThreadMessage(pView->seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
-			//	////切换为手柄操纵模式
-			//}
-			//else if (msg.message = WM_TRACK_END){
-			//	break;
-			//}
-			isFirst = false;
-			Sleep(1000);
+
+	::CoInitialize(NULL);
+	//获取路径内所有直线
+	IPolylinePtr pPolyline;
+	pPolyline = pView->m_trackPath;
+	ISegmentCollectionPtr pSegCol = (ISegmentCollectionPtr)pPolyline;	//直线集合
+	long num;
+	pSegCol->get_SegmentCount(&num);
+	IPointPtr pStartPoint(CLSID_Point);		//当前路径起始点
+	IPointPtr pEndPoint(CLSID_Point);		//当前路径结束点
+	IPolylinePtr pNowPath(CLSID_Polyline);	//当前路径
+	int nowPathPos = -1;		//当前路径在直线集合中的位置
+	double lineHeading;		//路径航向
+	//pNowPath = pPolyline;
+
+	while (pView->isTracked){
+		//获取最近点
+		IPointPtr pNearestPoint(CLSID_Point);	//最近点
+		IPointPtr pSeekurPoint(CLSID_Point);		//Seekur所在点
+		IGeometryPtr pGeo;
+		pView->lastPointElement->get_Geometry(&pGeo);
+		pSeekurPoint = (IPointPtr)pGeo;
+		double x;
+		pSeekurPoint->get_X(&x);
+		double y;
+		pSeekurPoint->get_Y(&y);
+		//pSeekurPoint->PutCoords(12943887.463977, 4857805.079523);
+
+		double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
+		double distFromCurve = 0;//输入点到曲线的最短距离
+		VARIANT_BOOL isRightSide = false;//输入点是否在曲线的右边
+		pPolyline->QueryPointAndDistance(esriNoExtension, pSeekurPoint, false, pNearestPoint, &distAlongCurveFrom, &distFromCurve, &isRightSide);
+
+		//判断最近点在Seekur的左边还是右边，获取
+		double nearestX, nearestY, seekurX, seekurY;
+		pNearestPoint->get_X(&nearestX);
+		pNearestPoint->get_Y(&nearestY);
+		pSeekurPoint->get_X(&seekurX);
+		pSeekurPoint->get_Y(&seekurY);
+
+		//计算最近点是否在当前路径
+		ITopologicalOperatorPtr topo = (ITopologicalOperatorPtr)pNearestPoint;
+		/*IGeometryPtr buffer;
+		topo->Buffer(0.001, &buffer);
+		topo = (ITopologicalOperatorPtr)buffer;*/
+		IGeometryPtr pTpGeo;
+		HRESULT hr = topo->Intersect((IGeometryPtr)pNowPath, esriGeometry0Dimension, &pTpGeo);
+		if (FAILED(hr))
+		{
+			pView->MessageBox(_T("交点计算错误"));
+		}
+		VARIANT_BOOL isEmpty;	//交点是否为空
+		pTpGeo->get_IsEmpty(&isEmpty);
+		//先判断是否在当前路径上，不是则重新计算现有路径
+		if (isEmpty){
+			for (long i = nowPathPos + 1; i < num; i++)
+			{
+				ISegmentPtr pSeg;	//当前所在路径
+				//ISegmentPtr pSeg(CLSID_Line);	//当前所在路径
+				pSegCol->get_Segment(i, &pSeg);
+
+				//构造polyline路径
+				IPolylinePtr ptpPath(CLSID_Polyline);
+				ISegmentCollectionPtr ptpSegCol = (ISegmentCollectionPtr)ptpPath;
+				ptpSegCol->AddSegment(pSeg);
+
+
+				//计算最近点是否在当前路径
+				hr = topo->Intersect((IGeometryPtr)ptpPath, esriGeometry0Dimension, &pTpGeo);
+				if (FAILED(hr))
+				{
+					pView->MessageBox(_T("交点计算错误"));
+				}
+				pTpGeo->get_IsEmpty(&isEmpty);
+				if (!isEmpty)
+				{
+					pNowPath = ptpPath;
+					pSeg->get_FromPoint(&pStartPoint);
+					pSeg->get_ToPoint(&pEndPoint);
+					//计算路径航向
+					double startX, startY;
+					pStartPoint->get_X(&startX);
+					pStartPoint->get_Y(&startY);
+
+					double endX, endY;
+					pEndPoint->get_X(&endX);
+					pEndPoint->get_Y(&endY);
+
+					lineHeading = atan2(endY - startY, endX - startX) * 180 / PI;
+					if (lineHeading > 0)
+					{
+						lineHeading = 90 - lineHeading;
+					}
+					else
+					{
+						lineHeading = -lineHeading;
+					}
+					nowPathPos = i;
+					break;
+				}
+			}
+		}
+
+		CString cKDis;
+		pView->m_editKDis.GetWindowTextW(cKDis);
+		CString cKSubHead;
+		pView->m_editKSubHead.GetWindowTextW(cKSubHead);
+		double kDis = _ttof(cKDis);
+		double kSubHead = _ttof(cKSubHead);
+
+		distFromCurve *= 100000;
+		double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000;	//Seekur到路径距离（米）
+		double subHeading = lineHeading - pView->myGPSInfo.Heading;	//路径航向与Seekur航向差值
+
+		double turnHeading = 0;	//转向角
+		double maxTrun = 45;	//最大转向角
+		if (dis > 2){
+			maxTrun = 45;
+		}
+		else if (dis > 1){
+			maxTrun = 30;
+		}
+		else if (dis>0.5)
+		{
+			maxTrun = 20;
 		}
 		else
 		{
-			::CoInitialize(NULL);
-			IPolylinePtr pPolyline;
-			pPolyline = pView->m_trackPath;
-
-			//获取最近点
-			IPointPtr pNearestPoint(CLSID_Point);	//最近点
-			IPointPtr pSeekurPoint(CLSID_Point);		//Seekur所在点
-			IGeometryPtr pGeo;
-			pView->lastPointElement->get_Geometry(&pGeo);
-			pSeekurPoint = (IPointPtr)pGeo;
-			double x;
-			pSeekurPoint->get_X(&x);
-			double y;
-			pSeekurPoint->get_Y(&y);
-			//pSeekurPoint->PutCoords(12943887.463977, 4857805.079523);
-
-			double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
-			double distFromCurve = 0;//输入点到曲线的最短距离
-			VARIANT_BOOL isRightSide = false;//输入点是否在曲线的右边
-			pPolyline->QueryPointAndDistance(esriNoExtension, pSeekurPoint, false, pNearestPoint, &distAlongCurveFrom, &distFromCurve, &isRightSide);
-
-			//判断最近点在Seekur的左边还是右边，获取
-			double nearestX, seekurX,seekurY;
-			pNearestPoint->get_X(&nearestX);
-			pSeekurPoint->get_X(&seekurX);
-			pSeekurPoint->get_Y(&seekurY);
-			IPointCollectionPtr pPointCol = (IPointCollectionPtr)pPolyline;
-
-			IPointPtr pNextPoint(CLSID_Point);	//最近点的邻近点，构成离Seekur最近的线段
-			//遍历查询
-			long pointNum;	//点总数
-			double nearestY;	//最近点Y坐标
-			pNearestPoint->get_Y(&nearestY);
-			pPointCol->get_PointCount(&pointNum);
-			//bool isEnd = false;	//是前方的点还是后方的点
-			//for (long i = 0; i < pointNum; i++)
-			//{
-			//	IPointPtr pTmpPoint(CLSID_Point);
-			//	pPointCol->get_Point(i, &pTmpPoint);
-			//	double tmpX, tmpY;
-			//	pTmpPoint->get_X(&tmpX);
-			//	pTmpPoint->get_Y(&tmpY);
-			//	if (tmpX == nearestX&&tmpY == nearestY){
-			//		if (i == pointNum - 1)
-			//		{
-			//			pPointCol->get_Point(i - 1, &pNextPoint);
-			//			isEnd = true;
-			//		}
-			//		else
-			//			pPointCol->get_Point(i + 1, &pNextPoint);
-			//		break;
-			//	}
-			//}
-
-			//计算路径航向
-			IPointPtr pStartPoint(CLSID_Point);
-			pPointCol->get_Point(0, &pStartPoint);
-			double startX, startY;
-			pStartPoint->get_X(&startX);
-			pStartPoint->get_Y(&startY);
-
-			IPointPtr pEndPoint(CLSID_Point);
-			pPointCol->get_Point(1, &pEndPoint);
-			double endX, endY;
-			pEndPoint->get_X(&endX);
-			pEndPoint->get_Y(&endY);
-
-			double lineHeading;
-			double nextX, nextY;
-			pNextPoint->get_X(&nextX);
-			pNextPoint->get_Y(&nextY);
-			lineHeading = atan2(endY - startY, endX - startX) * 180 / PI;
-
-			/*if (isEnd)
-			{
-			lineHeading = atan2(nearestY - nextY, nearestX - nextX);
-			}
-			else{
-			lineHeading = atan2(nextY - nearestY, nextX - nearestX);
-			}*/
-
-			if (lineHeading > 0)
-			{
-				lineHeading = 90 - lineHeading;
-			}
-			else
-			{
-				lineHeading = - lineHeading;
-			}
-
-			CString cKDis;
-			pView->m_editKDis.GetWindowTextW(cKDis);
-			CString cKSubHead;
-			pView->m_editKSubHead.GetWindowTextW(cKSubHead);
-			double kDis = _ttof(cKDis);
-			double kSubHead = _ttof(cKSubHead);
-
-			distFromCurve *= 100000;
-			double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000;	//Seekur到路径距离（米）
-			double subHeading = lineHeading - pView->myGPSInfo.Heading;	//路径航向与Seekur航向差值
-			if (!isRightSide){
-				dis = -dis;
-			}
-			CString str;
-			str.Format(_T("%lf"), subHeading);
-			pView->m_editSubHeading.SetWindowText(str);
-			str.Format(_T("%lf"), dis);
-			pView->m_editDis.SetWindowText(str);
-
-			double turnHeading = 0;	//转向角
-			//double turnHeading = kDis*dis + abs(kSubHead*subHeading);	//转向角
-			double maxTrun = 20;	//最大转向角
-			if (dis > 2){
-				maxTrun = 30;
-			}
-			else if (dis > 0.5){
-				maxTrun = 20;
-			}
-			else
-			{
-				maxTrun = 10;
-			}
-			double diffDis = 0.5;	//缓冲距离，当进入该距离时转向角限制减半
-			//判断机器车在路径右侧还是左侧
-			if (turnHeading > maxTrun){
-				int dfsds = 23;
-			}
-			if (isRightSide)
-			{
-				//dis += 0.1;
-				turnHeading = kDis*dis - kSubHead*subHeading;
-				//调整转角，使转角不得令转向后的航向差值大于最大转向角
-				if ((subHeading + turnHeading) >= maxTrun)
-				{
-					turnHeading = maxTrun - subHeading;
-				}
-				//防止在右侧时外偏
-				if ((subHeading + turnHeading) <= -maxTrun)
-				{
-					turnHeading = -maxTrun - subHeading;
-				}
-
-				////在右侧时航向差值大于等于最大转向角时不再转角
-				//if (subHeading >= maxTrun)
-				//{
-				//	turnHeading= 0;
-				//}
-				/*if (dis <= diffDis&&subHeading >= (maxTrun / 2))
-				{
-					turnHeading = turnHeading/ - 2;
-				}*/
-			}
-			else
-			{
-				//dis -= 0.1;
-				turnHeading = kDis*dis + kSubHead*subHeading;
-				//调整转角，使转角不得令转向后的航向差值大于最大转向角
-				if ((subHeading + turnHeading) <= -maxTrun)
-				{
-					turnHeading = -maxTrun - subHeading;
-				}
-
-
-				//防止在右侧时外偏
-				if ((subHeading + turnHeading) >= maxTrun)
-				{
-					turnHeading = maxTrun - subHeading;
-				}
-				////在左侧时航向差值小于等于负的最大转向角时不再转角
-				//if (subHeading <= -maxTrun)
-				//{
-				//	turnHeading = 0;
-				//}
-				//if (dis <= diffDis&&subHeading <=( -maxTrun / 2))
-				//{
-				//	turnHeading = turnHeading /- 2;
-				//}
-				//turnHeading = -turnHeading;
-			}
-			
-
-			if (!isRightSide)
-			{
-				//dis = -dis;
-			}
-
-			CString vel;
-			vel.Format(_T("%lf"), turnHeading);
-			pView->m_editSeekurVel.SetWindowText(vel);
-
-			seekurParaPtr pPara = new seekurPara();
-			pPara->distance = 0;
-			pPara->heading = turnHeading;
-
-			if (isFirst)
-			{
-				CString cVel;
-				pView->m_editVelocity.GetWindowTextW(cVel);
-				double vel = _ttof(cVel);
-				pPara->veloctiy = pView->m_velocity;
-				isFirst = false;
-			}
-
-			PostThreadMessage(pView->seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, NULL);
-
-			//::PostMessage((HWND)lParam, WM_SEEKUR_RET, 0, 0);//发出自定义消息
+			maxTrun = 10;
 		}
+
+
+		/*if (turnHeading > maxTrun){
+			int dfsds = 23;
+		}*/
+		//判断机器车在路径右侧还是左侧
+		if (isRightSide)
+		{
+			//dis += 0.1;
+			turnHeading = kDis*dis - kSubHead*subHeading;
+			//调整转角，使转角不得令转向后的航向差值大于最大转向角
+			if ((subHeading + turnHeading) >= maxTrun)
+			{
+				turnHeading = maxTrun - subHeading;
+			}
+			//防止在右侧时外偏
+			if ((subHeading + turnHeading) <= -maxTrun)
+			{
+				turnHeading = -maxTrun - subHeading;
+			}
+
+			////在右侧时航向差值大于等于最大转向角时不再转角
+			//if (subHeading >= maxTrun)
+			//{
+			//	turnHeading= 0;
+			//}
+			/*if (dis <= diffDis&&subHeading >= (maxTrun / 2))
+			{
+			turnHeading = turnHeading/ - 2;
+			}*/
+		}
+		else
+		{
+			dis = -dis;
+			//dis += 0.1;
+			turnHeading = kDis*dis + kSubHead*subHeading;
+			//调整转角，使转角不得令转向后的航向差值大于最大转向角
+			if ((subHeading + turnHeading) <= -maxTrun)
+			{
+				turnHeading = -maxTrun - subHeading;
+			}
+
+
+			//防止在右侧时外偏
+			if ((subHeading + turnHeading) >= maxTrun)
+			{
+				turnHeading = maxTrun - subHeading;
+			}
+			////在左侧时航向差值小于等于负的最大转向角时不再转角
+			//if (subHeading <= -maxTrun)
+			//{
+			//	turnHeading = 0;
+			//}
+			//if (dis <= diffDis&&subHeading <=( -maxTrun / 2))
+			//{
+			//	turnHeading = turnHeading /- 2;
+			//}
+			//turnHeading = -turnHeading;
+		}
+
+		CString str;
+		str.Format(_T("%lf"), subHeading);
+		pView->m_editSubHeading.SetWindowText(str);
+		str.Format(_T("%lf"), dis);
+		pView->m_editDis.SetWindowText(str);
+		CString vel;
+		vel.Format(_T("%lf"), turnHeading);
+		pView->m_editSeekurVel.SetWindowText(vel);
+
+		seekurParaPtr pPara = new seekurPara();
+		pPara->distance = 0;
+		pPara->heading = turnHeading;
+
+		if (isFirst)
+		{
+			CString cVel;
+			pView->m_editVelocity.GetWindowTextW(cVel);
+			double vel = _ttof(cVel);
+			pPara->veloctiy = pView->m_velocity;
+			isFirst = false;
+		}
+
+		PostThreadMessage(pView->seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
+
+		//::PostMessage((HWND)lParam, WM_SEEKUR_RET, 0, 0);//发出自定义消息
 		Sleep(20);
 	}
+	PostThreadMessage(pView->seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
 	return 0;
 }
 #pragma endregion
@@ -943,7 +924,7 @@ void CMFCTestView::OnMouseDownMapcontrol1(long button, long shift, long X, long 
 	IActiveViewPtr iActiveView;
 	m_ipMapControl->get_ActiveView(&iActiveView);
 	IPointPtr ipoint(CLSID_Point);
-	
+
 	if (ipoint == NULL) return;
 	ipoint->PutCoords(mapX, mapY);
 	m_cPointLine.SetCheck(1);
@@ -986,9 +967,9 @@ void CMFCTestView::OnMouseDownMapcontrol1(long button, long shift, long X, long 
 		else
 			hr = m_pNewLineFeedback->AddPoint(ipoint);
 	}
-	
 
-	
+
+
 }
 
 void CMFCTestView::OnTestMarkerStyle()
@@ -1036,7 +1017,7 @@ IPoint* CMFCTestView::geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromPr
 	ISpatialReferenceFactoryPtr newReferenceSystem;
 
 	HRESULT hr = originalSpecialReference.CreateInstance(CLSID_SpatialReferenceEnvironment);
-	
+
 	HRESULT hr1 = originalSpecialReference->CreateProjectedCoordinateSystem(fromProjType, &projCoordSystem);
 	spatialRf = (ISpatialReference*)projCoordSystem;
 	//HRESULT hr2 = points->putref_SpatialReference(spatialRf);
@@ -1065,12 +1046,12 @@ void CMFCTestView::OnDoubleClickMapcontrol1(long button, long shift, long X, lon
 	if (ipolyline != NULL)
 	{
 		//AddCreateElement(m_pgeometry, iActiveView);
-		
+
 
 		IGraphicsContainerPtr pgracont(iActiveView);
 		ILineElementPtr pLineElement(CLSID_LineElement);
 		//pLineElement->put_Symbol(m_isymbol);
-		
+
 		IElementPtr pElement = (IElementPtr)pLineElement;
 		pElement->put_Geometry(ipolyline);
 		pgracont->AddElement((IElementPtr)pElement, 0);
@@ -1163,7 +1144,7 @@ void CMFCTestView::OnBnClickedButton2()
 
 	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, NULL);
 	//PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, dis, head);
-	
+
 }
 
 
@@ -1209,15 +1190,20 @@ void CMFCTestView::OnBnClickedButton3()
 		IGeometryPtr pGeometry;
 		pFeature->get_Shape(&pGeometry);
 		m_trackPath = pGeometry;
-		
+
 
 		if (!isTracked)
 		{
-			//通知线程开始追踪
-			//CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
-			//CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
-			//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
+			//启动追踪线程
 			isTracked = true;
+			track_thread = AfxBeginThread(
+				TrackFuc,
+				this->GetSafeHwnd()   // 传递窗体的句柄
+				);
+			CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
+			CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
+			PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
+
 			m_btnTrack.SetWindowTextW(_T("停止追踪"));
 		}
 		else{
@@ -1246,7 +1232,7 @@ void CMFCTestView::OnBnClickedButton3()
 	IPointPtr ipoint(CLSID_Point);
 	ipoint->PutCoords(290, 480);*/
 
-	
+
 }
 
 void CreateShapeFile(){
