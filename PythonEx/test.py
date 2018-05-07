@@ -1,140 +1,103 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import pymysql.cursors
-import time
 
-time_start = time.time()
-time_last=time_start
+import xlrd  # 读取模块
+from openpyxl.styles import numbers
+from openpyxl import load_workbook
 
-# 连接数据库
-config = {
-    'host': 'localhost',  # 地址
-    'user': 'root',  # 用户名
-    'passwd': 'kdi1994',  # 密码
-    'db': 'myacgn_info',  # 使用的数据库名
-    'charset': 'utf8',  # 编码类型
-    'cursorclass': pymysql.cursors.DictCursor  # 按dict输出，无此属性时按list输出
-}
+# 读取表格
+wb_day_sum = load_workbook('F:\Summary _business_tracking\每天业务追踪规定汇总.xlsx')  # 当天表
+sheet_day_sum = wb_day_sum.worksheets[0]
+rd_apply1 = xlrd.open_workbook('F:\Summary _business_tracking\day1_apply_money.xls')  # apply1
+sheet_apply1 = rd_apply1.sheets()[0]
+rd_overdue1 = xlrd.open_workbook('F:\Summary _business_tracking\day1_overdue_rate.xls')  # overdue1
+sheet_overdue1 = rd_overdue1.sheets()[0]
 
-db = pymysql.connect(**config)
-cursor = db.cursor()
 
-# 获取所有的计划并以编号建立词典
-cursor.execute("select money,no from plan")
-tp_data = cursor.fetchall()
+def get_table_info(sheet, search_data, search_col, target_col):
+    """
+    查询表格获取对应行的指定数据
+    表格为xlrd格式，数据仅有数字和百分比字符串两种
+    :param sheet: 要查询的表格
+    :param search_data: 要对比的属性内容
+    :param search_col: 要对比的属性所在列
+    :param target_col: 要查找的属性所在列
+    :return: 查找的属性值
+    """
+    nrows = sheet.nrows
+    for i in range(nrows):
+        cp_data = sheet.cell(i, search_col).value  # 进行对比的单元格内容
+        if search_data == cp_data:
+            data = sheet.cell(i, target_col).value
+            if isinstance(data, str) and '%' in data:  # 判断是否为字符串形式的百分比
+                data = float(data[:-1]) / 100  # 是则将字符串转换为小数
+            return data
+    return -1
 
-time_now=time.time()
-print('读取计划表耗时：{}s/{}s'.format(round(time_now-time_last,2),round(time_now-time_start,2)))
-time_last=time_now
 
-plans = {}
-i=0
-for x in tp_data:
-    if not x['no']:
-        continue
-    tp_no = x['no']
-    # 判断本编号是否已建立词典
-    if tp_no in plans:
-        # 是则直接添加
-        tp_plan = plans[tp_no]
-        tp_plan.append(x['money'])
+# 申请单量-放款量表1，匹配分行名称，获取申请单量
+nrows = sheet_day_sum.max_row  # 行数
+for i in range(3, nrows):
+    name = sheet_day_sum['B' + str(i)].value
+    print('分行名 ： %s' % name)
+
+    # 获取day1的累计申请
+    apply1_num = get_table_info(sheet_apply1, name + '分公司', 0, 5)
+    if apply1_num >= 0:
+        sheet_day_sum['C' + str(i)] = apply1_num
+        print('day1 累计申请：%s' % apply1_num)
     else:
-        # 否则新建编号记录列表再添加
-        tp_plan = [x['money']]
-        plans[tp_no] = tp_plan
-    i+=1
+        print('无值')
 
-time_now=time.time()
-print('分类计划表耗时：{}s/{}s'.format(round(time_now-time_last,4),round(time_now-time_start,2)))
-time_last=time_now
-
-    
-# 获取所有实际还款，并建立词典
-nos=set()
-reals = {}
-cursor.execute("select id,return_date,money,name,no from `real`")
-tp_data = cursor.fetchall()
-
-time_now=time.time()
-print('读取实际表耗时：{}s/{}s'.format(round(time_now-time_last,2),round(time_now-time_start,2)))
-time_last=time_now
-
-i=0
-for x in tp_data:
-    tp_no = x['no']
-    nos.add(tp_no)
-    # 判断本编号是否已建立词典
-    if tp_no in reals:
-        # 是则直接添加
-        tp_real=reals[tp_no]
-        tp_real.append(x)
+    # 获取day1的累计放款
+    apply1_money = get_table_info(sheet_apply1, name + '分公司', 0, 2)
+    if apply1_money >= 0:
+        sheet_day_sum['D' + str(i)] = apply1_money
+        print('day1 累计放款：%s' % apply1_money)
     else:
-        # 否则新建编号记录列表再添加
-        tp_real=[x]
-        reals[tp_no]=tp_real
-    i+=1
+        print('无值')
 
-time_now=time.time()
-print('分类实际表耗时：{}s/{}s'.format(round(time_now-time_last,4),round(time_now-time_start,2)))
-time_last=time_now
+    # 获取day1的9-30天逾期(逾期率)
+    overdue1_value = get_table_info(sheet_overdue1, name + '分公司', 0, 4)
+    sheet_day_sum['E' + str(i)].number_format = numbers.FORMAT_PERCENTAGE_00
+    if overdue1_value >= 0:
+        sheet_day_sum['E' + str(i)] = overdue1_value
+        print('day1 9-30天逾期(逾期率)：%s' % overdue1_value)
+    else:
+        print('无值')
 
-no_len = len(nos)
-i=0
-for no in nos:
-    # 获取该编号还款计划
-    if not no in plans:
-        continue
-    now_plans = plans[no]
+    nrate = 0  # 任务达标次数
 
-    # 获取实际还款期数
-    now_reals=reals[no]
-    # 对其按时间升序（快速排序）
-    for x in range(1, len(now_reals)):
-        for j in range(x-1,-1,-1):
-            a=now_reals[j]['return_date']
-            b=now_reals[j + 1]['return_date']
-            if a>b:
-                temp=now_reals[j]
-                now_reals[j]=now_reals[j + 1]
-                now_reals[j + 1]=temp
-            else:
-                break
+    # 对比申请数
+    task_num = sheet_day_sum['J' + str(i)].value  # 每日申请任务
+    sheet_day_sum['G' + str(i)].number_format = numbers.FORMAT_GENERAL
+    if apply1_num > task_num:
+        sheet_day_sum['G' + str(i)] = 1
+        nrate += 1
+    else:
+        sheet_day_sum['G' + str(i)] = 0
 
-    if no == 'A0838000006':
-        adf = 24
+    # 对比累计放款金额
+    task_money = sheet_day_sum['K' + str(i)].value  # 每日放款任务
+    task_money *= 10000
+    if apply1_money > task_money:
+        sheet_day_sum['H' + str(i)] = 1
+        nrate += 1
+    else:
+        sheet_day_sum['H' + str(i)] = 0
 
-    # 将计划与实际还款进行对比，计算其实际还款数量
-    now_period = 0  # 当前还款期数，最后写入时加1
-    now_money = 0  # 当前还款金额
-    plan_money = now_plans[0]  # 当前应还款金额累计，与期数对应，初始为第1期
-    for info in now_reals:
-        # 在值不为空时叠加（反例：编号：HXYLcredit201706283794467）
-        if info['money']:
-            now_money += info['money']  # 叠加本次还款金额
-        # 判断当前还款是否大于当前应还款
-        if now_money > plan_money:
-            # 大于时计算还至第几期
-            while now_money > plan_money:
-                # 判断是否已还至最后一期，至最后一期时不再往后计算
-                if now_period == len(now_plans) - 1:
-                    break
-                now_period += 1
-                plan_money += now_plans[now_period]
-        time_now = time.time()
-        print('[{}/{}]\t编号：{}\t姓名：{}\t还款时间：{}\t金额：{}/{}\t期数：{}'.format(i, no_len,tp_no,
-                                                                         info['name'], info['return_date'],
-                                                                         info['money'],now_plans[now_period],
-                                                                         now_period + 1))
-        # 写入
-        sql = "update `real` set period={} where id={}".format(now_period + 1, info['id'])
-        cursor.execute(sql)
-        db.commit()
-    time_now = time.time()
-    print('本编号计算耗时：{}s/{}s'.format(round(time_now - time_last, 4), round(time_now - time_start, 2)))
-    time_last = time_now
-    i += 1
+    # 对比9-30天逾期(逾期率)
+    if overdue1_value >= 0 and overdue1_value < 0.01:
+        sheet_day_sum['I' + str(i)] = 1
+        nrate += 1
+    else:
+        sheet_day_sum['I' + str(i)] = 0
 
-print('计算完毕！，累计耗时{}s'.format(round(time.time() - time_start, 2)))
-cursor.close()
-db.close()
+    # 判断总体是否达标
+    if nrate >= 2:
+        sheet_day_sum['F' + str(i)] = '否'
+    else:
+        sheet_day_sum['F' + str(i)] = '是'
+
+wb_day_sum.save('F:\\test.xlsx')

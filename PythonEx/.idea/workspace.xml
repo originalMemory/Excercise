@@ -14,23 +14,31 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
-              <caret line="108" column="27" lean-forward="false" selection-start-line="108" selection-start-column="27" selection-end-line="108" selection-end-column="27" />
+            <state relative-caret-position="486">
+              <caret line="85" column="13" lean-forward="false" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="13" />
               <folding>
-                <element signature="e#47#69#0" expanded="true" />
+                <element signature="e#48#67#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sort_gal.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sort_gal.py">
+      <file leaf-file-name="Summary _business_tracking(1).py" pinned="false" current-in-tab="true">
+        <entry file="file://F:/Summary _business_tracking(1).py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="217" column="22" lean-forward="false" selection-start-line="217" selection-start-column="10" selection-end-line="217" selection-end-column="22" />
-              <folding>
-                <element signature="e#147#156#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="66">
+              <caret line="158" column="14" lean-forward="true" selection-start-line="158" selection-start-column="8" selection-end-line="158" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="numbers.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/openpyxl/styles/numbers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1080">
+              <caret line="64" column="20" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="20" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -40,8 +48,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="600">
               <caret line="33" column="6" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sort_excel.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sort_excel.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="940">
+              <caret line="47" column="51" lean-forward="false" selection-start-line="46" selection-start-column="16" selection-end-line="47" selection-end-column="51" />
               <folding>
-                <element signature="e#79#88#0" expanded="true" />
+                <element signature="e#47#81#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -103,6 +121,7 @@
       <replace>h3</replace>
       <replace>tp_value</replace>
       <replace>real</replace>
+      <replace>x</replace>
     </replaceStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -114,8 +133,12 @@
         <option value="F:/test1.py" />
         <option value="$PROJECT_DIR$/sort_excel.py" />
         <option value="$PROJECT_DIR$/excel_repay.py" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/sort_gal.py" />
+        <option value="$PROJECT_DIR$/excel_repay2.py" />
+        <option value="$PROJECT_DIR$/cp_period_excel.py" />
+        <option value="$PROJECT_DIR$/cp_period_mysql.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="F:/Summary _business_tracking(1).py" />
       </list>
     </option>
   </component>
@@ -170,13 +193,18 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/sort_gal.py" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\MyGit\PythonEx" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -190,7 +218,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.sort">
+  <component name="RunManager" selected="Python.test">
     <configuration name="sort" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -267,20 +295,29 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17650159" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.50264204" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15279241" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900944" sideWeight="0.49577168" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5471698" sideWeight="0.5021142" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.497358" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5011161" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900944" sideWeight="0.49524313" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4740566" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.497358" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5479911" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4716981" sideWeight="0.49788582" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -302,14 +339,14 @@
           <option name="timeStamp" value="153" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test.py</url>
-          <line>85</line>
-          <option name="timeStamp" value="200" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/sort_gal.py</url>
           <line>114</line>
           <option name="timeStamp" value="201" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/sort_excel.py</url>
+          <line>3</line>
+          <option name="timeStamp" value="221" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -319,7 +356,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="202" />
+      <option name="time" value="227" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -333,50 +370,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6200">
-          <caret line="310" column="0" lean-forward="false" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sort_gal.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#147#156#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3860">
-          <caret line="193" column="0" lean-forward="false" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sort_gal.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#147#156#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sort_gal.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#147#156#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Anaconda3/Lib/re.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5800">
@@ -396,7 +389,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -420,7 +413,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -444,7 +437,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -475,7 +468,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -492,7 +485,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -509,7 +502,7 @@
         <state relative-caret-position="360">
           <caret line="18" column="53" lean-forward="false" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="53" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -526,7 +519,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -543,7 +536,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -560,7 +553,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -570,7 +563,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -659,21 +652,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://F:/python/demo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="11" column="38" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://F:/python/demo.py" />
     <entry file="file://F:/test1.py" />
-    <entry file="file://$PROJECT_DIR$/sort_excel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2960">
-          <caret line="149" column="0" lean-forward="false" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/pymysql/cursors.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5120">
@@ -688,51 +668,93 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gal_write_mysql.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="33" column="6" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="6" />
-          <folding>
-            <element signature="e#79#88#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Anaconda3/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6160">
-          <caret line="308" column="0" lean-forward="false" selection-start-line="308" selection-start-column="0" selection-end-line="308" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/excel_repay.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="726">
-          <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
-          <folding>
-            <element signature="e#47#69#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="108" column="27" lean-forward="false" selection-start-line="108" selection-start-column="27" selection-end-line="108" selection-end-column="27" />
-          <folding>
-            <element signature="e#47#69#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="109">
+          <caret line="310" column="0" lean-forward="false" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sort_gal.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="217" column="22" lean-forward="false" selection-start-line="217" selection-start-column="10" selection-end-line="217" selection-end-column="22" />
+        <state relative-caret-position="5375">
+          <caret line="215" column="12" lean-forward="false" selection-start-line="215" selection-start-column="12" selection-end-line="215" selection-end-column="12" />
           <folding>
-            <element signature="e#147#156#0" expanded="true" />
+            <element signature="e#147#156#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/openpyxl/workbook/workbook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="142" column="8" lean-forward="false" selection-start-line="142" selection-start-column="8" selection-end-line="142" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cp_period_mysql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="742">
+          <caret line="178" column="0" lean-forward="false" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/excel_repay.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="942">
+          <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cp_period_excel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="127" column="35" lean-forward="false" selection-start-line="127" selection-start-column="35" selection-end-line="127" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sort_excel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="940">
+          <caret line="47" column="51" lean-forward="false" selection-start-line="46" selection-start-column="16" selection-end-line="47" selection-end-column="51" />
+          <folding>
+            <element signature="e#47#81#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gal_write_mysql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="33" column="6" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/openpyxl/styles/numbers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="64" column="20" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="85" column="13" lean-forward="false" selection-start-line="85" selection-start-column="8" selection-end-line="85" selection-end-column="13" />
+          <folding>
+            <element signature="e#48#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Summary _business_tracking(1).py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="158" column="14" lean-forward="true" selection-start-line="158" selection-start-column="8" selection-end-line="158" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
