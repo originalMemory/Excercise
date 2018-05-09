@@ -59,7 +59,6 @@ public:
 	//CEdit m_editLongitude;		//经度文本框
 	//CEdit m_editLatitude;		//纬度文本框
 	INewLineFeedbackPtr m_pNewLineFeedback;
-	IPolylinePtr m_trackPath;	//追踪路径
 	bool isTracked;		//是否正在追踪
 	MyGPSInfo myGPSInfo;		//我实际使用的GPS信息
 
@@ -68,19 +67,13 @@ protected:
 	CSerialPort serialPort;		//串口通信类
 	GPSTranslate gpsTran;	/*GPS语句解析类*/
 	string gpsStr;	//获取到的完整的一句GPS语句
-	GPSInfo* gpsInfo;		//解析后的GPS语句指针
 	CWinThread* seekur_thread;		//Seekur线程句柄
-	CWinThread* track_thread;		//追踪线程句柄
-
-	//ILayerPtr m_currentLayer;		//当前图层
-	//IMapPtr m_map;		//地图控件中的地图
-	//IFeaturePtr m_editFeature;	//编辑中的要素
-	//IDisplayFeedbackPtr m_feedback;		//用于地图显示
-	//bool m_bInUse;		//判断是否正在使用
-	//IPointCollectionPtr m_pointCollection;	//当前要素的点集
+	//CWinThread* track_thread;		//追踪线程句柄
+	bool isGPSEnd;		//本轮GPS语句组是否已至最后
 	IPolylinePtr pPath;			//创建的路径
+	IElementPtr lastPointElement;	// Seekur上一次的坐标
 
-	IElementPtr lastPointElement;
+
 
 private:
 	void AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactiveview);
@@ -88,8 +81,7 @@ private:
 	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType = 3857, long toGeoType = 4326);
 	ISymbolPtr m_isymbol;
 	static UINT SeekurFuc(LPVOID lParam);		//Seekur控制线程函数
-	//HRESULT CreateShapeFile(esriGeometryType type, CString layerPath, CString layerName, IFeatureClass** ppFeatureClass);
-	void CreateShapeFile();
+	//void CreateShapeFile();
 	static UINT TrackFuc(LPVOID lParam);		//追踪线程函数
 
 	
@@ -100,7 +92,6 @@ protected:
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnFileOpen();
-//	afx_msg void OnSize(UINT nType, int cx, int cy);
 protected:
 	/*
 	描述：GPS串口通信函数
@@ -112,55 +103,75 @@ protected:
 	afx_msg LRESULT OnCommunication(WPARAM ch, LPARAM portnum);
 public:
 //	afx_msg void OnBnClickedButton1();
-	afx_msg void OnClickedButton1();
 	afx_msg void OnMouseDownMapcontrol1(long button, long shift, long x, long y, double mapX, double mapY);
 	afx_msg void OnDoubleClickMapcontrol1(long button, long shift, long X, long Y, double mapX, double mapY);
 	afx_msg	void OnMouseMoveMapcontrol1(long button, long shift, long X, long Y, double mapX, double mapY);
 	afx_msg void OnFileSave();
-	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBtnMoveSeekur();
 private:
 	// 控制线程的结束
 protected:
 	afx_msg LRESULT OnSeekur(WPARAM wParam, LPARAM lParam);
 public:
-	// 航向文本框
-	CEdit m_editHeading;
-	// 距离文本框
-	CEdit m_editDistance;
+	// 转动相对角度文本框
+	CEdit m_editMoveHeading;
+	// 移动相对距离文本框
+	CEdit m_editMoveDistance;
 	// 纬度文本框
 	CEdit m_editLongitude;
 	// 经度文本框
 	CEdit m_editLatitude;
-	afx_msg void OnBnClickedButton3();
+	afx_msg void OnBtnTrack();
 	// 点线切换绘制
 	CButton m_cPointLine;
-	// Seekur当前速度
+	// Seekur当前速度文本框
 	CEdit m_editSeekurVel;
-	// Seekur当前航向
+	// Seekur当前航向文本框
 	CEdit m_editSeekurHeading;
-	// P控制法K1参数，与距离有关
-	CEdit m_editKDis;
-	// P控制法K2参数，与航向差值相关
-	CEdit m_editKSubHead;
 	// 追踪开始/停止按钮
 	CButton m_btnTrack;
-	// 北京54，X坐标
-	CEdit m_editBJ54_x;
-	// 北京54，Y坐标
-	CEdit m_editBJ54_y;
-	// 是否在地图上显示GPS坐标
-	CButton m_checkShowGPS;
-	// Seekur运动速度
+	// GPS卫星数量文本框
+	CEdit m_editSatNum;
+	// GPS状态指示位文本框
+	CEdit m_editGPSStaus;
+	// 是否转换北京54坐标
+	CButton m_checkShowBJ54;
+	// Seekur运动速度文本框
 	CEdit m_editVelocity;
 	// 追踪时的速度
 	double m_velocity;
 	// 路径选择按钮
 	CButton m_btnPathSelect;
-	afx_msg void OnBtnPathCreate();
+	afx_msg void OnBtnPathAdd();
+	afx_msg void OnBtnSavePath();
 	// 航向差值
 	CEdit m_editSubHeading;
 	// 距离差值
 	CEdit m_editDis;
+#pragma region PID控制相关控件
+	// P参数文本框
+	CEdit m_editKp;
+	// I参数文本框
+	CEdit m_editKi;
+	// d参数文本框
+	CEdit m_editKd;
+	// 距离差与航向差对应比例值文本框
+	CEdit m_editKinter;
+	IPointPtr pStartPoint;		//当前路径起始点
+	IPointPtr pEndPoint;		//当前路径结束点
+	IPolylinePtr pNowPath;	//当前路径
+	int nowPathPos;		//当前路径在路径集合中的位置，用于跳过已追踪路径
+	double lineHeading;		//路径航向
+	long num;	//路径总数量
+	IPolylinePtr m_trackPath;	//追踪路径
+	double err;		//当前偏差值
+	double err_last;	//上一次的偏差值
+	double integral;	//积分值
+	double kp;	//P控制比例系数
+	double ki;	//I控制比例系数
+	double kd;	//D控制比例系数
+	double kinter;	//距离差和航向差的比例系数
+#pragma endregion
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

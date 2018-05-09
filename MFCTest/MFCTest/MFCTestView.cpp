@@ -61,12 +61,12 @@ BEGIN_MESSAGE_MAP(CMFCTestView, CFormView)
 	ON_COMMAND(ID_FILE_OPEN, &CMFCTestView::OnFileOpen)
 	//	ON_WM_SIZE()
 	ON_MESSAGE(WM_COMM_RXCHAR, &CMFCTestView::OnCommunication)
-	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestView::OnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestView::OnBtnSavePath)
 	ON_COMMAND(ID_FILE_SAVE, &CMFCTestView::OnFileSave)
-	ON_BN_CLICKED(IDC_BUTTON2, &CMFCTestView::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFCTestView::OnBtnMoveSeekur)
 	ON_MESSAGE(WM_SEEKUR_RET, &CMFCTestView::OnSeekur)
-	ON_BN_CLICKED(IDC_BUTTON3, &CMFCTestView::OnBnClickedButton3)
-	ON_BN_CLICKED(IDC_BUTTON4, &CMFCTestView::OnBtnPathCreate)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCTestView::OnBtnTrack)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMFCTestView::OnBtnPathAdd)
 END_MESSAGE_MAP()
 
 
@@ -97,23 +97,25 @@ CMFCTestView::~CMFCTestView()
 void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_EDIT6, m_editHeading);
-	DDX_Control(pDX, IDC_EDIT5, m_editDistance);
+	DDX_Control(pDX, IDC_EDIT6, m_editMoveHeading);
+	DDX_Control(pDX, IDC_EDIT5, m_editMoveDistance);
 	DDX_Control(pDX, IDC_EDIT2, m_editLongitude);
 	DDX_Control(pDX, IDC_EDIT1, m_editLatitude);
 	DDX_Control(pDX, IDC_CHECK1, m_cPointLine);
 	DDX_Control(pDX, IDC_EDIT4, m_editSeekurVel);
 	DDX_Control(pDX, IDC_EDIT3, m_editSeekurHeading);
-	DDX_Control(pDX, IDC_EDIT7, m_editKDis);
-	DDX_Control(pDX, IDC_EDIT8, m_editKSubHead);
+	DDX_Control(pDX, IDC_EDIT7, m_editKp);
+	DDX_Control(pDX, IDC_EDIT8, m_editKinter);
 	DDX_Control(pDX, IDC_BUTTON3, m_btnTrack);
-	DDX_Control(pDX, IDC_EDIT10, m_editBJ54_x);
-	DDX_Control(pDX, IDC_EDIT9, m_editBJ54_y);
-	DDX_Control(pDX, IDC_CHECK2, m_checkShowGPS);
+	DDX_Control(pDX, IDC_EDIT10, m_editSatNum);
+	DDX_Control(pDX, IDC_EDIT9, m_editGPSStaus);
+	DDX_Control(pDX, IDC_CHECK2, m_checkShowBJ54);
 	DDX_Control(pDX, IDC_EDIT11, m_editVelocity);
 	DDX_Control(pDX, IDC_BUTTON4, m_btnPathSelect);
 	DDX_Control(pDX, IDC_EDIT12, m_editSubHeading);
 	DDX_Control(pDX, IDC_EDIT13, m_editDis);
+	DDX_Control(pDX, IDC_EDIT14, m_editKi);
+	DDX_Control(pDX, IDC_EDIT15, m_editKd);
 }
 
 BOOL CMFCTestView::PreCreateWindow(CREATESTRUCT& cs)
@@ -153,6 +155,8 @@ void CMFCTestView::OnInitialUpdate()
 		this->GetSafeHwnd()   // 传递窗体的句柄
 		);
 
+	isGPSEnd = false;
+
 	//调用串口程序，打开与GPS的通信
 	CMainFrame *p = (CMainFrame*)AfxGetMainWnd();
 	CMFCTestView *m_CView = (CMFCTestView *)p->GetActiveView();//获取View类的指针
@@ -167,86 +171,12 @@ void CMFCTestView::OnInitialUpdate()
 
 
 
-	m_editKDis.SetWindowTextW(_T("25"));
-	m_editKSubHead.SetWindowTextW(_T("0.5"));
+	m_editKp.SetWindowTextW(_T("1"));
+	m_editKinter.SetWindowTextW(_T("2"));
 	m_editVelocity.SetWindowTextW(_T("500"));
-	m_velocity = 500;
 	isTracked = false;
+	isGPSEnd = false;
 }
-//
-//HRESULT CMFCTestView::CreateShapeFile(esriGeometryType type, CString layerPath, CString layerName, IFeatureClass** ppFeatureClass)
-//{
-//	if (!ppFeatureClass)
-//		return E_POINTER;
-//
-//	IWorkspaceFactoryPtr ipWKSPFac(CLSID_ShapefileWorkspaceFactory);
-//	IWorkspacePtr ipWKSP;
-//	HRESULT hr = ipWKSPFac->OpenFromFile((CComBSTR)layerPath, 0, &ipWKSP);
-//	if (FAILED(hr) || ipWKSP == 0)
-//	{
-//		AfxMessageBox(_T("无法打开目标文件夹！"), MB_ICONINFORMATION);
-//		return hr;
-//	}
-//	IFeatureWorkspacePtr ipFeatureWKSP(ipWKSP);
-//
-//	// Set up a simple fields collection
-//	IFieldsPtr ipFields(CLSID_Fields);
-//	IFieldsEditPtr ipFieldsEdit(ipFields);
-//
-//	// Make and add the shape field. It will need a geometry definition and a spatial reference
-//	IFieldPtr ipField(CLSID_Field);
-//	IFieldEditPtr ipFieldEdit(ipField);
-//	hr = ipFieldEdit->put_Name(CComBSTR(L"Shape"));
-//	hr = ipFieldEdit->put_Type(esriFieldTypeGeometry);
-//
-//	IGeometryDefPtr ipGeomDef(CLSID_GeometryDef);
-//	IGeometryDefEditPtr ipGeomDefEdit(ipGeomDef);
-//	hr = ipGeomDefEdit->put_GeometryType(type);
-//	ISpatialReferencePtr ipUnkSpatial(CLSID_UnknownCoordinateSystem);
-//	hr = ipGeomDefEdit->putref_SpatialReference(ipUnkSpatial);
-//	ipFieldEdit->putref_GeometryDef(ipGeomDef);
-//	ipFieldsEdit->AddField(ipField);
-//
-//	// Add another miscellanesous text field
-//	IFieldPtr ipX(CLSID_Field);
-//	IFieldPtr ipY(CLSID_Field);
-//	IFieldPtr ipValue(CLSID_Field);
-//	long len = 30;
-//	ipFieldEdit = ipX;
-//	ipFieldEdit->put_Length(len);
-//	ipFieldEdit->put_Name(CComBSTR(L"X"));
-//	ipFieldEdit->put_Type(esriFieldTypeDouble);
-//	ipFieldsEdit->AddField(ipX);
-//
-//	ipFieldEdit = ipY;
-//	ipFieldEdit->put_Length(len);
-//	ipFieldEdit->put_Name(CComBSTR(L"Y"));
-//	ipFieldEdit->put_Type(esriFieldTypeDouble);
-//	ipFieldsEdit->AddField(ipY);
-//	ipFieldEdit = ipValue;
-//
-//	ipFieldEdit->put_Length(len);
-//	ipFieldEdit->put_Name(CComBSTR(L"Value"));
-//	ipFieldEdit->put_Type(esriFieldTypeDouble);
-//	ipFieldsEdit->AddField(ipValue);
-//
-//	// Create the shapefile (some parameters apply to geodatabase options and can be defaulted as NULL)
-//	IFeatureClassPtr ipFeatClass;
-//	hr = ipFeatureWKSP->CreateFeatureClass(CComBSTR(layerName), ipFields,
-//		0, 0,
-//		esriFTSimple,
-//		CComBSTR(L"Shape"),
-//		CComBSTR(L""),
-//		&ipFeatClass);
-//	*ppFeatureClass = ipFeatClass;
-//	if (*ppFeatureClass)
-//		(*ppFeatureClass)->AddRef();
-//	else
-//		return E_FAIL;
-//
-//	return hr;
-//
-//}
 
 // CMFCTestView 诊断
 
@@ -366,7 +296,7 @@ void CMFCTestView::OnFileOpen()
 描述：GPS串口通信函数
 参数：
 @ch：串口传递的单个字符
-@ch：端口号
+@portnum：端口号
 返回值：0
 */
 afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
@@ -379,26 +309,16 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 	//接收到完整一句时解析字符串
 	else if (gpsStr != "")
 	{
-		//判断是否需要释放GPS坐标
-		/*while (gpsInfos.size()>0)
-		{
-		GPSInfo *tmp;
-		gpsInfos.pop_back(tmp);
-		delete tmp;
-		}*/
 		CString x;
 		x.Format(_T("%s"), gpsStr);
-		gpsInfo = gpsTran.Tanslate(gpsStr);
+		GPSInfo* gpsInfo = gpsTran.Tanslate(gpsStr);
 
 		//判断是不是GPS经纬度坐标
 		if (gpsInfo->InfoType == GGA)
 		{
-			/*m_editLongitude = (CEdit *)GetDlgItem(IDC_EDIT1);
-			m_editLatitude = (CEdit *)GetDlgItem(IDC_EDIT2);*/
-			//将经纬度坐标从度分格式转化为度格式
 			double longtitude = ((GGAInfo*)gpsInfo)->Longitude;
 			double latitude = ((GGAInfo*)gpsInfo)->Latitude;
-
+			//刷新窗口显示
 			CString x;
 			x.Format(_T("%lf"), longtitude);
 			CString y;
@@ -409,19 +329,19 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 			myGPSInfo.Longitude = longtitude;
 			myGPSInfo.Latitude = latitude;
 
+			// 建立坐标点
 			IPointPtr point1;
 			HRESULT hr1 = point1.CreateInstance(CLSID_Point);
 			point1->PutCoords(myGPSInfo.Longitude, myGPSInfo.Latitude);
-			//point1->PutCoords(114.068188, 22.531326);
-			//point1->PutCoords(12698012.6530, 2575437.9373);
 
+			// 刷新卫星状态
 			x.Format(_T("%d"), ((GGAInfo*)gpsInfo)->UseSatelliteNum);
-			//CString y;
 			y.Format(_T("%d"), ((GGAInfo*)gpsInfo)->GPSStatus);
-			m_editBJ54_x.SetWindowText(x);
-			m_editBJ54_y.SetWindowText(y);
+			m_editSatNum.SetWindowText(x);
+			m_editGPSStaus.SetWindowText(y);
 
-			if (m_checkShowGPS.GetCheck()){
+			// 判断是否要转换为北京54坐标
+			if (m_checkShowBJ54.GetCheck()){
 				//point1 = geoToProj(point1);
 				//double bj_x, bj_y;
 				//point1->get_X(&bj_x);
@@ -458,7 +378,6 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 			ipoint->PutCoords(myGPSInfo.Longitude*100, myGPSInfo.Latitude*100);*/
 
 			//画点
-			//IGeometryPtr pGeometry(ipoint);
 			IGeometryPtr pgeomln(point1);
 			IGraphicsContainerPtr pgracont(iActiveView);
 			//pgracont->DeleteAllElements();
@@ -471,22 +390,21 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 			((IElementPtr)pmarkerelem)->put_Geometry(pgeomln);
 			if (lastPointElement != NULL){
 				pgracont->DeleteElement(lastPointElement);
-				//lastPointElement.Release();
 			}
 			lastPointElement = pmarkerelem;
 			pgracont->AddElement((IElementPtr)pmarkerelem, 0);
 			iActiveView->Refresh();
-		}
 
-		if (gpsInfo->InfoType == PSAT_HPR)
+			isGPSEnd = false;
+		}
+		else if (gpsInfo->InfoType == PSAT_HPR)
 		{
 			CString heading;
 			heading.Format(_T("%lf"), ((PSAT_HPRInfo*)gpsInfo)->Heading);
 			m_editSeekurHeading.SetWindowText(heading);
 			myGPSInfo.Heading = ((PSAT_HPRInfo*)gpsInfo)->Heading;
 		}
-
-		if (gpsInfo->InfoType == VTG)
+		else if (gpsInfo->InfoType == VTG)
 		{
 			/*CString vel;
 			vel.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
@@ -497,9 +415,184 @@ afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
 			//heading.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
 			//m_editSeekurHeading.SetWindowText(heading);
 			//myGPSInfo.Heading = ((VTGInfo*)gpsInfo)->TrueHeading;
+			isGPSEnd = true;
 		}
-		delete gpsInfo;
 
+		//在追踪状态且更新了一组GPS数据时调整转向
+		if (isTracked&&isGPSEnd)
+		{
+			//::CoInitialize(NULL);
+
+			//获取最近点
+			IPointPtr pNearestPoint(CLSID_Point);	//最近点
+			IPointPtr pSeekurPoint(CLSID_Point);		//Seekur所在点
+			IGeometryPtr pGeo;
+			lastPointElement->get_Geometry(&pGeo);
+			pSeekurPoint = (IPointPtr)pGeo;
+			double x;
+			pSeekurPoint->get_X(&x);
+			double y;
+			pSeekurPoint->get_Y(&y);
+			//pSeekurPoint->PutCoords(12943887.463977, 4857805.079523);
+
+			double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
+			double distFromCurve = 0;//输入点到曲线的最短距离
+			VARIANT_BOOL isRightSide = false;//输入点是否在曲线的右边
+			m_trackPath->QueryPointAndDistance(esriNoExtension, pSeekurPoint, false, pNearestPoint, &distAlongCurveFrom, &distFromCurve, &isRightSide);
+
+			//判断最近点在Seekur的左边还是右边，获取
+			double nearestX, nearestY, seekurX, seekurY;
+			pNearestPoint->get_X(&nearestX);
+			pNearestPoint->get_Y(&nearestY);
+			pSeekurPoint->get_X(&seekurX);
+			pSeekurPoint->get_Y(&seekurY);
+
+			//计算最近点是否在当前路径
+			ITopologicalOperatorPtr topo = (ITopologicalOperatorPtr)pNearestPoint;
+			/*IGeometryPtr buffer;
+			topo->Buffer(0.001, &buffer);
+			topo = (ITopologicalOperatorPtr)buffer;*/
+			IGeometryPtr pTpGeo;
+			HRESULT hr = topo->Intersect((IGeometryPtr)pNowPath, esriGeometry0Dimension, &pTpGeo);
+			if (FAILED(hr))
+			{
+				MessageBox(_T("交点计算错误"));
+			}
+			VARIANT_BOOL isEmpty;	//交点是否为空
+			pTpGeo->get_IsEmpty(&isEmpty);
+			//先判断是否在当前路径上，不是则重新计算现有路径
+			if (isEmpty){
+				ISegmentCollectionPtr pSegCol = (ISegmentCollectionPtr)m_trackPath;	//路径集合
+				for (long i = nowPathPos + 1; i < num; i++)
+				{
+					ISegmentPtr pSeg;	//当前所在路径
+					//ISegmentPtr pSeg(CLSID_Line);	//当前所在路径
+					pSegCol->get_Segment(i, &pSeg);
+
+					//构造polyline路径
+					IPolylinePtr ptpPath(CLSID_Polyline);
+					ISegmentCollectionPtr ptpSegCol = (ISegmentCollectionPtr)ptpPath;
+					ptpSegCol->AddSegment(pSeg);
+
+					//计算最近点是否在当前路径
+					hr = topo->Intersect((IGeometryPtr)ptpPath, esriGeometry0Dimension, &pTpGeo);
+					if (FAILED(hr))
+					{
+						MessageBox(_T("交点计算错误"));
+					}
+					pTpGeo->get_IsEmpty(&isEmpty);
+					if (!isEmpty)
+					{
+						pNowPath = ptpPath;
+						pSeg->get_FromPoint(&pStartPoint);
+						pSeg->get_ToPoint(&pEndPoint);
+						//计算路径航向
+						double startX, startY;
+						pStartPoint->get_X(&startX);
+						pStartPoint->get_Y(&startY);
+						double endX, endY;
+						pEndPoint->get_X(&endX);
+						pEndPoint->get_Y(&endY);
+
+						lineHeading = atan2(endY - startY, endX - startX) * 180 / PI;
+						if (lineHeading > 0)
+						{
+							lineHeading = 90 - lineHeading;
+						}
+						else
+						{
+							lineHeading = -lineHeading;
+						}
+						nowPathPos = i;
+						break;
+					}
+				}
+			}
+
+
+			distFromCurve *= 100000*100;
+			double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000*100;	//Seekur到路径距离（厘米）
+			double subHeading = myGPSInfo.Heading - lineHeading;	//Seekur航向路与径航向差值
+			if (!isRightSide){
+				dis = -dis;
+			}
+			err = dis + kinter*subHeading;		// 车辆当前状态
+			double turnHeading = 0;	//转向角
+			//P控制
+			turnHeading = kp*err;
+
+			//50厘米内启用I控制
+			if (dis<50)
+			{
+				integral += ki;
+				turnHeading += ki*integral;
+			}
+
+			//D控制
+			turnHeading += kd*(err - err_last);
+			err_last = err;
+
+			double maxTrun = 45;	//最大转向角
+			if (dis < 0.5)
+			{
+				maxTrun = 10;
+			}
+			else if (dis < 1)
+			{
+				maxTrun = 20;
+			}
+			else if (dis < 2)
+			{
+				maxTrun = 30;
+			}
+			//判断机器车在路径右侧还是左侧
+			if (isRightSide)
+			{
+				//调整转角，使转角不得令转向后的航向差值大于最大转向角
+				if (turnHeading - subHeading >= maxTrun)
+				{
+					turnHeading = maxTrun - subHeading;
+				}
+				////防止在右侧时外偏
+				//if ((subHeading + turnHeading) <= -maxTrun)
+				//{
+				//	turnHeading = -maxTrun - subHeading;
+				//}
+			}
+			else
+			{
+				maxTrun = -maxTrun;
+				//调整转角，使转角不得令转向后的航向差值大于最大转向角
+				if (turnHeading - subHeading <= maxTrun)
+				{
+					turnHeading = maxTrun - subHeading;
+				}
+				////防止在左侧时外偏
+				//if ((subHeading + turnHeading) >= maxTrun)
+				//{
+				//	turnHeading = maxTrun - subHeading;
+				//}
+			}
+
+			CString cTp;
+			cTp.Format(_T("%lf"), subHeading);
+			m_editSubHeading.SetWindowText(cTp);
+			cTp.Format(_T("%lf"), dis);
+			m_editDis.SetWindowText(cTp);
+			cTp.Format(_T("%lf"), turnHeading);
+			m_editSeekurVel.SetWindowText(cTp);
+
+			//发送控制指令
+			seekurParaPtr pPara = new seekurPara();
+			pPara->distance = 0;
+			pPara->veloctiy = 0;
+			pPara->heading = turnHeading;
+
+			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
+
+		}
+
+		delete gpsInfo;
 		gpsStr = "";
 	}
 
@@ -566,7 +659,8 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			if (pPara->distance != 0)
 				action.Move(pPara->distance);
 			//转动角度
-			action.SetDeltaHeading(pPara->heading);
+			if (pPara->heading != 0)
+				action.SetDeltaHeading(pPara->heading);
 			//直线移动距离
 			if (pPara->veloctiy != 0)
 				action.SetVelocity(pPara->veloctiy);
@@ -702,9 +796,9 @@ UINT CMFCTestView::TrackFuc(LPVOID lParam){
 		}
 
 		CString cKDis;
-		pView->m_editKDis.GetWindowTextW(cKDis);
+		pView->m_editKp.GetWindowTextW(cKDis);
 		CString cKSubHead;
-		pView->m_editKSubHead.GetWindowTextW(cKSubHead);
+		pView->m_editKinter.GetWindowTextW(cKSubHead);
 		double kDis = _ttof(cKDis);
 		double kSubHead = _ttof(cKSubHead);
 
@@ -820,38 +914,8 @@ UINT CMFCTestView::TrackFuc(LPVOID lParam){
 }
 #pragma endregion
 
-void CMFCTestView::OnClickedButton1()
+void CMFCTestView::OnBtnSavePath()
 {
-	/*CString x;
-	x.Format(_T("%lf"), myGPSInfo.Longitude++);
-	CString y;
-	y.Format(_T("%lf"), myGPSInfo.Latitude);
-	m_editLongitude.SetWindowText(x);
-	m_editLatitude.SetWindowText(y);*/
-
-
-	//CString distance;
-	//m_editDistance.GetWindowTextW(distance);
-	//CString heading;
-	//m_editHeading.GetWindowTextW(heading);
-	//double dis = _ttof(distance);
-	//double head = _ttof(heading);
-
-	//IPointPtr point1;
-	//HRESULT hr1 = point1.CreateInstance(CLSID_Point);
-	//point1->PutCoords(dis, head);
-	////point1->PutCoords(114.068188, 22.531326);
-	////point1->PutCoords(12698012.6530, 2575437.9373);
-
-	//point1 = geoToProj(point1);
-	//double x, y;
-	//point1->get_X(&x);
-	//point1->get_Y(&y);
-	//CString str;
-	//str.Format(_T("X=%lf,Y=%lf"), x, y);
-	//MessageBox(str);
-
-
 	//分解文件路径和名称
 	CString strFolder = _T("D:\\arcMap");
 	CString strFile = _T("path.shp");
@@ -1128,22 +1192,31 @@ void CMFCTestView::OnFileSave()
 }
 
 //测试运动按钮
-void CMFCTestView::OnBnClickedButton2()
+void CMFCTestView::OnBtnMoveSeekur()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	//获取要移动的距离
 	CString distance;
-	m_editDistance.GetWindowTextW(distance);
+	m_editMoveDistance.GetWindowTextW(distance);
 	CString heading;
-	m_editHeading.GetWindowTextW(heading);
+	m_editMoveHeading.GetWindowTextW(heading);
+
 	double dis = _ttof(distance);
 	double head = _ttof(heading);
-	seekurParaPtr pPara = new seekurPara();
-	pPara->distance = dis;
-	pPara->heading = head;
 
-	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, NULL);
-	//PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, dis, head);
+	//弹出窗口确认参数是否无误
+	CString alert;
+	alert.Format(_T("确定为以下参数？\n距离：\lf\n角度：\lf"), dis, head);
+	int result = AfxMessageBox(alert, MB_OKCANCEL);
+	if (result==IDOK)
+	{
+		seekurParaPtr pPara = new seekurPara();
+		pPara->distance = dis;
+		pPara->heading = head;
+
+		PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, NULL);
+		//PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, dis, head);
+	}
 
 }
 
@@ -1157,7 +1230,7 @@ afx_msg LRESULT CMFCTestView::OnSeekur(WPARAM wParam, LPARAM lParam)
 }
 
 //测试追踪
-void CMFCTestView::OnBnClickedButton3()
+void CMFCTestView::OnBtnTrack()
 {
 	//获取路径图层
 	ILayerPtr pLayer;
@@ -1191,207 +1264,67 @@ void CMFCTestView::OnBnClickedButton3()
 		pFeature->get_Shape(&pGeometry);
 		m_trackPath = pGeometry;
 
-
 		if (!isTracked)
 		{
 			//启动追踪线程
 			isTracked = true;
-			track_thread = AfxBeginThread(
-				TrackFuc,
-				this->GetSafeHwnd()   // 传递窗体的句柄
-				);
-			CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
-			CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
-			PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
+			//CWinThread* track_thread = AfxBeginThread(
+			//	TrackFuc,
+			//	this->GetSafeHwnd()   // 传递窗体的句柄
+			//	);
+			//CMainFrame*   pFrame = (CMainFrame*)AfxGetMainWnd();
+			//CMFCTestView *pView = (CMFCTestView *)pFrame->GetActiveView();//获取View类的指针
+			//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_START, (UINT)pView, NULL);
 
+			
+			//初始化数据
+			ISegmentCollectionPtr pSegCol = (ISegmentCollectionPtr)m_trackPath;	//直线集合
+			pSegCol->get_SegmentCount(&num);
+			nowPathPos = -1;
+			CString cTp;	//临时Cstring类，用于将文本框数据转为其他格式
+			m_editKp.GetWindowTextW(cTp);
+			kp = _ttof(cTp);
+			m_editKinter.GetWindowTextW(cTp);
+			kinter = _ttof(cTp);
+			m_editKi.GetWindowTextW(cTp);
+			ki = _ttof(cTp);
+			m_editKd.GetWindowTextW(cTp);
+			kd = _ttof(cTp);
+			integral = 0;
+			err_last = 0;
+			//加载
+			ISegmentPtr pSeg;	//当前所在路径
+			pSegCol->get_Segment(0, &pSeg);
+			//构造polyline路径
+			IPolylinePtr ptpPath(CLSID_Polyline);
+			ISegmentCollectionPtr ptpSegCol = (ISegmentCollectionPtr)ptpPath;
+			ptpSegCol->AddSegment(pSeg);
+			pNowPath = ptpPath;
+
+			//令Seekur开始运动
+			seekurParaPtr pPara = new seekurPara();
+			pPara->distance = 0;
+			pPara->heading = 0;
+			m_editVelocity.GetWindowTextW(cTp);
+			double vel = _ttof(cTp);
+			pPara->veloctiy = vel;
+			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
 			m_btnTrack.SetWindowTextW(_T("停止追踪"));
 		}
 		else{
 			//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
 			isTracked = false;
+			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
 			m_btnTrack.SetWindowTextW(_T("开始追踪"));
 		}
 	}
-	//// TODO:  在此添加控件通知处理程序代码
-	//IFeatureLayer pFeatLayer = m_ipMapControl->get_Layer(0) as IFeatureLayer;
-	//IFeatureClass pFeatCla = pFeatLayer.FeatureClass;
-
-	//IPoint pnt = new PointClass();
-	//pnt.X = 113.301;
-	//pnt.Y = 23.113;
-	//GISTool.CreateTimePoint(pFeatCla, pnt, 100.1);
-
-	//axMapControl1.ActiveView.Refresh();
-
-	/*ILayerPtr pLayer;
-	IFeatureLayerPtr pFeatLayer;
-	m_ipMapControl->get_Layer(0, &pLayer);
-	pFeatLayer = pLayer;
-	IFeatureClassPtr pFeatCla;
-	pFeatLayer->get_FeatureClass(&pFeatCla);
-	IPointPtr ipoint(CLSID_Point);
-	ipoint->PutCoords(290, 480);*/
-
 
 }
 
-void CreateShapeFile(){
-	//分解文件路径和名称
-	CString strFolder = _T("F:\\arcMap");
-	CString strFile = _T("path.shp");
-
-	//为输出SHP文件创建特征工厂
-	IWorkspaceFactoryPtr ipWorkFact(CLSID_ShapefileWorkspaceFactory);
-	IWorkspacePtr ipWork;
-	HRESULT hr = ipWorkFact->OpenFromFile(CComBSTR(strFolder), 0, &ipWork);
-	if (FAILED(hr) || ipWork == 0)
-	{
-		AfxMessageBox(_T("无法打开目标文件夹！"), MB_ICONINFORMATION);
-		/*if (FAILED(hr))
-		return hr;
-		else
-		return E_FAIL;*/
-	}
-	IFeatureWorkspacePtr ipFeatWork(ipWork);
-
-	// Set up fields
-	IFieldsPtr ipFields(CLSID_Fields);
-	IFieldsEditPtr ipFieldsEdit;
-	ipFieldsEdit = ipFields; //QI
-	// Geometry and spatial reference
-	IFieldPtr ipField(CLSID_Field);
-	IFieldEditPtr ipFieldEdit;
-	ipFieldEdit = ipField; //QI
-	ipFieldEdit->put_Name(CComBSTR("Shape"));
-	ipFieldEdit->put_Type(esriFieldTypeGeometry);
-
-	//创建空间数据类型
-	IGeometryDefPtr ipGeoDef(CLSID_GeometryDef);
-	IGeometryDefEditPtr ipGeoDefEdit;
-	ipGeoDefEdit = ipGeoDef; //QI
-	ipGeoDefEdit->put_GeometryType(esriGeometryPolyline);
-
-	//创建坐标系
-	ISpatialReferenceFactory2Ptr ipSpaRefFact2(CLSID_SpatialReferenceEnvironment);
-	IGeographicCoordinateSystemPtr ipGeoCoordSys;
-	ipSpaRefFact2->CreateGeographicCoordinateSystem(esriSRGeoCS_Beijing1954, &ipGeoCoordSys);
-
-	ISpatialReferencePtr ipSRef;
-	ipSRef = ipGeoCoordSys;
-	ipGeoDefEdit->putref_SpatialReference(ipSRef);
-	ipFieldEdit->putref_GeometryDef(ipGeoDef);
-	ipFieldsEdit->AddField(ipField);
-
-	// Create the shapefile
-	IFeatureClassPtr pFeatureClass;
-	hr = ipFeatWork->CreateFeatureClass(CComBSTR(strFile), ipFields, 0, 0,
-		esriFTSimple, CComBSTR("Shape"), 0, &pFeatureClass);
-
-	IFeaturePtr pFeature;
-	pFeatureClass->CreateFeature(&pFeature);
-
-	IPolylinePtr pPolyline(CLSID_Polyline);
-	IPointCollectionPtr pPtclo = (IPointCollectionPtr)pPolyline;
-
-	IPointPtr point(CLSID_Point);
-	point->PutCoords(12943884.706671, 4857804.266050);
-	pPtclo->AddPoint(point);
-
-	point = new IPointPtr(CLSID_Point);
-	point->PutCoords(12943885.463977, 4857805.079523);
-	pPtclo->AddPoint(point);
-
-
-	pFeature->putref_Shape(pPolyline);
-	pFeature->Store();
-
-
-#pragma region 废弃创建方式
-	////创建图层
-	//IFeatureClassPtr pFeatClass;
-	//IFeatureLayerPtr pFeatLayer(CLSID_FeatureLayer);
-	//ISpatialReferencePtr ipSpatialReference;
-
-	////设置坐标系并定义几何类型
-	//ISpatialReferenceFactoryPtr spatialReferenceFactory;
-	//HRESULT hr = spatialReferenceFactory.CreateInstance(CLSID_SpatialReferenceEnvironment);
-
-	//IGeographicCoordinateSystem* pGCS;
-	//pGCS = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
-
-	//HRESULT hr = ipSpatialReference.CreateInstance(CLSID_UnknownCoordinateSystem);
-	//if (FAILED(hr)) return;
-	//hr = m_ipMapControl->get_SpatialReference(&ipSpatialReference);
-	//if (FAILED(hr))
-	//	return;
-	//hr = pFeatLayer->putref_SpatialReference(ipSpatialReference);
-	//if (FAILED(hr))
-	//	return;
-	//hr = pFeatLayer->put_Name((CComBSTR)(L"SeekurGPS"));
-	//if (FAILED(hr))
-	//	return;
-	//
-
-
-	//m_currentLayer = pFeatLayer;
-	//m_ipMapControl->get_Map(&m_map);
-	////获取编辑的要素类
-	//IDatasetPtr pDataset;
-	//pDataset = pFeatClass;
-	//IWorkspaceEditPtr pWorkSpaceEdit;
-	//IWorkspacePtr pWorkspace;
-	//pDataset->get_Workspace(&pWorkspace);
-	//pWorkSpaceEdit = pWorkspace;
-	//VARIANT_BOOL isStart;
-	//pWorkSpaceEdit->IsBeingEdited(&isStart);
-	//if (!isStart)
-	//{
-	//	pWorkSpaceEdit->StartEditing(true);
-	//}
-
-	//IFeaturePtr pFeature;
-	//pFeatClass->CreateFeature(&pFeature);
-	//IPointPtr point(CLSID_Point);
-	//point->PutCoords(452499, 4450252);
-	//pFeature->putref_Shape(point);
-	//pFeature->Store();
-	////m_ipTocControl->Update();
-	//pWorkSpaceEdit->StopEditing(isStart);
-
-	//hr = pFeatLayer->putref_FeatureClass(pFeatClass);
-	//if (FAILED(hr))
-	//	return;
-
-	//hr = m_ipMapControl->AddLayer(pFeatLayer, 1);
-	//if (FAILED(hr))
-	//	return;
-
-	//IActiveViewPtr iActiveView;
-	//m_ipMapControl->get_ActiveView(&iActiveView);
-	//IPointPtr ipoint(CLSID_Point);
-
-	////点画法
-	//IGeometryPtr pGeometry;
-	//pFeature->get_Shape(&pGeometry);
-	//AddCreateElement(pGeometry, iActiveView);
-	//iActiveView->Refresh();
-	//
-	////INewMultiPointFeedbackPtr pMultiPointFeed;
-	////CoCreateInstance(CLSID_NewMultiPointFeedback,
-	////	NULL, CLSCTX_ALL, IID_INewMultiPointFeedback,
-	////	(void**)&pMultiPointFeed);
-	////IActiveViewPtr pActiveView;
-	////pActiveView = m_map;
-
-	////IPointPtr point(CLSID_Point);
-	////m_ipMapControl->ToMapPoint(290, 680, &point);
-	////CreateFeature(point);
-#pragma endregion
-}
-
-
-
-void CMFCTestView::OnBtnPathCreate()
+/*
+向路径中添加点，无路径时则创建路径
+*/
+void CMFCTestView::OnBtnPathAdd()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	//路径为空时创建路径
