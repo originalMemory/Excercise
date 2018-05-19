@@ -65,7 +65,7 @@ def get_html(url, type=0):
     return tp_html
 
 
-def get_gal_basic_info(filename, base_dir):
+def get_gal_basic_info(filename, base_dir,default_source=None):
     """
     根据文件名解析GAL基础数据
     :param filename: GAL文件名
@@ -121,8 +121,9 @@ def get_gal_basic_info(filename, base_dir):
         if '后宫' in info:
             print('后宫：是')
             gal_info['harem'] = '是'
-    gal_info['pw'] = '⑨'
-    gal_info['source'] = '灵梦御所'
+    # gal_info['pw'] = '⑨'
+    if default_source:
+        gal_info['source'] = default_source
 
     return gal_info
 
@@ -478,14 +479,14 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
     return True
 
 
-gal_dir = 'G:\Gal\拔作\未整理\\'
+gal_dir = 'G:\Gal\拔作\未整理\绯月\\'
 tar_dir = 'G:\Gal\拔作\整理\\'
 unfind_dir = 'G:\Gal\拔作\无信息\\'
 
 for dir in os.listdir(gal_dir):
     print(dir)
     path = gal_dir + dir
-    basic_info = get_gal_basic_info(dir, gal_dir)
+    basic_info = get_gal_basic_info(dir, gal_dir,'2dhgame')
     getchu_result = get_getchu_gal_info(path, tar_dir, **basic_info)
     if not getchu_result:
         dlsite_result = get_dlsite_gal_info(path, tar_dir, **basic_info)

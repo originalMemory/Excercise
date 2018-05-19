@@ -57,6 +57,7 @@ namespace MyTools.CrawNovel
         Diyibanzhu,
         Sexinsex,
         CaoLiu,
+        sis001,
     }
 
 

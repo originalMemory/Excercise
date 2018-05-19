@@ -45,6 +45,10 @@ namespace MyTools.CrawNovel
                         novel = ExtractCLChapter(url, respHtml);
                         novel.Kind = NovelWebKind.CaoLiu;
                         break;
+                    case "sis001.com":
+                        novel = ExtractSis001Chapter(url, respHtml);
+                        novel.Kind = NovelWebKind.sis001;
+                        break;
                     default:
                         break;
                 }
@@ -168,7 +172,7 @@ namespace MyTools.CrawNovel
             }
             else
             {
-                novel.PageCount = 0;
+                novel.PageCount = 1;
             }
 
             //匹配作者
@@ -183,6 +187,76 @@ namespace MyTools.CrawNovel
             return novel;
         }
 
+        /// <summary>
+        /// 抽取第一会所小说
+        /// </summary>
+        /// <param name="url">网页链接</param>
+        /// <param name="html">网页源码</param>
+        /// <returns></returns>
+        NovelInfo ExtractSis001Chapter(string url, string html)
+        {
+            var novel = new NovelInfo();
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            novel.Author = "";
+
+            //获取文章名称
+            novel.Title = doc.DocumentNode.SelectSingleNode("//div[@class=\"postmessage defaultpost\"]/h2").InnerText.Trim();
+
+            //获取楼主
+            HtmlNode authorNode = doc.DocumentNode.SelectSingleNode("//td[@class=\"postauthor\"]/cite/a");
+            string firstPoster = authorNode.InnerText;
+            string postId = authorNode.GetAttributeValue("id", "").Replace("userinfo", "");
+            novel.Poster = firstPoster;
+            //string uid = authorNode.GetAttributeValue("href", "");
+            //uid = uid.Replace("space.php?uid=", "");
+
+            //遍历获取小说正文
+            //获取楼主
+            string poster = doc.DocumentNode.SelectSingleNode("//td[@class=\"postauthor\"]//a").InnerText;
+            HtmlNode conNode = doc.DocumentNode.SelectSingleNode("//*[@id=\"postmessage_{0}\"]".FormatStr(postId));
+            string firstNovel = conNode.InnerText;
+
+
+            //获取总页数
+            novel.Urls = new List<string>();
+            novel.Urls.Add(url);
+            HtmlNode pagesNode = doc.DocumentNode.SelectSingleNode("//*[@id=\"wrapper\"]/div[1]/div[5]/div[2]");
+            if (pagesNode != null)
+            {
+                //存在多页情况
+                int totalCount = pagesNode.ChildNodes.Count;
+                for (int i = totalCount - 1; i < totalCount; i--)
+                {
+                    var pageNode = pagesNode.ChildNodes[i];
+                    string temp = pageNode.InnerText;
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        temp = temp.Replace(".", "").Trim();
+                        if (temp.IsNum())
+                        {
+                            novel.PageCount = Convert.ToInt32(temp);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                novel.PageCount = 1;
+            }
+
+            //匹配作者
+            var authorMatch = Regex.Match(firstNovel, "作者[：:](?<info>.+)】?");
+            if (authorMatch.Success)
+            {
+                string author = authorMatch.Groups[0].Value;
+                author = author.Replace("\r", "");
+                novel.Author = author;
+            }
+
+            return novel;
+        }
         /// <summary>
         /// 抽取草榴小说
         /// </summary>
@@ -226,7 +300,7 @@ namespace MyTools.CrawNovel
             }
             else
             {
-                novel.PageCount = 0;
+                novel.PageCount = 1;
             }
 
             //匹配作者

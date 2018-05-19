@@ -51,6 +51,9 @@ namespace MyTools.CrawNovel
                 case NovelWebKind.Sexinsex:
                     Title.Text = Regex.Replace(novel.Title + " - " + novel.Author, @"&", @"&&") + "（" + novel.PageCount + "页）";
                     break;
+                case NovelWebKind.sis001:
+                    Title.Text = Regex.Replace(novel.Title + " - " + novel.Author, @"&", @"&&") + "（" + novel.PageCount + "页）";
+                    break;
                 case NovelWebKind.CaoLiu:
                     Title.Text = Regex.Replace(novel.Title + " - " + novel.Author, @"&", @"&&") + "（" + novel.PageCount + "页）";
                     break;
@@ -67,7 +70,7 @@ namespace MyTools.CrawNovel
             //正则表达式"[\\u005C/:\\u002A\\u003F\"<>\'\\u007C’‘“”：？]"还包含中文的字符（实际上中文字符是可以使用的）
             //string fileNameCheck = "[\\u005C/:\\u002A\\u003F\"<>\'\\u007C]";
             //string pathCheck = "";
-            string path = @"D:\Program Files (x86)\DAEMON Tools Lite\bin\和谐文\新建文件夹\";
+            string path = @"D:\Program Files (x86)\DAEMON Tools Lite\bin\和谐文\";
             //switch (novel.Kind)
             //{
             //    case NovelWebKind.Diyibanzhu:
@@ -108,6 +111,9 @@ namespace MyTools.CrawNovel
                                 break;
                             case NovelWebKind.Sexinsex:
                                 GetSISChapter(novel.Urls[i]);
+                                break;
+                            case NovelWebKind.sis001:
+                                GetSIS001Chapter(novel.Urls[i]);
                                 break;
                             case NovelWebKind.CaoLiu:
                                 GetCLChapter(novel.Urls[i]);
@@ -297,6 +303,99 @@ namespace MyTools.CrawNovel
         }
 
         /// <summary>
+        /// 获取色中色帖子文章
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        void GetSIS001Chapter(string url)
+        {
+
+            int page = 1;
+            string newUrl = url;
+            while (page <= novel.PageCount)
+            {
+                bar.Value = (int)((float)(page) / novel.PageCount * 100);
+                string newHtml = WebApi.GetHtml(newUrl);
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(newHtml);
+                //获取当前页所有帖子
+                HtmlNodeCollection floors = doc.DocumentNode.SelectNodes("//div[@class=\"mainbox viewthread\"]");
+
+                //获取本页小说部分
+                string content = "";
+                for (int i = 0; i < floors.Count; i++)
+                {
+                    string tpCon = "";
+                    HtmlNode floor = HtmlNode.CreateNode(floors[i].OuterHtml);
+                    //获取楼主
+                    var posterNode = floor.SelectSingleNode("//td[@class=\"postauthor\"]/cite/a");
+                    string poster = "";
+                    if (posterNode != null)
+                    {
+                        poster = posterNode.InnerText;
+                    }
+                    if (poster == novel.Poster)
+                    {
+                        HtmlNode conNode = floor.SelectSingleNode("//div[@class=\"t_msgfont\"]/div");
+                        tpCon = conNode.InnerText;
+                    }
+                    else
+                    {
+                        //判断字数，如果小于500，则认为与作品无关，跳过
+                        HtmlNode conNode = floor.SelectSingleNode("//div[@class=\"t_msgfont\"]/div");
+                        if (conNode != null)
+                        {
+                            string str = conNode.InnerText;
+                            if (str.Length > 500)
+                            {
+                                tpCon = str;
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(tpCon))
+                    {
+                        tpCon = tpCon.HtmlDiscode();
+                        string temp = SortNovel(tpCon, NovelWebKind.sis001);
+                        content += temp;
+                    }
+                }
+
+                if (page < novel.PageCount)
+                {
+                    //获取页数
+                    HtmlNode pagesNode = doc.DocumentNode.SelectSingleNode("//*[@id=\"wrapper\"]/div[1]/div[5]/div[2]");
+                    if (pagesNode != null)
+                    {
+                        //存在多页情况
+                        int nowPageIndex = -1;    //当前所在页位置
+                        for (int i = 0; i < pagesNode.ChildNodes.Count; i++)
+                        {
+                            var pageNode = pagesNode.ChildNodes[i];
+                            //获取页数
+                            string temp = pageNode.InnerText;
+                            if (!string.IsNullOrEmpty(temp) && temp.HtmlDiscode().IsNum())
+                            {
+                                //判断是否为下一页
+                                int num = Convert.ToInt32(temp.HtmlDiscode());
+                                if (num == page + 1)
+                                {
+                                    nowPageIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+                        string baseUrl = System.IO.Path.GetDirectoryName(url).Replace("\\", "/") + "/";
+                        newUrl = baseUrl + pagesNode.ChildNodes[nowPageIndex].GetAttributeValue("href", "");
+                        newUrl = newUrl.Replace("http:/", "http://");
+                        newUrl = newUrl.Replace("https:/", "https://");
+                    }
+                }
+                page++;
+                if (content.Length > 0)
+                    txt_main.Text += content + System.Environment.NewLine + System.Environment.NewLine;
+            }
+        }
+        /// <summary>
         /// 获取草榴帖子文章
         /// </summary>
         /// <param name="url"></param>
@@ -390,6 +489,10 @@ namespace MyTools.CrawNovel
             //Regex regChapter = new Regex("(?<chapter>" + txt_regChapter.Text + ")\r\n");
             for (int i = 0; i < txtList.Count; )
             {
+                if (i == txtList.Count - 3)
+                {
+                    string st = txtList[i];
+                }
                 string txt = txtList[i];
                 Regex saveReg = new Regex("字数|作者|排版|首发|发表|日期");
                 Regex dateReg = new Regex("(20\\d{2}[-/]\\d{1,2}[-/]\\d{1,2})|(20\\d{2}年\\d{1,2}月\\d{1,2}日)");
@@ -441,6 +544,16 @@ namespace MyTools.CrawNovel
                             }
                         }
                         break;
+                    case NovelWebKind.sis001:
+                        {
+                            Regex regDel = new Regex("本帖最后由.+编辑|版主提醒：阅文前请点击右边小手|手留余香，希望您高抬贵手点一下右上角的");
+                            if (regDel.IsMatch(txt))
+                            {
+                                txtList.RemoveAt(i);
+                                continue;
+                            }
+                        }
+                        break;
                     case NovelWebKind.CaoLiu:
                         break;
                     default:
@@ -478,8 +591,17 @@ namespace MyTools.CrawNovel
                 }
                 else if (i < txtList.Count - 1)
                 {
-                    txtList[i] += txtList[i + 1];
-                    txtList.RemoveAt(i + 1);
+                    Regex regDel = new Regex("本帖最后由.+编辑");
+                    if (regDel.IsMatch(txtList[i + 1]))
+                    {
+                        i++;
+                        continue;
+                    }
+                    else
+                    {
+                        txtList[i] += txtList[i + 1];
+                        txtList.RemoveAt(i + 1);
+                    }
                 }
                 else
                 {
@@ -491,10 +613,10 @@ namespace MyTools.CrawNovel
             string str = "";
             for (int i = 0; i < txtList.Count; i++)
             {
-                str += "    " + txtList[i] + Environment.NewLine;
+                str += "    " + txtList[i] + System.Environment.NewLine;
                 if (checkMoreSpace.Checked)
                 {
-                    str += Environment.NewLine;
+                    str += System.Environment.NewLine;
                 }
             }
 

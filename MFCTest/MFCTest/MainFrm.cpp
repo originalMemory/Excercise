@@ -73,6 +73,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO:  在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
 
+	cs.cx = 1300;
+	cs.cy = 1200;
 	return TRUE;
 }
 

@@ -72,6 +72,8 @@ protected:
 	bool isGPSEnd;		//本轮GPS语句组是否已至最后
 	IPolylinePtr pPath;			//创建的路径
 	IElementPtr lastPointElement;	// Seekur上一次的坐标
+	CString pathLayerName;		//路径图层名称
+	bool isPathExist;	//是否已加载路径图层
 
 
 
@@ -122,8 +124,6 @@ public:
 	// 经度文本框
 	CEdit m_editLatitude;
 	afx_msg void OnBtnTrack();
-	// 点线切换绘制
-	CButton m_cPointLine;
 	// Seekur当前速度文本框
 	CEdit m_editSeekurVel;
 	// Seekur当前航向文本框
@@ -159,10 +159,10 @@ public:
 	CEdit m_editKinter;
 	IPointPtr pStartPoint;		//当前路径起始点
 	IPointPtr pEndPoint;		//当前路径结束点
-	IPolylinePtr pNowPath;	//当前路径
+	ILinePtr pNowPath;	//当前路径
 	int nowPathPos;		//当前路径在路径集合中的位置，用于跳过已追踪路径
 	double lineHeading;		//路径航向
-	long num;	//路径总数量
+	long segNum;	//路径总数量
 	IPolylinePtr m_trackPath;	//追踪路径
 	double err;		//当前偏差值
 	double err_last;	//上一次的偏差值
@@ -171,7 +171,13 @@ public:
 	double ki;	//I控制比例系数
 	double kd;	//D控制比例系数
 	double kinter;	//距离差和航向差的比例系数
+	// 启用ID控制
+	CButton m_cUseID;
 #pragma endregion
+	// 北京54 x坐标
+	CEdit m_editBJ54_x;
+	// 北京54 y坐标
+	CEdit m_editBJ54_y;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本
