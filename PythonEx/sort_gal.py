@@ -177,11 +177,11 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         link = node.xpath('.//a[@class="blueb"]')[0]
         item_url = link.get('href')
         item_url = item_url.replace('../', base_url) + '&gc=gc'
-        print(item_url)
         break
 
-    if 'てにおはっ' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=792515&gc=gc'
+    if 'みんな孕ませ♪女子校修学旅行' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=943289&gc=gc'
+    print(item_url)
     if not len(item_url):
         print('该Galgame在Getchu上没有信息！')
         return False
@@ -486,7 +486,7 @@ unfind_dir = 'G:\Gal\拔作\无信息\\'
 for dir in os.listdir(gal_dir):
     print(dir)
     path = gal_dir + dir
-    basic_info = get_gal_basic_info(dir, gal_dir,'2dhgame')
+    basic_info = get_gal_basic_info(dir, gal_dir,'绯月')
     getchu_result = get_getchu_gal_info(path, tar_dir, **basic_info)
     if not getchu_result:
         dlsite_result = get_dlsite_gal_info(path, tar_dir, **basic_info)

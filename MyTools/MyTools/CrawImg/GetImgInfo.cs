@@ -33,7 +33,7 @@ namespace MyTools.CrawImg
                 string kind = kindMat.Groups["info"].Value;
                 switch (kind)
                 {
-                    case "coser":
+                    case "item":
                         img.Kind = ImgKind.Cosplay;
                         break;
                     case "daily":
@@ -173,7 +173,7 @@ namespace MyTools.CrawImg
             img.Kind = ImgKind.Daily;
             img.Urls = new List<string>();
             //获取图片归属作品名称
-            Match ACGWork = Regex.Match(respHtml, @"<meta name=""keywords"" content="".+,.+,(?<info>.+?),.+,.+,.+,.+,.+,.+,.+"" />");
+            Match ACGWork = Regex.Match(respHtml, @"<meta name=""keywords"" content=""(?<info>.+?),+.*"" />");
             img.ACGWork = ACGWork.Groups["info"].Value;
             //获取Author信息
             Regex cnReg = new Regex(@"<img.+alt=""(?<info>.+?)""/>");
