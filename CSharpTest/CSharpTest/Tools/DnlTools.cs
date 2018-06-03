@@ -2763,6 +2763,179 @@ namespace CSharpTest.Tools
                     break;
             }
         }
+
+        public static void SearchNewrankWXAccount()
+        {
+            //搜索关键词
+            string linkUrl = "https://api.newrank.cn/api/sync/weixin/account/info";       //关键词获取文章接口地址
+            string appkey = "02b6f7c73e9d4814b79f4feb1";
+            var proObjId = new ObjectId("5b0d4dc4f4b87d0c1c66f4f1");
+            var keyObjIds = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(new QueryDocument { { "ProjectId", proObjId } }).Project(x => x.KeywordId.ToString()).ToList().Distinct().ToList();
+            var linkInfos = MongoDBHelper.Instance.GetWXLinkMain().Find(Builders<WXLinkMainMongo>.Filter.In(x => x.KeywordId, keyObjIds)).Project(x => new
+            {
+                Id = x._id,
+                Account = x.Name,
+                NickName=x.Nickname,
+                NameId=x.NameId
+            }).ToList();
+
+            var builder_Account = Builders<WXName_NewrankMongo>.Filter;
+            var col_Account = MongoDBHelper.Instance.GetWXName_Newrank();
+            int num = 0;
+            foreach(var link in linkInfos)
+            {
+                num++;
+                var filter_Account = builder_Account.Eq(x => x.Account, link.Account);
+                ObjectId acccoutId = col_Account.Find(filter_Account).Project(x => x._id).FirstOrDefault();
+                if (false)
+                {
+                    CommonTools.Log("公众号：{0} 已查询".FormatStr(link.NickName));
+                }
+                else
+                {
+                    CommonTools.Log("当前查询公众号[{0}/{1}]：{2}".FormatStr(num, linkInfos.Count, link.NickName));
+                    Thread.Sleep(1000);
+                    Dictionary<string, object> postData = new Dictionary<string, object>();                 //post参数
+                    postData.Add("account", link.Account);
+                    #region 查询请求
+                    HttpWebRequest request = WebRequest.Create(linkUrl) as HttpWebRequest;
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
+                    request.Headers.Add("Key", appkey);
+                    //发送POST数据
+                    StringBuilder buffer = new StringBuilder();
+                    int i = 0;
+                    foreach (string key in postData.Keys)
+                    {
+                        if (i > 0)
+                        {
+                            buffer.AppendFormat("&{0}={1}", key, postData[key]);
+                        }
+                        else
+                        {
+                            buffer.AppendFormat("{0}={1}", key, postData[key]);
+                            i++;
+                        }
+                    }
+                    byte[] data = Encoding.UTF8.GetBytes(buffer.ToString());
+                    using (Stream stream = request.GetRequestStream())
+                    {
+                        stream.Write(data, 0, data.Length);
+                    }
+                    string[] value = request.Headers.GetValues("Content-Type");
+                    HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string resultStr = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                    # endregion
+
+                    //解析Json字符串
+                    JObject linkJson = new JObject();
+                    try
+                    {
+                        linkJson = JObject.Parse(resultStr);
+                    }
+                    catch (Exception ex)
+                    {
+                        CommonTools.Log("微信搜索出错：" + ex.Message);
+                        continue;
+                    }
+
+                    if (linkJson.Property("code") != null && linkJson.Property("code").Value.ToString() == "0")
+                    {
+                        //CommonTools.Log("链接" + linkJson.Property("msg").Value);
+                        //CommonTools.Log("从{0}至{1}内第{2}页数据已搜索完成！\n".FormatStr(tpStartDate.ToString("yyyy-MM-dd"), tpEndDate.ToString("yyyy-MM-dd"),page));
+                        JArray items = (JArray)linkJson["data"];
+                        for (i = 0; i < items.Count; i++)
+                        {
+                            //获取常用链接信息
+                            JObject item = (JObject)items[i];
+                            if (item == null)
+                                break;
+                            var account = new WXName_NewrankMongo()
+                            {
+                                _id = ObjectId.GenerateNewId(),
+                                CreatedAt = DateTime.Now.AddHours(8),
+                                Account = link.Account
+                            };
+                            if (item.Property("name") != null)
+                                account.Name = item.Property("name").Value.ToString();
+                            if (item.Property("account") != null)
+                                account.Account = item.Property("account").Value.ToString();
+                            if (item.Property("description") != null)
+                                account.Description = item.Property("description").Value.ToString();
+
+                            if (item.Property("certifiedText") != null)
+                                account.CertifiedText = item.Property("certifiedText").Value.ToString();
+                            if (item.Property("wxId") != null)
+                                account.WXId = item.Property("wxId").Value.ToString();
+                            if (item.Property("tags") != null)
+                            {
+                                try
+                                {
+                                    JArray Jtags = (JArray)item["tags"];
+                                    account.Tags = Jtags.ToObject<List<string>>();
+                                }
+                                catch
+                                {
+                                    CommonTools.Log(item["tags"].ToString());
+                                }
+                            }
+                            if (item.Property("type") != null)
+                                account.Type = item.Property("type").Value.ToString();
+
+                            JToken dsf = item.Property("favorite").Value;
+                            string str = dsf.ToString();
+                            if (item.Property("favorite") != null && !string.IsNullOrEmpty(item.Property("favorite").Value.ToString()))
+                                account.Favorite = Convert.ToInt32(item.Property("favorite").Value);
+                            if (item.Property("isOriUser") != null && !string.IsNullOrEmpty(item.Property("isOriUser").Value.ToString()))
+                                account.IsOriUser = Convert.ToInt32(item.Property("isOriUser").Value);
+
+                            if (item.Property("headImageUrl") != null)
+                                account.HeadImageUrl = item.Property("headImageUrl").Value.ToString();
+                            if (item.Property("codeImageUrl") != null)
+                                account.CodeImageUrl = item.Property("codeImageUrl").Value.ToString();
+                            if (item.Property("weekNri") != null && !string.IsNullOrEmpty(item.Property("weekNri").Value.ToString()))
+                                account.WeekNri = Convert.ToDouble(item.Property("weekNri").Value);
+
+                            if (item.Property("miniProgramInfos") != null)
+                                account.MiniProgramInfos = item.Property("miniProgramInfos").Value.ToString();
+                            if (item.Property("platformInfos") != null)
+                                account.PlatformInfos = item.Property("platformInfos").Value.ToString();
+
+                            DateTime dt = new DateTime();
+                            if (item.Property("joinDate") != null)
+                                DateTime.TryParse(item.Property("joinDate").Value.ToString(), out dt);
+                            account.JoinDate = dt.AddHours(8);
+                            dt = DateTime.MinValue;
+
+                            col_Account.InsertOne(account);
+                            acccoutId = account._id;
+                        }
+                    }
+                    else if (linkJson.Property("code").Value.ToString() == "1203")
+                    {
+                        CommonTools.Log("数据不存在！\n");
+                    }
+                    else
+                    {
+                        CommonTools.Log("错误信息 - " + linkJson.Property("msg").ToString());
+                        CommonTools.Log("错误代码 - " + linkJson.Property("code").ToString());
+                        break;
+                    }
+
+                }
+                if (link.NameId == ObjectId.Empty)
+                {
+                    //更新链接公众号Id
+                    var update = Builders<WXLinkMainMongo>.Update.Set(x => x.NameId, acccoutId);
+                    MongoDBHelper.Instance.GetWXLinkMain().UpdateOne(new QueryDocument { { "_id", link.Id } }, update);
+                }
+            }
+                
+        }
     }
 
     public class IdAndName

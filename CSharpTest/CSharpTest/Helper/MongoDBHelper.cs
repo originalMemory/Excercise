@@ -220,6 +220,10 @@ namespace CSharpTest.Helper
         {
             return base.GetCollection<WXNameMongo>("WXName");
         }
+        public IMongoCollection<WXName_NewrankMongo> GetWXName_Newrank()
+        {
+            return base.GetCollection<WXName_NewrankMongo>("WXName_Newrank");
+        }
         #endregion
 
         #region 百度链接库
