@@ -2787,7 +2787,7 @@ namespace CSharpTest.Tools
                 num++;
                 var filter_Account = builder_Account.Eq(x => x.Account, link.Account);
                 ObjectId acccoutId = col_Account.Find(filter_Account).Project(x => x._id).FirstOrDefault();
-                if (false)
+                if (acccoutId!=ObjectId.Empty)
                 {
                     CommonTools.Log("公众号：{0} 已查询".FormatStr(link.NickName));
                 }
@@ -2926,9 +2926,6 @@ namespace CSharpTest.Tools
                         break;
                     }
 
-                }
-                if (link.NameId == ObjectId.Empty)
-                {
                     //更新链接公众号Id
                     var update = Builders<WXLinkMainMongo>.Update.Set(x => x.NameId, acccoutId);
                     MongoDBHelper.Instance.GetWXLinkMain().UpdateOne(new QueryDocument { { "_id", link.Id } }, update);

@@ -121,9 +121,11 @@ def get_gal_basic_info(filename, base_dir,default_source=None):
         if '后宫' in info:
             print('后宫：是')
             gal_info['harem'] = '是'
-    # gal_info['pw'] = '⑨'
+
     if default_source:
         gal_info['source'] = default_source
+        if default_source=='say花火':
+            gal_info['pw'] = '⑨'
 
     return gal_info
 
@@ -138,6 +140,7 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
     """
     name_re = re.compile(r'～|♪|－')
     gal_name = re.split(name_re, basic_info['name'])[0]
+    # name2 = gal_name.encode('utf-8')
     name2 = gal_name.encode('EUC-JP')
 
     gal_name = parse.quote(name2)
@@ -179,8 +182,10 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         item_url = item_url.replace('../', base_url) + '&gc=gc'
         break
 
-    if 'みんな孕ませ♪女子校修学旅行' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=943289&gc=gc'
+    if '催眠術３' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=773849&gc=gc'
+    if 'リア充催眠' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=932594&gc=gc'
     print(item_url)
     if not len(item_url):
         print('该Galgame在Getchu上没有信息！')
@@ -479,14 +484,14 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
     return True
 
 
-gal_dir = 'G:\Gal\拔作\未整理\绯月\\'
+gal_dir = 'G:\Gal\拔作\未整理\say花火\\'
 tar_dir = 'G:\Gal\拔作\整理\\'
 unfind_dir = 'G:\Gal\拔作\无信息\\'
 
 for dir in os.listdir(gal_dir):
     print(dir)
     path = gal_dir + dir
-    basic_info = get_gal_basic_info(dir, gal_dir,'绯月')
+    basic_info = get_gal_basic_info(dir, gal_dir,'say花火')
     getchu_result = get_getchu_gal_info(path, tar_dir, **basic_info)
     if not getchu_result:
         dlsite_result = get_dlsite_gal_info(path, tar_dir, **basic_info)

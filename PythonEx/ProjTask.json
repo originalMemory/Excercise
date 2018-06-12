@@ -1,0 +1,44 @@
+{
+  "globalSettings": {
+    "width": 2048,
+    "height": 2048,
+    "centerLon": 111.75,
+    "centerLat": 15.55,
+    "resLon": 0.04,
+    "resLat": 0.04,
+    "nomFile": "./nom/FY4A_4000.dat",
+    "interval": 10
+  },
+  "ProjTaskItems": [
+     {
+	  "width": 2048,
+	  "height": 2048,
+	  "centerLon": 111.75,
+	  "centerLat": 15.55,
+	  "resLon": 0.04,
+      "resLat": 0.04,
+      "nomFile": "FY4A_4000.dat",
+      "name": "FY4L1Proj4000m",
+      "selectBands": [
+        "NOMChannel01",
+        "NOMChannel02",
+        "NOMChannel03",
+        "NOMChannel04",
+        "NOMChannel05",
+        "NOMChannel06",
+        "NOMChannel07",
+        "NOMChannel08",
+        "NOMChannel09",
+        "NOMChannel10",
+        "NOMChannel11",
+        "NOMChannel12",
+        "NOMChannel13",
+        "NOMChannel14"
+      ],
+      "isRadiation": false,
+      "inDirOrFile": "hdf",
+      "outDirOrFile": "envi",
+      "fileFilter": ".*_4000M_V0001.HDF"
+    }
+  ]
+}
