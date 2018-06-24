@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	system("pause");*/
 
 	TestFun *test = new TestFun();
-	test->ConnectPort(2);
+	test->ConnectPort(3,9600);
 
 	return 0;
 }

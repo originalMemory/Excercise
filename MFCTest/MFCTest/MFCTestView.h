@@ -12,6 +12,26 @@
 #include "BaseAction.h"
 #include "afxwin.h"
 #include <windows.h>
+#include <iostream>
+
+#define M_PI       3.14159265358979323846
+#define STX 0x02   /*every PC->LMS packet is started by STX*/ 
+#define ACKSTX 0x06 /*every LMS->PC packet is started by ACKSTX*/
+#define LEN100X1 101
+#define LEN100X5 201
+#define LEN100X25 401
+#define LEN180X1 181
+#define LEN180X5 361
+#define RANGE100 100//range of LMS200
+#define RANGE180 180
+#define RES1 1		//resolution
+#define RES5 0.5
+#define RES25 0.25
+#define MAXPACKET 812
+
+const string LASER_HEADER[7] = { "02", "80", "6E", "01", "B0", "B5", "00" };
+//const char LASER_HEADER[7] = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x00 };
+
 
 //seekur控制参数
 typedef struct seekurPara{
@@ -64,9 +84,19 @@ public:
 
 //成员对象
 protected:
-	CSerialPort serialPort;		//串口通信类
+	CSerialPort serialPort_gps;		//GPS串口通信类
+	CSerialPort serialPort_laser;		//激光串口通信类
 	GPSTranslate gpsTran;	/*GPS语句解析类*/
-	string gpsStr;	//获取到的完整的一句GPS语句
+	string gpsStr;		//获取到的完整的一句GPS语句
+	bool isLaserStart;	//是否开始写入激光数据
+	string laserBuf[MAXPACKET];	//获取到激光16进制数据缓冲
+	int laserBufPos;	//当前激光缓冲数据位置
+	string laserCheckBuf[7];	//获取到激光16进制数据头缓冲
+	int laserCheckBufPos;	//当前激光缓冲数据位置
+	int laserData[LEN180X1];	//解析后的激光扫描信息
+	int laserDataLength;	//激光数据长度
+	double laserRange;		//激光角度范围
+	double laserRes;		//激光角度分辨率
 	CWinThread* seekur_thread;		//Seekur线程句柄
 	//CWinThread* track_thread;		//追踪线程句柄
 	bool isGPSEnd;		//本轮GPS语句组是否已至最后
@@ -74,8 +104,8 @@ protected:
 	IElementPtr lastPointElement;	// Seekur上一次的坐标
 	CString pathLayerName;		//路径图层名称
 	bool isPathExist;	//是否已加载路径图层
-
-
+	string testStr;
+	CString RecText;
 
 private:
 	void AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactiveview);
@@ -96,13 +126,13 @@ public:
 	afx_msg void OnFileOpen();
 protected:
 	/*
-	描述：GPS串口通信函数
+	描述：串口通信回调函数
 	参数：
 	@ch：串口传递的单个字符
-	@ch：端口号
+	@portnum：端口号
 	返回值：0
 	*/
-	afx_msg LRESULT OnCommunication(WPARAM ch, LPARAM portnum);
+	afx_msg LRESULT OnSerialPortCallback(WPARAM ch, LPARAM portnum);
 public:
 //	afx_msg void OnBnClickedButton1();
 	afx_msg void OnMouseDownMapcontrol1(long button, long shift, long x, long y, double mapX, double mapY);
@@ -110,11 +140,9 @@ public:
 	afx_msg	void OnMouseMoveMapcontrol1(long button, long shift, long X, long Y, double mapX, double mapY);
 	afx_msg void OnFileSave();
 	afx_msg void OnBtnMoveSeekur();
-private:
-	// 控制线程的结束
 protected:
 	afx_msg LRESULT OnSeekur(WPARAM wParam, LPARAM lParam);
-public:
+private:
 	// 转动相对角度文本框
 	CEdit m_editMoveHeading;
 	// 移动相对距离文本框
@@ -148,6 +176,10 @@ public:
 	CEdit m_editSubHeading;
 	// 距离差值
 	CEdit m_editDis;
+	// GPS串口号
+	int m_GPSport;
+	// 激光串口号
+	int m_laserport;
 #pragma region PID控制相关控件
 	// P参数文本框
 	CEdit m_editKp;
@@ -174,10 +206,26 @@ public:
 	// 启用ID控制
 	CButton m_cUseID;
 #pragma endregion
-	// 北京54 x坐标
+	// 北京54 x坐标文本框
 	CEdit m_editBJ54_x;
-	// 北京54 y坐标
+	// 北京54 y坐标文本框
 	CEdit m_editBJ54_y;
+	/*
+	描述：GPS串口数据解析
+	参数：
+	@spData：GPS语句
+	返回值：
+	*/
+	void OnGPSAnalysis(string spData);
+	/*
+	描述：激光串口数据解析
+	参数：
+	@buf：16进制检测数据组
+	@len：数据长度
+	@intBuf：转化后的数据组
+	返回值：
+	*/
+	void OnLaserAnalysis(string *buf, int len, int *intBuf);
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

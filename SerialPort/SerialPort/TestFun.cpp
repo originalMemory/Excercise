@@ -33,16 +33,16 @@ void TestFun::ConnectPort(int no, int baud, std::string path){
 
 	int temp;
 	std::cin >> temp;
-	std::ofstream out(path);
-	if (temp == 1){
+	//std::ofstream out(path);
+	//if (temp == 1){
 		mySerialPort.CloseListenTread();
 		for (int i = 0; i < mySerialPort.length; i++){
 			for (int j = 0; mySerialPort.dataAarry[i][j] != '\n'; j++){
 				std::cout << mySerialPort.dataAarry[i][j];
-				out << mySerialPort.dataAarry[i][j];
+				//out << mySerialPort.dataAarry[i][j];
 			}
 			std::cout << std::endl;
-			out << '\n';
+			//out << '\n';
 		}
-	}
+	//}
 }

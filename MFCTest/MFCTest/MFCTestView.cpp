@@ -12,7 +12,7 @@
 #include "MFCTestDoc.h"
 #include "MFCTestView.h"
 #include <math.h>
-
+#include <stdio.h>
 #include "MainFrm.h"
 
 #define WM_SEEKUR_RET WM_USER+100		 //Seekur返回消息
@@ -52,6 +52,35 @@ double GetDistance(double lat1, double lng1, double lat2, double lng2)
 	return s;
 }
 
+unsigned long HextoDec(const unsigned char *hex, int length)
+{
+	int i;
+	unsigned long rslt = 0;
+	for (i = 0; i < length; i++)
+	{
+		rslt += (unsigned long)(hex[i]) << (8 * (length - 1 - i));
+
+	}
+	return rslt;
+}
+
+int HexToDem(string str)
+{
+	int dem = 0;
+	for (int i = 0; i < str.size(); i++)
+	{
+		dem = dem * 16;
+		if ((str[i] <= '9') && (str[i] >= '0'))        //0~9之间的字符
+			dem += str[i] - '0';
+		else if ((str[i] <= 'F') && (str[i] >= 'A'))   //A~F之间的字符
+			dem += str[i] - 'A' + 10;
+		else if ((str[i] <= 'f') && (str[i] >= 'a'))   //a~f之间的字符
+			dem += str[i] - 'a' + 10;
+		else
+			return -1;                          //出错时返回-1
+	}
+	return dem;
+}
 // CMFCTestView
 
 IMPLEMENT_DYNCREATE(CMFCTestView, CFormView)
@@ -60,7 +89,7 @@ BEGIN_MESSAGE_MAP(CMFCTestView, CFormView)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_FILE_OPEN, &CMFCTestView::OnFileOpen)
 	//	ON_WM_SIZE()
-	ON_MESSAGE(WM_COMM_RXCHAR, &CMFCTestView::OnCommunication)
+	ON_MESSAGE(WM_COMM_RXCHAR, &CMFCTestView::OnSerialPortCallback)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestView::OnBtnSavePath)
 	ON_COMMAND(ID_FILE_SAVE, &CMFCTestView::OnFileSave)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCTestView::OnBtnMoveSeekur)
@@ -157,19 +186,39 @@ void CMFCTestView::OnInitialUpdate()
 		);
 
 	isGPSEnd = false;
-
+	m_GPSport = 6;
 	//调用串口程序，打开与GPS的通信
 	CMainFrame *p = (CMainFrame*)AfxGetMainWnd();
 	CMFCTestView *m_CView = (CMFCTestView *)p->GetActiveView();//获取View类的指针
-	if (serialPort.InitPort(m_CView, 6))
+	//if (serialPort_gps.InitPort(m_CView, m_GPSport))
+	//{
+	//	serialPort_gps.StartMonitoring();
+	//}
+	//else
+	//{
+	//	MessageBox(_T("GPS串口通信失败！"), _T("提示"), MB_OK);
+	//}
+	laserBufPos = 0;
+	laserCheckBufPos = 0;
+	//LASER_HEADER = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x00 };
+	/*LASER_HEADER[0] = '0x02';
+	LASER_HEADER[1] = 0x80;
+	LASER_HEADER[2] = 0x6E;
+	LASER_HEADER[3] = 0x01;
+	LASER_HEADER[4] = 0xB0;
+	LASER_HEADER[5] = 0xB5;
+	LASER_HEADER[6] = 0x00;*/
+	gpsStr = "";
+	testStr = "";
+	m_laserport = 3;
+	if (serialPort_laser.InitPort(m_CView, m_laserport, 9600))
 	{
-		serialPort.StartMonitoring();
+		serialPort_laser.StartMonitoring();
 	}
 	else
 	{
-		MessageBox(_T("GPS串口通信失败！"), _T("提示"), MB_OK);
+		MessageBox(_T("激光串口通信失败！"), _T("提示"), MB_OK);
 	}
-
 
 
 	m_editKp.SetWindowTextW(_T("0.25"));
@@ -345,316 +394,409 @@ void CMFCTestView::OnFileOpen()
 @portnum：端口号
 返回值：0
 */
-afx_msg LRESULT CMFCTestView::OnCommunication(WPARAM ch, LPARAM portnum)
+afx_msg LRESULT CMFCTestView::OnSerialPortCallback(WPARAM ch, LPARAM portnum)
 {
-	//接收单个字符
-	if (ch != 13 && ch != 10)
-	{
-		gpsStr += (char)ch;
+	//GPS数据
+	if (portnum == m_GPSport){
+		//接收单个字符
+		if (ch != 13 && ch != 10)
+		{
+			gpsStr += (char)ch;
+		}
+		//接收到完整一句时解析字符串
+		else if (gpsStr != "")
+		{
+			OnGPSAnalysis(gpsStr);
+			gpsStr = "";
+		}
 	}
-	//接收到完整一句时解析字符串
-	else if (gpsStr != "")
-	{
-		CString cTp;
-		cTp.Format(_T("%s"), gpsStr);
-		GPSInfo* gpsInfo = gpsTran.Tanslate(gpsStr);
 
-		//判断是不是GPS经纬度坐标
-		if (gpsInfo->InfoType == GGA)
+	//激光数据
+	if (portnum == m_laserport){
+		char a = 0x00;
+		char b = '0x80';
+		unsigned char cha = (unsigned char)ch;
+		int i;
+		char c16 = ch & 0xFF;
+		if (c16==a)
 		{
-			double longtitude = ((GGAInfo*)gpsInfo)->Longitude;
-			double latitude = ((GGAInfo*)gpsInfo)->Latitude;
-			//刷新窗口显示
-			cTp.Format(_T("%lf"), longtitude);
-			m_editLongitude.SetWindowText(cTp);
-			cTp.Format(_T("%lf"), latitude);
-			m_editLatitude.SetWindowTextW(cTp);
-
-			myGPSInfo.Longitude = longtitude;
-			myGPSInfo.Latitude = latitude;
-
-			// 建立坐标点
-			IPointPtr pShowPoint;
-			IPointPtr pGpsPoint;
-			HRESULT hr1 = pGpsPoint.CreateInstance(CLSID_Point);
-			pGpsPoint->PutCoords(myGPSInfo.Longitude, myGPSInfo.Latitude);
-
-			// 刷新卫星状态
-			cTp.Format(_T("%d"), ((GGAInfo*)gpsInfo)->UseSatelliteNum);
-			m_editSatNum.SetWindowText(cTp);
-			cTp.Format(_T("%d"), ((GGAInfo*)gpsInfo)->GPSStatus);
-			m_editGPSStaus.SetWindowText(cTp);
-			
-			// 判断是否要转换为北京54坐标
-			if (m_checkShowBJ54.GetCheck()){
-				IPointPtr pBJ54Point = geoToProj(pGpsPoint);
-				double bj_x, bj_y;
-				pBJ54Point->get_X(&bj_x);
-				pBJ54Point->get_Y(&bj_y);
-				myGPSInfo.BJ54_X = bj_x;
-				myGPSInfo.BJ54_Y = bj_y;
-				cTp.Format(_T("%lf"), bj_x);
-				m_editBJ54_x.SetWindowText(cTp);
-				cTp.Format(_T("%lf"), bj_y);
-				m_editBJ54_y.SetWindowText(cTp);
-
-				/*ISpatialReferenceFactory2Ptr ipSpaRefFact2(CLSID_SpatialReferenceEnvironment);
-				IGeographicCoordinateSystemPtr ipGeoCoordSys;
-				ipSpaRefFact2->CreateGeographicCoordinateSystem(esriSRGeoCS_Beijing1954, &ipGeoCoordSys);
-
-				ISpatialReferencePtr ipSRef;
-				ipSRef = ipGeoCoordSys;
-
-
-				IPointPtr point2(CLSID_Point);
-				point1->putref_SpatialReference(ipSRef);
-				point2->PutCoords(bj_x, bj_y);*/
-
-				pShowPoint = pBJ54Point;
-			}
-			else
+			int dsdf = 324;
+		}
+		char ctest[3] = { 0 };
+		sprintf(ctest, "%02X", cha);
+		string cstr = ctest;
+		//sscanf(&cha, "%x", ctest);
+		//CString str;
+		//str.Format(_T("%02X"), cha);//将接收到的BYTE型数据转换为对应的十六进制  
+		////char szTemp[4];
+		////wchar_t *wChar = str.GetBuffer(str.GetLength());
+		////str.ReleaseBuffer();
+		////// 将得到的wchar* 类型转为 char*类型
+		////size_t len = wcslen(wChar) + 1;
+		////size_t converted = 0;
+		////char *cChar;
+		////cChar = (char*)malloc(len*sizeof(char));
+		////wcstombs_s(&converted, cChar, len, wChar, _TRUNCATE);
+		//RecText.Append(str);
+		gpsStr += cstr + " ";
+		//校验是否为激光数据的起始
+		if (LASER_HEADER[laserCheckBufPos] == cstr)
+		{
+			if (laserCheckBufPos>0)
 			{
-				pShowPoint = pGpsPoint;
+				int ef = 234;
 			}
-			//刷新GPS位置
-			IActiveViewPtr iActiveView;
-			m_ipMapControl->get_ActiveView(&iActiveView);
-			/*IPointPtr ipoint(CLSID_Point);
-			if (ipoint == NULL)
-			MessageBox(_T("点创建错误"));
-			ipoint->PutCoords(myGPSInfo.Longitude*100, myGPSInfo.Latitude*100);*/
-
-			//画点
-			IGeometryPtr pgeomln(pGpsPoint);
-			IGraphicsContainerPtr pgracont(iActiveView);
-			//pgracont->DeleteAllElements();
-
-			IMarkerElementPtr pmarkerelem(CLSID_MarkerElement);//创建element对象，是element
-			if (pmarkerelem == NULL)
-				MessageBox(_T("画图元素创建错误"));
-			//IMarkerSymbolPtr imarkerSymbol(m_isymbol);//用m_isymbol初始化imarkerSymbol，是symbol
-			//pmarkerelem->put_Symbol(imarkerSymbol);//将symbol添加到element
-			((IElementPtr)pmarkerelem)->put_Geometry(pgeomln);
-			if (lastPointElement != NULL){
-				pgracont->DeleteElement(lastPointElement);
-			}
-			lastPointElement = pmarkerelem;
-			pgracont->AddElement((IElementPtr)pmarkerelem, 0);
-			iActiveView->Refresh();
-
-			isGPSEnd = false;
-		}
-		else if (gpsInfo->InfoType == PSAT_HPR)
-		{
-			CString heading;
-			heading.Format(_T("%lf"), ((PSAT_HPRInfo*)gpsInfo)->Heading);
-			m_editSeekurHeading.SetWindowText(heading);
-			myGPSInfo.Heading = ((PSAT_HPRInfo*)gpsInfo)->Heading;
-			isGPSEnd = true;
-		}
-		else if (gpsInfo->InfoType == VTG)
-		{
-			/*CString vel;
-			vel.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
-			m_editSeekurVel.SetWindowText(vel);
-			myGPSInfo.SpeedKm = ((VTGInfo*)gpsInfo)->TrueHeading;*/
-
-			//CString heading;
-			//heading.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
-			//m_editSeekurHeading.SetWindowText(heading);
-			//myGPSInfo.Heading = ((VTGInfo*)gpsInfo)->TrueHeading;
-		}
-
-		//在路径已加载且更新了一组GPS数据时计算状态
-		if (isPathExist&&isGPSEnd)
-		{
-			//计算当前距离差和航向差
-			//::CoInitialize(NULL);
-
-			//获取最近点
-			IPointPtr pNearestPoint(CLSID_Point);	//最近点
-			IPointPtr pSeekurPoint(CLSID_Point);		//Seekur所在点
-			IGeometryPtr pGeo;
-			lastPointElement->get_Geometry(&pGeo);
-			pSeekurPoint = (IPointPtr)pGeo;
-			double x;
-			pSeekurPoint->get_X(&x);
-			double y;
-			pSeekurPoint->get_Y(&y);
-			//pSeekurPoint->PutCoords(12943887.463977, 4857805.079523);
-
-			double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
-			double distFromCurve = 0;//输入点到曲线的最短距离
-			VARIANT_BOOL isRightSide = false;//输入点是否在曲线的右边
-			m_trackPath->QueryPointAndDistance(esriNoExtension, pSeekurPoint, false, pNearestPoint, &distAlongCurveFrom, &distFromCurve, &isRightSide);
-
-			//判断最近点在Seekur的左边还是右边，获取
-			double nearestX, nearestY, seekurX, seekurY;
-			pNearestPoint->get_X(&nearestX);
-			pNearestPoint->get_Y(&nearestY);
-			pSeekurPoint->get_X(&seekurX);
-			pSeekurPoint->get_Y(&seekurY);
-
-			//计算最近点是否在当前路径
-			ITopologicalOperatorPtr topo = (ITopologicalOperatorPtr)pNearestPoint;
-			/*IGeometryPtr buffer;
-			topo->Buffer(0.001, &buffer);
-			topo = (ITopologicalOperatorPtr)buffer;*/
-			IGeometryPtr pTpGeo;
-			HRESULT hr = topo->Intersect((IGeometryPtr)pNowPath, esriGeometry0Dimension, &pTpGeo);
-			if (FAILED(hr))
+			laserCheckBuf[laserCheckBufPos] = cstr;
+			if (laserCheckBufPos == 6)
 			{
-				MessageBox(_T("交点计算错误"));
-			}
-			VARIANT_BOOL isEmpty;	//交点是否为空
-			pTpGeo->get_IsEmpty(&isEmpty);
-			//先判断是否在当前路径上，不是则重新计算现有路径
-			if (isEmpty){
-				ISegmentCollectionPtr pSegCol = (ISegmentCollectionPtr)m_trackPath;	//路径集合
-				for (long i = nowPathPos + 1; i < segNum; i++)
+				laserDataLength = HexToDem(laserCheckBuf[6] + laserCheckBuf[5]);//两个8位（高位低位）合成16位包长
+				if (laserBufPos == laserDataLength*2)
 				{
-					ISegmentPtr pSeg;	//当前所在路径
-					//ISegmentPtr pSeg(CLSID_Line);	//当前所在路径
-					pSegCol->get_Segment(i, &pSeg);
-
-					//计算最近点是否在当前路径
-					hr = topo->Intersect((IGeometryPtr)pSeg, esriGeometry0Dimension, &pTpGeo);
-					if (FAILED(hr))
-					{
-						MessageBox(_T("交点计算错误"));
-					}
-					pTpGeo->get_IsEmpty(&isEmpty);
-					if (!isEmpty)
-					{
-						pNowPath = pSeg;
-						double angle;	//直线与X轴夹角，以弧度为单位
-						pNowPath->get_Angle(&angle);
-						lineHeading = angle * 180 / PI;
-						//因为当前角度是以四象限X为起点的逆时针角度，对应的是地图东部
-						//故需要转成以北为起点的顺时针角度
-						if (lineHeading <= 90)
-						{
-							//1、3、4象限
-							lineHeading = 90 - lineHeading;
-						}
-						else
-						{
-							//2象限
-							lineHeading = 360 + (90 - lineHeading);
-						}
-						nowPathPos = i;
-						break;
-					}
+					OnLaserAnalysis(laserBuf, laserDataLength, laserData);
 				}
 			}
-
-			distFromCurve *= 100000 * 100;	//cm
-			double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000*100;	//Seekur到路径距离（cm）
-			dis = distFromCurve;
-			double subHeading = myGPSInfo.Heading - lineHeading;	//Seekur航向路与径航向差值
-			//路径航向在1、4象限，Seekur航向在2、3象限的情况
-			if (lineHeading<180 && myGPSInfo.Heading>180 + lineHeading)
-			{
-				subHeading = myGPSInfo.Heading - 360 - lineHeading;
-			}
-			//Seekur航向在1、4象限，路径航向在2、3象限的情况
-			if (lineHeading > 180 && myGPSInfo.Heading < lineHeading - 180)
-			{
-				subHeading = myGPSInfo.Heading + 360 - lineHeading;
-			}
-			if (!isRightSide){
-				dis = -dis;
-			}
-			err = dis + kinter*subHeading;		// 车辆当前状态
-			double turnHeading = 0;	//转向角
-			//P控制
-			turnHeading = kp*err;
-
-			if (m_cUseID.GetCheck()){
-				//50厘米内启用I控制
-				if (dis < 5)
-				{
-					integral += err;
-					turnHeading += ki*integral;
-				}
-
-				//D控制
-				turnHeading += kd*(err - err_last);
-				err_last = err;
-			}
-
-			double maxTrun = 60;	//最大转向角
-			/*if (dis < 5)
-			{
-			maxTrun = 10;
-			}
-			else if (dis < 10)
-			{
-			maxTrun = 20;
-			}
-			else if (dis < 20)
-			{
-			maxTrun = 30;
-			}*/
-			//判断机器车在路径右侧还是左侧
-			if (isRightSide)
-			{
-				//调整转角，使转角不得令转向后的航向差值大于最大转向角
-				if (turnHeading - subHeading >= maxTrun)
-				{
-					turnHeading = maxTrun + subHeading;
-				}
-				////防止在右侧时外偏
-				//if ((subHeading + turnHeading) <= -maxTrun)
-				//{
-				//	turnHeading = -maxTrun - subHeading;
-				//}
-			}
-			else
-			{
-				maxTrun = -maxTrun;
-				//调整转角，使转角不得令转向后的航向差值大于最大转向角
-				if (turnHeading - subHeading <= maxTrun)
-				{
-					turnHeading = maxTrun + subHeading;
-				}
-				////防止在左侧时外偏
-				//if ((subHeading + turnHeading) >= maxTrun)
-				//{
-				//	turnHeading = maxTrun - subHeading;
-				//}
-			}
-
-			CString cTp;
-			cTp.Format(_T("%lf"), subHeading);
-			m_editSubHeading.SetWindowText(cTp);
-			cTp.Format(_T("%lf"), dis);
-			m_editDis.SetWindowText(cTp);
-			cTp.Format(_T("%lf"), turnHeading);
-			m_editSeekurVel.SetWindowText(cTp);
-
-			//在追踪状态时发送运动指令
-			if (isTracked)
-			{
-				//发送控制指令
-				seekurParaPtr pPara = new seekurPara();
-				pPara->distance = 0;
-				pPara->veloctiy = 0;
-				pPara->heading = turnHeading;
-
-				PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
-			}
-			else{
-				integral = 0;
-				err_last = 0;
-			}
+			laserCheckBufPos++;
+		}
+		else
+		{
+			laserCheckBufPos = 0;
+			laserCheckBuf[0] = '\0';
 		}
 
-		delete gpsInfo;
-		gpsStr = "";
+		//在是同一句时往缓冲中写入数据
+		if (laserBufPos<laserDataLength*2)
+		{
+			laserBuf[laserBufPos] = cstr;
+			laserBufPos++;
+		}
 	}
 
 	return 0;
+}
+
+
+
+/*
+描述：GPS串口数据解析
+参数：
+@spData：GPS语句
+返回值：
+*/
+void CMFCTestView::OnGPSAnalysis(string spData)
+{
+	CString cTp;
+	GPSInfo* gpsInfo = gpsTran.Tanslate(spData);
+
+	//判断是不是GPS经纬度坐标
+	if (gpsInfo->InfoType == GGA)
+	{
+		double longtitude = ((GGAInfo*)gpsInfo)->Longitude;
+		double latitude = ((GGAInfo*)gpsInfo)->Latitude;
+		//刷新窗口显示
+		cTp.Format(_T("%lf"), longtitude);
+		m_editLongitude.SetWindowText(cTp);
+		cTp.Format(_T("%lf"), latitude);
+		m_editLatitude.SetWindowTextW(cTp);
+
+		myGPSInfo.Longitude = longtitude;
+		myGPSInfo.Latitude = latitude;
+
+		// 建立坐标点
+		IPointPtr pShowPoint;
+		IPointPtr pGpsPoint;
+		HRESULT hr1 = pGpsPoint.CreateInstance(CLSID_Point);
+		pGpsPoint->PutCoords(myGPSInfo.Longitude, myGPSInfo.Latitude);
+
+		// 刷新卫星状态
+		cTp.Format(_T("%d"), ((GGAInfo*)gpsInfo)->UseSatelliteNum);
+		m_editSatNum.SetWindowText(cTp);
+		cTp.Format(_T("%d"), ((GGAInfo*)gpsInfo)->GPSStatus);
+		m_editGPSStaus.SetWindowText(cTp);
+
+		// 判断是否要转换为北京54坐标
+		if (m_checkShowBJ54.GetCheck()){
+			IPointPtr pBJ54Point = geoToProj(pGpsPoint);
+			double bj_x, bj_y;
+			pBJ54Point->get_X(&bj_x);
+			pBJ54Point->get_Y(&bj_y);
+			myGPSInfo.BJ54_X = bj_x;
+			myGPSInfo.BJ54_Y = bj_y;
+			cTp.Format(_T("%lf"), bj_x);
+			m_editBJ54_x.SetWindowText(cTp);
+			cTp.Format(_T("%lf"), bj_y);
+			m_editBJ54_y.SetWindowText(cTp);
+
+			/*ISpatialReferenceFactory2Ptr ipSpaRefFact2(CLSID_SpatialReferenceEnvironment);
+			IGeographicCoordinateSystemPtr ipGeoCoordSys;
+			ipSpaRefFact2->CreateGeographicCoordinateSystem(esriSRGeoCS_Beijing1954, &ipGeoCoordSys);
+
+			ISpatialReferencePtr ipSRef;
+			ipSRef = ipGeoCoordSys;
+
+
+			IPointPtr point2(CLSID_Point);
+			point1->putref_SpatialReference(ipSRef);
+			point2->PutCoords(bj_x, bj_y);*/
+
+			pShowPoint = pBJ54Point;
+		}
+		else
+		{
+			pShowPoint = pGpsPoint;
+		}
+		//刷新GPS位置
+		IActiveViewPtr iActiveView;
+		m_ipMapControl->get_ActiveView(&iActiveView);
+		/*IPointPtr ipoint(CLSID_Point);
+		if (ipoint == NULL)
+		MessageBox(_T("点创建错误"));
+		ipoint->PutCoords(myGPSInfo.Longitude*100, myGPSInfo.Latitude*100);*/
+
+		//画点
+		IGeometryPtr pgeomln(pGpsPoint);
+		IGraphicsContainerPtr pgracont(iActiveView);
+		//pgracont->DeleteAllElements();
+
+		IMarkerElementPtr pmarkerelem(CLSID_MarkerElement);//创建element对象，是element
+		if (pmarkerelem == NULL)
+			MessageBox(_T("画图元素创建错误"));
+		//IMarkerSymbolPtr imarkerSymbol(m_isymbol);//用m_isymbol初始化imarkerSymbol，是symbol
+		//pmarkerelem->put_Symbol(imarkerSymbol);//将symbol添加到element
+		((IElementPtr)pmarkerelem)->put_Geometry(pgeomln);
+		if (lastPointElement != NULL){
+			pgracont->DeleteElement(lastPointElement);
+		}
+		lastPointElement = pmarkerelem;
+		pgracont->AddElement((IElementPtr)pmarkerelem, 0);
+		iActiveView->Refresh();
+
+		isGPSEnd = false;
+	}
+	else if (gpsInfo->InfoType == PSAT_HPR)
+	{
+		CString heading;
+		heading.Format(_T("%lf"), ((PSAT_HPRInfo*)gpsInfo)->Heading);
+		m_editSeekurHeading.SetWindowText(heading);
+		myGPSInfo.Heading = ((PSAT_HPRInfo*)gpsInfo)->Heading;
+		isGPSEnd = true;
+	}
+	else if (gpsInfo->InfoType == VTG)
+	{
+		/*CString vel;
+		vel.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
+		m_editSeekurVel.SetWindowText(vel);
+		myGPSInfo.SpeedKm = ((VTGInfo*)gpsInfo)->TrueHeading;*/
+
+		//CString heading;
+		//heading.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
+		//m_editSeekurHeading.SetWindowText(heading);
+		//myGPSInfo.Heading = ((VTGInfo*)gpsInfo)->TrueHeading;
+	}
+
+	//在路径已加载且更新了一组GPS数据时计算状态
+	if (isPathExist&&isGPSEnd)
+	{
+		//计算当前距离差和航向差
+		//::CoInitialize(NULL);
+
+		//获取最近点
+		IPointPtr pNearestPoint(CLSID_Point);	//最近点
+		IPointPtr pSeekurPoint(CLSID_Point);		//Seekur所在点
+		IGeometryPtr pGeo;
+		lastPointElement->get_Geometry(&pGeo);
+		pSeekurPoint = (IPointPtr)pGeo;
+		double x;
+		pSeekurPoint->get_X(&x);
+		double y;
+		pSeekurPoint->get_Y(&y);
+		//pSeekurPoint->PutCoords(12943887.463977, 4857805.079523);
+
+		double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
+		double distFromCurve = 0;//输入点到曲线的最短距离
+		VARIANT_BOOL isRightSide = false;//输入点是否在曲线的右边
+		m_trackPath->QueryPointAndDistance(esriNoExtension, pSeekurPoint, false, pNearestPoint, &distAlongCurveFrom, &distFromCurve, &isRightSide);
+
+		//判断最近点在Seekur的左边还是右边，获取
+		double nearestX, nearestY, seekurX, seekurY;
+		pNearestPoint->get_X(&nearestX);
+		pNearestPoint->get_Y(&nearestY);
+		pSeekurPoint->get_X(&seekurX);
+		pSeekurPoint->get_Y(&seekurY);
+
+		//计算最近点是否在当前路径
+		ITopologicalOperatorPtr topo = (ITopologicalOperatorPtr)pNearestPoint;
+		/*IGeometryPtr buffer;
+		topo->Buffer(0.001, &buffer);
+		topo = (ITopologicalOperatorPtr)buffer;*/
+		IGeometryPtr pTpGeo;
+		HRESULT hr = topo->Intersect((IGeometryPtr)pNowPath, esriGeometry0Dimension, &pTpGeo);
+		if (FAILED(hr))
+		{
+			MessageBox(_T("交点计算错误"));
+		}
+		VARIANT_BOOL isEmpty;	//交点是否为空
+		pTpGeo->get_IsEmpty(&isEmpty);
+		//先判断是否在当前路径上，不是则重新计算现有路径
+		if (isEmpty){
+			ISegmentCollectionPtr pSegCol = (ISegmentCollectionPtr)m_trackPath;	//路径集合
+			for (long i = nowPathPos + 1; i < segNum; i++)
+			{
+				ISegmentPtr pSeg;	//当前所在路径
+				//ISegmentPtr pSeg(CLSID_Line);	//当前所在路径
+				pSegCol->get_Segment(i, &pSeg);
+
+				//计算最近点是否在当前路径
+				hr = topo->Intersect((IGeometryPtr)pSeg, esriGeometry0Dimension, &pTpGeo);
+				if (FAILED(hr))
+				{
+					MessageBox(_T("交点计算错误"));
+				}
+				pTpGeo->get_IsEmpty(&isEmpty);
+				if (!isEmpty)
+				{
+					pNowPath = pSeg;
+					double angle;	//直线与X轴夹角，以弧度为单位
+					pNowPath->get_Angle(&angle);
+					lineHeading = angle * 180 / PI;
+					//因为当前角度是以四象限X为起点的逆时针角度，对应的是地图东部
+					//故需要转成以北为起点的顺时针角度
+					if (lineHeading <= 90)
+					{
+						//1、3、4象限
+						lineHeading = 90 - lineHeading;
+					}
+					else
+					{
+						//2象限
+						lineHeading = 360 + (90 - lineHeading);
+					}
+					nowPathPos = i;
+					break;
+				}
+			}
+		}
+
+		distFromCurve *= 100000 * 100;	//cm
+		double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000 * 100;	//Seekur到路径距离（cm）
+		dis = distFromCurve;
+		double subHeading = myGPSInfo.Heading - lineHeading;	//Seekur航向路与径航向差值
+		//路径航向在1、4象限，Seekur航向在2、3象限的情况
+		if (lineHeading<180 && myGPSInfo.Heading>180 + lineHeading)
+		{
+			subHeading = myGPSInfo.Heading - 360 - lineHeading;
+		}
+		//Seekur航向在1、4象限，路径航向在2、3象限的情况
+		if (lineHeading > 180 && myGPSInfo.Heading < lineHeading - 180)
+		{
+			subHeading = myGPSInfo.Heading + 360 - lineHeading;
+		}
+		if (!isRightSide){
+			dis = -dis;
+		}
+		err = dis + kinter*subHeading;		// 车辆当前状态
+		double turnHeading = 0;	//转向角
+		//P控制
+		turnHeading = kp*err;
+
+		if (m_cUseID.GetCheck()){
+			//50厘米内启用I控制
+			if (dis < 5)
+			{
+				integral += err;
+				turnHeading += ki*integral;
+			}
+
+			//D控制
+			turnHeading += kd*(err - err_last);
+			err_last = err;
+		}
+
+		double maxTrun = 60;	//最大转向角
+		/*if (dis < 5)
+		{
+		maxTrun = 10;
+		}
+		else if (dis < 10)
+		{
+		maxTrun = 20;
+		}
+		else if (dis < 20)
+		{
+		maxTrun = 30;
+		}*/
+		//判断机器车在路径右侧还是左侧
+		if (isRightSide)
+		{
+			//调整转角，使转角不得令转向后的航向差值大于最大转向角
+			if (turnHeading - subHeading >= maxTrun)
+			{
+				turnHeading = maxTrun + subHeading;
+			}
+			////防止在右侧时外偏
+			//if ((subHeading + turnHeading) <= -maxTrun)
+			//{
+			//	turnHeading = -maxTrun - subHeading;
+			//}
+		}
+		else
+		{
+			maxTrun = -maxTrun;
+			//调整转角，使转角不得令转向后的航向差值大于最大转向角
+			if (turnHeading - subHeading <= maxTrun)
+			{
+				turnHeading = maxTrun + subHeading;
+			}
+			////防止在左侧时外偏
+			//if ((subHeading + turnHeading) >= maxTrun)
+			//{
+			//	turnHeading = maxTrun - subHeading;
+			//}
+		}
+
+		CString cTp;
+		cTp.Format(_T("%lf"), subHeading);
+		m_editSubHeading.SetWindowText(cTp);
+		cTp.Format(_T("%lf"), dis);
+		m_editDis.SetWindowText(cTp);
+		cTp.Format(_T("%lf"), turnHeading);
+		m_editSeekurVel.SetWindowText(cTp);
+
+		//在追踪状态时发送运动指令
+		if (isTracked)
+		{
+			//发送控制指令
+			seekurParaPtr pPara = new seekurPara();
+			pPara->distance = 0;
+			pPara->veloctiy = 0;
+			pPara->heading = turnHeading;
+
+			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
+		}
+		else{
+			integral = 0;
+			err_last = 0;
+		}
+	}
+
+	delete gpsInfo;
+}
+
+
+/*
+描述：激光串口数据解析
+参数：
+@buf：16进制检测数据组
+@len：数据长度
+@intBuf：转化后的数据组
+返回值：
+*/
+void CMFCTestView::OnLaserAnalysis(string *buf, int len, int *intBuf){
+	for (int i = 0; i < len; i++)
+	{
+		//only upper 12 bits of upper byte are used
+		intBuf[i] = HexToDem(buf[2 * i + 1] + buf[2 * i]);
+		//intBuf[i] = buf[2 * i] | ((buf[2 * i + 1] & 0x1f) << 8);
+	}
 }
 
 UINT CMFCTestView::SeekurFuc(LPVOID lParam){
@@ -1387,3 +1529,5 @@ void CMFCTestView::OnBtnPathAdd()
 	pPtclo->AddPoint(point);
 	//point->putref_SpatialReference()
 }
+
+

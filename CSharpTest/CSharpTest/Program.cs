@@ -60,10 +60,10 @@ namespace CSharpTest
             //StreamReader sr = new StreamReader(response.GetResponseStream());
             //Console.WriteLine(sr.ReadToEnd());
 
-            //MyTools.SortDir(@"C:\新建文件夹 (2)\绯月");
+            MyTools.SortDir(@"C:\下载\绯月");
 
             //Console.WriteLine(GetDistance(39.944094107166663, 116.27698527749999, 39.944652798500002, 116.27679663166667));
-            DnlTools.SearchNewrankWXAccount();
+            //DnlTools.SearchNewrankWXAccount();
             Console.ReadKey();
         }
 

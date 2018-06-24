@@ -25,8 +25,8 @@ class hdf_geolocation:
     _longitude_end = 180  # 结束经度
     _width = 0  # 输出图像宽度
     _height = 0  # 输出图像高度
-    # _xRes = 0  # x方向分辨率大小
-    # _yRes = 0  # y方向分辨率大小
+    _xRes = 0  # x方向分辨率大小
+    _yRes = 0  # y方向分辨率大小
     # _name = 0  # 本次任务名
     _hdf_file_paths = []  # 本次要处理的所有hdf文件路径
     _select_bands = []  # 本次要转换的波段列表
@@ -168,9 +168,9 @@ class hdf_geolocation:
         # endregion
         met_loc = """
   <Metadata domain="GEOLOCATION">  
-    <MDI key="LINE_OFFSET">1</MDI>  
+    <MDI key="LINE_OFFSET">-1</MDI>  
     <MDI key="LINE_STEP">1</MDI>  
-    <MDI key="PIXEL_OFFSET">1</MDI>  
+    <MDI key="PIXEL_OFFSET">-1</MDI>  
     <MDI key="PIXEL_STEP">1</MDI>  
     <MDI key="SRS">GEOGCS["WGS84",DATUM["WGS_1984",SPHEROID\["WGS84",6378137,298.257223563,AUTHORITY["EPSG","7030"]]\
 ,TOWGS84[0,0,0,0,0,0,0],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree"\
