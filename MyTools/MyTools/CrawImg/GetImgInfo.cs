@@ -9,6 +9,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using MyTools.Tools;
+using HtmlAgilityPack;
 
 namespace MyTools.CrawImg
 {
@@ -82,81 +83,34 @@ namespace MyTools.CrawImg
             ImgInfo img = new ImgInfo();
             img.Kind = ImgKind.Cosplay;
             img.Urls = new List<string>();
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(respHtml);
             //获取图片归属作品名称
-            Match ACGWork = Regex.Match(respHtml, @"<meta name=""keywords"" content="".+,(?<info>.+?),.+,.+,.+,.+,.+,.+,.+"" />");
-            img.ACGWork = ACGWork.Groups["info"].Value;
-            //获取Author信息
-            Regex cnReg = new Regex(@"cn:&nbsp;&nbsp;<h3><a href="".*"" class=""blue1"">(?<info>.+?)</a></h3>");
-            MatchCollection cn = cnReg.Matches(respHtml);
-            if (cn.Count == 0)
-            {
-                cnReg = new Regex(@"cn:&nbsp;&nbsp;(?<info>.+?)</span>");
-                cn = cnReg.Matches(respHtml);
-            }
-            //判断是单人还是多人cosplay，多人cosplay以角色名开头，单人cosplay以标题开头
-            if (cn.Count > 1)
-            {
-                //获取coser名字
-                string cosers = "";
-                foreach (Match x in cn)
-                {
-                    cosers += x.Groups["info"].Value + "&";
-                }
-                cosers = cosers.Substring(0, cosers.Length - 1);
-                img.Author = cosers;
-                //获取角色名字
-                Regex roleReg = new Regex("<h2.*>\n(?<info>.+?) </a>");
-                MatchCollection rolesMatch = roleReg.Matches(respHtml);
-                string roles = "";
-                foreach (Match x in rolesMatch)
-                {
-                    roles += x.Groups["info"].Value + "&";
-                }
-                img.Title = roles.Substring(0, roles.Length - 1);
-            }
-            else
-            {
-                img.Author = cn[0].Groups["info"].Value;
-                //获取标题
-                Match titleMat = Regex.Match(respHtml, "<h1.*>\n(?<info>.+?) </h1>");
-                try
-                {
-                    if (titleMat.Value == null || cn.Count == 0)
-                        img.Title = "";
-                    else
-                        img.Title = titleMat.Groups["info"].Value;
-                }
-                catch (Exception)
-                {
-                    string tilte = titleMat.Value;
-                    int index1 = tilte.IndexOf('\n');
-                    int index2 = tilte.IndexOf('<', index1);
-                    img.Title = tilte.Substring(index1 + 1, index2 - index1);
-                    
-                }
-            }
+            string con = doc.DocumentNode.SelectSingleNode("//meta[@name=\"keywords\"]").GetAttributeValue("content", "");
+            img.ACGWork = con.Split(',')[0];
+            //获取coser信息
+            img.Author = doc.DocumentNode.SelectSingleNode("//*[@id=\"js-hotFix\"]/div[1]/div/div[1]/div/div[2]/a").InnerText;
+            //改版后的半次元无自定义标题，也没有单独CN显示，故取作品名为标题
+            img.Title = img.ACGWork;
+            
             //获取正文
-            Match descriptionMatch = Regex.Match(respHtml, @"<div class=""post__content js-content-img-wrap js-fullimg js-maincontent mb0 pl0 pr0 l-left w650"">\s(?<info>.+?)<br/>");
-            string description = descriptionMatch.Groups["info"].Value;
-            //获取<a>标签内链接和内容
-            Regex desreg = new Regex(@"(?is)<a(?:(?!href=).)*href=(['""]?)(?<url>[^""\s>]*)\1[^>]*>(?<text>(?:(?!</?a\b).)*)</a>");
-            MatchCollection des = desreg.Matches(description);
-            foreach (Match x in des)
+            HtmlNode descNode = doc.DocumentNode.SelectSingleNode("//p[@class=\"mb20\"]");
+            if(descNode!=null)
             {
-                description = description.Replace(x.Value, x.Groups["text"].Value);
+                string descHtml = descNode.InnerHtml;
+                Regex reg = new Regex("</p>|<br>|</br>");
+                descHtml = reg.Replace(descHtml, System.Environment.NewLine);
+                descHtml = Regex.Replace(descHtml, "<a href=.+?>|</a>", "");
+                img.Description = descHtml;
             }
-            description = description.Replace("<br>", System.Environment.NewLine);
-            img.Description = description;
-            //获取链接
-            Regex linkreg = new Regex(@"<img class='detail_std detail_clickable' src='(?<info>.+?)/w650' />");
-            MatchCollection urls = linkreg.Matches(respHtml);
-            foreach (Match x in urls)
+            //获取图片链接
+            HtmlNodeCollection imgs = doc.DocumentNode.SelectNodes("//img[@class=\"detail_std detail_clickable\"]");
+            foreach (HtmlNode item in imgs)
             {
-                string str;
-                str = x.Groups["info"].Value;
-                if (!string.IsNullOrEmpty(str))
+                string url = item.GetAttributeValue("src", "").Replace("/w650", "");
+                if (!string.IsNullOrEmpty(url))
                 {
-                    img.Urls.Add(str);
+                    img.Urls.Add(url);
                 }
             }
             return img;

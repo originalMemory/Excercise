@@ -19,7 +19,7 @@ def get_FileSize(filePath):
     return round(fsize, 2)
 
 
-basic_path = 'G:\Gal\拔作\整理\\'
+basic_path = 'H:\Gal\拔作\整理\\'
 
 config = {
     'host': 'localhost',  # 地址

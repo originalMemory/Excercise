@@ -37,6 +37,10 @@ namespace MyTools.CrawNovel
                         novel = ExtractDiyiChapter(url, respHtml);
                         novel.Kind = NovelWebKind.Diyibanzhu;
                         break;
+                    case "www.tangzhekan.net":
+                        novel = ExtractDiyiChapter(url, respHtml);
+                        novel.Kind = NovelWebKind.Diyibanzhu;
+                        break;
                     case "sexinsex.net":
                         novel = ExtractSisChapter(url, respHtml);
                         novel.Kind = NovelWebKind.Sexinsex;

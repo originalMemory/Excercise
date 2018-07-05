@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseAction.h" />
+    <ClInclude Include="ObstacleAvoid.h" />
     <ClInclude Include="GPSTranslate.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFCTest.h" />
@@ -122,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseAction.cpp" />
+    <ClCompile Include="ObstacleAvoid.cpp" />
     <ClCompile Include="GPSTranslate.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFCTest.cpp" />

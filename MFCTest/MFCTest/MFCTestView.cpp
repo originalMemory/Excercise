@@ -14,6 +14,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "MainFrm.h"
+#include "ObstacleAvoid.h"
 
 #define WM_SEEKUR_RET WM_USER+100		 //Seekur返回消息
 #define WM_SEEKUR_MOVE WM_USER+101		//Seekur操作消息（开始）
@@ -230,6 +231,7 @@ void CMFCTestView::OnInitialUpdate()
 	isTracked = false;
 	isGPSEnd = false;
 	isPathExist = false;
+	isAvoid = false;
 	pathLayerName = _T("path");
 }
 
@@ -450,9 +452,10 @@ afx_msg LRESULT CMFCTestView::OnSerialPortCallback(WPARAM ch, LPARAM portnum)
 			if (laserCheckBufPos == 6)
 			{
 				laserDataLength = HexToDem(laserCheckBuf[6] + laserCheckBuf[5]);//两个8位（高位低位）合成16位包长
+				//当一组语句全部传输完后，对期进行解析
 				if (laserBufPos == laserDataLength*2)
 				{
-					OnLaserAnalysis(laserBuf, laserDataLength, laserData);
+					OnLaserAnalysis(laserBuf, laserDataLength);
 				}
 			}
 			laserCheckBufPos++;
@@ -580,18 +583,6 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		myGPSInfo.Heading = ((PSAT_HPRInfo*)gpsInfo)->Heading;
 		isGPSEnd = true;
 	}
-	else if (gpsInfo->InfoType == VTG)
-	{
-		/*CString vel;
-		vel.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
-		m_editSeekurVel.SetWindowText(vel);
-		myGPSInfo.SpeedKm = ((VTGInfo*)gpsInfo)->TrueHeading;*/
-
-		//CString heading;
-		//heading.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->TrueHeading);
-		//m_editSeekurHeading.SetWindowText(heading);
-		//myGPSInfo.Heading = ((VTGInfo*)gpsInfo)->TrueHeading;
-	}
 
 	//在路径已加载且更新了一组GPS数据时计算状态
 	if (isPathExist&&isGPSEnd)
@@ -694,76 +685,78 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 			dis = -dis;
 		}
 		err = dis + kinter*subHeading;		// 车辆当前状态
-		double turnHeading = 0;	//转向角
-		//P控制
-		turnHeading = kp*err;
-
-		if (m_cUseID.GetCheck()){
-			//50厘米内启用I控制
-			if (dis < 5)
-			{
-				integral += err;
-				turnHeading += ki*integral;
-			}
-
-			//D控制
-			turnHeading += kd*(err - err_last);
-			err_last = err;
-		}
-
-		double maxTrun = 60;	//最大转向角
-		/*if (dis < 5)
-		{
-		maxTrun = 10;
-		}
-		else if (dis < 10)
-		{
-		maxTrun = 20;
-		}
-		else if (dis < 20)
-		{
-		maxTrun = 30;
-		}*/
-		//判断机器车在路径右侧还是左侧
-		if (isRightSide)
-		{
-			//调整转角，使转角不得令转向后的航向差值大于最大转向角
-			if (turnHeading - subHeading >= maxTrun)
-			{
-				turnHeading = maxTrun + subHeading;
-			}
-			////防止在右侧时外偏
-			//if ((subHeading + turnHeading) <= -maxTrun)
-			//{
-			//	turnHeading = -maxTrun - subHeading;
-			//}
-		}
-		else
-		{
-			maxTrun = -maxTrun;
-			//调整转角，使转角不得令转向后的航向差值大于最大转向角
-			if (turnHeading - subHeading <= maxTrun)
-			{
-				turnHeading = maxTrun + subHeading;
-			}
-			////防止在左侧时外偏
-			//if ((subHeading + turnHeading) >= maxTrun)
-			//{
-			//	turnHeading = maxTrun - subHeading;
-			//}
-		}
+		
 
 		CString cTp;
 		cTp.Format(_T("%lf"), subHeading);
 		m_editSubHeading.SetWindowText(cTp);
 		cTp.Format(_T("%lf"), dis);
 		m_editDis.SetWindowText(cTp);
-		cTp.Format(_T("%lf"), turnHeading);
-		m_editSeekurVel.SetWindowText(cTp);
 
-		//在追踪状态时发送运动指令
-		if (isTracked)
+		//在追踪状态且不为避障状态时发送运动指令
+		if (isTracked&&!isAvoid)
 		{
+			double turnHeading = 0;	//转向角
+			//P控制
+			turnHeading = kp*err;
+
+			if (m_cUseID.GetCheck()){
+				//50厘米内启用I控制
+				if (dis < 5)
+				{
+					integral += err;
+					turnHeading += ki*integral;
+				}
+
+				//D控制
+				turnHeading += kd*(err - err_last);
+				err_last = err;
+			}
+
+			double maxTrun = 60;	//最大转向角
+			/*if (dis < 5)
+			{
+			maxTrun = 10;
+			}
+			else if (dis < 10)
+			{
+			maxTrun = 20;
+			}
+			else if (dis < 20)
+			{
+			maxTrun = 30;
+			}*/
+			//判断机器车在路径右侧还是左侧
+			if (isRightSide)
+			{
+				//调整转角，使转角不得令转向后的航向差值大于最大转向角
+				if (turnHeading - subHeading >= maxTrun)
+				{
+					turnHeading = maxTrun + subHeading;
+				}
+				////防止在右侧时外偏
+				//if ((subHeading + turnHeading) <= -maxTrun)
+				//{
+				//	turnHeading = -maxTrun - subHeading;
+				//}
+			}
+			else
+			{
+				maxTrun = -maxTrun;
+				//调整转角，使转角不得令转向后的航向差值大于最大转向角
+				if (turnHeading - subHeading <= maxTrun)
+				{
+					turnHeading = maxTrun + subHeading;
+				}
+				////防止在左侧时外偏
+				//if ((subHeading + turnHeading) >= maxTrun)
+				//{
+				//	turnHeading = maxTrun - subHeading;
+				//}
+			}
+			cTp.Format(_T("%lf"), turnHeading);
+			m_editSeekurVel.SetWindowText(cTp);
+
 			//发送控制指令
 			seekurParaPtr pPara = new seekurPara();
 			pPara->distance = 0;
@@ -787,15 +780,37 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 参数：
 @buf：16进制检测数据组
 @len：数据长度
-@intBuf：转化后的数据组
 返回值：
 */
-void CMFCTestView::OnLaserAnalysis(string *buf, int len, int *intBuf){
+void CMFCTestView::OnLaserAnalysis(string *buf, int len){
 	for (int i = 0; i < len; i++)
 	{
 		//only upper 12 bits of upper byte are used
-		intBuf[i] = HexToDem(buf[2 * i + 1] + buf[2 * i]);
+		laserData[i] = HexToDem(buf[2 * i + 1] + buf[2 * i]);
 		//intBuf[i] = buf[2 * i] | ((buf[2 * i + 1] & 0x1f) << 8);
+	}
+	//解析数据，判断是否需要避障
+	if (isTracked)
+	{
+		obsAvoid.Initialize(10 * 1000, 90, 90);
+		bool isObs = obsAvoid.SetObstaclePosture(laserData, len);
+		if (isObs)
+		{
+			isAvoid = true;
+			float turnHeading = obsAvoid.ComputeAvoidHeading();
+			//发送控制指令
+			seekurParaPtr pPara = new seekurPara();
+			pPara->distance = 0;
+			pPara->veloctiy = 0;
+			pPara->heading = turnHeading;
+
+			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
+		}
+		else
+		{
+			isAvoid = false;
+		}
+		
 	}
 }
 
@@ -1529,5 +1544,3 @@ void CMFCTestView::OnBtnPathAdd()
 	pPtclo->AddPoint(point);
 	//point->putref_SpatialReference()
 }
-
-

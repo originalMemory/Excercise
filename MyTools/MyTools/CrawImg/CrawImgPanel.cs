@@ -74,6 +74,7 @@ namespace MyTools.CrawImg
 
             //加载描述
             TextBox description = new TextBox();
+            description.ShortcutsEnabled = true;
             description.Multiline = true;
             description.Margin = new System.Windows.Forms.Padding(3);
             description.Name = "description";

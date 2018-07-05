@@ -26,7 +26,7 @@ namespace MyTools.Tools
             //使用GET方法获取链接指向的网页
             req.Method = "GET";
             //设置用户代理，防止网站判定为用户代理
-            req.UserAgent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; BOIE9;ZHCN)";
+            req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36";
             //如果方法验证网页来源就加上这一句如果不验证那就可以不写了
             //req.Referer = "http://sufei.cnblogs.com";
             //添加Cookie，用来抓取需登陆可见的网页
@@ -38,65 +38,63 @@ namespace MyTools.Tools
             objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
             req.CookieContainer = objcok;
             //设置超时
-            //req.Timeout = 3000;
+            req.Timeout = 3000;
             //Http响应
-            HttpWebResponse resp;
-            int time = 0;   //服务器无响应时重试次数
-            while (true)
-            {
-                time++;
-                resp = (HttpWebResponse)req.GetResponse();
-                if (resp.StatusCode != HttpStatusCode.OK)
-                {
-                    if (time < 5)
-                        continue;
-                    else
-                        break;
-                }
-                break;
-            }
-
-            //字节读取网页内容
-            MemoryStream memStream = new MemoryStream();
-            using (Stream stream = resp.GetResponseStream())
-            {
-
-                byte[] buffer = new byte[1024];
-                int byteCount;
-                do
-                {
-                    byteCount = stream.Read(buffer, 0, buffer.Length);
-                    memStream.Write(buffer, 0, byteCount);
-                } while (byteCount > 0);
-            }
-
-            //默认以UTF8格式解析
-            Encoding encoding = Encoding.UTF8;
             string html = "";       //网页内容
-            var charset = GetEncoding(resp.CharacterSet);
-            if (charset == null)
+
+            try
             {
-                html = Encoding.UTF8.GetString(memStream.ToArray());
-                //判断是否的确为UTF-8格式
-                var charsetStr = "";
-                var charsetReg = new System.Text.RegularExpressions.Regex("<meta [^>]*charset=(.*?)(?=(;|\b|\"))");
-                var match = charsetReg.Match(html);
-                if (match.Groups.Count > 1)
+                HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+
+                //字节读取网页内容
+                MemoryStream memStream = new MemoryStream();
+                using (Stream stream = resp.GetResponseStream())
                 {
-                    charsetStr = match.Groups[1].Value;
-                    if (charsetStr.Trim().ToLower() == "gbk" || charsetStr.Trim().ToLower() == "gb2312")
+
+                    byte[] buffer = new byte[1024];
+                    int byteCount;
+                    do
                     {
-                        html = Encoding.GetEncoding("gb2312").GetString(memStream.ToArray());
-                        encoding = Encoding.GetEncoding("gb2312");
+                        byteCount = stream.Read(buffer, 0, buffer.Length);
+                        memStream.Write(buffer, 0, byteCount);
+                    } while (byteCount > 0);
+                }
+
+                //默认以UTF8格式解析
+                Encoding encoding = Encoding.UTF8;
+                var charset = GetEncoding(resp.CharacterSet);
+                if (charset == null)
+                {
+                    html = Encoding.UTF8.GetString(memStream.ToArray());
+                    //判断是否的确为UTF-8格式
+                    var charsetStr = "";
+                    var charsetReg = new System.Text.RegularExpressions.Regex("<meta [^>]*charset=(.*?)(?=(;|\b|\"))");
+                    var match = charsetReg.Match(html);
+                    if (match.Groups.Count > 1)
+                    {
+                        charsetStr = match.Groups[1].Value;
+                        if (charsetStr.Trim().ToLower() == "gbk" || charsetStr.Trim().ToLower() == "gb2312")
+                        {
+                            html = Encoding.GetEncoding("gb2312").GetString(memStream.ToArray());
+                            encoding = Encoding.GetEncoding("gb2312");
+                        }
                     }
                 }
+                else
+                {
+                    html = charset.GetString(memStream.ToArray());
+                    //encoding = Encoding.GetEncoding("utf-8");
+                }
+                resp.Close();
             }
-            else
+            catch (WebException ex)
             {
-                html = charset.GetString(memStream.ToArray());
-                //encoding = Encoding.GetEncoding("utf-8");
+                using (var sr = new StreamReader(ex.Response.GetResponseStream(), Encoding.GetEncoding("gb2312")))
+                {
+                    html = sr.ReadToEnd();
+                }
+           
             }
-            resp.Close();
             return html;
         }
 

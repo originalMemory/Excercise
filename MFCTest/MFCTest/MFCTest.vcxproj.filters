@@ -48,6 +48,9 @@
     <ClInclude Include="BaseAction.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ObstacleAvoid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCTest.cpp">
@@ -72,6 +75,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BaseAction.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleAvoid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

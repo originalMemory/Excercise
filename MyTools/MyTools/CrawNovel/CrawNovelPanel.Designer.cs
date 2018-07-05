@@ -51,7 +51,7 @@
             this.txt_Url.Name = "txt_Url";
             this.txt_Url.Size = new System.Drawing.Size(484, 25);
             this.txt_Url.TabIndex = 13;
-            this.txt_Url.Text = "http://cl.soze.pw/htm_data/20/1604/1920038.html";
+            this.txt_Url.Text = "http://www.diyibanzhu.xyz/8/8123/";
             // 
             // label1
             // 

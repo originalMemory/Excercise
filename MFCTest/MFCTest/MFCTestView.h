@@ -104,6 +104,9 @@ protected:
 	IElementPtr lastPointElement;	// Seekur上一次的坐标
 	CString pathLayerName;		//路径图层名称
 	bool isPathExist;	//是否已加载路径图层
+	ObstacleAvoid obsAvoid;		//避障行为类
+	//是否是避障状态
+	bool isAvoid;
 	string testStr;
 	CString RecText;
 
@@ -222,10 +225,10 @@ private:
 	参数：
 	@buf：16进制检测数据组
 	@len：数据长度
-	@intBuf：转化后的数据组
 	返回值：
 	*/
-	void OnLaserAnalysis(string *buf, int len, int *intBuf);
+	void OnLaserAnalysis(string *buf, int len);
+
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

@@ -136,45 +136,48 @@ int main(int argc, char **argv){
 	//	return 1;
 	//}
 
-	bool repeat=true;
-	while (repeat) 
-	{
-		printf("输入运行指令:0、停止运动\t1、直线前进一段距离\t2、直线前进速度\n\
-			   3、设置绝对航向\t4、设置相对航向\t5、旋转速度\n");
-		printf("指令:");
-		int com;
-		double value;
-		scanf("%d",&com);
-		if (com!=0)
-		{
-			printf("数值:");
-			scanf("%lf",&value);
-		}
-		switch(com){
-		case 0:
-			action.Stop();
-			break;
-		case 1:
-			action.Move(value);
-			break;
-		case 2:
-			action.SetVelocity(value);
-			break;
-		case 3:
-			//robot->addAction(&jdAct, 100);
-			break;
-		case 4:
-			action.SetDeltaHeading(value);
-			break;
-		case 5:
-			action.SetRotVel(value);
-			break;
-		default:
-			repeat=false;
-			break;
-		}
-	}
+	//bool repeat=true;
+	//while (repeat) 
+	//{
+	//	printf("输入运行指令:0、停止运动\t1、直线前进一段距离\t2、直线前进速度\n\
+	//		   3、设置绝对航向\t4、设置相对航向\t5、旋转速度\n");
+	//	printf("指令:");
+	//	int com;
+	//	double value;
+	//	scanf("%d",&com);
+	//	if (com!=0)
+	//	{
+	//		printf("数值:");
+	//		scanf("%lf",&value);
+	//	}
+	//	switch(com){
+	//	case 0:
+	//		action.Stop();
+	//		break;
+	//	case 1:
+	//		action.Move(value);
+	//		break;
+	//	case 2:
+	//		action.SetVelocity(value);
+	//		break;
+	//	case 3:
+	//		//robot->addAction(&jdAct, 100);
+	//		break;
+	//	case 4:
+	//		action.SetDeltaHeading(value);
+	//		break;
+	//	case 5:
+	//		action.SetRotVel(value);
+	//		break;
+	//	default:
+	//		repeat=false;
+	//		break;
+	//	}
+	//}
+	double maxTran = robot->getTransVelMax();
+	double maxRot = robot->getRotVelMax();
+	printf("最大水平速度：%d\t最大旋转速度：%d\n", maxTran, maxRot);
 	robot->disconnect();
+	system("pause");
 	Aria::exit();
-
 }

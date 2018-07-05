@@ -182,10 +182,12 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         item_url = item_url.replace('../', base_url) + '&gc=gc'
         break
 
-    if '催眠術３' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=773849&gc=gc'
-    if 'リア充催眠' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=932594&gc=gc'
+    if 'ハーレムゲーム2' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=976838&gc=gc'
+    if '華麗なる悦辱' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=684001&gc=gc'
+    if 'ゾンビのあふれた世界で俺だけが襲' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=1004611&gc=gc'
     print(item_url)
     if not len(item_url):
         print('该Galgame在Getchu上没有信息！')
@@ -359,7 +361,7 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
         print(item_url)
         break
 
-    if '恥辱の虜' in basic_info['name']:
+    if 'ゾンビのあふれた世界で俺だけが襲われないV' in basic_info['name']:
         item_url = 'http://www.dlsite.com/maniax/work/=/product_id/RJ199855.html'
     if not len(item_url):
         print('该Galgame在dlsite上没有信息！')
@@ -484,14 +486,14 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
     return True
 
 
-gal_dir = 'G:\Gal\拔作\未整理\say花火\\'
-tar_dir = 'G:\Gal\拔作\整理\\'
-unfind_dir = 'G:\Gal\拔作\无信息\\'
+gal_dir = r'H:\Gal\拔作\未整理\终点\\'
+tar_dir = r'H:\Gal\拔作\整理\\'
+unfind_dir = r'H:\Gal\拔作\无信息\\'
 
 for dir in os.listdir(gal_dir):
     print(dir)
     path = gal_dir + dir
-    basic_info = get_gal_basic_info(dir, gal_dir,'say花火')
+    basic_info = get_gal_basic_info(dir, gal_dir,'终点')
     getchu_result = get_getchu_gal_info(path, tar_dir, **basic_info)
     if not getchu_result:
         dlsite_result = get_dlsite_gal_info(path, tar_dir, **basic_info)
