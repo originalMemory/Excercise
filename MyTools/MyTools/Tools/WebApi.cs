@@ -35,7 +35,7 @@ namespace MyTools.Tools
             //cook1.Name = "CNZZDATA1257708097";
             //cook1.Value = "1167517418-1479817270-%7C1488717892";
             //objcok.Add(cook1);
-            objcok.Add(new Cookie("LOGGED_USER", "2Gsu8lGqckigfryi4J%2BxqQ%3D%3D%3AEPYACL1Ic4QgUm9bW2hOXg%3D%3D", "/", ".bcy.net"));
+            objcok.Add(new Cookie("LOGGED_USER", "yFsD9Pt%2FclzX95SIIZA%2BcQ%3D%3D%3A9jqLj32MbscQVdQcdoCS%2Fw%3D%3D", "/", ".bcy.net"));
             req.CookieContainer = objcok;
             //设置超时
             req.Timeout = 3000;

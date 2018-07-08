@@ -82,6 +82,8 @@ namespace MyTools.CrawImg
         {
             ImgInfo img = new ImgInfo();
             img.Kind = ImgKind.Cosplay;
+            if (respHtml.Contains("/tags/name/绘画"))
+                img.Kind = ImgKind.Illustraion;
             img.Urls = new List<string>();
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(respHtml);
