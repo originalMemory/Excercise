@@ -1,8 +1,10 @@
+//#include "stdafx.h"
 #include<string>
 #include <iostream>
-#include "stdafx.h"
-#include "MFCTestView.h"
-using namespace std;
+//#include "MFCTestView.h"
+
+#ifndef _OBSTACLEAVOID_H_
+#define _OBSTACLEAVOID_H_
 
 class ObstacleAvoid
 {
@@ -23,7 +25,7 @@ private:
 	float angle_mf_paras[NANGLE * 3];//角度的偏差隶属度函数的参数
 	float rot_mf_paras[NANGLE * 3]; //转向角的隶属度函数的参数
 	int obstacle[3];	//距机器最近的障碍物信息，内容分别为障碍物左边缘角度（正前方为0，逆时间为正），右边缘角度，距中心点距离。
-	CMFCTestView *m_CView;	//控制对象指针，用以控制机器车运动
+	//CMFCTestView *m_CView;	//控制对象指针，用以控制机器车运动
 public:
 	ObstacleAvoid();
 	~ObstacleAvoid();
@@ -48,3 +50,5 @@ public:
 	*/
 	bool SetObstaclePosture(int* laserData, int len);
 };
+
+#endif

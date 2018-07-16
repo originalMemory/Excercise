@@ -13,6 +13,7 @@
 #include "afxwin.h"
 #include <windows.h>
 #include <iostream>
+#include "ObstacleAvoid.h"
 
 #define M_PI       3.14159265358979323846
 #define STX 0x02   /*every PC->LMS packet is started by STX*/ 
