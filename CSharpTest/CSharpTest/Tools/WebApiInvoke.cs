@@ -103,7 +103,7 @@ namespace CSharpTest.Tools
         /// </summary>
         /// <param name="url">网页链接</param>
         /// <returns></returns>
-        public static string GetHtml(string url, string htmlCharset, int type = 0, IDictionary<string, object> parameters = null, CookieCollection cookies = null)
+        public static string GetHtml(string url, string htmlCharset = "utf-8", int type = 0, IDictionary<string, object> parameters = null, CookieCollection cookies = null)
         {
             //Http请求
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);

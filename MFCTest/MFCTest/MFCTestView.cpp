@@ -12,9 +12,9 @@
 #include "MFCTestDoc.h"
 #include "MFCTestView.h"
 #include <math.h>
-#include <stdio.h>
 #include "MainFrm.h"
 #include "ObstacleAvoid.h"
+#include <time.h>
 
 #define WM_SEEKUR_RET WM_USER+100		 //Seekur返回消息
 #define WM_SEEKUR_MOVE WM_USER+101		//Seekur操作消息（开始）
@@ -135,7 +135,7 @@ void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT4, m_editSeekurVel);
 	DDX_Control(pDX, IDC_EDIT3, m_editSeekurHeading);
 	DDX_Control(pDX, IDC_EDIT7, m_editKp);
-	DDX_Control(pDX, IDC_EDIT8, m_editKinter);
+	DDX_Control(pDX, IDC_EDIT8, m_editKheading);
 	DDX_Control(pDX, IDC_BUTTON3, m_btnTrack);
 	DDX_Control(pDX, IDC_EDIT10, m_editSatNum);
 	DDX_Control(pDX, IDC_EDIT9, m_editGPSStaus);
@@ -191,16 +191,17 @@ void CMFCTestView::OnInitialUpdate()
 	//调用串口程序，打开与GPS的通信
 	CMainFrame *p = (CMainFrame*)AfxGetMainWnd();
 	CMFCTestView *m_CView = (CMFCTestView *)p->GetActiveView();//获取View类的指针
-	//if (serialPort_gps.InitPort(m_CView, m_GPSport))
-	//{
-	//	serialPort_gps.StartMonitoring();
-	//}
-	//else
-	//{
-	//	MessageBox(_T("GPS串口通信失败！"), _T("提示"), MB_OK);
-	//}
+	if (serialPort_gps.InitPort(m_CView, m_GPSport))
+	{
+		serialPort_gps.StartMonitoring();
+	}
+	else
+	{
+		MessageBox(_T("GPS串口通信失败！"), _T("提示"), MB_OK);
+	}
 	laserBufPos = 0;
 	laserCheckBufPos = 0;
+	laserStr = "";
 	//LASER_HEADER = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x00 };
 	/*LASER_HEADER[0] = '0x02';
 	LASER_HEADER[1] = 0x80;
@@ -211,7 +212,7 @@ void CMFCTestView::OnInitialUpdate()
 	LASER_HEADER[6] = 0x00;*/
 	gpsStr = "";
 	testStr = "";
-	m_laserport = 3;
+	m_laserport = 8;
 	if (serialPort_laser.InitPort(m_CView, m_laserport, 9600))
 	{
 		serialPort_laser.StartMonitoring();
@@ -223,7 +224,7 @@ void CMFCTestView::OnInitialUpdate()
 
 
 	m_editKp.SetWindowTextW(_T("0.25"));
-	m_editKinter.SetWindowTextW(_T("2"));
+	m_editKheading.SetWindowTextW(_T("0.5"));
 	m_editKi.SetWindowTextW(_T("0"));
 	m_editKd.SetWindowTextW(_T("0"));
 	m_cUseID.SetCheck(1);
@@ -440,8 +441,10 @@ afx_msg LRESULT CMFCTestView::OnSerialPortCallback(WPARAM ch, LPARAM portnum)
 		////cChar = (char*)malloc(len*sizeof(char));
 		////wcstombs_s(&converted, cChar, len, wChar, _TRUNCATE);
 		//RecText.Append(str);
-		gpsStr += cstr + " ";
 		//校验是否为激光数据的起始
+		if (cstr == "80"){
+			int dfe = 214;
+		}
 		if (LASER_HEADER[laserCheckBufPos] == cstr)
 		{
 			if (laserCheckBufPos>0)
@@ -452,11 +455,15 @@ afx_msg LRESULT CMFCTestView::OnSerialPortCallback(WPARAM ch, LPARAM portnum)
 			if (laserCheckBufPos == 6)
 			{
 				laserDataLength = HexToDem(laserCheckBuf[6] + laserCheckBuf[5]);//两个8位（高位低位）合成16位包长
+				isLaserStart = true;
 				//当一组语句全部传输完后，对期进行解析
 				if (laserBufPos == laserDataLength*2)
 				{
 					OnLaserAnalysis(laserBuf, laserDataLength);
+					laserBufPos = 0;
+					laserStr = "";
 				}
+				return 0;
 			}
 			laserCheckBufPos++;
 		}
@@ -467,11 +474,13 @@ afx_msg LRESULT CMFCTestView::OnSerialPortCallback(WPARAM ch, LPARAM portnum)
 		}
 
 		//在是同一句时往缓冲中写入数据
-		if (laserBufPos<laserDataLength*2)
+		if (isLaserStart&&laserBufPos<laserDataLength*2)
 		{
 			laserBuf[laserBufPos] = cstr;
+			laserStr += cstr + " ";
 			laserBufPos++;
 		}
+		
 	}
 
 	return 0;
@@ -668,8 +677,8 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		}
 
 		distFromCurve *= 100000 * 100;	//cm
-		double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000 * 100;	//Seekur到路径距离（cm）
-		dis = distFromCurve;
+		//double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000 * 100;	//Seekur到路径距离（cm）
+		double dis = distFromCurve;
 		double subHeading = myGPSInfo.Heading - lineHeading;	//Seekur航向路与径航向差值
 		//路径航向在1、4象限，Seekur航向在2、3象限的情况
 		if (lineHeading<180 && myGPSInfo.Heading>180 + lineHeading)
@@ -684,10 +693,22 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		if (!isRightSide){
 			dis = -dis;
 		}
-		err = dis + kinter*subHeading;		// 车辆当前状态
-		
 
-		CString cTp;
+		CString cTp;	//临时转换用Cstring
+
+		//判断是否过了指定时间而要记录数据
+		double nowclock = clock();
+		if ((nowclock-lastClock)/CLK_TCK<=0.5)	//每0.5秒计算一次
+		{
+			//保存GPS坐标、BJ54坐标、距离偏差、航向和航向偏差
+			cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, myGPSInfo.Longitude, myGPSInfo.Latitude, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y, dis, myGPSInfo.Heading, subHeading);
+			dataFile.WriteString(cTp);
+			lastClock = nowclock;
+		}
+
+
+		//err = dis + kinter*subHeading;		// 车辆当前状态
+		
 		cTp.Format(_T("%lf"), subHeading);
 		m_editSubHeading.SetWindowText(cTp);
 		cTp.Format(_T("%lf"), dis);
@@ -697,21 +718,23 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		if (isTracked&&!isAvoid)
 		{
 			double turnHeading = 0;	//转向角
-			//P控制
-			turnHeading = kp*err;
+			turnHeading = kp*dis + kheading*subHeading;
 
-			if (m_cUseID.GetCheck()){
-				//50厘米内启用I控制
-				if (dis < 5)
-				{
-					integral += err;
-					turnHeading += ki*integral;
-				}
+			////P控制
+			//turnHeading = kp*err;
 
-				//D控制
-				turnHeading += kd*(err - err_last);
-				err_last = err;
-			}
+			//if (m_cUseID.GetCheck()){
+			//	//50厘米内启用I控制
+			//	if (dis < 5)
+			//	{
+			//		integral += err;
+			//		turnHeading += ki*integral;
+			//	}
+
+			//	//D控制
+			//	turnHeading += kd*(err - err_last);
+			//	err_last = err;
+			//}
 
 			double maxTrun = 60;	//最大转向角
 			/*if (dis < 5)
@@ -792,7 +815,7 @@ void CMFCTestView::OnLaserAnalysis(string *buf, int len){
 	//解析数据，判断是否需要避障
 	if (isTracked)
 	{
-		obsAvoid.Initialize(10 * 1000, 90, 90);
+		obsAvoid.Initialize(10 * 100, 90, 90);
 		bool isObs = obsAvoid.SetObstaclePosture(laserData, len);
 		if (isObs)
 		{
@@ -1013,7 +1036,7 @@ UINT CMFCTestView::TrackFuc(LPVOID lParam){
 		CString cKDis;
 		pView->m_editKp.GetWindowTextW(cKDis);
 		CString cKSubHead;
-		pView->m_editKinter.GetWindowTextW(cKSubHead);
+		pView->m_editKheading.GetWindowTextW(cKSubHead);
 		double kDis = _ttof(cKDis);
 		double kSubHead = _ttof(cKSubHead);
 
@@ -1327,9 +1350,9 @@ IPoint* CMFCTestView::geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromPr
 	IProjectedCoordinateSystem*projCoordSystem;
 	ISpatialReferenceFactoryPtr originalSpecialReference;
 	ISpatialReferenceFactoryPtr newReferenceSystem;
-
+	
 	HRESULT hr = originalSpecialReference.CreateInstance(CLSID_SpatialReferenceEnvironment);
-
+	//esriSRProjCS_Beijing1954_3_Degree_GK_CM_93E
 	HRESULT hr1 = originalSpecialReference->CreateProjectedCoordinateSystem(fromProjType, &projCoordSystem);
 	spatialRf = (ISpatialReference*)projCoordSystem;
 	//HRESULT hr2 = points->putref_SpatialReference(spatialRf);
@@ -1487,16 +1510,27 @@ void CMFCTestView::OnBtnTrack()
 	else{
 		if (!isTracked)
 		{
+			//开始记录数据，以年月日分秒为文件名
+			time_t timet = time(NULL);
+			tm *tm_ = localtime(&timet);
+			CString fileName;
+			fileName.Format(_T("%4d-%2d-%2d %2d：%2d：%2d.txt"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			dataFile.Open(fileName, CFile::modeCreate | CFile::modeWrite);
+			//列表头
+			dataFile.WriteString(_T("no,lon,lat,x,y,dis,heading,subheading\n"));
+			no = 1;
+			lastClock = clock();
+
 			//启动追踪
 			isTracked = true;
-			
+
 			//初始化数据
 			nowPathPos = 0;
 			CString cTp;	//临时Cstring类，用于将文本框数据转为其他格式
 			m_editKp.GetWindowTextW(cTp);
 			kp = _ttof(cTp);
-			m_editKinter.GetWindowTextW(cTp);
-			kinter = _ttof(cTp);
+			m_editKheading.GetWindowTextW(cTp);
+			kheading = _ttof(cTp);
 			m_editKi.GetWindowTextW(cTp);
 			ki = _ttof(cTp);
 			m_editKd.GetWindowTextW(cTp);

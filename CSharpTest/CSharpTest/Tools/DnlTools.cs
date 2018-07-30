@@ -2933,6 +2933,53 @@ namespace CSharpTest.Tools
             }
                 
         }
+
+        public static void FilterWXLink(string projectId)
+        {
+            var proObjId = new ObjectId(projectId);
+            var builderKey=Builders<MediaKeywordMappingMongo>.Filter;
+            var filterKey = builderKey.Eq(x => x.ProjectId, proObjId) & builderKey.Eq(x => x.CategoryId, ObjectId.Empty) & builderKey.Eq(x => x.IsDel, false);
+            var keyIds = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(filterKey).Project(x => x.KeywordId.ToString()).ToList().Distinct().ToList();
+            var builderLink=Builders<WXLinkMainMongo>.Filter;
+            var colLink=MongoDBHelper.Instance.GetWXLinkMain();
+            var links = colLink.Find(builderLink.In(x => x.KeywordId, keyIds)).Project(x => new
+            {
+                Id = x._id,
+                Url = x.Url
+            }).ToList();
+            for (int i = 0; i < links.Count; i++)
+            {
+                if (i < 1644)
+                    continue;
+                var link = links[i];
+                var content = WebApiInvoke.GetHtml(link.Url);
+                WXDelLinkType delType = WXDelLinkType.Normal;
+                if (content.Contains("此内容因违规无法查看"))
+                {
+                    delType = WXDelLinkType.Illegal;
+                }
+                else if (content.Contains("此帐号已被屏蔽, 内容无法查看"))
+                {
+                    delType = WXDelLinkType.Shield;
+                }
+                else if (content.Contains("此帐号已自主注销，内容无法查看"))
+                {
+                    delType = WXDelLinkType.LogOff;
+                }
+                else if (content.Contains("此内容被投诉且经审核涉嫌侵权，无法查看"))
+                {
+                    delType = WXDelLinkType.Tort;
+                }
+                else if (content.Contains("该内容已被发布者删除"))
+                {
+                    delType = WXDelLinkType.Del;
+                }
+                var update = Builders<WXLinkMainMongo>.Update.Set(x => x.DelType, delType);
+                var filterLink = builderLink.Eq(x => x._id, link.Id);
+                colLink.UpdateOne(filterLink, update);
+                CommonTools.Log("{0}/{1} - {2}".FormatStr(i, links.Count, delType));
+            }
+        }
     }
 
     public class IdAndName

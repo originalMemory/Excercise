@@ -12,7 +12,6 @@
 #include "BaseAction.h"
 #include "afxwin.h"
 #include <windows.h>
-#include <iostream>
 #include "ObstacleAvoid.h"
 
 #define M_PI       3.14159265358979323846
@@ -91,6 +90,7 @@ protected:
 	string gpsStr;		//获取到的完整的一句GPS语句
 	bool isLaserStart;	//是否开始写入激光数据
 	string laserBuf[MAXPACKET];	//获取到激光16进制数据缓冲
+	string laserStr;
 	int laserBufPos;	//当前激光缓冲数据位置
 	string laserCheckBuf[7];	//获取到激光16进制数据头缓冲
 	int laserCheckBufPos;	//当前激光缓冲数据位置
@@ -98,6 +98,7 @@ protected:
 	int laserDataLength;	//激光数据长度
 	double laserRange;		//激光角度范围
 	double laserRes;		//激光角度分辨率
+	
 	CWinThread* seekur_thread;		//Seekur线程句柄
 	//CWinThread* track_thread;		//追踪线程句柄
 	bool isGPSEnd;		//本轮GPS语句组是否已至最后
@@ -109,12 +110,14 @@ protected:
 	//是否是避障状态
 	bool isAvoid;
 	string testStr;
-	CString RecText;
+	double lastClock;		//上次计时时间，用以定时录入文件数据
+	CStdioFile dataFile;		//数据文件，记录运行中数据状态
+	int no;		//编号，记录当前写入第几个点
 
 private:
 	void AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactiveview);
 	void OnTestMarkerStyle();
-	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType = 3857, long toGeoType = 4326);
+	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType = 3857, long toGeoType = 4326);	//esriSRGeoCS_Beijing1954
 	ISymbolPtr m_isymbol;
 	static UINT SeekurFuc(LPVOID lParam);		//Seekur控制线程函数
 	//void CreateShapeFile();
@@ -185,14 +188,14 @@ private:
 	// 激光串口号
 	int m_laserport;
 #pragma region PID控制相关控件
-	// P参数文本框
+	// 距离参数文本框	P参数
 	CEdit m_editKp;
 	// I参数文本框
 	CEdit m_editKi;
 	// d参数文本框
 	CEdit m_editKd;
-	// 距离差与航向差对应比例值文本框
-	CEdit m_editKinter;
+	// 航向差对应比例值文本框
+	CEdit m_editKheading;
 	IPointPtr pStartPoint;		//当前路径起始点
 	IPointPtr pEndPoint;		//当前路径结束点
 	ILinePtr pNowPath;	//当前路径
@@ -206,7 +209,7 @@ private:
 	double kp;	//P控制比例系数
 	double ki;	//I控制比例系数
 	double kd;	//D控制比例系数
-	double kinter;	//距离差和航向差的比例系数
+	double kheading;	//航向比例系数
 	// 启用ID控制
 	CButton m_cUseID;
 #pragma endregion

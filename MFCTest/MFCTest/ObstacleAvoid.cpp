@@ -32,6 +32,7 @@ ObstacleAvoid::~ObstacleAvoid()
 	delete[] angle_mf_paras;
 	delete[] rot_mf_paras;
 }
+
 //三角隶属度函数
 float ObstacleAvoid::trimf(float x, float a, float b, float c)
 {
@@ -43,8 +44,8 @@ float ObstacleAvoid::trimf(float x, float a, float b, float c)
 	else
 		u = 0.0;
 	return u;
-
 }
+
 //计算模糊结果
 float ObstacleAvoid::ComputeAvoidHeading()
 {
@@ -159,30 +160,31 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 {
 	bool result;	//是否有障碍物
 	//遍历扫描数据，筛选出10m内最近的障碍物
-	int status = 0;	//当前障碍物状态位，0为无障碍物，1为遍历至障碍物左端，2为遍历至障碍物右端
+	int status = 0;	//当前障碍物状态位，0为无障碍物，1为遍历至障碍物
+	obstacle[1] = -91;	//将右边缘角度初始化为-91，用于对比障碍物
 	obstacle[0] = -91;	//将左边缘角度初始化为-91，用于对比障碍物
+	int tpObs[3] = { -91, 0, -91 };		//临时障碍物信息对象，用于对比最近
 	for (int i = 0; i < len; i++){
-		if (laserData[i] <= 10 * 100)	//默认以cm为单位，i即为角度，0-180，逆时针叠加
+		// 
+		if (laserData[i] <= dismax&&status==0)	//默认以cm为单位，i即为角度，0-180，逆时针叠加
 		{
-			//如果是新的障碍物，对比是否最接近中央
-			if (status == 0)
-			{
-				if (abs(i - 90)>abs(obstacle[0]))
-				{
-					//大于时更新记录
-					obstacle[0] = i - 90;
-					status = 1;
-				}
-			}
-			else
-			{
-				obstacle[1] = i - 90;
-			}
+			tpObs[1] = i - 90;
+			status = 1;
 		}
 		//当一个障碍物遍历完后，重置状态
 		else if (status > 0)
 		{
+			tpObs[0] = i - 1 - 90;
 			status = 0;
+
+			//对比障碍物信息，保存最近的一个
+			int lastObsAngle = min(abs(obstacle[0]), abs(obstacle[1]));
+			int tpObsAngle = min(abs(tpObs[0]), abs(tpObs[1]));
+			if (lastObsAngle>tpObsAngle)
+			{
+				obstacle[0] = tpObs[0];
+				obstacle[1] = tpObs[1];
+			}
 		}
 	}
 
@@ -194,25 +196,25 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 	{
 		//判断障碍物位于左侧还是右侧
 		//左侧
-		if (obstacle[0] >= 0)
+		if (abs(obstacle[0])>=abs(obstacle[1]))
 		{
 			angle = Kangle*obstacle[0];
 			dis = Kdis*laserData[obstacle[0] + 90];
 		}
 		//右侧
-		else if (obstacle[1] <= 0)
+		else
 		{
 			angle = Kangle*obstacle[1];
 			dis = Kdis*laserData[obstacle[1] + 90];
 		}
-		//正前方
-		else
-		{
-			int tp_angle = -obstacle[0] < obstacle[1] ? obstacle[0] : obstacle[1];
-			angle = Kangle*tp_angle;
-			dis = Kdis*laserData[tp_angle + 90];
-		}
-		result = true;
+		////正前方
+		//else
+		//{
+		//	int tp_angle = -obstacle[0] < obstacle[1] ? obstacle[0] : obstacle[1];
+		//	angle = Kangle*tp_angle;
+		//	dis = Kdis*laserData[tp_angle + 90];
+		//}
+		//result = true;
 	}
 	return result;
 }
