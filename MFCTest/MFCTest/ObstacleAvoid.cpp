@@ -28,9 +28,9 @@ ObstacleAvoid::ObstacleAvoid()
 
 ObstacleAvoid::~ObstacleAvoid()
 {
-	delete[] dis_mf_paras;
+	/*delete[] dis_mf_paras;
 	delete[] angle_mf_paras;
-	delete[] rot_mf_paras;
+	delete[] rot_mf_paras;*/
 }
 
 //Èý½ÇÁ¥Êô¶Èº¯Êý
