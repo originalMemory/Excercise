@@ -18,13 +18,14 @@
 
 #define WM_SEEKUR_RET WM_USER+100		 //Seekur返回消息
 #define WM_SEEKUR_MOVE WM_USER+101		//Seekur操作消息（开始）
-//#define WM_SEEKUR_SUB WM_USER+102		//Seekur操作消息（负值）
-#define WM_SEEKUR_END WM_USER+103		//Seekur操作消息（结束）
-#define WM_SEEKUR_STOP WM_USER+104		//Seekur操作消息（停止）
+#define WM_SEEKUR_END WM_USER+102		//Seekur操作消息（结束）
+#define WM_SEEKUR_STOP WM_USER+103		//Seekur操作消息（停止）
+#define WM_SEEKUR_GET_DATA WM_USER+104		//Seekur返回当前相对位置
+#define WM_SEEKUR_GET_SPEED WM_USER+105		//Seekur返回当前相对速度
+#define WM_SEEKUR_GET_SPEED_LEFT WM_USER+106		//Seekur返回当前左边相对速度
+#define WM_SEEKUR_GET_SPEED_RIGHT WM_USER+107		//Seekur返回当前右边相对速度
 
-#define WM_TRACK_START WM_USER+104		//开始追踪
-#define WM_TRACK_STOP WM_USER+105		//停止追踪
-#define WM_TRACK_END WM_USER+106		//结束追踪
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -94,9 +95,11 @@ BEGIN_MESSAGE_MAP(CMFCTestView, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestView::OnBtnSavePath)
 	ON_COMMAND(ID_FILE_SAVE, &CMFCTestView::OnFileSave)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCTestView::OnBtnMoveSeekur)
-	ON_MESSAGE(WM_SEEKUR_RET, &CMFCTestView::OnSeekur)
+	ON_MESSAGE(WM_SEEKUR_RET, &CMFCTestView::OnSeekurCallback)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMFCTestView::OnBtnTrack)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMFCTestView::OnBtnPathAdd)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMFCTestView::OnBtnSeekurQuery)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMFCTestView::OnBtnSeekurStop)
 END_MESSAGE_MAP()
 
 
@@ -121,6 +124,7 @@ CMFCTestView::CMFCTestView()
 CMFCTestView::~CMFCTestView()
 {
 	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_END, 0, 0);
+	//dataFile.Close();
 	//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
 }
 
@@ -133,7 +137,7 @@ void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT1, m_editLatitude);
 	DDX_Control(pDX, IDC_CHECK1, m_cUseID);
 	DDX_Control(pDX, IDC_EDIT4, m_editSeekurVel);
-	DDX_Control(pDX, IDC_EDIT3, m_editSeekurHeading);
+	DDX_Control(pDX, IDC_EDIT3, m_editGPSHeading);
 	DDX_Control(pDX, IDC_EDIT7, m_editKp);
 	DDX_Control(pDX, IDC_EDIT8, m_editKheading);
 	DDX_Control(pDX, IDC_BUTTON3, m_btnTrack);
@@ -148,6 +152,9 @@ void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT15, m_editKd);
 	DDX_Control(pDX, IDC_EDIT17, m_editBJ54_x);
 	DDX_Control(pDX, IDC_EDIT16, m_editBJ54_y);
+	DDX_Control(pDX, IDC_EDIT18, m_editSeekurPose);
+	DDX_Control(pDX, IDC_EDIT19, m_editSeekurVal);
+	DDX_Control(pDX, IDC_EDIT20, m_editSeekurAccel);
 }
 
 BOOL CMFCTestView::PreCreateWindow(CREATESTRUCT& cs)
@@ -390,6 +397,21 @@ void CMFCTestView::OnFileOpen()
 	}
 }
 
+
+afx_msg LRESULT CMFCTestView::OnSeekurCallback(WPARAM wParam, LPARAM lParam)
+{
+	seekurDataPtr pData = (seekurDataPtr)wParam;
+	CString cTp;
+	cTp.Format(_T("%.3lf,%.3lf,%.3lf"), pData->x, pData->y, pData->heading);
+	m_editSeekurPose.SetWindowTextW(cTp);
+	cTp.Format(_T("%d,%d,%d"), pData->vel, pData->rightVel, pData->leftVel);
+	m_editSeekurVal.SetWindowTextW(cTp);
+	cTp.Format(_T("%d,%d"), pData->tranAccel, pData->rotAccel);
+	m_editSeekurAccel.SetWindowTextW(cTp);
+	delete pData;
+	return 0;
+}
+
 /*
 描述：GPS串口通信函数
 参数：
@@ -588,7 +610,7 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 	{
 		CString heading;
 		heading.Format(_T("%lf"), ((PSAT_HPRInfo*)gpsInfo)->Heading);
-		m_editSeekurHeading.SetWindowText(heading);
+		m_editGPSHeading.SetWindowText(heading);
 		myGPSInfo.Heading = ((PSAT_HPRInfo*)gpsInfo)->Heading;
 		isGPSEnd = true;
 	}
@@ -698,10 +720,15 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 
 		//判断是否过了指定时间而要记录数据
 		double nowclock = clock();
-		if ((nowclock-lastClock)/CLK_TCK<=0.5)	//每0.5秒计算一次
+		if ((nowclock-lastClock)/CLK_TCK>=0.5)	//每0.5秒计算一次
 		{
-			//保存GPS坐标、BJ54坐标、距离偏差、航向和航向偏差
-			cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, myGPSInfo.Longitude, myGPSInfo.Latitude, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y, dis, myGPSInfo.Heading, subHeading);
+			time_t timet = time(NULL);
+			tm *tm_ = localtime(&timet);
+			string time;
+			CString fileName;
+			fileName.Format(_T("%4d-%2d-%2d %2d：%2d：%2d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			//保存时间，GPS坐标、BJ54坐标、距离偏差、航向和航向偏差
+			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, fileName, myGPSInfo.Longitude, myGPSInfo.Latitude, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y, dis, myGPSInfo.Heading, subHeading);
 			dataFile.WriteString(cTp);
 			lastClock = nowclock;
 		}
@@ -887,12 +914,21 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 	BaseAction action(robot);
 
 	MSG msg;
+	int no = 1;	//序号，第几次操作
+	CStdioFile seekurFile;		//数据文件，记录seekur运行中数据状态
+	time_t timet = time(NULL);
+	tm *tm_ = localtime(&timet);
+	CString name;
+	name.Format(_T("D:\\data\\Seekur %4d-%2d-%2d %2d：%2d：%2d.csv"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+	seekurFile.Open(name, CFile::modeWrite | CFile::modeNoTruncate | CFile::modeCreate);
+	no = 1;
 	while (true)
 	{
 		GetMessage(&msg, NULL, 0, 0);
+		seekurParaPtr pPara = NULL;
 		if (msg.message == WM_SEEKUR_MOVE)
 		{
-			seekurParaPtr pPara = (seekurParaPtr)msg.wParam;
+			pPara = (seekurParaPtr)msg.wParam;
 			//直线移动距离
 			if (pPara->distance != 0)
 				action.Move(pPara->distance);
@@ -900,11 +936,16 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			if (pPara->heading != 0)
 				action.SetDeltaHeading(pPara->heading);
 			//直线移动距离
-			if (pPara->veloctiy != 0)
-				action.SetVelocity(pPara->veloctiy);
-			delete pPara;
-		}
+			//robot->setVel(500);
 
+			if (pPara->veloctiy != 0)
+			{
+				//action.SetVelocity(pPara->veloctiy);
+				robot->setTransVelMax(pPara->veloctiy);
+				//robot->setVel2(pPara->veloctiy, pPara->veloctiy);
+			}
+		}
+		
 		if (msg.message == WM_SEEKUR_STOP)
 		{
 			action.Stop();
@@ -914,12 +955,60 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			action.Stop();
 			break;
 		}
+		ArPose pose = robot->getPose();
+		seekurDataPtr pData = new seekurData();
+		pData->x = pose.getX();
+		pData->y = pose.getY();
+		pData->heading = pose.getTh();
+		pData->vel = robot->getVel();
+		pData->leftVel = robot->getLeftVel();
+		pData->rightVel = robot->getRightVel();
+		if (msg.message == WM_SEEKUR_GET_DATA){
+			::PostMessage((HWND)lParam, WM_SEEKUR_RET, (UINT)pData, 0);
+			continue;
+		}
+		//判断是否为有运动命令
+		if (pPara != NULL)
+		{
+			bool isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;	//判断运动是否完成
+			//写入目标信息
+			seekurFile.WriteString(_T("targetDis,targetHeading,targetVal\n"));	//列表头
+			CString cTp;
+			cTp.Format(_T("%lf,%lf,%lf\n"), pPara->distance, pPara->heading, pPara->veloctiy);
+			seekurFile.WriteString(cTp);
+			seekurFile.WriteString(_T("no,x,y,heading,tranVel,tranLeft,tranRight,tranAccel,tranDecel,rotVel,rotAccel,rotDecel\n"));
+			cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+				robot->getLeftVel(), robot->getRightVel(),robot->getTransAccel(),robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+			seekurFile.WriteString(cTp);
+			//double lastCl = clock();
+			while (!isEnd)
+			{
+				//double nowCl = clock();
+				//double sub = (nowCl - lastCl) / CLK_TCK;
+				//if (sub >= 0.1)	//每0.1秒计算一次
+				//{
+				//	cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, pData->x, pData->y, pData->heading, pData->vel,
+				//		pData->leftVel, pData->rightVel, robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+				//	seekurFile.WriteString(cTp);
+				//}
+				//lastCl = nowCl;
+
+				cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+					robot->getLeftVel(), robot->getRightVel(), robot->getTransAccel(), robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+				seekurFile.WriteString(cTp);
+				isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;
+				Sleep(100);
+			}
+			delete pPara;
+			no++;
+			seekurFile.WriteString(_T("\n"));
+		}
 		//::PostMessage((HWND)lParam,WM_SEEKUR_RET, 0, 0);//发出自定义消息
 	}
 	//robot->comInt(ArCommands::ENABLE, 1);
+	seekurFile.Close();
 	robot->disconnect();
 	Aria::exit();
-
 	return 0;
 }
 
@@ -1472,6 +1561,8 @@ void CMFCTestView::OnBtnMoveSeekur()
 	double dis = _ttof(cTp) * 1000;
 	m_editMoveHeading.GetWindowTextW(cTp);
 	double head = _ttof(cTp);
+	m_editVelocity.GetWindowTextW(cTp);
+	double vel = _ttof(cTp);
 
 	//弹出窗口确认参数是否无误
 	CString alert;
@@ -1482,7 +1573,7 @@ void CMFCTestView::OnBtnMoveSeekur()
 		seekurParaPtr pPara = new seekurPara();
 		pPara->distance = dis;
 		pPara->heading = head;
-
+		pPara->veloctiy = vel;
 		PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, NULL);
 		//PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, dis, head);
 
@@ -1493,13 +1584,6 @@ void CMFCTestView::OnBtnMoveSeekur()
 }
 
 
-afx_msg LRESULT CMFCTestView::OnSeekur(WPARAM wParam, LPARAM lParam)
-{
-	//MessageBox(_T("测试通信"));
-	/*m_editLongitude = (CEdit *)GetDlgItem(IDC_EDIT1);
-	m_editLongitude->SetWindowTextW(_T("测试消息"));*/
-	return 0;
-}
 
 //测试追踪
 void CMFCTestView::OnBtnTrack()
@@ -1517,7 +1601,7 @@ void CMFCTestView::OnBtnTrack()
 			fileName.Format(_T("%4d-%2d-%2d %2d：%2d：%2d.txt"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
 			dataFile.Open(fileName, CFile::modeCreate | CFile::modeWrite);
 			//列表头
-			dataFile.WriteString(_T("no,lon,lat,x,y,dis,heading,subheading\n"));
+			dataFile.WriteString(_T("no,time,lon,lat,x,y,dis,heading,subheading\n"));
 			no = 1;
 			lastClock = clock();
 
@@ -1577,4 +1661,17 @@ void CMFCTestView::OnBtnPathAdd()
 	point->PutCoords(myGPSInfo.Longitude, myGPSInfo.Latitude);
 	pPtclo->AddPoint(point);
 	//point->putref_SpatialReference()
+}
+
+void CMFCTestView::OnBtnSeekurQuery()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_GET_DATA, 0, 0);
+}
+
+
+void CMFCTestView::OnBtnSeekurStop()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
 }

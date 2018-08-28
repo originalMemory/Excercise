@@ -159,5 +159,6 @@ public:
 	返回值：当前速度(mm/s2)
 	*/
 	double GetVel();
+	ArPose GetPose();
 };
 #endif

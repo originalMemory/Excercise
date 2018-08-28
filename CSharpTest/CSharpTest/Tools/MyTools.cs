@@ -118,15 +118,24 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 整理本子文件夹路径
         /// </summary>
-        /// <param name="path"></param>
-        public static void SortDir(string path)
+        /// <param name="path">文件夹路径</param>
+        /// <param name="excludes">要排除的文件夹名称</param>
+        public static void SortDir(string path,List<string> excludes)
         {
             string errfile=path+@"\error.txt";
             string[] dirs = Directory.GetDirectories(path);
             int i = 1;
             foreach (var x in dirs)
             {
-                var files = Directory.GetFiles(path).ToList();
+                if (excludes.Contains(x))
+                {
+                    continue;
+                }
+                if(x.Contains("DearSexFriend"))
+                {
+                    int df = 324;
+                }
+                var files = Directory.GetFiles(x).ToList();
                 Regex reg = new Regex(".txt|.url|.torrent");
                 //Regex reg = new Regex(".rar|.txt|.zip|.url|.torrent");
                 if (files.Count > 1)

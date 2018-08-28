@@ -65,7 +65,7 @@ def get_html(url, type=0):
     return tp_html
 
 
-def get_gal_basic_info(filename, base_dir,default_source=None):
+def get_gal_basic_info(filename, base_dir):
     """
     根据文件名解析GAL基础数据
     :param filename: GAL文件名
@@ -122,10 +122,14 @@ def get_gal_basic_info(filename, base_dir,default_source=None):
             print('后宫：是')
             gal_info['harem'] = '是'
 
-    if default_source:
-        gal_info['source'] = default_source
-        if default_source=='say花火':
-            gal_info['pw'] = '⑨'
+    default_source = os.path.basename(base_dir)
+    gal_info['source'] = default_source
+    if default_source == 'say花火' and 'pw' not in gal_info:
+        gal_info['pw'] = '⑨'
+    if default_source == '终点':
+        gal_info['fileType'] = GalFileType.File
+        if 'pw' not in gal_info:
+            gal_info['pw'] = '终点'
 
     return gal_info
 
@@ -186,8 +190,8 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         item_url = 'http://www.getchu.com/soft.phtml?id=976838&gc=gc'
     if '華麗なる悦辱' in basic_info['name']:
         item_url = 'http://www.getchu.com/soft.phtml?id=684001&gc=gc'
-    if 'ゾンビのあふれた世界で俺だけが襲' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=1004611&gc=gc'
+    if '朝霧姉妹編' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=709117&gc=gc'
     print(item_url)
     if not len(item_url):
         print('该Galgame在Getchu上没有信息！')
@@ -237,18 +241,34 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
     if os.path.exists(target_dir):
         # 循环遍历，确认已存在安装文件
         for root, dirs, files in os.walk(target_dir):
+            del_list = []
+            for x in dirs:
+                is_del = input('该Gal已存在，请确认是删除或覆盖(Y/N)：')
+                if is_del != 'y' and is_del != 'Y':
+                    del_list.append(target_dir + x)
+
             for x in files:
                 if re.search(r'.zip|.rar|.7z|.iso|.mds|.mdf', x) or os.path.isdir(x):
-                    print('该Gal已存在')
-                    os.system('pause')
-                    if os.path.isfile(file_path):
-                        os.remove(file_path)
+                    is_del = input('该Gal已存在，请确认是删除或覆盖(Y/N)：')
+                    if is_del != 'y' and is_del != 'Y':
+                        del_list.append(target_dir + x)
+            if not len(del_list):
+                shutil.rmtree(file_path)
+                # os.removedirs(file_path)
+            else:
+                for x in del_list:
+                    if os.path.isdir(x):
+                        shutil.rmtree(x)
                     else:
-                        shutil.rmtree(file_path)
-                        # os.removedirs(file_path)
-                    return True
+                        os.remove(x)
+                # 移动安装包
+                gal_name = os.path.basename(file_path)
+                new_file_path = target_dir + gal_name
+                shutil.move(file_path, new_file_path)
+            return True
     else:
         os.makedirs(target_dir)
+
     with open(target_dir + '上传信息.txt', 'w', encoding="utf-8") as f:
         if 'update' in basic_info:
             f.write('上传时间：{}\n'.format(time.strftime('%Y/%m/%d', basic_info['update'])))
@@ -297,7 +317,7 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         else:
             cg_url = node
         if '.http' in cg_url:
-            cg_url=cg_url.replace('.http','http')
+            cg_url = cg_url.replace('.http', 'http')
         print(cg_url)
         cg_name = os.path.basename(cg_url)
         new_url_path = target_dir + cg_name
@@ -405,18 +425,34 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
     if os.path.exists(target_dir):
         # 循环遍历，确认已存在安装文件
         for root, dirs, files in os.walk(target_dir):
+            del_list = []
+            for x in dirs:
+                is_del = input('该Gal已存在，请确认是删除或覆盖(Y/N)：')
+                if is_del != 'y' and is_del != 'Y':
+                    del_list.append(target_dir+ x)
+
             for x in files:
                 if re.search(r'.zip|.rar|.7z|.iso|.mds|.mdf', x) or os.path.isdir(x):
-                    print('该Gal已存在')
-                    os.system('pause')
-                    if os.path.isfile(file_path):
-                        os.remove(file_path)
+                    is_del = input('该Gal已存在，请确认是删除或覆盖(Y/N)：')
+                    if is_del != 'y' and is_del != 'Y':
+                        del_list.append(target_dir+x)
+            if not len(del_list):
+                shutil.rmtree(file_path)
+                # os.removedirs(file_path)
+            else:
+                for x in del_list:
+                    if os.path.isdir(x):
+                        shutil.rmtree(x)
                     else:
-                        shutil.rmtree(file_path)
-                        # os.removedirs(file_path)
-                    return True
+                        os.remove(x)
+                # 移动安装包
+                gal_name = os.path.basename(file_path)
+                new_file_path = target_dir+ gal_name
+                shutil.move(file_path, new_file_path)
+            return True
     else:
         os.makedirs(target_dir)
+
     with open(target_dir + '上传信息.txt', 'w', encoding="utf-8") as f:
         if 'update' in basic_info:
             f.write('上传时间：{}\n'.format(time.strftime('%Y/%m/%d', basic_info['update'])))
@@ -493,7 +529,7 @@ unfind_dir = r'H:\Gal\拔作\无信息\\'
 for dir in os.listdir(gal_dir):
     print(dir)
     path = gal_dir + dir
-    basic_info = get_gal_basic_info(dir, gal_dir,'终点')
+    basic_info = get_gal_basic_info(dir, gal_dir)
     getchu_result = get_getchu_gal_info(path, tar_dir, **basic_info)
     if not getchu_result:
         dlsite_result = get_dlsite_gal_info(path, tar_dir, **basic_info)
@@ -501,7 +537,7 @@ for dir in os.listdir(gal_dir):
             print('该Gal无相关信息')
             gal_name = os.path.basename(path)
             new_file_path = unfind_dir + gal_name
-            if os.path.exists(path):
+            if os.path.exists(path) and not os.path.exists(new_file_path):
                 shutil.move(path, new_file_path)
 
 # for dir_name in os.listdir(tar_dir):

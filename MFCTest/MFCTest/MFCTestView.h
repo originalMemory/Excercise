@@ -40,6 +40,18 @@ typedef struct seekurPara{
 	double veloctiy;	//速度
 }*seekurParaPtr;
 
+//seekur相关数据
+typedef struct seekurData{
+	double x;
+	double y;
+	double heading;		//航向
+	double vel;
+	double leftVel;
+	double rightVel;
+	double tranAccel;
+	double rotAccel;
+}*seekurDataPtr;
+
 
 class CMFCTestView : public CFormView
 {
@@ -148,7 +160,7 @@ public:
 	afx_msg void OnFileSave();
 	afx_msg void OnBtnMoveSeekur();
 protected:
-	afx_msg LRESULT OnSeekur(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSeekurCallback(WPARAM wParam, LPARAM lParam);
 private:
 	// 转动相对角度文本框
 	CEdit m_editMoveHeading;
@@ -162,7 +174,7 @@ private:
 	// Seekur当前速度文本框
 	CEdit m_editSeekurVel;
 	// Seekur当前航向文本框
-	CEdit m_editSeekurHeading;
+	CEdit m_editGPSHeading;
 	// 追踪开始/停止按钮
 	CButton m_btnTrack;
 	// GPS卫星数量文本框
@@ -233,6 +245,15 @@ private:
 	*/
 	void OnLaserAnalysis(string *buf, int len);
 
+public:
+	// Seekur的位置（x,y）
+	CEdit m_editSeekurPose;
+	// Seekur自测速度
+	CEdit m_editSeekurVal;
+	afx_msg void OnBtnSeekurQuery();
+	afx_msg void OnBtnSeekurStop();
+	// Seekur加速度
+	CEdit m_editSeekurAccel;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

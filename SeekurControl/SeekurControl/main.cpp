@@ -177,6 +177,7 @@ int main(int argc, char **argv){
 	double maxTran = robot->getTransVelMax();
 	double maxRot = robot->getRotVelMax();
 	printf("最大水平速度：%d\t最大旋转速度：%d\n", maxTran, maxRot);
+	robot->setVel()
 	robot->disconnect();
 	system("pause");
 	Aria::exit();

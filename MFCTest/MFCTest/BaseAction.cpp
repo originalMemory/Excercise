@@ -262,3 +262,13 @@ double BaseAction::GetVel()
 {
 	return myRobot->getVel();
 }
+
+
+/// <summary>
+/// ªÒ»°Œª÷√
+/// </summary>
+/// <returns></returns>
+ArPose BaseAction::GetPose()
+{
+	return myRobot->getPose();
+}
