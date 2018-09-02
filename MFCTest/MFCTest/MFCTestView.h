@@ -119,8 +119,7 @@ protected:
 	CString pathLayerName;		//路径图层名称
 	bool isPathExist;	//是否已加载路径图层
 	ObstacleAvoid obsAvoid;		//避障行为类
-	//是否是避障状态
-	bool isAvoid;
+	bool isAvoid;	//是否是避障状态
 	string testStr;
 	double lastClock;		//上次计时时间，用以定时录入文件数据
 	CStdioFile dataFile;		//数据文件，记录运行中数据状态
@@ -129,7 +128,7 @@ protected:
 private:
 	void AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactiveview);
 	void OnTestMarkerStyle();
-	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType = 3857, long toGeoType = 4326);	//esriSRGeoCS_Beijing1954
+	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long projType = 2414, long geoType = 4326);	//esriSRGeoCS_Beijing1954
 	ISymbolPtr m_isymbol;
 	static UINT SeekurFuc(LPVOID lParam);		//Seekur控制线程函数
 	//void CreateShapeFile();

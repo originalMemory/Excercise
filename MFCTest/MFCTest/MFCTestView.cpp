@@ -194,7 +194,7 @@ void CMFCTestView::OnInitialUpdate()
 		);
 
 	isGPSEnd = false;
-	m_GPSport = 6;
+	m_GPSport = 2;
 	//调用串口程序，打开与GPS的通信
 	CMainFrame *p = (CMainFrame*)AfxGetMainWnd();
 	CMFCTestView *m_CView = (CMFCTestView *)p->GetActiveView();//获取View类的指针
@@ -234,7 +234,8 @@ void CMFCTestView::OnInitialUpdate()
 	m_editKheading.SetWindowTextW(_T("0.5"));
 	m_editKi.SetWindowTextW(_T("0"));
 	m_editKd.SetWindowTextW(_T("0"));
-	m_cUseID.SetCheck(1);
+	m_cUseID.SetCheck(0);
+	m_checkShowBJ54.SetCheck(1);
 	m_editVelocity.SetWindowTextW(_T("500"));
 	isTracked = false;
 	isGPSEnd = false;
@@ -560,24 +561,15 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 			cTp.Format(_T("%lf"), bj_y);
 			m_editBJ54_y.SetWindowText(cTp);
 
-			/*ISpatialReferenceFactory2Ptr ipSpaRefFact2(CLSID_SpatialReferenceEnvironment);
-			IGeographicCoordinateSystemPtr ipGeoCoordSys;
-			ipSpaRefFact2->CreateGeographicCoordinateSystem(esriSRGeoCS_Beijing1954, &ipGeoCoordSys);
-
-			ISpatialReferencePtr ipSRef;
-			ipSRef = ipGeoCoordSys;
-
-
-			IPointPtr point2(CLSID_Point);
-			point1->putref_SpatialReference(ipSRef);
-			point2->PutCoords(bj_x, bj_y);*/
-
 			pShowPoint = pBJ54Point;
 		}
 		else
 		{
 			pShowPoint = pGpsPoint;
 		}
+		double tp_x, tp_y;
+		pShowPoint->get_X(&tp_x);
+		pShowPoint->get_Y(&tp_y);
 		//刷新GPS位置
 		IActiveViewPtr iActiveView;
 		m_ipMapControl->get_ActiveView(&iActiveView);
@@ -587,7 +579,7 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		ipoint->PutCoords(myGPSInfo.Longitude*100, myGPSInfo.Latitude*100);*/
 
 		//画点
-		IGeometryPtr pgeomln(pGpsPoint);
+		IGeometryPtr pgeomln(pShowPoint);
 		IGraphicsContainerPtr pgracont(iActiveView);
 		//pgracont->DeleteAllElements();
 
@@ -724,13 +716,13 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		{
 			time_t timet = time(NULL);
 			tm *tm_ = localtime(&timet);
-			string time;
-			CString fileName;
-			fileName.Format(_T("%4d-%2d-%2d %2d：%2d：%2d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			CString cTime;
+			cTime.Format(_T("%4d-%2d-%2d %2d:%2d:%2d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
 			//保存时间，GPS坐标、BJ54坐标、距离偏差、航向和航向偏差
-			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, fileName, myGPSInfo.Longitude, myGPSInfo.Latitude, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y, dis, myGPSInfo.Heading, subHeading);
+			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, cTime, myGPSInfo.Longitude, myGPSInfo.Latitude, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y,myGPSInfo.SpeedKm, dis, myGPSInfo.Heading, subHeading);
 			dataFile.WriteString(cTp);
 			lastClock = nowclock;
+			no++;
 		}
 
 
@@ -910,6 +902,7 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 
 	// 异步运行机器人处理循环
 	robot->enableMotors();
+	//robot->setVel2(100, -100);
 	robot->runAsync(true);
 	BaseAction action(robot);
 
@@ -931,7 +924,10 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			pPara = (seekurParaPtr)msg.wParam;
 			//直线移动距离
 			if (pPara->distance != 0)
+			{
+				//robot->setVel2(300, 500);
 				action.Move(pPara->distance);
+			}
 			//转动角度
 			if (pPara->heading != 0)
 				action.SetDeltaHeading(pPara->heading);
@@ -941,8 +937,17 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			if (pPara->veloctiy != 0)
 			{
 				//action.SetVelocity(pPara->veloctiy);
-				robot->setTransVelMax(pPara->veloctiy);
-				//robot->setVel2(pPara->veloctiy, pPara->veloctiy);
+				if (pPara->distance!=0)
+				{
+					//robot->setTransVelMax(pPara->veloctiy);
+				}
+				else
+				{
+					//robot->setVel2(250, 350);
+					robot->setVel(pPara->veloctiy);
+					//robot->setRotVel(2);
+					//robot->setVel2(pPara->veloctiy, pPara->veloctiy);
+				}
 			}
 		}
 		
@@ -955,53 +960,95 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			action.Stop();
 			break;
 		}
-		ArPose pose = robot->getPose();
-		seekurDataPtr pData = new seekurData();
-		pData->x = pose.getX();
-		pData->y = pose.getY();
-		pData->heading = pose.getTh();
-		pData->vel = robot->getVel();
-		pData->leftVel = robot->getLeftVel();
-		pData->rightVel = robot->getRightVel();
 		if (msg.message == WM_SEEKUR_GET_DATA){
+			ArPose pose = robot->getPose();
+			seekurDataPtr pData = new seekurData();
+			pData->x = pose.getX();
+			pData->y = pose.getY();
+			pData->heading = pose.getTh();
+			pData->vel = robot->getVel();
+			pData->leftVel = robot->getLeftVel();
+			pData->rightVel = robot->getRightVel();
 			::PostMessage((HWND)lParam, WM_SEEKUR_RET, (UINT)pData, 0);
 			continue;
 		}
 		//判断是否为有运动命令
-		if (pPara != NULL)
+		if (pPara != NULL&&pPara->distance==0)
 		{
-			bool isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;	//判断运动是否完成
+
+			ArPose pose;
+			pose.setPose(0, 0);
+			robot->moveTo(pose);
+			#pragma region 距离模式数据记录
+			//bool isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;	//判断运动是否完成
+			////写入目标信息
+			//seekurFile.WriteString(_T("targetDis,targetHeading,targetVal\n"));	//列表头
+			//CString cTp;
+			//cTp.Format(_T("%lf,%lf,%lf\n"), pPara->distance, pPara->heading, pPara->veloctiy);
+			//seekurFile.WriteString(cTp);
+			//seekurFile.WriteString(_T("no,x,y,heading,tranVel,tranLeft,tranRight,tranAccel,tranDecel,rotVel,rotAccel,rotDecel\n"));
+			//cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+			//	robot->getLeftVel(), robot->getRightVel(), robot->getTransAccel(), robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+			//seekurFile.WriteString(cTp);
+			////double lastCl = clock();
+			//while (!isEnd)
+			//{
+			//	//double nowCl = clock();
+			//	//double sub = (nowCl - lastCl) / CLK_TCK;
+			//	//if (sub >= 0.1)	//每0.1秒计算一次
+			//	//{
+			//	//	cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, pData->x, pData->y, pData->heading, pData->vel,
+			//	//		pData->leftVel, pData->rightVel, robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+			//	//	seekurFile.WriteString(cTp);
+			//	//}
+			//	//lastCl = nowCl;
+
+			//	cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+			//		robot->getLeftVel(), robot->getRightVel(), robot->getTransAccel(), robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+			//	seekurFile.WriteString(cTp);
+			//	isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;
+			//	Sleep(100);
+			//}
+			//cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+			//	robot->getLeftVel(), robot->getRightVel(), robot->getTransAccel(), robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+			//seekurFile.WriteString(cTp);
+			//delete pPara;
+			//no++;
+			//seekurFile.WriteString(_T("\n"));
+			#pragma endregion
+
+			#pragma region 速度模式数据记录
+			//bool isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;	//判断运动是否完成
 			//写入目标信息
-			seekurFile.WriteString(_T("targetDis,targetHeading,targetVal\n"));	//列表头
+			seekurFile.WriteString(_T("targetDis,targetHeading,targetVel\n"));	//列表头
 			CString cTp;
 			cTp.Format(_T("%lf,%lf,%lf\n"), pPara->distance, pPara->heading, pPara->veloctiy);
 			seekurFile.WriteString(cTp);
-			seekurFile.WriteString(_T("no,x,y,heading,tranVel,tranLeft,tranRight,tranAccel,tranDecel,rotVel,rotAccel,rotDecel\n"));
-			cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
-				robot->getLeftVel(), robot->getRightVel(),robot->getTransAccel(),robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
-			seekurFile.WriteString(cTp);
+			seekurFile.WriteString(_T("no,time,x,y,heading,tranVel,tranLeft,tranRight,subTranVel,tranDecel,rotVel,rotAccel,rotDecel\n"));
 			//double lastCl = clock();
-			while (!isEnd)
+			int num = 0;
+			//CString cTime;
+			double lastCl = clock();
+			while (num<=300)
 			{
-				//double nowCl = clock();
-				//double sub = (nowCl - lastCl) / CLK_TCK;
-				//if (sub >= 0.1)	//每0.1秒计算一次
-				//{
-				//	cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, pData->x, pData->y, pData->heading, pData->vel,
-				//		pData->leftVel, pData->rightVel, robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
-				//	seekurFile.WriteString(cTp);
-				//}
-				//lastCl = nowCl;
-
-				cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
-					robot->getLeftVel(), robot->getRightVel(), robot->getTransAccel(), robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
+				double nowCl = clock();
+				double sub = (nowCl - lastCl) / CLK_TCK;
+				/*time_t timet = time(NULL);
+				tm *tm_ = localtime(&timet);
+				cTime.Format(_T("%4d/%2d/%2d %2d:%2d:%2d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);*/
+				cTp.Format(_T("%d,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), num, sub, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+					robot->getLeftVel(), robot->getRightVel(), robot->getLeftVel()-robot->getRightVel(), robot->getTransDecel(), robot->getRotVel(), robot->getRotAccel(), robot->getRotDecel());
 				seekurFile.WriteString(cTp);
-				isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;
+				//isEnd = robot->isMoveDone() && robot->isHeadingDone() ? true : false;
 				Sleep(100);
+				num++;
 			}
+			robot->stop();
 			delete pPara;
-			no++;
 			seekurFile.WriteString(_T("\n"));
+			#pragma endregion
+
+
 		}
 		//::PostMessage((HWND)lParam,WM_SEEKUR_RET, 0, 0);//发出自定义消息
 	}
@@ -1429,9 +1476,9 @@ void CMFCTestView::AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactive
 }
 
 
-IPoint* CMFCTestView::geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromProjType, long toGeoType)
+IPoint* CMFCTestView::geoToProj(IPoint* point/*需要更改坐标系的点*/, long projType, long geoType)
 {
-	long geoType = toGeoType;//4326;
+	long geoType = geoType;//4326;
 	IPoint* points = point;
 	ISpatialReference* spatialRf;
 	ISpatialReference* spatialRf1;
@@ -1442,7 +1489,7 @@ IPoint* CMFCTestView::geoToProj(IPoint* point/*需要更改坐标系的点*/, long fromPr
 	
 	HRESULT hr = originalSpecialReference.CreateInstance(CLSID_SpatialReferenceEnvironment);
 	//esriSRProjCS_Beijing1954_3_Degree_GK_CM_93E
-	HRESULT hr1 = originalSpecialReference->CreateProjectedCoordinateSystem(fromProjType, &projCoordSystem);
+	HRESULT hr1 = originalSpecialReference->CreateProjectedCoordinateSystem(projType, &projCoordSystem);
 	spatialRf = (ISpatialReference*)projCoordSystem;
 	//HRESULT hr2 = points->putref_SpatialReference(spatialRf);
 
@@ -1598,10 +1645,10 @@ void CMFCTestView::OnBtnTrack()
 			time_t timet = time(NULL);
 			tm *tm_ = localtime(&timet);
 			CString fileName;
-			fileName.Format(_T("%4d-%2d-%2d %2d：%2d：%2d.txt"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			fileName.Format(_T("D:\\data\\Track %4d-%2d-%2d %2d：%2d：%2d.csv"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
 			dataFile.Open(fileName, CFile::modeCreate | CFile::modeWrite);
 			//列表头
-			dataFile.WriteString(_T("no,time,lon,lat,x,y,dis,heading,subheading\n"));
+			dataFile.WriteString(_T("no,time,lon,lat,x,y,speed,dis,heading,subheading\n"));
 			no = 1;
 			lastClock = clock();
 
@@ -1673,5 +1720,7 @@ void CMFCTestView::OnBtnSeekurQuery()
 void CMFCTestView::OnBtnSeekurStop()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	isTracked = false;
+	isAvoid = false;
 	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
 }

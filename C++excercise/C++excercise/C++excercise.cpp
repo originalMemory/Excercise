@@ -10,115 +10,15 @@
 void MergeDirFiles(string dir_path);
 #define N 6
 
-struct TreeNode {
-	int val;
-	TreeNode *left;
-	TreeNode *right;
-	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-void createdTree(TreeNode* pre, int i, int a[10], int exist[10]){
-	if (i == 10)
-	{
-		return;
-	}
-	TreeNode *left = new TreeNode(a[i]);
-	createdTree(left, i + 1, a, exist);
-	pre->left = left;
-	if (exist[i] == 0)
-	{
-		TreeNode *right = new TreeNode(a[i]);
-		createdTree(right, i + 1, a, exist);
-		pre->right = right;
-	}
-}
-
-void showTree(TreeNode* node, string base,int type){
-	if (node->val==8)
-	{
-		int sdf = 34;
-	}
-	string next = "";
-	if (type == 1)
-	{
-		cout << node->val;
-		next = to_string(node->val);
-	}
-	//叶子节点
-	if (node->left->left == NULL)
-	{
-		if (node->right != NULL)
-		{
-			cout << endl;
-		}
-		if (node->left != NULL)
-		{
-			cout << base;
-			cout << next;
-			cout << node->left->val << endl;
-		}
-	}
-	else
-	{
-
-		if (node->left != NULL)
-		{
-			showTree(node->left, base + next, 1);
-
-		}
-		if (node->right != NULL)
-		{
-			cout << base;
-			showTree(node->right, base, 0);
-		}
-	}
-
-}
-
 
 int main()
 {
-	int a[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	int exist[10] = { 0 };
-	
-	for (size_t i = 0; i < 10; i++)
-	{
-		cin >> exist[i];
-	}
-	TreeNode* root = new TreeNode(-1);
-	createdTree(root, 0, a, exist);
-	showTree(root, "",0);
+	MergeDirFiles("C:\\下载\\幻想次元\\Mutsuki\\汉化\\[单行本][睦月] このまま膣内で… [中国翻訳] [無邪気漢化組]");
 	system("pause");
 	return 0;
 }
 
 
-
-
-class Solution {
-public:
-	TreeNode* reConstructBinaryTree(vector<int> pre, vector<int> vin) {
-		//获取根结点在中序的位置
-		TreeNode* root = reConstructBinaryTree(pre, 0, pre.size() - 1, vin, 0, vin.size() - 1);
-		return root;
-	}
-
-	TreeNode*reConstructBinaryTree(vector<int> pre, int preStart, int preEnd, vector<int> vin, int vinStart, int vinEnd){
-		if (preStart > preEnd || vinStart > vinEnd){
-			return NULL;
-		}
-		TreeNode* root = new TreeNode(pre[preStart]);
-		for (size_t i = vinStart; i < vinEnd; i++)
-		{
-			if (vin[vinStart] == pre[preStart]){
-				root->left = reConstructBinaryTree(pre, preStart + 1, preStart + i, vin, vinStart, i - 1);
-				root->right = reConstructBinaryTree(pre, i + 1, preEnd, vin, i + 1, vinEnd);
-				break;
-			}
-		}
-		return root;
-	}
-};
 
 /// <summary>
 /// 获取文件及文件夹路径

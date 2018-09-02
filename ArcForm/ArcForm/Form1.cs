@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+//using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -266,7 +266,23 @@ namespace ArcForm
             IGeometry polyline;
             polyline = axMapControl1.TrackLine();
         }
-            
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            IPoint gcs = new ESRI.ArcGIS.Geometry.Point();
+            gcs.PutCoords(116.444913, 40.179516);
+            IPoint prj = GCStoPRJ(gcs, 4326, 3857);
+            MessageBox.Show(string.Format("x={0},y={1}", prj.X, prj.Y));
+        }
+
+
+        private IPoint GCStoPRJ(IPoint pPoint, int GCSType, int PRJType)
+        {
+            ISpatialReferenceFactory pSRF = new SpatialReferenceEnvironmentClass();
+            pPoint.SpatialReference = pSRF.CreateGeographicCoordinateSystem(GCSType);
+            pPoint.Project(pSRF.CreateProjectedCoordinateSystem(PRJType));
+            return pPoint;
+        }
     }
 
     //public class EditTool
