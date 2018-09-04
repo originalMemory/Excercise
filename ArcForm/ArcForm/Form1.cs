@@ -103,12 +103,14 @@ namespace ArcForm
             //        MessageBox.Show("点在直线上");
                 
             //}
+
+            
         }
 
         void CreateShape()
         {
             string strFolder = @"F:\arcMap";
-            string strFile = "block" + ".shp";
+            string strFile = "newpath" + ".shp";
             FileInfo fFile = new FileInfo(strFolder + @"\" + strFile);
 
             string shapeFullName = strFolder + @"\" + strFile;
@@ -130,8 +132,10 @@ namespace ArcForm
 
             //设置坐标系并定义几何类型
             ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
-            IGeographicCoordinateSystem pGCS;
-            pGCS = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            //IGeographicCoordinateSystem pGCS;
+            //pGCS = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            IProjectedCoordinateSystem pPrj;
+            pPrj = spatialReferenceFactory.CreateProjectedCoordinateSystem((int)esriSRProjCS4Type.esriSRProjCS_Beijing1954_3_Degree_GK_Zone_38);
             pFieldEdit.Name_2 = "SHAPE";
             pFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
 
@@ -172,109 +176,125 @@ namespace ArcForm
             #endregion
 
             #region 线创建
+            IGeometryDef pGeoDef = new GeometryDef();
+            IGeometryDefEdit pGeoDefEdit = pGeoDef as IGeometryDefEdit;
+            pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolyline;
+
+            pGeoDefEdit.SpatialReference_2 = pPrj;
+            pFieldEdit.GeometryDef_2 = pGeoDef;
+            pFieldsEdit.AddField(pFiled);
+
+            //创建shp
+            pFeatureClass = pFeatureWorkspace.CreateFeatureClass(strFile, pFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+
+            pPoint = new ESRI.ArcGIS.Geometry.Point();
+            pPoint.PutCoords(38708267.3691335, 4452391.75361639);
+
+            //定义一个多义线对象
+            IPolyline pPolyline = new ESRI.ArcGIS.Geometry.PolylineClass();
+            //定义一个点的集合
+            IPointCollection ptclo = pPolyline as IPointCollection;
+            //定义一系列要添加到多义线上的点对象，并赋初始值
+
+            ptclo.AddPoint(pPoint);
+
+            pPoint = new ESRI.ArcGIS.Geometry.Point();
+            pPoint.PutCoords(38708297.23653, 4452391.79756713);
+
+            ptclo.AddPoint(pPoint);
+
+            IFeature pFeature = pFeatureClass.CreateFeature();
+            pFeature.Shape = pPolyline as IPolyline;
+            pFeature.Store();
+            #endregion
+
+            #region 面创建
             //IGeometryDef pGeoDef = new GeometryDef();
             //IGeometryDefEdit pGeoDefEdit = pGeoDef as IGeometryDefEdit;
-            //pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolyline;
+            //pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolygon;
 
             //pGeoDefEdit.SpatialReference_2 = pGCS;
             //pFieldEdit.GeometryDef_2 = pGeoDef;
             //pFieldsEdit.AddField(pFiled);
 
+            //pFiled = new Field();
+            //pFieldEdit = (IFieldEdit)pFiled;
+            //pFieldEdit.Name_2 = "名称";
+            //pFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            //pFieldsEdit.AddField(pFiled);
             ////创建shp
             //pFeatureClass = pFeatureWorkspace.CreateFeatureClass(strFile, pFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
 
-            //tmpLongitude = 116.276984;
-            //tmpLatitude = 39.9445685;
-            //pPoint = new ESRI.ArcGIS.Geometry.Point();
-            //pPoint.PutCoords(12943884.706671, 4857804.266050);
-
-            ////定义一个多义线对象
-            //IPolyline pPolyline = new ESRI.ArcGIS.Geometry.PolylineClass();
-            ////定义一个点的集合
-            //IPointCollection ptclo = pPolyline as IPointCollection;
-            ////定义一系列要添加到多义线上的点对象，并赋初始值
-
-            //ptclo.AddPoint(pPoint);
-
-            //pPoint = new ESRI.ArcGIS.Geometry.Point();
-            //pPoint.PutCoords(12943885.463977, 4857805.079523);
-
-            //ptclo.AddPoint(pPoint);
-
-            //IFeature pFeature = pFeatureClass.CreateFeature();
-            //pFeature.Shape = pPolyline as IPolyline;
-            //pFeature.Store();
-            #endregion
-
-            #region 面创建
-            IGeometryDef pGeoDef = new GeometryDef();
-            IGeometryDefEdit pGeoDefEdit = pGeoDef as IGeometryDefEdit;
-            pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolygon;
-
-            pGeoDefEdit.SpatialReference_2 = pGCS;
-            pFieldEdit.GeometryDef_2 = pGeoDef;
-            pFieldsEdit.AddField(pFiled);
-
-            pFiled = new Field();
-            pFieldEdit = (IFieldEdit)pFiled;
-            pFieldEdit.Name_2 = "名称";
-            pFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
-            pFieldsEdit.AddField(pFiled);
-            //创建shp
-            pFeatureClass = pFeatureWorkspace.CreateFeatureClass(strFile, pFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
-
-            IPointCollection pointPolygon = new PolygonClass(); 
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.445171, 40.187373);
-            pointPolygon.AddPoint(pPoint);
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.445698, 40.187436);
-            pointPolygon.AddPoint(pPoint);
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.446457, 40.184014);
-            pointPolygon.AddPoint(pPoint);
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.445927, 40.183817);
-            pointPolygon.AddPoint(pPoint);
+            //IPointCollection pointPolygon = new PolygonClass(); 
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.445171, 40.187373);
+            //pointPolygon.AddPoint(pPoint);
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.445698, 40.187436);
+            //pointPolygon.AddPoint(pPoint);
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.446457, 40.184014);
+            //pointPolygon.AddPoint(pPoint);
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.445927, 40.183817);
+            //pointPolygon.AddPoint(pPoint);
             
-            IFeature pFeature = pFeatureClass.CreateFeature();
-            pFeature.Shape = pointPolygon as IGeometry;
-            pFeature.set_Value(pFeature.Fields.FindField("名称"), "地块1");
-            pFeature.Store();
+            //IFeature pFeature = pFeatureClass.CreateFeature();
+            //pFeature.Shape = pointPolygon as IGeometry;
+            //pFeature.set_Value(pFeature.Fields.FindField("名称"), "地块1");
+            //pFeature.Store();
 
-            pointPolygon = new PolygonClass();
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.445698, 40.187436);
-            pointPolygon.AddPoint(pPoint);
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.446257, 40.187502);
-            pointPolygon.AddPoint(pPoint);
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.446967, 40.184236);
-            pointPolygon.AddPoint(pPoint);
-            pPoint = new PointClass();
-            pPoint.PutCoords(116.446457, 40.184014);
-            pointPolygon.AddPoint(pPoint);
+            //pointPolygon = new PolygonClass();
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.445698, 40.187436);
+            //pointPolygon.AddPoint(pPoint);
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.446257, 40.187502);
+            //pointPolygon.AddPoint(pPoint);
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.446967, 40.184236);
+            //pointPolygon.AddPoint(pPoint);
+            //pPoint = new PointClass();
+            //pPoint.PutCoords(116.446457, 40.184014);
+            //pointPolygon.AddPoint(pPoint);
 
-            pFeature = pFeatureClass.CreateFeature();
-            pFeature.Shape = pointPolygon as IGeometry;
-            pFeature.set_Value(pFeature.Fields.FindField("名称"), "地块2");
-            pFeature.Store();
+            //pFeature = pFeatureClass.CreateFeature();
+            //pFeature.Shape = pointPolygon as IGeometry;
+            //pFeature.set_Value(pFeature.Fields.FindField("名称"), "地块2");
+            //pFeature.Store();
 
             #endregion
 
-            IGeometry polyline;
-            polyline = axMapControl1.TrackLine();
+            //IGeometry polyline;
+            //polyline = axMapControl1.TrackLine();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             IPoint gcs = new ESRI.ArcGIS.Geometry.Point();
-            gcs.PutCoords(116.444913, 40.179516);
-            IPoint prj = GCStoPRJ(gcs, 4326, 3857);
-            MessageBox.Show(string.Format("x={0},y={1}", prj.X, prj.Y));
+            string[] strs = textBox1.Text.Split(',');
+
+            //gcs.PutCoords(Convert.ToDouble(strs[0]), Convert.ToDouble(strs[1]));
+            //IPoint prj = GCStoPRJ(gcs, 4326, 2414);
+            //string prjStr = string.Format("{0},{1}", prj.X, prj.Y);
+
+            double[] cood = lonLat2Mercator(Convert.ToDouble(strs[0]), Convert.ToDouble(strs[1]));
+            string prjStr = string.Format("{0},{1}", cood[0], cood[1]);
+
+            textBox2.Text = prjStr;
+            textBox2.Copy();
         }
 
+        public double[] lonLat2Mercator(double X,double Y)
+        {
+            double[] db = new double[2];
+            double x = X * 20037508.34 / 180;
+            double y = Math.Log(Math.Tan((90 + Y) * Math.PI / 360)) / (Math.PI / 180);
+            y = y * 20037508.34 / 180;
+            db[0] = x;
+            db[1] = y;
+            return db;
+        }
 
         private IPoint GCStoPRJ(IPoint pPoint, int GCSType, int PRJType)
         {
@@ -283,6 +303,79 @@ namespace ArcForm
             pPoint.Project(pSRF.CreateProjectedCoordinateSystem(PRJType));
             return pPoint;
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            IFeatureLayer layer = axMapControl1.get_Layer(0) as IFeatureLayer;
+            IFeatureClass pFeatCla = layer.FeatureClass;
+            IFeature pFeature = pFeatCla.GetFeature(0);
+            IGeometry pGeometry = pFeature.Shape;
+            IPolyline pPoly = pGeometry as IPolyline;
+            IPoint point = new Point();
+            point.PutCoords(38708267.399133502, 4452391.7536163898);
+            IPointCollection pPointC = (IPointCollection)pPoly;
+            IPoint pPoint = pPointC.Point[0];
+            //isPointOnLine(pPoint, pPoly);
+            bool isOn= isPointOnLine(point, pPointC.Point[0], pPointC.Point[1]);
+            //for (int i = 0; i < pPointC.PointCount; i++)
+            //{
+            //    IPoint pPoint = pPointC.Point[i];
+            //    int ad = 34;
+            //}
+        }
+
+        /// 粗略判断一个已知点是否在线上        
+        private bool isPointOnLine(IPoint pPoint, IPolyline myLine)
+        {
+            ITopologicalOperator topo = pPoint as ITopologicalOperator;
+            IGeometry buffer = topo.Buffer(0.00001); //缓冲一个极小的距离
+            topo = buffer as ITopologicalOperator;
+            IGeometryCollection pgeo = topo.Intersect(myLine, esriGeometryDimension.esriGeometry0Dimension) as IGeometryCollection;
+            bool result = false;
+            if (pgeo.GeometryCount > 0)
+                result = true;
+            return result;
+        }
+
+        #region==判断点是否在直线上 ==
+        /// <summary>
+        /// Determines whether [is point on line] [the specified points].
+        /// </summary>
+        /// <param name="points">The point.</param>
+        /// <param name="lineStartPoint">The line start point.</param>
+        /// <param name="lineEndPoint">The line end point.</param>
+        /// <returns>
+        ///   <c>true</c> if [is point on line] [the specified points]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool isPointOnLine(IPoint point, IPoint lineStartPoint, IPoint lineEndPoint)
+        {
+            //(P-P1)*(P2-P1)=0 向量差乘是否为0; 
+            double X21, Y21, X10, Y10;
+            X21 = lineEndPoint.X - lineStartPoint.X;
+            Y21 = lineEndPoint.Y - lineStartPoint.Y;
+            X10 = point.X - lineStartPoint.X;
+            Y10 = point.Y - lineStartPoint.Y;
+
+            //向量乘积为0则该点在线上
+            double vectorValue = X21 * Y10 - X10 * Y21;
+            if (vectorValue != 0.0)
+                return false;
+            else
+            {
+                double xMin = Math.Min(lineStartPoint.X, lineEndPoint.X);
+                double xMax = Math.Max(lineEndPoint.X, lineStartPoint.X);
+                double yMin = Math.Min(lineStartPoint.Y, lineEndPoint.Y);
+                double yMax = Math.Max(lineEndPoint.Y, lineStartPoint.Y);
+
+                //判断点是否是在该线的延长线上
+                if (xMin <= point.X && point.X <= xMax && yMin <= point.Y && point.Y <= yMax)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        #endregion
+
     }
 
     //public class EditTool

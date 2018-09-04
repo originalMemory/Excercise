@@ -29,8 +29,8 @@
 #define RES25 0.25
 #define MAXPACKET 812
 
-const string LASER_HEADER[7] = { "02", "80", "6E", "01", "B0", "B5", "00" };
-//const char LASER_HEADER[7] = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x00 };
+
+
 
 
 //seekur控制参数
@@ -48,8 +48,7 @@ typedef struct seekurData{
 	double vel;
 	double leftVel;
 	double rightVel;
-	double tranAccel;
-	double rotAccel;
+	double rotVel;
 }*seekurDataPtr;
 
 
@@ -115,7 +114,8 @@ protected:
 	//CWinThread* track_thread;		//追踪线程句柄
 	bool isGPSEnd;		//本轮GPS语句组是否已至最后
 	IPolylinePtr pPath;			//创建的路径
-	IElementPtr lastPointElement;	// Seekur上一次的坐标
+	IElementPtr lastPointElement;	// GPS最新坐标(地图）
+	IPointPtr pSeekurPoint;	// GPS获取的Seekur最新坐标
 	CString pathLayerName;		//路径图层名称
 	bool isPathExist;	//是否已加载路径图层
 	ObstacleAvoid obsAvoid;		//避障行为类
@@ -128,7 +128,6 @@ protected:
 private:
 	void AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactiveview);
 	void OnTestMarkerStyle();
-	IPoint* geoToProj(IPoint* point/*需要更改坐标系的点*/, long projType = 2414, long geoType = 4326);	//esriSRGeoCS_Beijing1954
 	ISymbolPtr m_isymbol;
 	static UINT SeekurFuc(LPVOID lParam);		//Seekur控制线程函数
 	//void CreateShapeFile();

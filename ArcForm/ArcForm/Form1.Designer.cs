@@ -36,6 +36,9 @@
             this.btn_open = new System.Windows.Forms.Button();
             this.btn_save = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).BeginInit();
@@ -45,6 +48,7 @@
             // axMapControl1
             // 
             this.axMapControl1.Location = new System.Drawing.Point(381, 127);
+            this.axMapControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.axMapControl1.Name = "axMapControl1";
             this.axMapControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMapControl1.OcxState")));
             this.axMapControl1.Size = new System.Drawing.Size(687, 489);
@@ -54,6 +58,7 @@
             // 
             this.axLicenseControl1.Enabled = true;
             this.axLicenseControl1.Location = new System.Drawing.Point(27, 61);
+            this.axLicenseControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.axLicenseControl1.Name = "axLicenseControl1";
             this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
             this.axLicenseControl1.Size = new System.Drawing.Size(32, 32);
@@ -62,6 +67,7 @@
             // axTOCControl1
             // 
             this.axTOCControl1.Location = new System.Drawing.Point(27, 127);
+            this.axTOCControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.axTOCControl1.Name = "axTOCControl1";
             this.axTOCControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTOCControl1.OcxState")));
             this.axTOCControl1.Size = new System.Drawing.Size(331, 489);
@@ -70,6 +76,7 @@
             // axToolbarControl1
             // 
             this.axToolbarControl1.Location = new System.Drawing.Point(133, 36);
+            this.axToolbarControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.axToolbarControl1.Name = "axToolbarControl1";
             this.axToolbarControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axToolbarControl1.OcxState")));
             this.axToolbarControl1.Size = new System.Drawing.Size(331, 28);
@@ -77,9 +84,10 @@
             // 
             // btn_open
             // 
-            this.btn_open.Location = new System.Drawing.Point(545, 41);
+            this.btn_open.Location = new System.Drawing.Point(409, 33);
+            this.btn_open.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_open.Name = "btn_open";
-            this.btn_open.Size = new System.Drawing.Size(75, 23);
+            this.btn_open.Size = new System.Drawing.Size(56, 18);
             this.btn_open.TabIndex = 4;
             this.btn_open.Text = "打开";
             this.btn_open.UseVisualStyleBackColor = true;
@@ -87,9 +95,10 @@
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(669, 41);
+            this.btn_save.Location = new System.Drawing.Point(502, 33);
+            this.btn_save.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_save.Name = "btn_save";
-            this.btn_save.Size = new System.Drawing.Size(75, 23);
+            this.btn_save.Size = new System.Drawing.Size(56, 18);
             this.btn_save.TabIndex = 5;
             this.btn_save.Text = "保存";
             this.btn_save.UseVisualStyleBackColor = true;
@@ -97,19 +106,48 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(789, 40);
+            this.button1.Location = new System.Drawing.Point(592, 32);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(74, 18);
             this.button1.TabIndex = 6;
-            this.button1.Text = "button1";
+            this.button1.Text = "坐标转换";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(502, 61);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(200, 21);
+            this.textBox1.TabIndex = 7;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(502, 88);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(200, 21);
+            this.textBox2.TabIndex = 8;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(697, 32);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(56, 18);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "查看";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1101, 708);
+            this.ClientSize = new System.Drawing.Size(826, 566);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btn_save);
             this.Controls.Add(this.btn_open);
@@ -117,6 +155,7 @@
             this.Controls.Add(this.axTOCControl1);
             this.Controls.Add(this.axLicenseControl1);
             this.Controls.Add(this.axMapControl1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).EndInit();
@@ -124,6 +163,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -136,6 +176,9 @@
         private System.Windows.Forms.Button btn_open;
         private System.Windows.Forms.Button btn_save;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button button2;
     }
 }
 
