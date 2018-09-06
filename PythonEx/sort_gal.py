@@ -122,7 +122,7 @@ def get_gal_basic_info(filename, base_dir):
             print('后宫：是')
             gal_info['harem'] = '是'
 
-    default_source = os.path.basename(base_dir)
+    default_source = os.path.basename(base_dir[:-1])
     gal_info['source'] = default_source
     if default_source == 'say花火' and 'pw' not in gal_info:
         gal_info['pw'] = '⑨'
@@ -186,10 +186,10 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         item_url = item_url.replace('../', base_url) + '&gc=gc'
         break
 
-    if 'ハーレムゲーム2' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=976838&gc=gc'
-    if '華麗なる悦辱' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=684001&gc=gc'
+    if '巨乳妻との癒され愛温泉' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=975405&gc=gc'
+    if '魅惑の人妻ライフ' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=915932&gc=gc'
     if '朝霧姉妹編' in basic_info['name']:
         item_url = 'http://www.getchu.com/soft.phtml?id=709117&gc=gc'
     print(item_url)
@@ -522,9 +522,9 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
     return True
 
 
-gal_dir = r'H:\Gal\拔作\未整理\终点\\'
-tar_dir = r'H:\Gal\拔作\整理\\'
-unfind_dir = r'H:\Gal\拔作\无信息\\'
+gal_dir = 'H:\\Gal\\拔作\\未整理\\绯月\\'
+tar_dir = 'H:\\Gal\\拔作\\整理\\'
+unfind_dir = 'H:\\Gal\\拔作\\无信息\\'
 
 for dir in os.listdir(gal_dir):
     print(dir)

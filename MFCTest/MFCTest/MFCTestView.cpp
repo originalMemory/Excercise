@@ -33,32 +33,15 @@
 
 #define wm
 
-#define PI 3.1415926
-#define EARTH_RADIUS 6378.137
+#define PI 3.14159265358979323846
 
 const string LASER_HEADER[7] = { "02", "80", "6E", "01", "B0", "B5", "00" };
 //const char LASER_HEADER[7] = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x00 };
 
 int seekurNo = 1;
 CStdioFile seekurRunFile;
+MyGPSInfo myGPSInfo;		//我实际使用的GPS信息
 
-double rad(double d)
-{
-	return d * PI / 180.0;
-}
-
-double GetDistance(double lat1, double lng1, double lat2, double lng2)
-{
-	double radLat1 = rad(lat1);
-	double radLat2 = rad(lat2);
-	double a = radLat1 - radLat2;
-	double b = rad(lng1) - rad(lng2);
-	double s = 2 * asin(sqrt(pow(sin(a / 2), 2) +
-		cos(radLat1) * cos(radLat2) * pow(sin(b / 2), 2)));
-	s = s * EARTH_RADIUS;
-	s = round(s * 10000) / 10000;
-	return s;
-}
 
 unsigned long HextoDec(const unsigned char *hex, int length)
 {
@@ -195,6 +178,7 @@ CMFCTestView::CMFCTestView()
 CMFCTestView::~CMFCTestView()
 {
 	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_END, 0, 0);
+	Sleep(100);
 	//seekurRunFile.Close();
 	//dataFile.Close();
 	//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
@@ -227,6 +211,7 @@ void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT18, m_editSeekurPose);
 	DDX_Control(pDX, IDC_EDIT19, m_editSeekurVal);
 	DDX_Control(pDX, IDC_EDIT20, m_editSeekurAccel);
+	DDX_Control(pDX, IDC_EDIT21, m_editGPSSpeedKm);
 }
 
 BOOL CMFCTestView::PreCreateWindow(CREATESTRUCT& cs)
@@ -682,6 +667,13 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		myGPSInfo.Heading = 75;
 		isGPSEnd = false;
 	}
+	else if (gpsInfo->InfoType == VTG)
+	{
+		CString speed;
+		speed.Format(_T("%lf"), ((VTGInfo*)gpsInfo)->SpeedKm);
+		m_editGPSSpeedKm.SetWindowText(speed);
+		myGPSInfo.SpeedKm = ((VTGInfo*)gpsInfo)->SpeedKm;
+	}
 	else if (gpsInfo->InfoType == PSAT_HPR)
 	{
 		CString heading;
@@ -867,7 +859,7 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 			time_t timet = time(NULL);
 			tm *tm_ = localtime(&timet);
 			CString cTime;
-			cTime.Format(_T("%4d-%02d-%02d %02d：%02d：%02d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			cTime.Format(_T("%4d-%02d-%02d %02d:%02d:%02d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
 			//保存时间，GPS坐标、BJ54坐标、距离偏差、航向和航向偏差
 			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, cTime, myGPSInfo.Longitude, myGPSInfo.Latitude, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y, myGPSInfo.SpeedKm, dis, myGPSInfo.Heading, subHeading);
 			dataFile.WriteString(cTp);
@@ -1033,15 +1025,13 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			}
 			time_t timet = time(NULL);
 			tm *tm_ = localtime(&timet);
-			CString ctime;
-			ctime.Format(_T("%4d/%02d/%02d %02d：%02d：%02d"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			CString cTime;
+			cTime.Format(_T("%4d/%02d/%02d %02d:%02d:%02d"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
 
 			CString cTp;
-			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), seekurNo, ctime, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), seekurNo,cTime, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
 				robot->getLeftVel(), robot->getRightVel(), robot->getLeftVel() - robot->getRightVel(), robot->getRotVel());
-			//::MessageBox((HWND)lParam,cTp,_T("text"),0);
 			seekurRunFile.WriteString(cTp);
-			//seekurRunFile.WriteString(_T("0,213.000000,454,adb,0.000000,0.000000,0.000000,0.000000,0.000000\n"));
 			seekurNo++;
 		}
 		
@@ -1050,11 +1040,11 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			action.Stop();
 			time_t timet = time(NULL);
 			tm *tm_ = localtime(&timet);
-			CString ctime;
-			ctime.Format(_T("%4d/%02d/%02d %02d：%02d：%02d"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			CString cTime;
+			cTime.Format(_T("%4d/%02d/%02d %02d:%02d:%02d"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
 
 			CString cTp;
-			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), seekurNo, ctime, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
+			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n"), seekurNo, cTime, robot->getX(), robot->getY(), robot->getTh(), robot->getVel(),
 				robot->getLeftVel(), robot->getRightVel(), robot->getLeftVel() - robot->getRightVel(), robot->getRotVel());
 			seekurRunFile.WriteString(cTp);
 			seekurNo = 1;
@@ -1285,7 +1275,7 @@ UINT CMFCTestView::TrackFuc(LPVOID lParam){
 		distFromCurve *= 100000;
 		//double dis = GetDistance(seekurY, seekurX, nearestY, nearestX) * 1000;	//Seekur到路径距离（米）
 		double dis = distFromCurve;
-		double subHeading = lineHeading - pView->myGPSInfo.Heading;	//路径航向与Seekur航向差值
+		double subHeading = lineHeading - myGPSInfo.Heading;	//路径航向与Seekur航向差值
 
 		double turnHeading = 0;	//转向角
 		double maxTrun = 45;	//最大转向角
@@ -1415,7 +1405,7 @@ void CMFCTestView::OnBtnSavePath()
 		{
 			m_ipMapControl->DeleteLayer(i);
 			CFileFind finder;
-			BOOL bWorking = finder.FindFile(_T("F:\\ArcMap\\path.*"));
+			BOOL bWorking = finder.FindFile(_T("D:\\ArcMap\\path.*"));
 			while (bWorking)
 			{
 				bWorking = finder.FindNextFile();
@@ -1429,6 +1419,18 @@ void CMFCTestView::OnBtnSavePath()
 		}
 	}
 	isPathExist = false;
+
+	CFileFind finder;
+	BOOL bWorking = finder.FindFile(_T("D:\\ArcMap\\path.*"));
+	while (bWorking)
+	{
+		bWorking = finder.FindNextFile();
+		if (bWorking)
+		{
+			CString filePath = finder.GetFilePath();
+			DeleteFile(filePath);
+		}
+	}
 
 	//为输出SHP文件创建特征工厂
 	IWorkspaceFactoryPtr ipWorkFact(CLSID_ShapefileWorkspaceFactory);
@@ -1473,10 +1475,13 @@ void CMFCTestView::OnBtnSavePath()
 	ipFieldEdit->putref_GeometryDef(ipGeoDef);
 	ipFieldsEdit->AddField(ipField);
 
-	// Create the shapefile
+	//创建shp文件
 	IFeatureClassPtr pFeatureClass;
 	hr = ipFeatWork->CreateFeatureClass(CComBSTR(strFile), ipFields, 0, 0,
 		esriFTSimple, CComBSTR("Shape"), 0, &pFeatureClass);
+
+	if (FAILED(hr))
+		AfxMessageBox(_T("创建出错！"), MB_ICONINFORMATION);
 
 	IFeaturePtr pFeature;
 	pFeatureClass->CreateFeature(&pFeature);
@@ -1489,6 +1494,9 @@ void CMFCTestView::OnBtnSavePath()
 	CString str(_T("路径起始点"));
 	m_btnPathSelect.SetWindowTextW(str);
 	pPath->Release();
+	dataFile.Close();
+	AfxMessageBox(_T("创建成功！"), MB_ICONINFORMATION);
+
 }
 
 void CMFCTestView::OnMouseDownMapcontrol1(long button, long shift, long X, long Y, double mapX, double mapY)
@@ -1778,13 +1786,23 @@ void CMFCTestView::OnBtnTrack()
 */
 void CMFCTestView::OnBtnPathAdd()
 {
-	// TODO:  在此添加控件通知处理程序代码
-	//路径为空时创建路径
+	// TODO:  在此添加控件通知处理程序代码if (!pPath)
+	CString cTp;
 	if (!pPath)
 	{
+		no = 1;
 		HRESULT hr1 = pPath.CreateInstance(CLSID_Polyline);
 		CString str(_T("下一点"));
 		m_btnPathSelect.SetWindowTextW(str);
+		time_t timet = time(NULL);
+		tm *tm_ = localtime(&timet);
+		CString fileName;
+		fileName.Format(_T("D:\\data\\GPS %4d-%02d-%02d %02d：%02d：%02d.csv"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+		dataFile.Open(fileName, CFile::modeCreate | CFile::modeWrite);
+		//列表头
+		dataFile.WriteString(_T("no,time,lon,lat,x,y,speed,dis,heading,subheading\n"));
+		//保存时间，GPS坐标、BJ54坐标、距离偏差、航向和航向偏差
+		no++;
 	}
 
 	IPointCollectionPtr pPtclo = (IPointCollectionPtr)pPath;
@@ -1792,6 +1810,15 @@ void CMFCTestView::OnBtnPathAdd()
 	point->PutCoords(myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y);
 	pPtclo->AddPoint(point);
 	//point->putref_SpatialReference()
+
+	//路径为空时创建路径
+	time_t timet = time(NULL);
+	tm *tm_ = localtime(&timet);
+	CString cTime;
+	cTime.Format(_T("%4d-%02d-%02d %02d:%02d:%02d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+	cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, cTime, myGPSInfo.Longitude, myGPSInfo.Latitude, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y, myGPSInfo.SpeedKm, myGPSInfo.Heading);
+	dataFile.WriteString(cTp);
+	no++;
 }
 
 void CMFCTestView::OnBtnSeekurQuery()

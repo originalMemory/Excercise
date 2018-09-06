@@ -14,7 +14,6 @@
 #include <windows.h>
 #include "ObstacleAvoid.h"
 
-#define M_PI       3.14159265358979323846
 #define STX 0x02   /*every PC->LMS packet is started by STX*/ 
 #define ACKSTX 0x06 /*every LMS->PC packet is started by ACKSTX*/
 #define LEN100X1 101
@@ -91,7 +90,6 @@ public:
 	//CEdit m_editLatitude;		//纬度文本框
 	INewLineFeedbackPtr m_pNewLineFeedback;
 	bool isTracked;		//是否正在追踪
-	MyGPSInfo myGPSInfo;		//我实际使用的GPS信息
 
 //成员对象
 protected:
@@ -252,6 +250,8 @@ public:
 	afx_msg void OnBtnSeekurStop();
 	// Seekur加速度
 	CEdit m_editSeekurAccel;
+	// gps速度(km/h)
+	CEdit m_editGPSSpeedKm;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本
