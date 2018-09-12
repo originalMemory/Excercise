@@ -33,14 +33,14 @@
 
 
 //seekur控制参数
-typedef struct seekurPara{
+typedef struct SeekurPara{
 	double distance;	//距离
 	double heading;		//航向
 	double veloctiy;	//速度
-}*seekurParaPtr;
+}*SeekurParaPtr;
 
 //seekur相关数据
-typedef struct seekurData{
+typedef struct SeekurData{
 	double x;
 	double y;
 	double heading;		//航向
@@ -48,7 +48,7 @@ typedef struct seekurData{
 	double leftVel;
 	double rightVel;
 	double rotVel;
-}*seekurDataPtr;
+}*SeekurDataPtr;
 
 
 class CMFCTestView : public CFormView
@@ -168,7 +168,7 @@ private:
 	CEdit m_editLatitude;
 	afx_msg void OnBtnTrack();
 	// Seekur当前速度文本框
-	CEdit m_editSeekurVel;
+	CEdit m_editTurnHeading;
 	// Seekur当前航向文本框
 	CEdit m_editGPSHeading;
 	// 追踪开始/停止按钮

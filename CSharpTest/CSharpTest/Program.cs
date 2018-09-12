@@ -54,39 +54,174 @@ namespace CSharpTest
             //Console.WriteLine(reStr);
 
 
-            //string url = "http://localhost:2022/api/Media/GetLevelLinks?user_id=587b5379cba12d035c51ce23&categoryId=&projectId=59242f261037d47990e7b6d3&keywordId=593fa6c21037d43f1038a586&Title=&domain=&infriLawCode=&status=&page=0&pagesize=2";
-            //Dictionary<string, string> para = new Dictionary<string, string>();
-            //var response = WebApiInvoke.CreateGetHttpResponse(url);
-            //StreamReader sr = new StreamReader(response.GetResponseStream());
-            //Console.WriteLine(sr.ReadToEnd());
+            //string linkUrl = "https://mp.weixin.qq.com/s?src=3&timestamp=1536644778&ver=1&signature=pl4vJAFcu*2F4ZIkp8Ho4nT9LuFTKrEQHIPuGBRQFn1YwGFX2kVQQcXGESn55HIPzVWLz4V79092QTu00E7ZapJHdrq6QB*pM8L01N0W49HdPdeCfAdKG0tlMFpfUCfqS5AZ-BAHpsrarU0wG2HGQ3Tw4GXMbnieBl48TVx7OYs=";
+            //linkUrl = HttpUtility.UrlEncode(linkUrl);
+            //string account="erciy66";
+            //string appid="33e8773009029e227badd9e8d7477daf";
+            //string url = "https://api.shenjian.io/?appid={0}&url={1}&account={2}".FormatStr(appid, linkUrl, account);
+            //var result = WebApiInvoke.CreateGetHttpResponse(url);
+            //Console.WriteLine(result);
+
+
 
             //DnlTools.FilterWXLink("5b547bcdf4b87d0c88a54ab2");
 
-            MyTools.SortDir(@"C:\下载\绯月", new List<string>() { });
+            //MyTools.SortDir(@"C:\下载\绯月", new List<string>() { });
 
-            //Console.WriteLine(GetDistance(39.944094107166663, 116.27698527749999, 39.944652798500002, 116.27679663166667));
-            //DnlTools.SearchNewrankWXAccount();
+            //getProxyList(1);
+            //for (int i = 0; i < masterPorxyList.Count; i++)
+            //{
+            //    var por = masterPorxyList[i];
+            //    Console.Write((i + 1) + ":");
+            //    Console.WriteLine(yanzhen(por.ip, Convert.ToInt32(por.port)));
+            //}
+            Console.WriteLine(yanzhen("221.239.108.36", 80));
             Console.ReadKey();
         }
 
-        private const double EARTH_RADIUS = 6378.137;
-        private static double rad(double d)
+        //存放所有抓取的代理
+        public static List<proxy> masterPorxyList = new List<proxy>();
+        //代理IP类
+        public class proxy
         {
-            return d * Math.PI / 180.0;
+            public string ip;
+
+            public string port;
+            public int speed;
+
+            public proxy(string pip, string pport, int pspeed)
+            {
+                this.ip = pip;
+                this.port = pport;
+                this.speed = pspeed;
+            }
+
+
+        }
+        //抓去处理方法
+        static void getProxyList(object pageIndex)
+        {
+
+            string urlCombin = "http://www.xicidaili.com/wt/" + pageIndex.ToString();
+            string catchHtml = catchProxIpMethord(urlCombin, "UTF8");
+
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(catchHtml);
+
+
+            HtmlNode table = doc.DocumentNode.SelectSingleNode("//div[@id='wrapper']//div[@id='body']/table[1]");
+
+            HtmlNodeCollection collectiontrs = table.SelectNodes("./tr");
+
+
+
+            for (int i = 0; i < collectiontrs.Count; i++)
+            {
+                HtmlAgilityPack.HtmlNode itemtr = collectiontrs[i];
+
+
+                HtmlNodeCollection collectiontds = itemtr.ChildNodes;
+                //table中第一个是能用的代理标题，所以这里从第二行TR开始取值
+                if (i > 0)
+                {
+                    HtmlNode itemtdip = (HtmlNode)collectiontds[3];
+
+                    HtmlNode itemtdport = (HtmlNode)collectiontds[5];
+
+                    HtmlNode itemtdspeed = (HtmlNode)collectiontds[13];
+
+                    string ip = itemtdip.InnerText.Trim();
+                    string port = itemtdport.InnerText.Trim();
+
+
+                    string speed = itemtdspeed.InnerHtml;
+                    int beginIndex = speed.IndexOf(":", 0, speed.Length);
+                    int endIndex = speed.IndexOf("%", 0, speed.Length);
+
+                    int subSpeed = int.Parse(speed.Substring(beginIndex + 1, endIndex - beginIndex - 1));
+                    //如果速度展示条的值大于90,表示这个代理速度快。
+                    if (subSpeed > 90)
+                    {
+                        proxy temp = new proxy(ip, port, subSpeed);
+
+                        masterPorxyList.Add(temp);
+                        Console.WriteLine("当前是第:" + masterPorxyList.Count.ToString() + "个代理IP");
+                    }
+
+                }
+
+
+            }
+
         }
 
-        public static double GetDistance(double lat1, double lng1, double lat2, double lng2)
+        //抓网页方法
+        static string catchProxIpMethord(string url, string encoding)
         {
-            double radLat1 = rad(lat1);
-            double radLat2 = rad(lat2);
-            double a = radLat1 - radLat2;
-            double b = rad(lng1) - rad(lng2);
-            double s = 2 * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin(a / 2), 2) +
-             Math.Cos(radLat1) * Math.Cos(radLat2) * Math.Pow(Math.Sin(b / 2), 2)));
-            s = s * EARTH_RADIUS;
-            s = Math.Round(s * 10000) / 10000;
-            return s;
-        }  
+
+            string htmlStr = "";
+            try
+            {
+                if (!String.IsNullOrEmpty(url))
+                {
+                    WebRequest request = WebRequest.Create(url);
+                    WebResponse response = request.GetResponse();
+                    Stream datastream = response.GetResponseStream();
+                    Encoding ec = Encoding.Default;
+                    if (encoding == "UTF8")
+                    {
+                        ec = Encoding.UTF8;
+                    }
+                    else if (encoding == "Default")
+                    {
+                        ec = Encoding.Default;
+                    }
+                    StreamReader reader = new StreamReader(datastream, ec);
+                    htmlStr = reader.ReadToEnd();
+                    reader.Close();
+                    datastream.Close();
+                    response.Close();
+                }
+            }
+            catch { }
+            return htmlStr;
+        }
+
+        static bool yanzhen(string ipStr, int port)
+        {
+            try
+            {
+                HttpWebRequest Req;
+                HttpWebResponse Resp;
+                WebProxy proxyObject = new WebProxy(ipStr, port);// port为端口号 整数型
+                Req = WebRequest.Create("http://www.baidu.com/s?wd=ip&ie=utf-8&tn=94523140_hao_pg") as HttpWebRequest;
+                Req.Proxy = proxyObject; //设置代理
+                Req.Timeout = 1000;   //超时
+                Resp = (HttpWebResponse)Req.GetResponse();
+                Encoding bin = Encoding.GetEncoding("UTF-8");
+                using (StreamReader sr = new StreamReader(Resp.GetResponseStream(), bin))
+                {
+                    string str = sr.ReadToEnd();
+                    if (str.Contains(ipStr))
+                    {
+                        Resp.Close();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
     }
 
 

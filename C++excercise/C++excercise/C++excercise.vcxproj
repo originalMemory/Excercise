@@ -82,6 +82,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mytools.h" />
     <ClInclude Include="pid.h" />
     <ClInclude Include="sort.h" />
     <ClInclude Include="stdafx.h" />

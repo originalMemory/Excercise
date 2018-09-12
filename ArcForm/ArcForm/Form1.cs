@@ -187,6 +187,8 @@ namespace ArcForm
             //创建shp
             pFeatureClass = pFeatureWorkspace.CreateFeatureClass(strFile, pFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
 
+            ILine pLine = new LineClass();
+
             pPoint = new ESRI.ArcGIS.Geometry.Point();
             pPoint.PutCoords(38708267.3691335, 4452391.75361639);
 
@@ -200,6 +202,7 @@ namespace ArcForm
 
             pPoint = new ESRI.ArcGIS.Geometry.Point();
             pPoint.PutCoords(38708297.23653, 4452391.79756713);
+
 
             ptclo.AddPoint(pPoint);
 
@@ -304,6 +307,7 @@ namespace ArcForm
             return pPoint;
         }
 
+        double PI = 3.14159265358979323846;
         private void button2_Click(object sender, EventArgs e)
         {
             IFeatureLayer layer = axMapControl1.get_Layer(0) as IFeatureLayer;
@@ -311,17 +315,22 @@ namespace ArcForm
             IFeature pFeature = pFeatCla.GetFeature(0);
             IGeometry pGeometry = pFeature.Shape;
             IPolyline pPoly = pGeometry as IPolyline;
-            IPoint point = new Point();
-            point.PutCoords(38708267.399133502, 4452391.7536163898);
-            IPointCollection pPointC = (IPointCollection)pPoly;
-            IPoint pPoint = pPointC.Point[0];
-            //isPointOnLine(pPoint, pPoly);
-            bool isOn= isPointOnLine(point, pPointC.Point[0], pPointC.Point[1]);
-            //for (int i = 0; i < pPointC.PointCount; i++)
-            //{
-            //    IPoint pPoint = pPointC.Point[i];
-            //    int ad = 34;
-            //}
+            ISegmentCollection pSegCol = pGeometry as ISegmentCollection;
+            ILine pLine = pSegCol.get_Segment(0) as ILine;
+            double lineHeading = pLine.Angle * 180 / PI;
+            //因为当前角度是以四象限X为起点的逆时针角度，对应的是地图东部
+            //故需要转成以北为起点的顺时针角度
+            if (lineHeading <= 90)
+            {
+                //1、3、4象限
+                lineHeading = 90 - lineHeading;
+            }
+            else
+            {
+                //2象限
+                lineHeading = 360 + (90 - lineHeading);
+            }
+            textBox1.Text = lineHeading.ToString();
         }
 
         /// 粗略判断一个已知点是否在线上        
@@ -375,6 +384,11 @@ namespace ArcForm
             }
         }
         #endregion
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            axMapControl1.DeleteLayer(0);
+        }
 
     }
 

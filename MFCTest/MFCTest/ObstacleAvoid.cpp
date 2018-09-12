@@ -148,14 +148,12 @@ void ObstacleAvoid::Initialize(float dis_max, float angle_max, float rot_max)
 		rule[i][j] = ruleMatrix[i][j];
 }
 
-/*
-描述：计算障碍物位置
-参数：
-@laserData：激光数据检测指针
-@len：数据长度
-返回值：
-bool值，是为有障碍物，否为无障碍物
-*/
+/// <summary>
+/// 计算障碍物位置
+/// </summary>
+/// <param name="laserData">激光数据检测指针</param>
+/// <param name="len">数据长度</param>
+/// <returns>是为有障碍物，否为无障碍物</returns>
 bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 {
 	bool result;	//是否有障碍物
@@ -163,7 +161,7 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 	int status = 0;	//当前障碍物状态位，0为无障碍物，1为遍历至障碍物
 	obstacle[1] = -91;	//将右边缘角度初始化为-91，用于对比障碍物
 	obstacle[0] = -91;	//将左边缘角度初始化为-91，用于对比障碍物
-	int tpObs[3] = { -91, 0, -91 };		//临时障碍物信息对象，用于对比最近
+	int tpObs[3] = { -91, -91,0 };		//临时障碍物信息对象，用于对比最近
 	for (int i = 0; i < len; i++){
 		// 
 		if (laserData[i] <= dismax&&status==0)	//默认以cm为单位，i即为角度，0-180，逆时针叠加
@@ -172,9 +170,9 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 			status = 1;
 		}
 		//当一个障碍物遍历完后，重置状态
-		else if (status > 0)
+		else if (laserData[i]>dismax&&status > 0)
 		{
-			tpObs[0] = i - 1 - 90;
+			tpObs[0] = i - 90;
 			status = 0;
 
 			//对比障碍物信息，保存最近的一个
@@ -185,6 +183,10 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 				obstacle[0] = tpObs[0];
 				obstacle[1] = tpObs[1];
 			}
+		}
+		else
+		{
+
 		}
 	}
 
