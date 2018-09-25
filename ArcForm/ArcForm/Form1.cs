@@ -272,20 +272,39 @@ namespace ArcForm
             //polyline = axMapControl1.TrackLine();
         }
 
+        //public void OnMouseDown(int Button, int Shift, int X, int Y)
+        //{
+        //    IMxDocument mxDoc = m_App.Document as IMxDocument;
+        //    IActiveView activeView = mxDoc.FocusMap as IActiveView;
+        //    IScreenDisplay screenDisplay = activeView.ScreenDisplay;
+        //    screenDisplay.StartDrawing(screenDisplay.hDC, (short)esriScreenCache.esriNoScreenCache);
+        //    screenDisplay.SetSymbol(new SimpleMarkerSymbolClass());
+        //    screenDisplay.DrawPoint(mxDoc.CurrentLocation);
+        //    screenDisplay.FinishDrawing();
+        //}
+
         private void button1_Click(object sender, EventArgs e)
         {
-            IPoint gcs = new ESRI.ArcGIS.Geometry.Point();
-            string[] strs = textBox1.Text.Split(',');
+            IFeatureLayer layer = axMapControl1.get_Layer(0) as IFeatureLayer;
+            IFeatureClass pFeatCla = layer.FeatureClass;
+            IFeature pFeature = pFeatCla.GetFeature(0);
+            IGeometry pGeometry = pFeature.Shape;
+            IPolyline pPoly = pGeometry as IPolyline;
+
+            //IPoint gcs = new ESRI.ArcGIS.Geometry.Point();
+            //string[] strs = textBox1.Text.Split(',');
 
             //gcs.PutCoords(Convert.ToDouble(strs[0]), Convert.ToDouble(strs[1]));
             //IPoint prj = GCStoPRJ(gcs, 4326, 2414);
-            //string prjStr = string.Format("{0},{1}", prj.X, prj.Y);
-
-            double[] cood = lonLat2Mercator(Convert.ToDouble(strs[0]), Convert.ToDouble(strs[1]));
-            string prjStr = string.Format("{0},{1}", cood[0], cood[1]);
-
+            IPoint point = PRJtoGCS(pPoly.FromPoint);
+            string prjStr = string.Format("{0},{1}", point.X, point.Y);
             textBox2.Text = prjStr;
-            textBox2.Copy();
+            prjStr = string.Format("{0},{1}", pPoly.FromPoint.X, pPoly.FromPoint.Y);
+            textBox1.Text = prjStr;
+            //double[] cood = lonLat2Mercator(Convert.ToDouble(strs[0]), Convert.ToDouble(strs[1]));
+            //string prjStr = string.Format("{0},{1}", cood[0], cood[1]);
+
+            //textBox2.Copy();
         }
 
         public double[] lonLat2Mercator(double X,double Y)
@@ -299,11 +318,19 @@ namespace ArcForm
             return db;
         }
 
-        private IPoint GCStoPRJ(IPoint pPoint, int GCSType, int PRJType)
+        private IPoint GCStoPRJ(IPoint pPoint, int GCSType = 4326, int PRJType=2414)
         {
             ISpatialReferenceFactory pSRF = new SpatialReferenceEnvironmentClass();
             pPoint.SpatialReference = pSRF.CreateGeographicCoordinateSystem(GCSType);
             pPoint.Project(pSRF.CreateProjectedCoordinateSystem(PRJType));
+            return pPoint;
+        }
+
+        private IPoint PRJtoGCS(IPoint pPoint, int PRJType=2414, int GCSType = 4326)
+        {
+            ISpatialReferenceFactory pSRF = new SpatialReferenceEnvironmentClass();
+            pPoint.SpatialReference = pSRF.CreateProjectedCoordinateSystem(PRJType);
+            pPoint.Project(pSRF.CreateGeographicCoordinateSystem(GCSType));
             return pPoint;
         }
 
@@ -317,6 +344,14 @@ namespace ArcForm
             IPolyline pPoly = pGeometry as IPolyline;
             ISegmentCollection pSegCol = pGeometry as ISegmentCollection;
             ILine pLine = pSegCol.get_Segment(0) as ILine;
+            IPoint inPoint = new Point(); //已知点
+            inPoint.X = pPoly.FromPoint.X + 5;
+            inPoint.Y = pPoly.FromPoint.Y+2;
+            IPoint outPoint = new PointClass(); //曲线上到输入点距离最小的点；
+            double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
+            double distFromCurve = 0;//输出点到输入点的距离
+            bool isRightSide = true;//输入点是否在曲线的右边
+            pPoly.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, inPoint, false, outPoint, ref distAlongCurveFrom, ref distFromCurve, ref isRightSide);
             double lineHeading = pLine.Angle * 180 / PI;
             //因为当前角度是以四象限X为起点的逆时针角度，对应的是地图东部
             //故需要转成以北为起点的顺时针角度
@@ -331,6 +366,9 @@ namespace ArcForm
                 lineHeading = 360 + (90 - lineHeading);
             }
             textBox1.Text = lineHeading.ToString();
+            //textBox1.Text = string.Format("{0},{1}", distAlongCurveFrom, distFromCurve);
+            //double len = pPoly.Length;
+            //textBox2.Text = len.ToString();
         }
 
         /// 粗略判断一个已知点是否在线上        

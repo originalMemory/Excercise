@@ -53,59 +53,131 @@ private:
 	}
 };
 
-struct Tri
-{
-	int a;
-	int b;
-	int c;
-};
+int getNum(){
+	char x;
+	int a[4];
+	int value = 0;
+	int i = 0;
+	
+	while (true)
+	{
+		x = cin.get();
+		if (x == '\n'||x == ',')
+			break;
+		a[i] = x - '0';
+		i++;
+	}
+	for (int j = 0; j < i; j++)
+	{
+		value += a[j]*pow(10, i - j-1);
+	}
+	return value;
+}
 
-bool isPrime(int x, int y){
-	if (x <= 0 || y <= 0 || x == y) 
-		return false;
-	else if (x == 1 || y == 1)
-		return true;
-	else{
-		while (true){
-			int tp = y%x;
-			if (tp == 0)
-				break;
-			else{
-				y = x;
-				x = tp;
-			}
+int lcm2(int a, int b){
+	int t;
+	if (a>b)
+	for (t = a; t%b; t += a);
+	else
+	for (t = b; t%a; t += b);
+	return t;
+}
+
+vector<set<int>> city;
+int cpPath( set<int> path, int idx, int used[4], int *x){
+	used[idx]++;
+	path.insert(idx);
+	set<int> target = city[idx];
+	int num = 0;
+	for (auto iter = target.begin(); iter != target.end();iter++)
+	{
+		if (*iter==idx)
+			continue;
+		num += cpPath(path, *iter, used, x) + 1;
+	}
+	if (used[idx]==1)
+		x[idx] += num;
+	return num;
+}
+
+int reverse(string num){
+	int value = 0;
+	int len = num.size();
+	for (int i = 0; i < len; i++)
+	{
+		int tp = num[i] - '0';
+		if (tp == 3 || tp == 4 || tp == 7)
+			return -1;
+		switch (tp)
+		{
+		case 2:
+			tp = 5;
+			break;
+		case 5:
+			tp = 2;
+			break;
+		case 6:
+			tp = 9;
+			break;
+		case 9:
+			tp = 6;
+			break;
+		default:
+			break;
 		}
-		if (x > 1)
-			return false;
-		else
-			return true;
+		value += tp*pow(10, len - i - 1);
+	}
+	return value;
+}
+
+void compute(int a[6],int i){
+	int sub1 = a[i + 2] - a[i + 1];
+	int sub2 = a[i + 1] - a[i];
+	if (sub1 == sub2)
+	{
+		compute(a, i + 1);
+	}
+	else
+	{
+
 	}
 }
+
+int foo(vector<int> x, int n)
+{
+	int a = x[0], b = x[1], c = x[2];
+	if (a == b && b == c)
+	{
+		for (int i = 3; i < n; i++)
+		if (x[i] != a)
+			return i;
+		return -1;
+	}
+	else{
+		if (a == b) return 2;
+		if (a == c) return 1;
+		return 0;
+	}
+}
+
+int cpAll(int n){
+	if (n <= 3)
+		return 1;
+	else
+	{
+		return cpAll(n - 1) + cpAll(n - 4);
+	}
+}
+
+
 
 int main(int argc, char *argv[])
 {
-	int N;
-	cin >> N;
-	int num = 0;
-	for (int i = 0; i <= N; i++)
-	{
-		for (int j = i; j <= N; j++)
-		{
-			for (int k = j; k <= N; k++)
-			{
-				if (i*i + j*j == k*k){
-					if (isPrime(i, j) && isPrime(j, k) && isPrime(i, k)){
-						num++;
-					}
-				}
-			}
-		}
-	}
-	cout << num << endl;
+	MergeDirFiles("C:\\下载\\绯月\\3424");
+	
 	system("pause");
 	return 0;
 }
-
 int knapsack(int *weight, int *value, int *res, int n, int maxW)
 {
 	int **opt = new int *[n];
@@ -229,7 +301,3 @@ int knapsack_complete(int *weight, int *value, int *res, int n, int maxW)
 	delete[] opt;
 	return max;
 }
-
-
-// 只有1为公约数的两个正整数，两个整数才会互质
-// 也就是说两个整数的最大公约数为1，即可判断两个正整数互质

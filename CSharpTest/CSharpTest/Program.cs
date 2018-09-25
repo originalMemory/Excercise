@@ -65,8 +65,8 @@ namespace CSharpTest
 
 
             //DnlTools.FilterWXLink("5b547bcdf4b87d0c88a54ab2");
-
-            //MyTools.SortDir(@"C:\下载\绯月", new List<string>() { });
+            //var ex = new List<string>() { "元ヤン奥さんとギャル娘ちゃん～菜緒さんは硬派な元ヤン妻♪～", "ぱこ★シス ～ビッチな妹とハメぱこ同棲性活", "880912" };
+            //MyTools.SortDir(@"C:\下载\绯月",ex );
 
             //getProxyList(1);
             //for (int i = 0; i < masterPorxyList.Count; i++)
@@ -75,8 +75,54 @@ namespace CSharpTest
             //    Console.Write((i + 1) + ":");
             //    Console.WriteLine(yanzhen(por.ip, Convert.ToInt32(por.port)));
             //}
-            Console.WriteLine(yanzhen("221.239.108.36", 80));
+            //DnlTools.CheckRepeat(new ObjectId("5b8e1891eaf66807001efefe"));
+            //DnlTools.DelRepeat(new ObjectId("5b8e1891eaf66807001efefe"));
+            //DnlTools.CountWXLinkNum(new ObjectId("5b8e1891eaf66807001efefe"));
+            //string str= Console.ReadLine();
+            //int[] a = str.Split(' ').Select(x => Convert.ToInt32(x)).ToArray();
+            //DnlTools dnl = new DnlTools();
+            //dnl.SearchWXName(new ObjectId("5b8e1891eaf66807001efefe"),a[0],a[1]);
+            Console.WriteLine(WebApiInvoke.CreateGetHttpResponse("http://ip.11jsq.com/index.php/api/entry?method=proxyServer.generate_api_url&packid=0&fa=0&fetch_key=&qty=1&time=100&pro=&city=&port=1&format=txt&ss=1&css=&dt=1&specialTxt=3&specialJson="));
             Console.ReadKey();
+        }
+
+        static string GetNewRankSearchData(string url, Dictionary<string, object> postData)
+        {
+            string appkey = "108bf3090c0747feac154d685";
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            //Console.WriteLine("appKey:{0}".FormatStr(appkey));
+            //Console.WriteLine("url:{0}".FormatStr(url));
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
+            request.Headers.Add("Key", appkey);
+            //发送POST数据
+            StringBuilder buffer = new StringBuilder();
+            int i = 0;
+            foreach (string key in postData.Keys)
+            {
+                if (i > 0)
+                {
+                    buffer.AppendFormat("&{0}={1}", key, postData[key]);
+                }
+                else
+                {
+                    buffer.AppendFormat("{0}={1}", key, postData[key]);
+                    i++;
+                }
+            }
+            byte[] data = Encoding.UTF8.GetBytes(buffer.ToString());
+            using (Stream stream = request.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+            }
+            string[] value = request.Headers.GetValues("Content-Type");
+            HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+            Stream myResponseStream = response.GetResponseStream();
+            StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+            string resultStr = myStreamReader.ReadToEnd();
+            myStreamReader.Close();
+            myResponseStream.Close();
+            return resultStr;
         }
 
         //存放所有抓取的代理

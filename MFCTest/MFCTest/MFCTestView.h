@@ -36,7 +36,8 @@
 typedef struct SeekurPara{
 	double distance;	//距离
 	double heading;		//航向
-	double veloctiy;	//速度
+	double tranVel;	//平移速度
+	double rotVel;	//旋转速度
 }*SeekurParaPtr;
 
 //seekur相关数据
@@ -173,16 +174,14 @@ private:
 	CEdit m_editGPSHeading;
 	// 追踪开始/停止按钮
 	CButton m_btnTrack;
-	// GPS卫星数量文本框
-	CEdit m_editSatNum;
 	// GPS状态指示位文本框
 	CEdit m_editGPSStaus;
 	// 是否转换北京54坐标
 	CButton m_checkShowBJ54;
 	// Seekur运动速度文本框
-	CEdit m_editVelocity;
-	// 追踪时的速度
-	double m_velocity;
+	CEdit m_editTranVel;
+	// 追踪时的平移速度
+	double m_tranVel;
 	// 路径选择按钮
 	CButton m_btnPathSelect;
 	afx_msg void OnBtnPathAdd();
@@ -196,30 +195,17 @@ private:
 	// 激光串口号
 	int m_laserport;
 #pragma region PID控制相关控件
-	// 距离参数文本框	P参数
-	CEdit m_editKp;
-	// I参数文本框
-	CEdit m_editKi;
-	// d参数文本框
-	CEdit m_editKd;
+	// 距离参数文本框
+	CEdit m_editKdis;
 	// 航向差对应比例值文本框
 	CEdit m_editKheading;
-	IPointPtr pStartPoint;		//当前路径起始点
-	IPointPtr pEndPoint;		//当前路径结束点
 	ILinePtr pNowPath;	//当前路径
 	int nowPathPos;		//当前路径在路径集合中的位置，用于跳过已追踪路径
 	double lineHeading;		//路径航向
 	long segNum;	//路径总数量
 	IPolylinePtr m_trackPath;	//追踪路径
-	double err;		//当前偏差值
-	double err_last;	//上一次的偏差值
-	double integral;	//积分值
-	double kp;	//P控制比例系数
-	double ki;	//I控制比例系数
-	double kd;	//D控制比例系数
+	double kdis;	//距离比例系数
 	double kheading;	//航向比例系数
-	// 启用ID控制
-	CButton m_cUseID;
 #pragma endregion
 	// 北京54 x坐标文本框
 	CEdit m_editBJ54_x;
@@ -252,6 +238,8 @@ public:
 	CEdit m_editSeekurAccel;
 	// gps速度(km/h)
 	CEdit m_editGPSSpeedKm;
+	// 旋转速度文本控件
+	CEdit m_editRotVel;
 };
 
 #ifndef _DEBUG  // MFCTestView.cpp 中的调试版本

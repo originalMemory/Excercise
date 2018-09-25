@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="GdalConfiguration.cs" />
     <Compile Include="Helper\EncryptHelper.cs" />
+    <Compile Include="Helper\HttpHelper.cs" />
     <Compile Include="Helper\JiebaHelper.cs" />
     <Compile Include="Model\ComputeClass.cs" />
     <Compile Include="Model\D3forceModel.cs" />

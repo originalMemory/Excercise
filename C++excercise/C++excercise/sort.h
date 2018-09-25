@@ -145,3 +145,44 @@ void QuickSort(int *array, int left, int right){
 	}
 }
 #endif // !SORT
+
+
+void sift(int a[], int root, int len)//堆调整函数
+{
+	int child = 2 * root;
+	while (child <= len)//注意该函数的参数是从root到len，所以此处必须写=
+	{
+		if (child < len&&a[child] < a[child + 1])//注意此处必须是child<len，之所以不取=因为child=child+1会溢出
+		{
+			child = child + 1;    //得到当前根节点的子节点中值较大的节点
+		}
+		if (a[root] < a[child])
+		{
+			swap(a[root], a[child]);
+			root = child;
+			child = 2 * root;
+		}
+		else
+		{
+			break;//这个地方之所以可以直接break是因为堆调整函数的前提它本身就是堆，只不过交换了之后得重新调整，所以如果当前结点不满足，则它的子孙结点一定都不满足。
+		}
+	}
+}
+void cre_heap(int a[], int n)
+{
+	for (int i = n / 2; i >= 1; i--)//从最后一个非叶子结点开始，自底向上倒推，之所以是从非叶子结点开始。是因为该函数是将当前结点与其子结点比较大小，而叶子结点无子结点
+	{
+
+		sift(a, i, n);//调整堆函数的参数为，array_name,root,len.
+	}
+}
+void heap_sort(int a[], int n)
+{
+	cre_heap(a, n);//堆排序的第一步，建初堆
+	for (int i = n; i >= 1; i--)
+	{
+		swap(a[1], a[i]);
+		sift(a, 1, i - 1);
+	}
+}
+

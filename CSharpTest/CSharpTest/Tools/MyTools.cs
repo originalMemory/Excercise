@@ -127,7 +127,16 @@ namespace CSharpTest.Tools
             int i = 1;
             foreach (var x in dirs)
             {
-                if (excludes.Contains(x))
+                bool isEx = false;
+                foreach (var y in excludes)
+                {
+                    if(x.Contains(y))
+                    {
+                        isEx = true;
+                        break;
+                    }
+                }
+                if (isEx)
                 {
                     continue;
                 }
