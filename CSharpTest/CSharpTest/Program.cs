@@ -23,9 +23,13 @@ using System.Web;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using AISSystem;
+//using AISSystem;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+
+//using JiebaNet.Analyser;
+//using JiebaNet.Segmenter.PosSeg;
+
 
 namespace CSharpTest
 {
@@ -65,25 +69,68 @@ namespace CSharpTest
 
 
             //DnlTools.FilterWXLink("5b547bcdf4b87d0c88a54ab2");
-            //var ex = new List<string>() { "元ヤン奥さんとギャル娘ちゃん～菜緒さんは硬派な元ヤン妻♪～", "ぱこ★シス ～ビッチな妹とハメぱこ同棲性活", "880912" };
-            //MyTools.SortDir(@"C:\下载\绯月",ex );
-
-            //getProxyList(1);
-            //for (int i = 0; i < masterPorxyList.Count; i++)
-            //{
-            //    var por = masterPorxyList[i];
-            //    Console.Write((i + 1) + ":");
-            //    Console.WriteLine(yanzhen(por.ip, Convert.ToInt32(por.port)));
-            //}
-            //DnlTools.CheckRepeat(new ObjectId("5b8e1891eaf66807001efefe"));
-            //DnlTools.DelRepeat(new ObjectId("5b8e1891eaf66807001efefe"));
-            //DnlTools.CountWXLinkNum(new ObjectId("5b8e1891eaf66807001efefe"));
-            //string str= Console.ReadLine();
-            //int[] a = str.Split(' ').Select(x => Convert.ToInt32(x)).ToArray();
+            //DnlTools.CountWXLinkNum(new ObjectId("5bc9bc97eaf66807248ee4c8"));
+            //DnlTools.CountPro(new ObjectId("5bc9bc97eaf66807248ee4c8"));
+            //DnlTools.ExportWXLink(new ObjectId("5bc9bdc7eaf66807248ee54c"));
             //DnlTools dnl = new DnlTools();
-            //dnl.SearchWXName(new ObjectId("5b8e1891eaf66807001efefe"),a[0],a[1]);
-            Console.WriteLine(WebApiInvoke.CreateGetHttpResponse("http://ip.11jsq.com/index.php/api/entry?method=proxyServer.generate_api_url&packid=0&fa=0&fetch_key=&qty=1&time=100&pro=&city=&port=1&format=txt&ss=1&css=&dt=1&specialTxt=3&specialJson="));
+            //dnl.ImportWXLink("F:\\errorLink_旧.csv");
+            //DnlTools.CheckWXLink(new ObjectId("5bc9bdc7eaf66807248ee54c"));
+            //DnlTools.RepairWXLink(new ObjectId("5bc9bc97eaf66807248ee4c8"));
+            //DnlTools.MoveKey(new ObjectId("5bc9bc97eaf66807248ee4c8"), new ObjectId("5bc9bdc7eaf66807248ee54c")); 
+            var ex = new List<string>() { "游戏" };
+            MyTools.SortDir(@"C:\下载\绯月", ex);
+
+
             Console.ReadKey();
+        }
+
+        static TreeNode FindNode(TreeNode root, int value)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+            if (root.value == value)
+            {
+                return root;
+            }
+            else
+            {
+                var r = FindNode(root.child, value);
+                if (r == null)
+                {
+                    r = FindNode(root.brother, value);
+                }
+                return r;
+            }
+        }
+
+        public class TreeNode
+        {
+            public TreeNode child = null;
+            public TreeNode brother = null;
+            public int value;
+            public TreeNode(int v)
+            {
+                this.value = v;
+            }
+        }
+        static public int Height(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            int left = 0, right = 0;
+            if (root.child != null)
+            {
+                left = Height(root.child);
+            }
+            if (root.brother != null)
+            {
+                right = Height(root.brother);
+            }
+            return (left >= right) ? left+1 : right;
         }
 
         static string GetNewRankSearchData(string url, Dictionary<string, object> postData)

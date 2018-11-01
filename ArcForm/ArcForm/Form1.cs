@@ -345,28 +345,29 @@ namespace ArcForm
             ISegmentCollection pSegCol = pGeometry as ISegmentCollection;
             ILine pLine = pSegCol.get_Segment(0) as ILine;
             IPoint inPoint = new Point(); //已知点
-            inPoint.X = pPoly.FromPoint.X + 5;
-            inPoint.Y = pPoly.FromPoint.Y+2;
-            IPoint outPoint = new PointClass(); //曲线上到输入点距离最小的点；
-            double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
-            double distFromCurve = 0;//输出点到输入点的距离
-            bool isRightSide = true;//输入点是否在曲线的右边
-            pPoly.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, inPoint, false, outPoint, ref distAlongCurveFrom, ref distFromCurve, ref isRightSide);
-            double lineHeading = pLine.Angle * 180 / PI;
-            //因为当前角度是以四象限X为起点的逆时针角度，对应的是地图东部
-            //故需要转成以北为起点的顺时针角度
-            if (lineHeading <= 90)
-            {
-                //1、3、4象限
-                lineHeading = 90 - lineHeading;
-            }
-            else
-            {
-                //2象限
-                lineHeading = 360 + (90 - lineHeading);
-            }
-            textBox1.Text = lineHeading.ToString();
-            //textBox1.Text = string.Format("{0},{1}", distAlongCurveFrom, distFromCurve);
+            //inPoint.X = pPoly.FromPoint.X + 5;
+            //inPoint.Y = pPoly.FromPoint.Y+2;
+            //IPoint outPoint = new PointClass(); //曲线上到输入点距离最小的点；
+            //double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
+            //double distFromCurve = 0;//输出点到输入点的距离
+            //bool isRightSide = true;//输入点是否在曲线的右边
+            //pPoly.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, inPoint, false, outPoint, ref distAlongCurveFrom, ref distFromCurve, ref isRightSide);
+            //double lineHeading = pLine.Angle * 180 / PI;
+            ////因为当前角度是以四象限X为起点的逆时针角度，对应的是地图东部
+            ////故需要转成以北为起点的顺时针角度
+            //if (lineHeading <= 90)
+            //{
+            //    //1、3、4象限
+            //    lineHeading = 90 - lineHeading;
+            //}
+            //else
+            //{
+            //    //2象限
+            //    lineHeading = 360 + (90 - lineHeading);
+            //}
+            //textBox1.Text = lineHeading.ToString();
+            textBox1.Text = string.Format("{0},{1}", pPoly.FromPoint.X, pPoly.FromPoint.Y);
+            textBox2.Text = string.Format("{0},{1}", pPoly.ToPoint.X, pPoly.ToPoint.Y);
             //double len = pPoly.Length;
             //textBox2.Text = len.ToString();
         }

@@ -252,7 +252,7 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
                     is_del = input('该Gal已存在，请确认是删除或覆盖(Y/N)：')
                     if is_del != 'y' and is_del != 'Y':
                         del_list.append(target_dir + x)
-            if not len(del_list):
+            if is_del=='y' and not len(del_list):
                 shutil.rmtree(file_path)
                 # os.removedirs(file_path)
             else:

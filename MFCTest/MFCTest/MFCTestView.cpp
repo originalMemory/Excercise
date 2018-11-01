@@ -822,10 +822,10 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 			SeekurParaPtr pPara = new SeekurPara();
 			pPara->distance = 0;
 			pPara->tranVel = 0;
-			//判断距离是否在50mm内，同时转向角在3度以内
-			if (abs((dis) <= 500) && abs(turnHeading) <= 3){
+			//判断距离是否在500mm内，同时转向角在1度以内
+			if (abs((dis) <= 500) && abs(turnHeading) <= 1){
 				pPara->heading = 0;
-				if (abs(turnHeading) <= 0.2)
+				if (abs(turnHeading) <= 0.2&&abs(subHeading) <= 0.2)
 					pPara->rotVel = 0;
 				else
 				{
@@ -842,7 +842,8 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 				pPara->heading = turnHeading;
 				pPara->rotVel = 0;
 			}
-
+			/*pPara->heading = turnHeading;
+			pPara->rotVel = 0;*/
 			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
 			no++;
 		}
@@ -1635,13 +1636,15 @@ void CMFCTestView::OnBtnMoveSeekur()
 		pPara->distance = dis;
 		pPara->heading = head;
 		if (dis == 0 && head == 0)
+		{
 			pPara->tranVel = vel;
-		else
-			pPara->tranVel = 0;
-		if (head == 0)
 			pPara->rotVel = rotVel;
+		}
 		else
+		{
+			pPara->tranVel = 0;
 			pPara->rotVel = 0;
+		}
 
 		PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, NULL);
 
@@ -1664,11 +1667,19 @@ void CMFCTestView::OnBtnTrack()
 	else{
 		if (!isTracked)
 		{
+			//初始化参数
+			nowPathPos = 0;
+			CString cTp;	//临时Cstring类，用于将文本框数据转为其他格式
+			m_editKdis.GetWindowTextW(cTp);
+			kdis = _ttof(cTp);
+			m_editKheading.GetWindowTextW(cTp);
+			kheading = _ttof(cTp);
+
 			//开始记录数据，以年月日分秒为文件名
 			time_t timet = time(NULL);
 			tm *tm_ = localtime(&timet);
 			CString fileName;
-			fileName.Format(_T("D:\\data\\Track %4d-%02d-%02d %02d：%02d：%02d.csv"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			fileName.Format(_T("D:\\data\\Track(%.4lf-%.4lf) %4d-%02d-%02d %02d：%02d：%02d.csv"), kdis, kheading, tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
 			dataFile.Open(fileName, CFile::modeCreate | CFile::modeWrite);
 			//列表头
 			dataFile.WriteString(_T("no,time,lon,lat,bj54_x,bj54_y,speed,dis,heading,subheading,turnHeading,,seekur_x,seekur_y,seekur_heading,seekur_tranLeft,seekur_tranRight,seekur_subTranVel,seekur_rotVel\n"));
@@ -1678,13 +1689,7 @@ void CMFCTestView::OnBtnTrack()
 			//启动追踪
 			isTracked = true;
 
-			//初始化数据
-			nowPathPos = 0;
-			CString cTp;	//临时Cstring类，用于将文本框数据转为其他格式
-			m_editKdis.GetWindowTextW(cTp);
-			kdis = _ttof(cTp);
-			m_editKheading.GetWindowTextW(cTp);
-			kheading = _ttof(cTp);
+			
 
 			//令Seekur开始运动
 			SeekurParaPtr pPara = new SeekurPara();

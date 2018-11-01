@@ -7,18 +7,87 @@ using System.Text;
 using System.Drawing;
 using HtmlAgilityPack;
 using System.Threading;
-using CSharpTest.Tools;
+using System.Net.Sockets;
+using System.Text.RegularExpressions;
 
-namespace CSharpTest.Helper
+namespace CSharpTest.Tools
 {
-   public class HttpHelper
+    public class HttpHelper
     {
 
-        string _vcode_url = ""; //需要填验证码的url
-
+        /// <summary>
+        /// 当前代理IP
+        /// </summary>
+        public WebProxy NowProxyIp;
+        /// <summary>
+        /// IP过期时间
+        /// </summary>
+        public DateTime ExpireTime;
         public HttpHelper()
         {
-            LoadProxyIP();
+            //初始化
+            //LoadProxyIP();
+            while (true)
+            {
+                try
+                {
+                    //判断本机IP是否在白名单内
+                    string str = CreateHttpGet("http://ip.11jsq.com/index.php/api/entry?method=proxyServer.generate_api_url&packid=0&fa=0&fetch_key=&qty=1&time=100&pro=&city=&port=1&format=json&ss=5&css=&ipport=1&et=1&dt=1&specialTxt=3&specialJson=");
+                    JObject json = JObject.Parse(str);
+                    if (json["code"].ToString() == "5")
+                    {
+                        CommonTools.Log(json["msg"].ToString());
+                        CommonTools.Log("添加IP至白名单");
+                        //添加白名单
+                        string ip = Regex.Match(str, @"(2(5[0-5]{1}|[0-4]\d{1})|[0-1]?\d{1,2})(\.(2(5[0-5]{1}|[0-4]\d{1})|[0-1]?\d{1,2})){3}").Value;
+                        json = JObject.Parse(CreateHttpGet(string.Format("http://http.zhiliandaili.cn/Users-whiteIpAddNew.html?appid=2723&appkey=b36d9ff1f6e1f19e6cca8d7a28ae5e9f&whiteip={0}&index=", ip)));
+                        if (json["code"].ToString() == "0")
+                        {
+                            LoadProxyIP();
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        string ipStr = json["data"][0]["IP"].ToString();
+                        string timeStr = json["data"][0]["ExpireTime"].ToString();
+                        if (!DateTime.TryParse(timeStr, out ExpireTime))
+                        {
+                            CommonTools.Log("获取出错，等待1s再获取代理IP!");
+                            Thread.Sleep(1000);
+                            continue;
+                        }
+                        string[] arr = ipStr.Split(':');
+                        NowProxyIp = new WebProxy(arr[0], Convert.ToInt32(arr[1]));
+                        CommonTools.Log(string.Format("代理IP：{0}\t到期时间：{1}", NowProxyIp.Address.ToString(), timeStr));
+                        if (yanzhen(NowProxyIp))
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CommonTools.Log(ex.Message);
+                    Thread.Sleep(1000);
+                }
+
+            }
+        }
+
+        private string GetIpAddress()
+        {
+            string hostName = Dns.GetHostName();   //获取本机名
+            IPHostEntry IpEntry = Dns.GetHostEntry(hostName);
+            for (int i = 0; i < IpEntry.AddressList.Length; i++)
+            {
+                //从IP地址列表中筛选出IPv4类型的IP地址
+                //AddressFamily.InterNetwork表示此IP为IPv4,
+                //AddressFamily.InterNetworkV6表示此地址为IPv6类型
+                if (IpEntry.AddressList[i].AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return IpEntry.AddressList[i].ToString();
+                }
+            }
+            return "";
         }
 
         public static List<string> _agent = new List<string>
@@ -81,6 +150,7 @@ namespace CSharpTest.Helper
                 catch (Exception ex)
                 {
                     CommonTools.Log(ex.Message);
+                    Thread.Sleep(1000);
                 }
             }
             return resp;
@@ -93,16 +163,41 @@ namespace CSharpTest.Helper
         {
             while (true)
             {
-                string ipStr = CreateHttpGet("http://api3.xiguadaili.com/ip/?tid=556784223307992&num=1&sortby=time&filter=on");
+                //获取余额，当接近0时通知充值
+                string str = CreateHttpGet("http://http.zhiliandaili.cn/Users-getBalanceNew.html?appid=2723&appkey=b36d9ff1f6e1f19e6cca8d7a28ae5e9f");
+                JObject json = JObject.Parse(str);
+                double money = Convert.ToDouble(json["data"]);
+                if (json["code"].ToString() == "10000")
+                {
+                    Thread.Sleep(10000);
+                    continue;
+                }
+                if (money <= 0.003)
+                {
+                    CommonTools.Log("余额不足，请通知管理员充值代理IP费用！充值后按任意键继续！");
+                    CommonTools.SendErrorMail("搜狗BOT", "", "代理IP余额不足！");
+                    Console.ReadKey();
+                }
+                str = CreateHttpGet("http://ip.11jsq.com/index.php/api/entry?method=proxyServer.generate_api_url&packid=0&fa=0&fetch_key=&qty=1&time=100&pro=&city=&port=1&format=json&ss=5&css=&ipport=1&et=1&dt=1&specialTxt=3&specialJson=");
+                json = JObject.Parse(str);
                 try
                 {
+                    string ipStr = json["data"][0]["IP"].ToString();
+                    string timeStr = json["data"][0]["ExpireTime"].ToString();
+                    if (!DateTime.TryParse(timeStr, out ExpireTime))
+                    {
+                        CommonTools.Log("获取出错，等待1s再获取代理IP!");
+                        Thread.Sleep(1000);
+                        continue;
+                    }
                     string[] arr = ipStr.Split(':');
                     NowProxyIp = new WebProxy(arr[0], Convert.ToInt32(arr[1]));
-                    CommonTools.Log(NowProxyIp.Address.ToString());
+                    CommonTools.Log(string.Format("代理IP：{0}\t到期时间：{1}", NowProxyIp.Address.ToString(), timeStr));
                     if (yanzhen(NowProxyIp))
                         break;
                 }
-                catch(Exception ex){
+                catch (Exception ex)
+                {
                     CommonTools.Log(ex.Message);
                     CommonTools.Log("代理IP获取失败，重试！");
                     Thread.Sleep(1000);
@@ -136,8 +231,6 @@ namespace CSharpTest.Helper
             }
         }
 
-        public WebProxy NowProxyIp = new WebProxy();
-        public Queue<WebProxy> ProxyIps = new Queue<WebProxy>();
 
         /// <summary>
         /// 指定header参数的HTTP Get方法
@@ -153,7 +246,7 @@ namespace CSharpTest.Helper
             {
                 var request = (HttpWebRequest)WebRequest.Create(url);
                 request.Timeout = 4000;
-                if(isUseProxyIp)
+                if (isUseProxyIp)
                     request.Proxy = NowProxyIp;
 
                 request.Method = "GET";
@@ -239,8 +332,6 @@ namespace CSharpTest.Helper
                 if (isUseCookie && response.Cookies.Count > 0)
                 {
                     var cookieCollection = response.Cookies;
-                    //WechatCache cache = new WechatCache(Config.CacheDir, 3000);
-                    //if (!cache.Add("cookieCollection", cookieCollection, 3000)) { cache.Update("cookieCollection", cookieCollection, 3000); };
                 }
                 // Get the stream containing content returned by the server.
                 Stream dataStream = response.GetResponseStream();
@@ -298,6 +389,8 @@ namespace CSharpTest.Helper
             bool isAgain = false;    //判断是否需要重新获取
             do
             {
+                if (DateTime.Now > ExpireTime)
+                    LoadProxyIP();
                 //获取网页，判断是否为错误信息
                 text = Get(headers, url, "utf-8", true);
                 if (text == "获取网页失败！")
@@ -336,323 +429,6 @@ namespace CSharpTest.Helper
             } while (isAgain);
 
             return text;
-        }
-
-
-        /// <summary>
-        /// 简单的HTTP GET方法
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns>response</returns>
-        public string Get(string url)
-        {
-            var request = (HttpWebRequest)WebRequest.Create(url);
-
-            request.Method = "GET";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            // Get the stream containing content returned by the server.
-            Stream dataStream = response.GetResponseStream();
-            // Open the stream using a StreamReader for easy access.
-            StreamReader reader = new StreamReader(dataStream);
-            // Read the content.
-            string responseFromServer = reader.ReadToEnd();
-
-            // Cleanup the streams and the response.
-            reader.Close();
-            dataStream.Close();
-            response.Close();
-
-            return responseFromServer;
-        }
-
-
-
-
-
-
-        /// <summary>
-        /// Post请求， body是json类型的数据
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="token"></param>
-        /// <param name="jsonBody"></param>
-        /// <returns></returns>
-        public string PostJson(string url, WebHeaderCollection headers, string jsonBody)
-        {
-            string responseText = "";
-            try
-            {
-
-                var request = (HttpWebRequest)WebRequest.Create(url);
-
-
-                foreach (string key in headers.Keys)
-                {
-                    switch (key.ToLower())
-                    {
-                        case "user-agent":
-                            request.UserAgent = headers[key];
-                            break;
-                        case "referer":
-                            request.Referer = headers[key];
-                            break;
-                        case "host":
-                            request.Host = headers[key];
-                            break;
-                        case "contenttype":
-                            request.ContentType = headers[key];
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-
-                if (string.IsNullOrEmpty(request.Referer))
-                {
-                    request.Referer = "http://weixin.sogou.com/";
-                };
-                if (string.IsNullOrEmpty(request.Host))
-                {
-                    request.Host = "weixin.sogou.com";
-                };
-                // request.Headers.Add("Token", token);
-                request.Method = "POST";
-                request.ContentType = "application/json";
-                request.Accept = "application/json";
-
-                System.Text.Encoding encoding = Encoding.UTF8;
-                byte[] buffer = encoding.GetBytes(jsonBody);
-                request.ContentLength = buffer.Length;
-
-                request.GetRequestStream().Write(buffer, 0, buffer.Length);
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
-                    {
-                        responseText = reader.ReadToEnd();
-                        if (responseText.Contains(""))
-                        {
-                            _vcode_url = url;
-                        }
-                    }
-                }
-                else
-                {
-                    throw new Exception("requests status_code error");
-                }
-
-            }
-            catch (Exception e)
-            {
-            }
-
-            return responseText;
-        }
-
-
-
-        /// <summary>
-        /// 简单HTTP POST方法,用于post验证码，Content-Type: application/x-www-form-urlencoded
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public string Post(string url, WebHeaderCollection headers, string postData, bool isUseCookie = false)
-        {
-
-            string responseText = "";
-            try
-            {
-
-                var request = (HttpWebRequest)WebRequest.Create(url);
-
-
-                foreach (string key in headers.Keys)
-                {
-                    switch (key.ToLower())
-                    {
-                        case "user-agent":
-                            request.UserAgent = headers[key];
-                            break;
-                        case "referer":
-                            request.Referer = headers[key];
-                            break;
-                        case "host":
-                            request.Host = headers[key];
-                            break;
-                        case "contenttype":
-                            request.ContentType = headers[key];
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-
-                if (string.IsNullOrEmpty(request.Referer))
-                {
-                    request.Referer = "http://weixin.sogou.com/";
-                };
-                if (string.IsNullOrEmpty(request.Host))
-                {
-                    request.Host = "weixin.sogou.com";
-                };
-
-                if (isUseCookie)
-                {
-                    //request.CookieContainer = new CookieContainer();
-                    //CookieCollection cc = Tools.LoadCookieFromCache();
-                    //request.CookieContainer.Add(cc);
-                }
-
-
-
-                request.Method = "POST";
-
-                request.ContentType = "application/x-www-form-urlencoded";
-                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-                // Set the ContentLength property of the WebRequest.  
-                request.ContentLength = byteArray.Length;
-
-                // Get the request stream.  
-                Stream inDataStream = request.GetRequestStream();
-                // Write the data to the request stream.  
-                inDataStream.Write(byteArray, 0, byteArray.Length);
-                // Close the Stream object.  
-                inDataStream.Close();
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-
-                if (isUseCookie && response.Cookies.Count > 0)
-                {
-                    var cookieCollection = response.Cookies;
-                    //WechatCache cache = new WechatCache(Config.CacheDir, 3000);
-                    //if (!cache.Add("cookieCollection", cookieCollection, 3000)) { cache.Update("cookieCollection", cookieCollection, 3000); };
-                }
-
-                // Get the stream containing content returned by the server.
-                Stream outDataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(outDataStream);
-                // Read the content.
-                responseText = reader.ReadToEnd();
-
-                // Cleanup the streams and the response.
-                reader.Close();
-                outDataStream.Close();
-                response.Close();
-
-
-            }
-            catch (Exception e)
-            {
-            }
-
-            return responseText;
-        }
-
-
-
-       
-        //抓去处理方法
-        public void getProxy()
-        {
-            int page = 1;
-            while (true)
-            {
-                string urlCombin = string.Format("http://www.xicidaili.com/wt/{0}",page);
-                string catchHtml = catchProxIpMethord(urlCombin, "UTF8");
-
-
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(catchHtml);
-
-
-                HtmlNode table = doc.DocumentNode.SelectSingleNode("//div[@id='wrapper']//div[@id='body']/table[1]");
-
-                HtmlNodeCollection collectiontrs = table.SelectNodes("./tr");
-
-
-
-                for (int i = 0; i < collectiontrs.Count; i++)
-                {
-                    Console.WriteLine(string.Format("当前验证第{0}页第{1}个代理ip", page, i));
-                    HtmlAgilityPack.HtmlNode itemtr = collectiontrs[i];
-                    HtmlNodeCollection collectiontds = itemtr.ChildNodes;
-                    //table中第一个是能用的代理标题，所以这里从第二行TR开始取值
-                    if (i > 0)
-                    {
-                        HtmlNode itemtdip = (HtmlNode)collectiontds[3];
-
-                        HtmlNode itemtdport = (HtmlNode)collectiontds[5];
-
-                        HtmlNode itemtdspeed = (HtmlNode)collectiontds[13];
-
-                        string ip = itemtdip.InnerText.Trim();
-                        string port = itemtdport.InnerText.Trim();
-
-
-                        string speed = itemtdspeed.InnerHtml;
-                        int beginIndex = speed.IndexOf(":", 0, speed.Length);
-                        int endIndex = speed.IndexOf("%", 0, speed.Length);
-
-                        int subSpeed = int.Parse(speed.Substring(beginIndex + 1, endIndex - beginIndex - 1));
-                        //如果速度展示条的值大于90,表示这个代理速度快。
-                        if (subSpeed > 90)
-                        {
-                            if (yanzhen(ip, Convert.ToInt32(port)))
-                            {
-                                WebProxy temp = new WebProxy(ip, Convert.ToInt32(port));
-                                if (temp != NowProxyIp)
-                                {
-                                    NowProxyIp = temp;
-                                    Console.WriteLine(string.Format("代理ip有效：{0}:{1}", ip, port));
-                                    return;
-                                }
-                            }
-                            //Console.WriteLine("当前是第:" + masterPorxyList.Count.ToString() + "个代理IP");
-                        }
-                    }
-                    Console.WriteLine("该代理ip无效！");
-
-                }
-                page++;
-            }
-            
-
-        }
-
-        //抓网页方法
-        string catchProxIpMethord(string url, string encoding)
-        {
-
-            string htmlStr = "";
-            try
-            {
-                if (!String.IsNullOrEmpty(url))
-                {
-                    WebRequest request = WebRequest.Create(url);
-                    WebResponse response = request.GetResponse();
-                    Stream datastream = response.GetResponseStream();
-                    Encoding ec = Encoding.Default;
-                    if (encoding == "UTF8")
-                    {
-                        ec = Encoding.UTF8;
-                    }
-                    else if (encoding == "Default")
-                    {
-                        ec = Encoding.Default;
-                    }
-                    StreamReader reader = new StreamReader(datastream, ec);
-                    htmlStr = reader.ReadToEnd();
-                    reader.Close();
-                    datastream.Close();
-                    response.Close();
-                }
-            }
-            catch { }
-            return htmlStr;
         }
 
         bool yanzhen(string ipStr, int port)

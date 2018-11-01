@@ -186,3 +186,170 @@ void heap_sort(int a[], int n)
 	}
 }
 
+
+
+/// <summary>
+/// 使用manacher算法计算最长回文
+/// </summary>
+/// <param name="str">原字符串</param>
+/// <returns></returns>
+string manacher(string str){
+	string tp("$#");
+	for (int i = 0; i < str.length(); i++)
+	{
+		tp += str[i];
+		tp += '#';
+	}
+	tp += "/";
+	int mx = 0, id = 0, max = 0;
+	vector<int> p(tp.length(), 1);
+	for (int i = 1; i < tp.length() - 1; i++)
+	{
+		char c = tp[i];
+		if (mx>i){
+			p[i] = min(p[2 * id - i], mx - i);
+		}
+		while (tp[i + p[i]] == tp[i - p[i]])
+		{
+			p[i]++;
+		}
+		if (i + p[i] > mx){
+			mx = i + p[i];
+			id = i;
+		}
+		if (p[max] < p[id]){
+			max = id;
+		}
+	}
+	string r = "";
+	int i = max - p[max] + 2;
+	for (; i < max + p[max]; i += 2){
+		r += tp[i];
+	}
+	return r;
+}
+
+int knapsack(int *weight, int *value, int *res, int n, int maxW)
+{
+	int **opt = new int *[n];
+	//计算表格
+	opt[0] = new int[maxW + 1];
+	for (size_t i = 0; i <= maxW; i++)
+	{
+		opt[0][i] = i >= weight[0] ? value[0] : 0;
+	}
+	for (size_t i = 1; i < n; i++)
+	{
+		opt[i] = new int[maxW + 1];
+		for (size_t j = 0; j <= maxW; j++)
+		{
+			if (weight[i]>j)
+			{
+				opt[i][j] = opt[i - 1][j];
+			}
+			else
+			{
+				opt[i][j] = max(opt[i - 1][j], value[i] + opt[i - 1][j - weight[i]]);
+			}
+		}
+	}
+
+	for (size_t i = 0; i < n; i++)
+	{
+		for (size_t j = 0; j <= maxW; j++)
+		{
+			cout << opt[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+	int num = n - 1;
+	int tpW = maxW;
+	while (num)
+	{
+		if (opt[num][tpW] == opt[num - 1][tpW - weight[num]] + value[num])
+		{
+			res[num] = 1;
+			tpW -= weight[num];
+		}
+		else
+		{
+			res[num] = 0;
+		}
+		num--;
+	}
+	if (opt[0][maxW])
+		res[0] = 1;
+	else
+	{
+		res[0] = 0;
+	}
+
+	int max = opt[n - 1][maxW];
+	delete[] opt;
+	return max;
+}
+
+
+int knapsack_complete(int *weight, int *value, int *res, int n, int maxW)
+{
+	int **opt = new int *[n];
+	//计算表格
+	opt[0] = new int[maxW + 1];
+	for (size_t i = 0; i <= maxW; i++)
+	{
+		opt[0][i] = i >= weight[0] ? i / weight[0] * value[0] : 0;
+	}
+	for (size_t i = 1; i < n; i++)
+	{
+		opt[i] = new int[maxW + 1];
+		for (size_t j = 0; j <= maxW; j++)
+		{
+			if (weight[i]>j)
+			{
+				opt[i][j] = opt[i - 1][j];
+			}
+			else
+			{
+				opt[i][j] = max(opt[i - 1][j], value[i] + opt[i][j - weight[i]]);
+			}
+		}
+	}
+
+	for (size_t i = 0; i < n; i++)
+	{
+		for (size_t j = 0; j <= maxW; j++)
+		{
+			cout << opt[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+	int num = n - 1;
+	int tpW = maxW;
+	while (num)
+	{
+		if (opt[num][tpW] == opt[num][tpW - weight[num]] + value[num])
+		{
+			res[num] = 1;
+			tpW -= weight[num];
+		}
+		else
+		{
+			res[num] = 0;
+		}
+		num--;
+	}
+	if (opt[0][maxW])
+		res[0] = 1;
+	else
+	{
+		res[0] = 0;
+	}
+	res[0] = opt[0][tpW] / value[0];
+
+	int max = opt[n - 1][maxW];
+	delete[] opt;
+	return max;
+}
+
