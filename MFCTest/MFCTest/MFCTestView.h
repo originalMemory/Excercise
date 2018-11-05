@@ -9,7 +9,7 @@
 #include "GPSTranslate.h"
 #include "SerialPort.h"
 #include <vector>
-#include "BaseAction.h"
+//#include "SeekurStatus.h"
 #include "afxwin.h"
 #include <windows.h>
 #include "ObstacleAvoid.h"
@@ -29,7 +29,7 @@
 #define MAXPACKET 812
 
 
-
+void RecordFuc();		//Seekur记录函数
 
 
 //seekur控制参数
@@ -40,16 +40,6 @@ typedef struct SeekurPara{
 	double rotVel;	//旋转速度
 }*SeekurParaPtr;
 
-//seekur相关数据
-typedef struct SeekurData{
-	double x;
-	double y;
-	double heading;		//航向
-	double vel;
-	double leftVel;
-	double rightVel;
-	double rotVel;
-}*SeekurDataPtr;
 
 
 class CMFCTestView : public CFormView
@@ -96,7 +86,6 @@ public:
 protected:
 	CSerialPort serialPort_gps;		//GPS串口通信类
 	CSerialPort serialPort_laser;		//激光串口通信类
-	GPSTranslate gpsTran;	/*GPS语句解析类*/
 	string gpsStr;		//获取到的完整的一句GPS语句
 	bool isLaserStart;	//是否开始写入激光数据
 	string laserBuf[MAXPACKET];	//获取到激光16进制数据缓冲
@@ -104,12 +93,12 @@ protected:
 	int laserBufPos;	//当前激光缓冲数据位置
 	string laserCheckBuf[7];	//获取到激光16进制数据头缓冲
 	int laserCheckBufPos;	//当前激光缓冲数据位置
-	int laserData[LEN180X1];	//解析后的激光扫描信息
 	int laserDataLength;	//激光数据长度
 	double laserRange;		//激光角度范围
 	double laserRes;		//激光角度分辨率
 	
 	CWinThread* seekur_thread;		//Seekur线程句柄
+	CWinThread* record_thread;		//Seekur线程句柄
 	//CWinThread* track_thread;		//追踪线程句柄
 	bool isGPSEnd;		//本轮GPS语句组是否已至最后
 	IPolylinePtr pPath;			//创建的路径
@@ -129,8 +118,10 @@ private:
 	void OnTestMarkerStyle();
 	ISymbolPtr m_isymbol;
 	static UINT SeekurFuc(LPVOID lParam);		//Seekur控制线程函数
+	static UINT RecordFuc2(LPVOID lParam);		//Seekur控制线程函数
+	
 	//void CreateShapeFile();
-	static UINT TrackFuc(LPVOID lParam);		//追踪线程函数
+	void ComputeTurnHeading();		//追踪函数
 
 	
 // 生成的消息映射函数

@@ -59,6 +59,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <BasicRuntimeChecks>UninitializedLocalUsageCheck</BasicRuntimeChecks>
+      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -109,7 +110,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseAction.h" />
+    <ClInclude Include="SeekurStatus.h" />
     <ClInclude Include="ObstacleAvoid.h" />
     <ClInclude Include="GPSTranslate.h" />
     <ClInclude Include="MainFrm.h" />
@@ -122,7 +123,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BaseAction.cpp" />
+    <ClCompile Include="SeekurStatus.cpp" />
     <ClCompile Include="ObstacleAvoid.cpp" />
     <ClCompile Include="GPSTranslate.cpp" />
     <ClCompile Include="MainFrm.cpp" />

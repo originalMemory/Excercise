@@ -19,7 +19,7 @@ namespace MyTools.Tools
         /// </summary>
         /// <param name="url">网页链接</param>
         /// <returns></returns>
-        public static string GetHtml(string url)
+        public static string GetHtml(string url,CookieContainer cookiesCon=null)
         {
             //Http请求
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
@@ -29,14 +29,15 @@ namespace MyTools.Tools
             req.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36";
             //如果方法验证网页来源就加上这一句如果不验证那就可以不写了
             //req.Referer = "http://sufei.cnblogs.com";
-            //添加Cookie，用来抓取需登陆可见的网页
-            CookieContainer objcok = new CookieContainer();
-            Cookie cook1 = new Cookie();
-            //cook1.Name = "CNZZDATA1257708097";
-            //cook1.Value = "1167517418-1479817270-%7C1488717892";
-            //objcok.Add(cook1);
-            objcok.Add(new Cookie("LOGGED_USER", "yFsD9Pt%2FclzX95SIIZA%2BcQ%3D%3D%3A9jqLj32MbscQVdQcdoCS%2Fw%3D%3D", "/", ".bcy.net"));
-            req.CookieContainer = objcok;
+            ////添加Cookie，用来抓取需登陆可见的网页
+            //CookieContainer objcok = new CookieContainer();
+            //Cookie cook1 = new Cookie();
+            ////cook1.Name = "CNZZDATA1257708097";
+            ////cook1.Value = "1167517418-1479817270-%7C1488717892";
+            ////objcok.Add(cook1);
+            //objcok.Add(new Cookie("__tea_sdk__ssid", "d0cbb440-3366-4c4e-972b-8694b4c19e76", "/", ".bcy.net"));
+            if(cookiesCon!=null)
+                req.CookieContainer = cookiesCon;
             //设置超时
             req.Timeout = 3000;
             //Http响应

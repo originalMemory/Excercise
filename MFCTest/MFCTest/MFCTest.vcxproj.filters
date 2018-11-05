@@ -45,10 +45,10 @@
     <ClInclude Include="GPSTranslate.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BaseAction.h">
+    <ClInclude Include="ObstacleAvoid.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ObstacleAvoid.h">
+    <ClInclude Include="SeekurStatus.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,10 +74,10 @@
     <ClCompile Include="GPSTranslate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BaseAction.cpp">
+    <ClCompile Include="ObstacleAvoid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ObstacleAvoid.cpp">
+    <ClCompile Include="SeekurStatus.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

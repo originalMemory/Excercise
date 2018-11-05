@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using MyTools.Tools;
 using HtmlAgilityPack;
+using MyTools.Helper;
 
 namespace MyTools.CrawImg
 {
@@ -26,8 +27,28 @@ namespace MyTools.CrawImg
             ImgInfo img = new ImgInfo();
             try
             {
+                //半次元cookies
+                CookieContainer objcok = new CookieContainer();
+                objcok.Add(new Cookie("__tea_sdk__ssid", "d0cbb440-3366-4c4e-972b-8694b4c19e76", "/", ".bcy.net"));
+                objcok.Add(new Cookie("__tea_sdk__user_unique_id", "6548691244520080900", "/", ".bcy.net"));
+                objcok.Add(new Cookie("CNZZDATA1257708097", "1707831137-1520559900-%7C1526728284", "/", "bcy.net"));
+                objcok.Add(new Cookie("_ga", "GA1.2.1951345541.1531376347", "/", ".bcy.net"));
+                objcok.Add(new Cookie("lang_set", "zh", "/", ".bcy.net"));
+                objcok.Add(new Cookie("tt_webid", "6599603821759776263", "/", ".bcy.net"));
+                objcok.Add(new Cookie("ccid", "87d5218b58ad1cf2471c3ed722233f66", "/", ".bcy.net"));
+                objcok.Add(new Cookie("sid_guard", "df0dd15351f0d723b151bf1169ea6bfd%7C1538656608%7C5184000%7CMon%2C+03-Dec-2018+12%3A36%3A48+GMT", "/", ".bcy.net"));
+                objcok.Add(new Cookie("uid_tt", "e2b1d6d3b15165205114387e1693f776", "/", ".bcy.net"));
+                objcok.Add(new Cookie("sid_tt", "df0dd15351f0d723b151bf1169ea6bfd", "/", ".bcy.net"));
+                objcok.Add(new Cookie("sessionid", "df0dd15351f0d723b151bf1169ea6bfd", "/", ".bcy.net"));
+                objcok.Add(new Cookie("PHPSESSID", "f2dcf83c81402ec4210080ac85c6bf19", "/", "bcy.net"));
+                objcok.Add(new Cookie("mobile_set", "no", "/", ".bcy.net"));
+                objcok.Add(new Cookie("Hm_lvt_330d168f9714e3aa16c5661e62c00232", "1540977951%2C1540995336%2C1541252789%2C1541336092", "/", ".bcy.net"));
+                objcok.Add(new Cookie("_gid", "GA1.2.169433111.1541336095", "/", ".bcy.net"));
+                objcok.Add(new Cookie("Hm_lpvt_330d168f9714e3aa16c5661e62c00232", "1541398442", "/", ".bcy.net"));
+                objcok.Add(new Cookie("_csrf_token", "d4500ff829403edc9bcd75348761f489", "/", ".bcy.net"));
+                objcok.Add(new Cookie("_bcy_user_id", "U2FsdGVkX1+/Zqi2ucICyz9tj4Y9o9VXE6ZqoxDQGd1nhlSbAxGOWiaROCTsKstXoMFeCphhUhGRGkjgN3szzA==", "/", ".bcy.net"));
                 //获取网页
-                string respHtml = WebApi.GetHtml(url);
+                string respHtml = WebApi.GetHtml(url,objcok);
                 //对网页进行分类
                 Regex kindReg = new Regex(@"bcy.net/(?<info>.+?)/");
                 Match kindMat = kindReg.Match(url);
@@ -89,30 +110,34 @@ namespace MyTools.CrawImg
             doc.LoadHtml(respHtml);
             //获取图片归属作品名称
             string con = doc.DocumentNode.SelectSingleNode("//meta[@name=\"keywords\"]").GetAttributeValue("content", "");
-            img.ACGWork = con.Split(',')[0];
+            img.ACGWork = con.Split(',')[0].Replace("。ACG", "");
             //获取coser信息
-            img.Author = doc.DocumentNode.SelectSingleNode("//*[@id=\"js-hotFix\"]/div[1]/div/div[1]/div/div[2]/a").InnerText;
-            //改版后的半次元无自定义标题，也没有单独CN显示，故取作品名为标题
-            img.Title = img.ACGWork;
+            img.Author = doc.DocumentNode.SelectSingleNode("//a[@class=\"cut\"][1]").InnerText;
+            //改版后的半次元无自定义标题，也没有单独CN显示，故取最后一个标签为标题
+            HtmlNode titleNode = doc.DocumentNode.SelectSingleNode("//div[@class=\"tag-group\"]").LastChild;
+            img.Title = System.Net.WebUtility.HtmlDecode(titleNode.InnerText);
             
             //获取正文
-            HtmlNode descNode = doc.DocumentNode.SelectSingleNode("//p[@class=\"mb20\"]");
+            HtmlNode descNode = doc.DocumentNode.SelectSingleNode("//div[@class=\"content\"]/div");
             if(descNode!=null)
             {
-                string descHtml = descNode.InnerHtml;
+                string desc = descNode.InnerHtml;
                 Regex reg = new Regex("</p>|<br>|</br>");
-                descHtml = reg.Replace(descHtml, System.Environment.NewLine);
-                descHtml = Regex.Replace(descHtml, "<a href=.+?>|</a>", "");
-                img.Description = descHtml;
+                desc = reg.Replace(desc, System.Environment.NewLine);
+                desc = Regex.Replace(desc, "<a href=.+?>|</a>", "");
+                img.Description = System.Net.WebUtility.HtmlDecode(desc);
             }
             //获取图片链接
-            HtmlNodeCollection imgs = doc.DocumentNode.SelectNodes("//img[@class=\"detail_std detail_clickable\"]");
-            foreach (HtmlNode item in imgs)
+            string json = Regex.Match(respHtml, "JSON.parse.+;").Value;
+            json = Regex.Unescape(Regex.Unescape(json));
+            MatchCollection urls = Regex.Matches(json, "\"path\":\"(?<url>.+?)/w650");
+            foreach (Match x in urls)
             {
-                string url = item.GetAttributeValue("src", "").Replace("/w650", "");
-                if (!string.IsNullOrEmpty(url))
+                string str;
+                str = x.Groups["url"].Value;
+                if (!string.IsNullOrEmpty(str))
                 {
-                    img.Urls.Add(url);
+                    img.Urls.Add(str);
                 }
             }
             return img;

@@ -72,6 +72,8 @@
 
 #pragma endregion
 
+#include <thread>
+#include <mutex>
 
 ////Seekur Çý¶¯
-//#include <Aria.h>
+#include <Aria.h>

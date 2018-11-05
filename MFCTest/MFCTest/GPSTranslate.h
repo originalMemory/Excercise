@@ -116,36 +116,22 @@ public:
 /*
 我使用的GPS信息
 */
-class MyGPSInfo
+struct MyGPSInfo
 {
-public:
 	double Latitude;		//纬度
 	double Longitude;		//经度
 	double Heading;			//航向
 	double SpeedKm;			//地面速率（0000.0~1851.8公里/小时，前面的0也将被传输）
-	//char NSIndicator;		//纬度半球指示符
-	//char EWIndicator;		//经度半球指示符
-	//int GPSStatus;			//GPS状态：0=未定位，1=非差分定位，2=差分定位，6=正在估算
-
 	double BJ54_X;		//BJ54 X坐标
 	double BJ54_Y;		//BJ54_Y坐标
 };
 
 /*
-GPS解析类
+描述：构造函数
+参数：
+@line：GPS单行语句
+返回值：GPS解析语句指针
 */
-class GPSTranslate
-{
-public:
-	/*
-	描述：构造函数
-	参数：
-		@line：GPS单行语句
-	返回值：GPS解析语句指针
-	*/
-	GPSInfo* Tanslate(std::string str);
-};
-
-
+GPSInfo* GpsTanslate(std::string str);
 
 #endif // !GPSTRANSLATE_H

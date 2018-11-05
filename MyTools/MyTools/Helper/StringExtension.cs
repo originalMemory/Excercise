@@ -41,6 +41,9 @@ namespace MyTools.Helper
             theString = theString.Replace("&#39;", "\'");
             theString = theString.Replace("<br/>", "\n");
             theString = theString.Replace("<br>", "\n");
+            theString = theString.Replace("&#091;", "[");
+            theString = theString.Replace("&#093;", "]");
+            theString = theString.Replace("&#093;", "·");
             return theString;
         }
 

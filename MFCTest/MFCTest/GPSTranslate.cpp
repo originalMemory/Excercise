@@ -17,7 +17,7 @@
 @line：GPS单行语句
 返回值：GPS解析语句指针
 */
-GPSInfo* GPSTranslate::Tanslate(string line)
+GPSInfo* GpsTanslate(string line)
 {
 	vector<string> arr2;  //定义一个GPS字符串解析数据容器    
 	int	position = 0;
