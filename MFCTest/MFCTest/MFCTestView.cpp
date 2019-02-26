@@ -20,10 +20,9 @@
 #define WM_SEEKUR_MOVE WM_USER+101		//Seekur操作消息（开始）
 #define WM_SEEKUR_END WM_USER+102		//Seekur操作消息（结束）
 #define WM_SEEKUR_STOP WM_USER+103		//Seekur操作消息（停止）
-#define WM_SEEKUR_GET_DATA WM_USER+104		//Seekur返回当前相对位置
-#define WM_SEEKUR_GET_SPEED WM_USER+105		//Seekur返回当前相对速度
-#define WM_SEEKUR_GET_SPEED_LEFT WM_USER+106		//Seekur返回当前左边相对速度
-#define WM_SEEKUR_GET_SPEED_RIGHT WM_USER+107		//Seekur返回当前右边相对速度
+#define WM_RECORD_START WM_USER+104		//开始记录数据
+#define WM_RECORD_STOP WM_USER+105		//停止记录数据
+#define WM_RECORD_END WM_USER+106		//结束记录数据进程
 
 
 
@@ -35,79 +34,108 @@
 
 #define PI 3.14159265358979323846
 
-const string LASER_HEADER[7] = { "02", "80", "6E", "01", "B0", "B5", "00" };
-//const char LASER_HEADER[7] = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x00 };
+//const string LASER_HEADER[7] = { "02", "80", "6E", "01", "B0", "B5", "00" };
+const int LASER_HEADER[7] = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x40 };
 
-CStdioFile seekurRunFile;
 MyGPSInfo myGPSInfo;		//我实际使用的GPS信息
-int laserData[LEN180X1] = { 0 };	//解析后的激光扫描信息
-static ArRobot *GRobot = nullptr;
+ObstacleInfo g_cObsInfo;	//障碍物信息
+bool g_bAvoid;	//是否是避障状态
 
-mutex MuGpsModify;	//gps是否未处理完一组数据
-bool IsSeekurStop=true;	//Seekur现在是否处于静止状态
-bool IsSeekurRun = false;	//Seekur是否处于速度模式
-thread th;
+static ArRobot *g_pRobot = nullptr;	//arRobot指针，非控制线程获取信息
+
+//mutex g_muGpsModify;	//互斥锁：gps是否未处理完一组数据
+bool g_bSeekurRunning = false;	//Seekur是否在运动
 
 //Seekur记录函数
-void RecordFuc(){
-	IsSeekurStop = false;
+UINT CMFCTestView::RecordFuc(LPVOID lParam){
 	CStdioFile seekurFile;		//数据文件，记录seekur运行中数据状态
 	time_t timet = time(NULL);
 	tm *tm_ = new tm();
-	localtime_s(tm_, &timet);
 	CString name;
-	name.Format(_T("D:\\data\\trajectory %4d-%02d-%02d %02d：%02d：%02d.csv"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
-	seekurFile.Open(name, CFile::modeWrite | CFile::modeNoTruncate | CFile::modeCreate);
-	//开始记录数据，以年月日分秒为文件名
-	//列表头
-	seekurFile.WriteString(_T("no,time,bj54_x,bj54_y,speed,heading,,seekur_x,seekur_y,seekur_heading,seekurVel,seekur_rotVel,obs_len,obs_angle,obs_x,obs_y\n"));
+	MSG msg;
+	bool bRecord = false;
 	int i = 1;
-	CString cTp;
-	while (!IsSeekurStop)
+	while (true)
 	{
-		bool a = GRobot->isMoveDone();
-		bool b = GRobot->isHeadingDone();
-		if (GRobot->isMoveDone() && GRobot->isHeadingDone() && !IsSeekurRun){
-			IsSeekurStop = true;
-			break;
-		}
-		CString cTime;
-		cTime.Format(_T("%4d-%02d-%02d %02d:%02d:%02d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
-		//保存时间，GPS坐标、BJ54坐标、距离偏差、航向和航向偏差
-		//no,time,bj54_x,bj54_y,speed,heading,
-		MuGpsModify.lock();
-		double heading = myGPSInfo.Heading;
-		double bj_x = myGPSInfo.BJ54_X, bj_y = myGPSInfo.BJ54_Y;
-		cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,,"), i, cTime, myGPSInfo.BJ54_X, myGPSInfo.BJ54_Y, myGPSInfo.SpeedKm, myGPSInfo.Heading);
-		MuGpsModify.unlock();
-		seekurFile.WriteString(cTp);
-		//seekur_x,seekur_y,seekur_heading,seekurVel,seekur_rotVel
-		cTp.Format(_T("%lf,%lf,%lf,%lf,%lf,,"), GRobot->getX(),GRobot->getY(),GRobot->getTh(),GRobot->getVel(),GRobot->getRotVel());
-		seekurFile.WriteString(cTp);
-		//获取最近的障碍物信息
-		int angle=0, len=90;
-		for (int j=0; j < LEN180X1; j++)
-		{
-			if (len > laserData[j]){
-				angle = j;
-				len = laserData[j];
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)){
+			switch (msg.message){
+			case WM_RECORD_START:
+			{
+				bRecord = true;
+				timet = time(NULL);
+				localtime_s(tm_, &timet);
+				name.Format(_T("D:\\data\\record %4d-%02d-%02d %02d：%02d：%02d.csv"), tm_->tm_year + 1900, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+				seekurFile.Open(name, CFile::modeWrite | CFile::modeNoTruncate | CFile::modeCreate);
+				//开始记录数据，以年月日分秒为文件名
+				//列表头
+				seekurFile.WriteString(_T("no,time,bj54_x,bj54_y,speed,heading,,obs_x,obs_y,obs_len,obs_angle,obs_detail,,seekur_x,seekur_y,seekur_heading,seekurVel,seekur_rotVel\n"));
+				//seekurFile.WriteString(_T("no,time,seekur_x,seekur_y,seekur_heading,seekurVel,seekur_rotVel,obs_len,obs_angle,obs_x,obs_y\n"));
+				i = 1;
+			}
+				break;
+			case WM_RECORD_STOP:
+			{
+				bRecord = false;
+				seekurFile.Close();
+			}
+			case WM_RECORD_END:
+				return 1;
+				break;
+			default:
+				break;
 			}
 		}
-		//计算障碍物坐标
-		if (len != 90 && len != 0){
-			double tp_x = 0, tp_y = 0;
-			//计算Seekur坐标系下位置
-			tp_x = len*cos(angle);
-			tp_y = len*sin(angle);
-			double obs_x = bj_x + tp_y*sin(heading) + tp_x*cos(heading);
-			double obs_y = bj_y + tp_y*cos(heading) - tp_x*sin(heading);
-			cTp.Format(_T("%d,%d,%lf,%lf\n"), len, angle,obs_x,obs_y);
+		if (bRecord)
+		{
+			CString cTp;
+			/*if (g_pRobot->isMoveDone() && g_pRobot->isHeadingDone() && !g_bSeekurRunning){
+				continue;
+			}*/
+
+			//保存时间，GPS坐标、BJ54坐标、距离偏差、航向
+			CString cTime;
+			cTime.Format(_T("%4d-%02d-%02d %02d:%02d:%02d"), tm_->tm_year + 1990, tm_->tm_mon + 1, tm_->tm_mday, tm_->tm_hour, tm_->tm_min, tm_->tm_sec);
+			//no,time,bj54_x,bj54_y,speed,heading,
+			double heading = 0, speed, bj_x = 0, bj_y = 0;
+			/*if (g_muGpsModify.try_lock()){
+				
+				g_muGpsModify.unlock();
+			}*/
+			heading = myGPSInfo.Heading;
+			bj_x = myGPSInfo.BJ54_X;
+			bj_y = myGPSInfo.BJ54_Y;
+			speed = myGPSInfo.SpeedKm;
+			cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,,"), i, cTime, bj_x, bj_y, speed, heading);
+			//cTp.Format(_T("%d,%s,"), i, cTime);
+			seekurFile.WriteString(cTp);
+
+			//计算障碍物坐标
+			if (g_bAvoid){
+				double tp_x = 0, tp_y = 0;
+				//从极坐标转为Seekur为原点的北京54坐标
+				tp_x = g_cObsInfo.avoidDis*sin(g_cObsInfo.avoidAngle - heading);
+				tp_y = g_cObsInfo.avoidDis*cos(g_cObsInfo.avoidAngle - heading);
+				//修正原点为北京54真实原点
+				double obs_x = bj_x + tp_x;
+				double obs_y = bj_y + tp_y;
+				cTp.Format(_T("%lf,%lf,%d,%d,%d|%d|%d|%d,,"), obs_x, obs_y, g_cObsInfo.avoidDis, g_cObsInfo.avoidAngle, g_cObsInfo.leftAngle, g_cObsInfo.leftDis,
+					g_cObsInfo.rightAngle, g_cObsInfo.rightDis);
+				seekurFile.WriteString(cTp);
+			}
+			else{
+				cTp = ",,,,,,";
+				seekurFile.WriteString(cTp);
+			}
+			Sleep(200);
+			i++;
+
+			//seekur_x,seekur_y,seekur_heading,seekurVel,seekur_rotVel
+			cTp.Format(_T("%lf,%lf,%lf,%lf,%lf\n"), g_pRobot->getX(), g_pRobot->getY(), g_pRobot->getTh(), g_pRobot->getVel(), g_pRobot->getRotVel());
 			seekurFile.WriteString(cTp);
 		}
-		Sleep(200);
-		i++;
 	}
-	seekurFile.Close();
+	return 0;
+	
 }
 unsigned long HextoDec(const unsigned char *hex, int length)
 {
@@ -183,7 +211,7 @@ bool isPointOnLine(IPointPtr pPoint, ILinePtr pPath)
 /// </summary>
 /// <param name="point">经纬度点</param>
 /// <param name="prjType">投影坐标系编号，默认为(2414)esriSRProjCS_Beijing1954_3_Degree_GK_Zone_38</param>
-/// <param name="gcsType">经纬为坐标系编号，默认为(4326)esriSRGeoCS_WGS1984</param>
+/// <param name="gcsType">经纬坐标系编号，默认为(4326)esriSRGeoCS_WGS1984</param>
 /// <returns>投影坐标点</returns>
 IPoint* geoToProj(IPoint* point, long prjType = 2414, long gcsType = 4326)
 {
@@ -244,9 +272,10 @@ CMFCTestView::CMFCTestView()
 
 CMFCTestView::~CMFCTestView()
 {
-	GRobot = nullptr;
-	th.detach();
+	g_pRobot = nullptr;
+	//th.detach();
 	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_END, 0, 0);
+	PostThreadMessage(record_thread->m_nThreadID, WM_RECORD_END, 0, 0);
 	Sleep(100);
 	//seekurRunFile.Close();
 	//dataFile.Close();
@@ -275,7 +304,7 @@ void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT16, m_editBJ54_y);
 	DDX_Control(pDX, IDC_EDIT18, m_editSeekurPose);
 	DDX_Control(pDX, IDC_EDIT19, m_editSeekurVal);
-	DDX_Control(pDX, IDC_EDIT20, m_editSeekurAccel);
+	DDX_Control(pDX, IDC_EDIT20, m_editObsPos);
 	DDX_Control(pDX, IDC_EDIT21, m_editGPSSpeedKm);
 	DDX_Control(pDX, IDC_EDIT22, m_editRotVel);
 }
@@ -316,15 +345,20 @@ void CMFCTestView::OnInitialUpdate()
 		this->GetSafeHwnd()   // 传递窗体的句柄
 		);
 
+	record_thread = AfxBeginThread(
+		RecordFuc,
+		this->GetSafeHwnd()   // 传递窗体的句柄
+		);
+
 	m_editKdis.SetWindowTextW(_T("0.025"));
 	m_editKheading.SetWindowTextW(_T("0.5"));
 	m_checkShowBJ54.SetCheck(1);
 	m_editTranVel.SetWindowTextW(_T("500"));
 	m_editRotVel.SetWindowTextW(_T("1"));
-	isTracked = false;
+	m_bTrack = false;
 	isGPSEnd = false;
 	isPathExist = false;
-	isAvoid = false;
+	g_bAvoid = false;
 	pathLayerName = _T("path");
 	isGPSEnd = false;
 
@@ -341,38 +375,32 @@ void CMFCTestView::OnInitialUpdate()
 	m_GPSport = 6;
 	CMainFrame *p = (CMainFrame*)AfxGetMainWnd();
 	CMFCTestView *m_CView = (CMFCTestView *)p->GetActiveView();//获取View类的指针
-	if (serialPort_gps.InitPort(m_CView, m_GPSport))
+	if (m_csGps.InitPort(m_CView, m_GPSport))
 	{
-		serialPort_gps.StartMonitoring();
+		m_csGps.StartMonitoring();
 	}
 	else
 	{
 		MessageBox(_T("GPS串口通信失败！"), _T("提示"), MB_OK);
 	}
-	laserBufPos = 0;
-	laserCheckBufPos = 0;
-	laserStr = "";
-	//LASER_HEADER = { 0x02, 0x80, 0x6E, 0x01, 0xB0, 0xB5, 0x00 };
-	/*LASER_HEADER[0] = '0x02';
-	LASER_HEADER[1] = 0x80;
-	LASER_HEADER[2] = 0x6E;
-	LASER_HEADER[3] = 0x01;
-	LASER_HEADER[4] = 0xB0;
-	LASER_HEADER[5] = 0xB5;
-	LASER_HEADER[6] = 0x00;*/
-	gpsStr = "";
+	m_nLaserBufIdx = 0;
+	m＿nLaserCheckBufIdx = 0;
+	obsAvoid.Initialize(4 * 1000, 90,30);
+
+	m_sTpGps = "";
 	testStr = "";
 	m_laserport = 8;
-	if (serialPort_laser.InitPort(m_CView, m_laserport, 9600))
+	if (m_csLaser.InitPort(m_CView, m_laserport, 9600))
 	{
-		serialPort_laser.StartMonitoring();
+		m_csLaser.StartMonitoring();
 	}
 	else
 	{
 		MessageBox(_T("激光串口通信失败！"), _T("提示"), MB_OK);
 	}
 
-
+	/*char *once = "02 00 02 00 30 01 31 18";
+	serialPort_laser.WriteToPort(once);*/
 	
 }
 
@@ -424,7 +452,7 @@ int CMFCTestView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-#pragma region 成员函数
+#pragma region 自建函数
 void CMFCTestView::OnFileOpen()
 {
 	// TODO:  在此添加命令处理程序代码
@@ -562,81 +590,51 @@ afx_msg LRESULT CMFCTestView::OnSerialPortCallback(WPARAM ch, LPARAM portnum)
 		//接收单个字符
 		if (ch != 13 && ch != 10)
 		{
-			gpsStr += (char)ch;
+			m_sTpGps += (char)ch;
 		}
 		//接收到完整一句时解析字符串
-		else if (gpsStr != "")
+		else if (m_sTpGps != "")
 		{
-			OnGPSAnalysis(gpsStr);
-			gpsStr = "";
+			OnGPSAnalysis(m_sTpGps);
+			m_sTpGps = "";
 		}
 	}
 
 	//激光数据
 	if (portnum == m_laserport){
-		char a = 0x00;
-		char b = '0x80';
-		unsigned char cha = (unsigned char)ch;
-		int i;
-		char c16 = ch & 0xFF;
-		if (c16==a)
-		{
-			int dsdf = 324;
-		}
-		char ctest[3] = { 0 };
-		sprintf_s(ctest, "%02X", cha);
-		string cstr = ctest;
-		//sscanf(&cha, "%x", ctest);
-		//CString str;
-		//str.Format(_T("%02X"), cha);//将接收到的BYTE型数据转换为对应的十六进制  
-		////char szTemp[4];
-		////wchar_t *wChar = str.GetBuffer(str.GetLength());
-		////str.ReleaseBuffer();
-		////// 将得到的wchar* 类型转为 char*类型
-		////size_t len = wcslen(wChar) + 1;
-		////size_t converted = 0;
-		////char *cChar;
-		////cChar = (char*)malloc(len*sizeof(char));
-		////wcstombs_s(&converted, cChar, len, wChar, _TRUNCATE);
-		//RecText.Append(str);
+		int num = (int)ch;
 		//校验是否为激光数据的起始
-		if (cstr == "80"){
-			int dfe = 214;
-		}
-		if (LASER_HEADER[laserCheckBufPos] == cstr)
+		if (LASER_HEADER[m＿nLaserCheckBufIdx] == num)
 		{
-			if (laserCheckBufPos>0)
+			if (m＿nLaserCheckBufIdx == 6)
 			{
-				int ef = 234;
-			}
-			laserCheckBuf[laserCheckBufPos] = cstr;
-			if (laserCheckBufPos == 6)
-			{
-				laserDataLength = HexToDem(laserCheckBuf[6] + laserCheckBuf[5]);//两个8位（高位低位）合成16位包长
-				isLaserStart = true;
-				//当一组语句全部传输完后，对期进行解析
-				if (laserBufPos == laserDataLength*2)
-				{
-					OnLaserAnalysis(laserBuf, laserDataLength);
-					laserBufPos = 0;
-					laserStr = "";
-				}
+				m_bLaserStartWrite = true;
 				return 0;
 			}
-			laserCheckBufPos++;
+			m＿nLaserCheckBufIdx++;
 		}
 		else
 		{
-			laserCheckBufPos = 0;
-			laserCheckBuf[0] = '\0';
+			m＿nLaserCheckBufIdx = 0;
 		}
 
 		//在是同一句时往缓冲中写入数据
-		if (isLaserStart&&laserBufPos<laserDataLength*2)
+		if (m_bLaserStartWrite&&m_nLaserBufIdx<m_nLaserLen)
 		{
-			laserBuf[laserBufPos] = cstr;
-			laserStr += cstr + " ";
-			laserBufPos++;
+			if (m_nLastLaserFirst == -1){
+				m_nLastLaserFirst = num;
+			}
+			else{
+				m_anLaserData[m_nLaserBufIdx++] = num * 256 + m_nLastLaserFirst;
+				m_nLastLaserFirst = -1;
+			}
+		}
+		//当一组语句全部传输完后，对其进行解析
+		if (m_nLaserBufIdx == m_nLaserLen)
+		{
+			OnLaserAnalysis();
+			m_nLaserBufIdx = 0;
+			m_bLaserStartWrite = false;
 		}
 		
 	}
@@ -660,7 +658,7 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 	//判断是不是GPS经纬度坐标
 	if (gpsInfo->InfoType == GGA)
 	{
-		MuGpsModify.lock();
+		//g_muGpsModify.lock();
 		double longitude = ((GGAInfo*)gpsInfo)->Longitude;
 		double latitude = ((GGAInfo*)gpsInfo)->Latitude;
 		//刷新窗口显示
@@ -729,13 +727,10 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		double error = -0.785817526;	//误差
 		m_editGPSHeading.SetWindowText(heading);
 		myGPSInfo.Heading = ((PSAT_HPRInfo*)gpsInfo)->Heading + error;
-		if (isPathExist){
+		if (isPathExist&&!g_bAvoid){
 			ComputeTurnHeading();
 		}
-		else
-		{
-			MuGpsModify.unlock();
-		}
+		//g_muGpsModify.unlock();
 	}
 
 	delete gpsInfo;
@@ -744,38 +739,40 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 
 /*
 描述：激光串口数据解析
-参数：
-@buf：16进制检测数据组
-@len：数据长度
-返回值：
 */
-void CMFCTestView::OnLaserAnalysis(string *buf, int len){
-	for (int i = 0; i < len; i++)
-	{
-		//only upper 12 bits of upper byte are used
-		laserData[i] = HexToDem(buf[2 * i + 1] + buf[2 * i]);
-		//intBuf[i] = buf[2 * i] | ((buf[2 * i + 1] & 0x1f) << 8);
-	}
+void CMFCTestView::OnLaserAnalysis(){
 	//解析数据，判断是否需要避障
-	if (isTracked)
+	//if (isTracked)
+	if (true && (::GetTickCount() - m_tLastCompute>200))
 	{
-		obsAvoid.Initialize(10 * 100, 90, 90);
-		bool isObs = obsAvoid.SetObstaclePosture(laserData, len);
+		m_tLastCompute = ::GetTickCount();
+		bool isObs = obsAvoid.SetObstaclePosture(m_anLaserData, m_nLaserLen);
 		if (isObs)
 		{
-			isAvoid = true;
+			g_cObsInfo = obsAvoid.GetObsInfo();
 			float turnHeading = obsAvoid.ComputeAvoidHeading();
-			//发送控制指令
-			SeekurParaPtr pPara = new SeekurPara();
-			pPara->distance = 0;
-			pPara->tranVel = 0;
-			pPara->heading = turnHeading;
+			if (turnHeading == 0)
+				return;
+			g_bAvoid = true;
 
-			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
+			CString cTp;
+			cTp.Format(_T("%d,%d"), g_cObsInfo.avoidAngle, g_cObsInfo.avoidDis);
+			m_editObsPos.SetWindowText(cTp);
+			cTp.Format(_T("%f"), -turnHeading);
+			m_editTurnHeading.SetWindowText(cTp);
+			if (m_bTrack){
+				//发送控制指令
+				SeekurParaPtr pPara = new SeekurPara();
+				pPara->distance = 0;
+				pPara->tranVel = 0;
+				pPara->heading = -turnHeading;
+				PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
+			}
 		}
 		else
 		{
-			isAvoid = false;
+			m_editObsPos.SetWindowText(_T("0,0"));
+			g_bAvoid = false;
 		}
 		
 	}
@@ -829,7 +826,7 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 	robot->enableMotors();
 	//robot->setVel2(100, -100);
 	robot->runAsync(true);
-	GRobot = robot;
+	g_pRobot = robot;
 	MSG msg;
 	while (true)
 	{
@@ -840,7 +837,7 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 		{
 			pPara = (SeekurParaPtr)msg.wParam;
 			//直线移动距离
-			robot->lock();
+			//robot->lock();
 			if (pPara->distance != 0)
 			{
 				//robot->setVel2(300, 500);
@@ -849,7 +846,7 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			//转动角度
 			if (pPara->heading != 0)
 			{
-				robot->setDeltaHeading(pPara->heading);
+				robot->setHeading(pPara->heading);
 			}
 			if (pPara->rotVel != 0)
 				robot->setRotVel(pPara->rotVel);
@@ -858,25 +855,25 @@ UINT CMFCTestView::SeekurFuc(LPVOID lParam){
 			{
 				robot->setVel(pPara->tranVel);
 			}
-			robot->unlock();
+			//robot->unlock();
 		}
 		
 		if (msg.message == WM_SEEKUR_STOP)
 		{
-			robot->lock();
+			//robot->lock();
 			robot->stop();
-			robot->unlock();
-			IsSeekurRun = false;
+			//robot->unlock();
+			g_bSeekurRunning = false;
 		}
 		if (msg.message == WM_SEEKUR_END)
 		{
-			robot->lock();
+			//robot->lock();
 			robot->stop();
-			robot->unlock();
-			IsSeekurRun = false;
+			//robot->unlock();
+			g_bSeekurRunning = false;
 			break;
 		}
-		if (msg.message == WM_SEEKUR_GET_DATA){
+		if (msg.message == WM_RECORD_START){
 			
 			//SeekurDataPtr pData = new SeekurData();
 			//SeekurData.x = robot->getX();
@@ -972,7 +969,7 @@ void CMFCTestView::ComputeTurnHeading(){
 	m_trackPath->QueryPointAndDistance(esriNoExtension, pSeekurPoint, false, pNearestPoint, &distAlongCurveFrom, &distFromCurve, &isRightSide);
 	
 	double gpsHeading = myGPSInfo.Heading;
-	MuGpsModify.unlock();
+	//g_muGpsModify.unlock();
 
 	//判断最近点在Seekur的左边还是右边，获取
 	double nearestX, nearestY, seekurX, seekurY;
@@ -1081,7 +1078,7 @@ void CMFCTestView::ComputeTurnHeading(){
 	m_editTurnHeading.SetWindowText(cTp);
 
 	//在追踪状态且不为避障状态时发送运动指令
-	if (isTracked&&!isAvoid)
+	if (m_bTrack&&!g_bAvoid)
 	{
 		//发送控制指令
 		SeekurParaPtr pPara = new SeekurPara();
@@ -1113,7 +1110,6 @@ void CMFCTestView::ComputeTurnHeading(){
 		no++;
 	}
 }
-#pragma endregion
 
 void CMFCTestView::OnBtnSavePath()
 {
@@ -1444,7 +1440,8 @@ void CMFCTestView::OnBtnMoveSeekur()
 		pPara->heading = head;
 		if (dis == 0 && head == 0)
 		{
-			IsSeekurRun = true;
+			g_bSeekurRunning = true;
+			m_tLastCompute = ::GetTickCount();
 			pPara->tranVel = vel;
 			pPara->rotVel = rotVel;
 		}
@@ -1455,10 +1452,7 @@ void CMFCTestView::OnBtnMoveSeekur()
 		}
 
 		PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, NULL);
-		if (IsSeekurStop){
-			th = thread(RecordFuc);
-		}
-		//PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, dis, head);
+		//PostThreadMessage(record_thread->m_nThreadID, WM_RECORD_START, 0, 0);
 
 		m_editMoveDistance.SetWindowTextW(_T(""));
 		m_editMoveHeading.SetWindowTextW(_T(""));
@@ -1475,7 +1469,7 @@ void CMFCTestView::OnBtnTrack()
 		MessageBox(_T("无路径！"));
 	}
 	else{
-		if (!isTracked)
+		if (!m_bTrack)
 		{
 			//初始化参数
 			nowPathPos = 0;
@@ -1486,8 +1480,9 @@ void CMFCTestView::OnBtnTrack()
 			kheading = _ttof(cTp);
 
 			//启动追踪
-			isTracked = true;
-
+			m_bTrack = true;
+			g_bSeekurRunning = true;
+			m_tLastCompute = ::GetTickCount();
 
 			//令Seekur开始运动
 			SeekurParaPtr pPara = new SeekurPara();
@@ -1497,19 +1492,17 @@ void CMFCTestView::OnBtnTrack()
 			double vel = _ttof(cTp);
 			pPara->tranVel = vel;
 			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
-			if (!IsSeekurStop){
-				th = thread(RecordFuc);
-			}
+			PostThreadMessage(record_thread->m_nThreadID, WM_RECORD_START, 0, 0);
 			m_btnTrack.SetWindowTextW(_T("停止追踪"));
 		}
 		else{
 			//PostThreadMessage(track_thread->m_nThreadID, WM_TRACK_STOP, 0, 0);
-			isTracked = false;
-			IsSeekurRun = false;
+			m_bTrack = false;
 			PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
+			PostThreadMessage(record_thread->m_nThreadID, WM_RECORD_STOP, 0, 0);
 			m_btnTrack.SetWindowTextW(_T("开始追踪"));
 			no = 1;
-			dataFile.Close();
+			//dataFile.Close();
 		}
 	}
 
@@ -1542,9 +1535,9 @@ void CMFCTestView::OnBtnPathAdd()
 
 	IPointCollectionPtr pPtclo = (IPointCollectionPtr)pPath;
 	IPointPtr point(CLSID_Point);
-	MuGpsModify.lock();
+	//g_muGpsModify.lock();
 	point->PutCoords(myGPSInfo.BJ54_X,myGPSInfo.BJ54_Y);
-	MuGpsModify.unlock();
+	//g_muGpsModify.unlock();
 	pPtclo->AddPoint(point);
 	//point->putref_SpatialReference()
 
@@ -1562,9 +1555,9 @@ void CMFCTestView::OnBtnSeekurQuery()
 	// TODO:  在此添加控件通知处理程序代码
 	//PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_GET_DATA, 0, 0);
 	CString cTp;
-	cTp.Format(_T("%.3lf,%.3lf,%.3lf"), GRobot->getX(), GRobot->getY(), GRobot->getTh());
+	cTp.Format(_T("%.3lf,%.3lf,%.3lf"), g_pRobot->getX(), g_pRobot->getY(), g_pRobot->getTh());
 	m_editSeekurPose.SetWindowTextW(cTp);
-	cTp.Format(_T("%.2lf,%.2lf"), GRobot->getVel(), GRobot->getRotVel());
+	cTp.Format(_T("%.2lf,%.2lf"), g_pRobot->getVel(), g_pRobot->getRotVel());
 	m_editSeekurVal.SetWindowTextW(cTp);
 }
 
@@ -1572,7 +1565,8 @@ void CMFCTestView::OnBtnSeekurQuery()
 void CMFCTestView::OnBtnSeekurStop()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	isTracked = false;
-	isAvoid = false;
+	m_bTrack = false;
+	g_bAvoid = false;
 	PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_STOP, 0, 0);
 }
+#pragma endregion

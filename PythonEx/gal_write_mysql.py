@@ -83,6 +83,9 @@ for dir_name in dirs:
 
     is_repeated = False
 
+    if '未来ラジオと人' in dir_path:
+        df=34
+
     cover_path = ''  # 封面地址
     for file_name in os.listdir(dir_path):
         file_path = '{}\\{}'.format(dir_path, file_name)
@@ -120,13 +123,14 @@ for dir_name in dirs:
                         gal['description'] += info + '\r\n'
 
                     # 获取发布时间
-                    publish_time = re.search(time_re, info)
-                    if publish_time:
-                        gal['publish_time'] = publish_time.group()
-                        if '年' in publish_time.group():
-                            gal['publish_time'] = re.sub(r'年|月', '/', gal['publish_time'])
-                        # else:
-                        #     gal['publish_time'] = time.strptime(publish_time.group(), '%Y/%m/%d')
+                    if gal['publish_time']=='':
+                        publish_time = re.search(time_re, info)
+                        if publish_time:
+                            gal['publish_time'] = publish_time.group()
+                            if '年' in publish_time.group():
+                                gal['publish_time'] = re.sub(r'年|月', '/', gal['publish_time'])
+                            # else:
+                            #     gal['publish_time'] = time.strptime(publish_time.group(), '%Y/%m/%d')
 
                     # 获取标签
                     if not len(gal['tags']) and ('ジャンル' in info or 'カテゴリ' in info):

@@ -52,8 +52,8 @@ BEGIN
     "\r\n"
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
-    "#include ""res\\MFCTest.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
-    "#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
+    "#include ""res\\MFCTest.rc2""  // ·? Microsoft Visual C++ ±à?-μ?×ê?′\r\n"
+    "#include ""l.CHS\\afxres.rc""      // ±ê×?×é?t\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -223,7 +223,7 @@ BEGIN
     PUSHBUTTON      "Seekur查询",IDC_BUTTON5,511,81,50,14
     PUSHBUTTON      "停止运动",IDC_BUTTON6,511,97,50,14
     EDITTEXT        IDC_EDIT20,477,61,89,14,ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Seekur TAcc ,RAcc：",IDC_STATIC,403,63,71,8
+    LTEXT           "最近障碍物位置：",IDC_STATIC,403,63,61,8
     EDITTEXT        IDC_EDIT21,280,58,59,14,ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "速度：",IDC_STATIC,249,59,31,8
     EDITTEXT        IDC_EDIT22,183,37,50,14,ES_AUTOHSCROLL

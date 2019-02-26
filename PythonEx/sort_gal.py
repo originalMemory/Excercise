@@ -190,8 +190,8 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
         item_url = 'http://www.getchu.com/soft.phtml?id=975405&gc=gc'
     if '魅惑の人妻ライフ' in basic_info['name']:
         item_url = 'http://www.getchu.com/soft.phtml?id=915932&gc=gc'
-    if '朝霧姉妹編' in basic_info['name']:
-        item_url = 'http://www.getchu.com/soft.phtml?id=709117&gc=gc'
+    if 'セーラー服美人妻戦士' in basic_info['name']:
+        item_url = 'http://www.getchu.com/soft.phtml?id=835106&gc=gc'
     print(item_url)
     if not len(item_url):
         print('该Galgame在Getchu上没有信息！')
@@ -240,6 +240,7 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
     # 创建整理后的文件夹
     if os.path.exists(target_dir):
         # 循环遍历，确认已存在安装文件
+        is_del=None
         for root, dirs, files in os.walk(target_dir):
             del_list = []
             for x in dirs:
@@ -252,20 +253,21 @@ def get_getchu_gal_info(file_path, target_dir, **basic_info):
                     is_del = input('该Gal已存在，请确认是删除或覆盖(Y/N)：')
                     if is_del != 'y' and is_del != 'Y':
                         del_list.append(target_dir + x)
-            if is_del=='y' and not len(del_list):
-                shutil.rmtree(file_path)
-                # os.removedirs(file_path)
-            else:
-                for x in del_list:
-                    if os.path.isdir(x):
-                        shutil.rmtree(x)
-                    else:
-                        os.remove(x)
-                # 移动安装包
-                gal_name = os.path.basename(file_path)
-                new_file_path = target_dir + gal_name
-                shutil.move(file_path, new_file_path)
-            return True
+            if is_del:
+                if is_del == 'y' and not len(del_list):
+                    shutil.rmtree(file_path)
+                    # os.removedirs(file_path)
+                else:
+                    for x in del_list:
+                        if os.path.isdir(x):
+                            shutil.rmtree(x)
+                        else:
+                            os.remove(x)
+                    # 移动安装包
+                    gal_name = os.path.basename(file_path)
+                    new_file_path = target_dir + gal_name
+                    shutil.move(file_path, new_file_path)
+                return True
     else:
         os.makedirs(target_dir)
 
@@ -522,9 +524,9 @@ def get_dlsite_gal_info(file_path, target_dir, **basic_info):
     return True
 
 
-gal_dir = 'H:\\Gal\\拔作\\未整理\\绯月\\'
-tar_dir = 'H:\\Gal\\拔作\\整理\\'
-unfind_dir = 'H:\\Gal\\拔作\\无信息\\'
+gal_dir = 'G:\\Gal\\拔作\\未整理\\终点\\'
+tar_dir = 'G:\\Gal\\拔作\\整理\\'
+unfind_dir = 'G:\\Gal\\拔作\\无信息\\'
 
 for dir in os.listdir(gal_dir):
     print(dir)

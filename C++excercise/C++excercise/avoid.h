@@ -1,4 +1,3 @@
-//#include "stdafx.h"
 #include<string>
 #include <iostream>
 //#include "MFCTestView.h"
@@ -24,17 +23,17 @@ class ObstacleAvoid
 public:
 	const static int NANGLE = 7;//角度量化论域模糊子集数
 	const static int NDIS = 5;//距离量化论域模糊子集数
-private:
 	float dis;     //量化后的距离
 	float angle;    //量化后的角度
+	float Kdis;    //Kdis=n/dismax,量化论域为[-4,4],每2个为一次变化
+	float Kangle;   //Kangle=n/anglemax,量化论域为[-6,6],每2个为一次变化
+private:
 	float dismax;  //距离基本论域上限
 	float anglemax; //角度基本论域的上限
 	float rotmax;  //输出的上限
-	float Kdis;    //Kdis=n/dismax,量化论域为[-4,4],每2个为一次变化
-	float Kangle;   //Kangle=n/anglemax,量化论域为[-6,6],每2个为一次变化
 	float Krot;    //Krot=rotmax/n,量化论域为[-6,6],每2个为一次变化
 	int rule[NANGLE][NDIS];//模糊规则表
-	float dis_mf_paras[NDIS*3]; //距离的隶属度函数的参数
+	float dis_mf_paras[NDIS * 3]; //距离的隶属度函数的参数
 	float angle_mf_paras[NANGLE * 3];//角度的偏差隶属度函数的参数
 	float rot_mf_paras[NANGLE * 3]; //转向角的隶属度函数的参数
 	ObstacleInfo obsInfo;	//距离最近的障碍物信息
@@ -42,7 +41,7 @@ public:
 	ObstacleAvoid();
 	~ObstacleAvoid();
 	float trimf(float x, float a, float b, float c);          //三角隶属度函数
-	float ComputeAvoidHeading();              //实现模糊控制，计算转向角
+	float ComputeAvoidHeading(double ang, double d);              //实现模糊控制，计算转向角
 	/*
 	描述：初始化
 	参数：

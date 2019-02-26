@@ -1,23 +1,33 @@
 #include "stdafx.h"
-#include "ObstacleAvoid.h"
+#include "avoid.h"
+
+#include "stdafx.h"
 
 #define VN -4
+#define N -2
 #define N -2
 #define M 0
 #define F 2
 #define VF 4
 
-#define LB -3
+#define LL -3
 #define LM -2
 #define LS -1
 #define ZO 0
 #define RS 1
 #define RM 2
-#define RB 3
+#define RL 3
 
-ObstacleAvoid::ObstacleAvoid() 
+#define TLL -3
+#define TLM -2
+#define TLS -1
+#define TRS 1
+#define TRM 2
+#define TRL 3
+
+ObstacleAvoid::ObstacleAvoid()
 {
-	
+
 }
 
 ObstacleAvoid::~ObstacleAvoid()
@@ -41,8 +51,10 @@ float ObstacleAvoid::trimf(float x, float a, float b, float c)
 }
 
 //计算模糊结果
-float ObstacleAvoid::ComputeAvoidHeading()
+float ObstacleAvoid::ComputeAvoidHeading(double ang, double d)
 {
+	angle = Kangle*ang;
+	dis = Kdis*d;
 	float u_dis[NDIS] = { 0 }, u_angle[NANGLE] = { 0 }, u_rot[NANGLE] = { 0 };
 	int u_dis_index[3] = { 0 }, u_angle_index[3] = { 0 };//假设一个输入最多激活3个模糊子集
 	float rot;
@@ -96,18 +108,18 @@ void ObstacleAvoid::Initialize(float dis_max, float angle_max, float rot_max)
 	rotmax = rot_max;
 	dis = dis_max;
 	angle = angle_max;
-	Kdis = (NDIS / 2) / dismax;
-	Kangle = (NANGLE / 2) / anglemax;
-	Krot = rotmax / (NANGLE / 2);
+	Kdis = (NDIS/2) / dismax;
+	Kangle = (NANGLE/2) / anglemax;
+	Krot = rotmax / (NANGLE/2);
 
 	int ruleMatrix[NANGLE][NDIS] = {
-		{ RS, ZO, ZO, ZO, ZO },
-		{ RS, RS, ZO, ZO, ZO },
-		{ RM, RM, RS, ZO, ZO },
-		{ LB, LB, LM, LS, ZO },
-		{ LM, LM, LS, ZO, ZO },
-		{ LS, LS, ZO, ZO, ZO },
-		{ LS, ZO, ZO, ZO, ZO },
+		{ TRS, ZO, ZO, ZO, ZO },
+		{ TRS, TRS, ZO, ZO, ZO },
+		{ TRM, TRM, TRS, ZO, ZO },
+		{ TLL, TLL, TLM, TLS, ZO },
+		{ TLM, TLM, TLS, ZO, ZO },
+		{ TLS, TLS, ZO, ZO, ZO },
+		{ TLS, ZO, ZO, ZO, ZO },
 	};//模糊规则表
 	float dis_tp_paras[NDIS * 3] = {
 		VN, VN, N,
@@ -117,22 +129,22 @@ void ObstacleAvoid::Initialize(float dis_max, float angle_max, float rot_max)
 		F, VF, VF
 	};//距离dis的隶属度函数参数，这里隶属度函数为三角型，所以3个数据为一组
 	float angle_tp_paras[NANGLE * 3] = {
-		LB, LB, LM,
-		LB, LM, LS,
+		LL, LL, LM,
+		LL, LM, LS,
 		LM, LS, ZO,
 		LS, ZO, RS,
 		ZO, RS, RM,
-		RS, RM, RB,
-		RM, RB, RB
+		RS, RM, RL,
+		RM, RL, RL
 	};//角度angle的隶属度函数参数
 	float rot_tp_paras[NANGLE * 3] = {
-		LB, LB, LM,
-		LB, LM, LS,
-		LM, LS, ZO,
-		LS, ZO, RS,
-		ZO, RS, RM,
-		RS, RM, RB,
-		RM, RB, RB
+		TLL, TLL, TLM,
+		TLL, TLM, TLS,
+		TLM, TLS, ZO,
+		TLS, ZO, TRS,
+		ZO, TRS, TRM,
+		TRS, TRM, TRL,
+		TRM, TRL, TRL
 	};//输出量转角rot的隶属度函数参数
 
 	//设定模糊隶属度函数
@@ -157,7 +169,7 @@ void ObstacleAvoid::Initialize(float dis_max, float angle_max, float rot_max)
 /// <returns>是为有障碍物，否为无障碍物</returns>
 bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 {
-	bool ret=false;	//是否有障碍物
+	bool ret = false;	//是否有障碍物
 	//遍历扫描数据，筛选出10m内最近的障碍物
 	bool bScanObs = false;	//是否正在扫描障碍物
 	int aObsAngle[181] = { 0 };	//障碍物标记数组
@@ -184,18 +196,18 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 		ret = true;
 		int idx = 0;	//障碍物角度索引
 		int no = 0;		//障碍物编号
-		if (aObsAngle[90] > 0){
+		if (aObsAngle[0] > 0){
 			//中间有障碍物，则找出障碍物最近的边缘
 			for (int i = 1; i <= 90; i++){
 				int left = 90 + i, right = 90 - i;
-				if (aObsAngle[left] != no){
-					idx = left - 1;
-					no = aObsAngle[idx];
+				if (aObsAngle[left] == 0){
+					idx = left;
+					no = aObsAngle[left];
 					break;
 				}
-				else if (aObsAngle[right] != no){
-					idx = right + 1;
-					no = aObsAngle[idx];
+				else if (aObsAngle[right] == 0){
+					idx = right;
+					no = aObsAngle[right];
 					break;
 				}
 			}
@@ -216,21 +228,19 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 				}
 			}
 		}
-		angle = Kangle * (90 - idx);
+		angle = Kangle * (idx - 90);
 		dis = Kdis*laserData[idx];
 
 		obsInfo.avoidAngle = idx;
 		obsInfo.avoidDis = laserData[idx];
 
 		//更新障碍物信息
-		obsInfo.rightAngle = -1;
+		obsInfo.rightAngle = -91;
 		for (int i = 0; i < 181; i++){
 			if (aObsAngle[i] == no){
-				if (obsInfo.rightAngle == -1){
+				if (obsInfo.rightAngle == -91){
 					obsInfo.rightAngle = i;
 					obsInfo.rightDis = laserData[i];
-					obsInfo.leftAngle = i;
-					obsInfo.leftDis = laserData[i];
 				}
 				else{
 					obsInfo.leftAngle = i;
@@ -238,7 +248,6 @@ bool ObstacleAvoid::SetObstaclePosture(int* laserData, int len)
 				}
 			}
 		}
-		int dad = 34;
 	}
 	return ret;
 }

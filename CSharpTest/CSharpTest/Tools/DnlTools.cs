@@ -56,15 +56,29 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 计算微信链接数
         /// </summary>
-        public static void CountWXLinkNum(ObjectId projectId)
+        public static void CountWXLinkNum(ObjectId projectId, string cateName="")
         {
+            var builderKeyCate = Builders<MediaKeywordCategoryMongo>.Filter;
+            var colKeyCate = MongoDBHelper.Instance.GetMediaKeywordCategory();
+            var filterKeyCate = builderKeyCate.Eq(x => x.ProjectId, projectId) & builderKeyCate.Eq(x => x.Name, cateName);
+            var cateId = colKeyCate.Find(filterKeyCate).Project(x => x._id).FirstOrDefault();
+
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
             var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
 
             var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
-            var filterKeyMap = builderKeyMap.Eq(x => x.ProjectId, projectId) & builderKeyMap.Eq(x => x.CategoryId, ObjectId.Empty) & builderKeyMap.Eq(x => x.IsDel, false);
+            var filterKeyMap = builderKeyMap.Eq(x => x.IsDel, false);
+            if (cateId == ObjectId.Empty)
+            {
+                filterKeyMap &= builderKeyMap.Eq(x => x.ProjectId, projectId) & builderKeyMap.Eq(x => x.CategoryId, ObjectId.Empty);
+            }
+            else
+            {
+                filterKeyMap &= builderKeyMap.Eq(x => x.CategoryId, cateId);
+            }
+
             var keys = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(filterKeyMap).Project(x => new
             {
                 Id = x.KeywordId.ToString(),
@@ -79,7 +93,7 @@ namespace CSharpTest.Tools
                     int adf = 343;
                 }
                 var filterLink = builderLinkMain.Eq(x => x.KeywordId, key.Id);
-                filterLink &= builderLinkMain.Gt(x => x.CreatedAt, new DateTime(2018, 10, 1));
+                filterLink &= builderLinkMain.Gte(x => x.CreatedAt, new DateTime(2018, 12, 20));
                 var linkNum = colLinkMain.Count(filterLink);
                 colKey.UpdateOne(builderKey.Eq(x => x._id, new ObjectId(key.Id)), Builders<MediaKeywordMongo>.Update.Set(x => x.WXLinkNum, Convert.ToInt32(linkNum)));
                 CommonTools.Log("关键词 - {0}，链接数 - {1}".FormatStr(key.Name, linkNum));
@@ -3158,76 +3172,6 @@ namespace CSharpTest.Tools
             }
         }
 
-        public void SearchWXName(ObjectId projectId,int startPos,int endPos)
-        {
-            var builderKey = Builders<MediaKeywordMongo>.Filter;
-            var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
-            var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
-            var builderLinkContent = Builders<WXLinkContentMongo>.Filter;
-            var colLinkContent = MongoDBHelper.Instance.GetWXLinkContent();
-            var builderCate = Builders<MediaKeywordCategoryMongo>.Filter;
-
-            var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
-            var filterKeyMap = builderKeyMap.Eq(x => x.ProjectId, projectId) & builderKeyMap.Eq(x => x.IsDel, false);
-            var keys = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(filterKeyMap).Project(x => new
-            {
-                Id = x.KeywordId.ToString(),
-                Name = x.Keyword
-            }).ToList();
-
-            keys = keys.DistinctBy(x => x.Name);
-            //获取当前分组所有链接
-            var names = colLinkMain.Find(builderLinkMain.In(x => x.KeywordId, keys.Select(x=>x.Id))&builderLinkMain.Eq(x=>x.NameId,ObjectId.Empty)).Project(x => new
-            {
-                Account=x.Name,
-                AccountId=x.NameId,
-                Name=x.Nickname
-            }).ToList();
-            var builder_WXName = Builders<WXName_NewrankMongo>.Filter;
-            var col_WXName = MongoDBHelper.Instance.GetWXName_Newrank();
-
-            names = names.DistinctBy(x => x.Account).Where(x => x.Account != "").ToList();
-            int i = startPos;
-            foreach (var x in names)
-            {
-                if (i == endPos)
-                    break;
-                CommonTools.Log("当前查询公众号[{0}/{1}]：{2}".FormatStr(i, names.Count, x.Name));
-                var filter_WXName = builder_WXName.Eq(s => s.Name, x.Name);
-                ObjectId WXNameId = col_WXName.Find(filter_WXName).Project(s => s._id).FirstOrDefault();
-                if (WXNameId == ObjectId.Empty)
-                {
-                    CommonTools.Log("通过搜狗查询！");
-                    var accountInfo = SearchOfficialAccount(x.Name, 1);
-                    if (accountInfo == null)
-                        CommonTools.Log("该公众号疑似改名，暂缺");
-                    if (accountInfo != null)
-                    {
-                        var wxName = new WXName_NewrankMongo()
-                        {
-                            _id = ObjectId.GenerateNewId(),
-                            CreatedAt = DateTime.Now.AddHours(8),
-                            Account = accountInfo.WeChatId,
-                            Description = accountInfo.Introduction,
-                            Name = accountInfo.Name,
-                            CodeImageUrl = accountInfo.QrCode,
-                            HeadImageUrl = accountInfo.ProfilePicture,
-                        };
-                        WXNameId = wxName._id;
-                        col_WXName.InsertOne(wxName);
-                        
-                    }
-                }
-                if (WXNameId != ObjectId.Empty)
-                {
-                    var filterLinkMain = builderLinkMain.Eq(s => s.Name, x.Account);
-                    var updateLinkMain = Builders<WXLinkMainMongo>.Update.Set(s => s.NameId, WXNameId);
-                    colLinkMain.UpdateMany(filterLinkMain, updateLinkMain);
-                }
-                i++;
-            }
-        }
 
         public static void MoveKey(ObjectId oldProId, ObjectId newProId)
         {
@@ -3287,7 +3231,7 @@ namespace CSharpTest.Tools
             {
                 var keyIds = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(Builders<MediaKeywordMappingMongo>.Filter.Eq(x => x.CategoryId, cate._id)).Project(x => x.KeywordId).ToList();
                 var linkCount = MongoDBHelper.Instance.GetMediaKeyword().Find(Builders<MediaKeywordMongo>.Filter.In(x => x._id, keyIds)).Project(x => x.WXLinkNum).ToList();
-                Console.WriteLine("{0}-{1}-{2}".FormatStr(cate.Name, linkCount.Count,linkCount.Sum()));
+                Console.WriteLine("{0};{1};{2}".FormatStr(cate.Name, linkCount.Count,linkCount.Sum()));
             }
         }
 
@@ -3387,10 +3331,19 @@ namespace CSharpTest.Tools
         /// <summary>
         /// 检查微信链接是否与关键词相关
         /// </summary>
-        /// <param name="proId">项目Id</param>
-        public static void CheckWXLink(ObjectId proId)
+        /// <param name="projectId">项目Id</param>
+        public static void CheckWXLink(ObjectId projectId,string cateName="")
         {
+            var fileName = "wxNicks.txt";
+            var tpFile = File.OpenText(fileName);
+            var wxNicks = tpFile.ReadToEnd().Split(';').ToList();
+            tpFile.Close();
             var segmenter = new JiebaSegmenter();
+
+            var builderKeyCate = Builders<MediaKeywordCategoryMongo>.Filter;
+            var colKeyCate = MongoDBHelper.Instance.GetMediaKeywordCategory();
+            var filterKeyCate = builderKeyCate.Eq(x => x.ProjectId, projectId) & builderKeyCate.Eq(x => x.Name, cateName);
+            var cateId = colKeyCate.Find(filterKeyCate).Project(x => x._id).FirstOrDefault();
 
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
@@ -3398,7 +3351,15 @@ namespace CSharpTest.Tools
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
 
             var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
-            var filterKeyMap = builderKeyMap.Eq(x => x.ProjectId, proId) & builderKeyMap.Eq(x => x.CategoryId, ObjectId.Empty) & builderKeyMap.Eq(x => x.IsDel, false);
+            var filterKeyMap = builderKeyMap.Eq(x => x.IsDel, false);
+            if (cateId == ObjectId.Empty)
+            {
+                filterKeyMap &= builderKeyMap.Eq(x => x.ProjectId, projectId) & builderKeyMap.Eq(x => x.CategoryId, ObjectId.Empty);
+            }
+            else
+            {
+                filterKeyMap &= builderKeyMap.Eq(x => x.CategoryId, cateId);
+            }
             var keys = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(filterKeyMap).Project(x => new
             {
                 Id = x.KeywordId.ToString(),
@@ -3411,7 +3372,7 @@ namespace CSharpTest.Tools
             foreach (var key in keys)
             {
                 n++;
-                //if (n < 33)
+                //if (n < 15)
                 //{
                 //    continue;
                 //}
@@ -3421,7 +3382,7 @@ namespace CSharpTest.Tools
                     int adf = 343;
                 }
                 var filterLink = builderLinkMain.Eq(x => x.KeywordId, key.Id);
-                filterLink &= builderLinkMain.Gt(x => x.CreatedAt, new DateTime(2018, 10, 1));
+                filterLink &= builderLinkMain.Gt(x => x.CreatedAt, new DateTime(2018, 12, 20));
                 //filterLink &= builderLinkMain.Regex(x => x.Url, "timestamp");
                 var links = colLinkMain.Find(filterLink).Project(x => new
                 {
@@ -3446,6 +3407,8 @@ namespace CSharpTest.Tools
                     {
                         int df = 342;
                     }
+                    if (wxNicks.Contains(link.WxNick))
+                        continue;
                     var checkKeys = segmenter.Cut(key.Name).ToList();
                     string tp = checkKeys[0];
                     for (int j = 0; j < checkKeys.Count; )
@@ -3502,19 +3465,36 @@ namespace CSharpTest.Tools
                             continue;
                         CommonTools.Log("链接无关，地址：{0}".FormatStr(link.Url));
                         CommonTools.Log("{0}\t{1}".FormatStr(link.WxNick, link.WxAccount));
+                        Console.Write("请确认是否打开该链接（1/0)：");
+                        char c = Console.ReadKey().KeyChar;
+                        Console.Write('\n');
+                        if (c == '1')
+                        {
+                            System.Diagnostics.Process.Start(link.Url);
+                        }
                         Console.Write("请确认是否删除该链接（1/0)：");
-                        string str = Console.ReadLine();
-                        if (str == "1")
+                        c = Console.ReadKey().KeyChar;
+                        Console.Write('\n');
+                        if (c == '1')
                         {
                             //删除完全无关链接
                             filterLink = builderLinkMain.Eq(x => x._id, link.Id);
                             colLinkMain.DeleteOne(filterLink);
                             colLinkContent.DeleteOne(filterLinkContent);
                         }
+                        else
+                        {
+                            wxNicks.Add(link.WxNick);
+                        }
                     }
                     
                 }
             }
+            var fs = new FileStream(fileName, FileMode.OpenOrCreate);
+            var sw = new StreamWriter(fs);
+            sw.Write(string.Join(";", wxNicks));
+            sw.Close();
+            fs.Close();
         }
 
         /// <summary>
@@ -3557,7 +3537,7 @@ namespace CSharpTest.Tools
                     int adf = 343;
                 }
                 var filterLink = builderLinkMain.Eq(x => x.KeywordId, key.Id);
-                filterLink &= builderLinkMain.Gt(x => x.CreatedAt, new DateTime(2018, 10, 1));
+                filterLink &= builderLinkMain.Gte(x => x.CreatedAt, new DateTime(2018, 12, 7));
                 //filterLink &= builderLinkMain.Regex(x => x.Url, "timestamp");
                 var links = colLinkMain.Find(filterLink).Project(x => new
                 {
@@ -3640,199 +3620,143 @@ namespace CSharpTest.Tools
             fs.Close();
         }
 
-        public void ImportWXLink(string filePath)
+        /// <summary>
+        /// 导出百度关键词信息表
+        /// </summary>
+        /// <param name="proId"></param>
+        public static void ExportBaiduKeyInfo()
         {
-            FileStream fs = new FileStream(filePath, FileMode.Open);
-            StreamReader sr = new StreamReader(fs);
-            sr.ReadLine();
-            string str = sr.ReadLine();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
-            var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
-            while (!string.IsNullOrEmpty(str))
+            //获取项目信息
+            var pros=MongoDBHelper.Instance.GetIW2S_Projects().Find(Builders<IW2S_Project>.Filter.Eq(x=>x.IsDel,false)).Project(x=>new {
+                Id=x._id,
+                Name=x.Name
+            }).ToList();
+            pros.RemoveAll(x => x.Name.Contains("备份") || x.Name.Contains("克隆"));
+            //获取分组信息
+            var builderCate=Builders<Dnl_KeywordCategory>.Filter;
+            var filterCate = builderCate.In(x => x.ProjectId, pros.Select(x => x.Id)) & builderCate.Eq(x => x.ParentId, ObjectId.Empty) & builderCate.Eq(x => x.IsDel, false);
+            var cates = MongoDBHelper.Instance.GetDnl_KeywordCategory().Find(filterCate).Project(x => new
             {
-                var infos = str.Split(',').ToList();
-                CommonTools.Log("链接：{0}".FormatStr(infos[1]));
-                var linkId = new ObjectId(infos[0]);
-                var filterLinkMain=builderLinkMain.Eq(x => x._id, linkId);
-                string oldWxNick=colLinkMain.Find(filterLinkMain).Project(x=>x.Nickname).FirstOrDefault();
-                string wxNick = infos[2];
-                string url = infos[3];
-                #region 获取公号信息
-                //查询是否已存在公号信息
-                var builder_WXName = Builders<WXName_NewrankMongo>.Filter;
-                var col_WXName = MongoDBHelper.Instance.GetWXName_Newrank();
-                var filter_WXName = builder_WXName.Eq(x => x.Name, wxNick);
-                ObjectId WXNameId = col_WXName.Find(filter_WXName).Project(x => x._id).FirstOrDefault();
-                string account = "";
-                OfficialAccount accountInfo = null;
-                if (WXNameId == ObjectId.Empty)
-                {
-                    //不存在时查询公号
-                    //int waite = r.Next(5 * 1000, 10 * 1000);
-                    //CommonTools.Log("休眠{0}s，避免访问过于频繁！".FormatStr(waite / 1000));
-                    //Thread.Sleep(waite);
-                    CommonTools.Log("当前查询公众号：{0}".FormatStr(wxNick));
-                    accountInfo = SearchOfficialAccount(wxNick, 1);
-                    if (accountInfo != null)
-                    {
-                        var wxName = new WXName_NewrankMongo()
-                        {
-                            _id = ObjectId.GenerateNewId(),
-                            CreatedAt = DateTime.Now.AddHours(8),
-                            Account = accountInfo.WeChatId,
-                            Description = accountInfo.Introduction,
-                            Name = accountInfo.Name,
-                            CodeImageUrl = accountInfo.QrCode,
-                            HeadImageUrl = accountInfo.ProfilePicture,
-                        };
+                Id = x._id,
+                Name = x.Name,
+                ProjectId = x.ProjectId
+            }).ToList();
+            //获取关键词信息
+            var builderMap = Builders<Dnl_KeywordMapping>.Filter;
+            var filterMap = builderMap.In(x => x.CategoryId, cates.Select(x => x.Id)) & builderMap.Eq(x => x.IsDel, false);
+            //filterMap &= builderMap.Eq(x => x.ParentCategoryId, ObjectId.Empty);     //不获取一级分组以下内关键词
+            var maps = MongoDBHelper.Instance.GetDnl_KeywordMapping().Find(filterMap).Project(x => new
+            {
+                KeywordId = x.KeywordId,
+                Name = x.Keyword,
+                CategoryId = x.CategoryId,
+                ProjectId = x.ProjectId,
+            }).ToList();    //关键词映射列表
 
-                        col_WXName.InsertOne(wxName);
-                        WXNameId = wxName._id;
-                        account = accountInfo.WeChatId;
-                    }
-                }
-                else
-                {
-                    account = col_WXName.Find(filter_WXName).Project(x => x.Account).FirstOrDefault();
-                }
-                if(oldWxNick!=wxNick){
-                    colLinkMain.UpdateOne(filterLinkMain, Builders<WXLinkMainMongo>.Update.Set(x => x.Name, account).Set(x => x.NameId, WXNameId).Set(x=>x.Nickname,wxNick));
-                }
-                #endregion
-
-                #region 获取真实链接
-                string linkUrl = System.Web.HttpUtility.UrlEncode(url);    //url编码后的链接地址
-                string trueUrl = "";
-                string appid = "33e8773009029e227badd9e8d7477daf";
-                if (!string.IsNullOrEmpty(account))
-                {
-                    while (string.IsNullOrEmpty(trueUrl))
-                    {
-                        string reqUrl = "https://api.shenjian.io/?appid={0}&url={1}&account={2}".FormatStr(appid, linkUrl, account);
-                        JObject trueUrlJson = JObject.Parse(WebApiInvoke.CreateGetHttpResponse(reqUrl));
-                        try
-                        {
-                            trueUrl = trueUrlJson["data"]["article_origin_url"].ToString();
-                            CommonTools.Log(string.Format("真实链接：{0}".FormatStr(trueUrl)));
-                        }
-                        catch (Exception ex)
-                        {
-                            CommonTools.Log(trueUrlJson["reason"].ToString());
-                            Thread.Sleep(1000);
-                            if (trueUrlJson["reason"].ToString() == "链接服务失败")
-                                continue;
-                            else
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    CommonTools.Log("因获取不到公众号，暂时无法获取真实链接，先保存临时链接");
-                    trueUrl = url;
-                }
-                colLinkMain.UpdateOne(filterLinkMain, Builders<WXLinkMainMongo>.Update.Set(x => x.Url, trueUrl));
-                #endregion
-                str = sr.ReadLine();
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("项目");
+            IRow rowHead = sheet.CreateRow(0);
+            rowHead.CreateCell(0).SetCellValue("编号");
+            rowHead.CreateCell(1).SetCellValue("名称");
+            for (int i = 0; i < pros.Count; i++)
+            {
+                IRow row = sheet.CreateRow(i + 1);
+                row.CreateCell(0).SetCellValue(i);
+                row.CreateCell(1).SetCellValue(pros[i].Name);
             }
+            sheet = workbook.CreateSheet("分组");
+            rowHead = sheet.CreateRow(0);
+            rowHead.CreateCell(0).SetCellValue("编号");
+            rowHead.CreateCell(1).SetCellValue("名称");
+            rowHead.CreateCell(2).SetCellValue("项目编号");
+            rowHead.CreateCell(3).SetCellValue("项目名称");
+            for (int i = 0; i < cates.Count; i++)
+            {
+                IRow row = sheet.CreateRow(i + 1);
+                row.CreateCell(0).SetCellValue(i);
+                row.CreateCell(1).SetCellValue(cates[i].Name);
+                int idx = pros.FindIndex(x => x.Id == cates[i].ProjectId);
+                if (idx != -1)
+                {
+                    row.CreateCell(2).SetCellValue(idx);
+                    row.CreateCell(3).SetCellValue(pros[idx].Name);
+                }
+            }
+            sheet = workbook.CreateSheet("关键词");
+            rowHead = sheet.CreateRow(0);
+            rowHead.CreateCell(0).SetCellValue("编号");
+            rowHead.CreateCell(1).SetCellValue("名称");
+            rowHead.CreateCell(2).SetCellValue("分组编号");
+            rowHead.CreateCell(3).SetCellValue("分组名称");
+            rowHead.CreateCell(4).SetCellValue("项目编号");
+            rowHead.CreateCell(5).SetCellValue("项目名称");
+            for (int i = 0; i < maps.Count; i++)
+            {
+                IRow row = sheet.CreateRow(i + 1);
+                row.CreateCell(0).SetCellValue(i);
+                row.CreateCell(1).SetCellValue(maps[i].Name);
+                int idx = cates.FindIndex(x => x.Id == maps[i].CategoryId);
+                if (idx != -1)
+                {
+                    row.CreateCell(2).SetCellValue(idx);
+                    row.CreateCell(3).SetCellValue(cates[idx].Name);
+                }
+                idx = pros.FindIndex(x => x.Id == maps[i].ProjectId);
+                if (idx != -1)
+                {
+                    row.CreateCell(4).SetCellValue(idx);
+                    row.CreateCell(5).SetCellValue(pros[idx].Name);
+                }
+            }
+
+            FileStream fs = new FileStream("F:\\关键词.xls", FileMode.OpenOrCreate);
+            workbook.Write(fs);
+            fs.Close();
+            CommonTools.Log("导出完毕");
         }
 
         HttpHelper HttpHp = new HttpHelper();
 
-        /// <summary>
-        /// 公众号
-        /// </summary>
-        public class OfficialAccount
+        public static void DeleteExtraLink(ObjectId projectId, string cateName, int retainNum)
         {
-            /// <summary>
-            /// 微信公众号页
-            /// </summary>
-            public string AccountPageurl { get; set; }
-            /// <summary>
-            /// 公号ID（唯一)
-            /// </summary>
-            public string WeChatId { get; set; }
-            /// <summary>
-            /// 名称
-            /// </summary>
-            public string Name { get; set; }
-            /// <summary>
-            /// 介绍
-            /// </summary>
-            public string Introduction { get; set; }
-            /// <summary>
-            /// //是否官方认证账号
-            /// </summary>
-            public bool IsAuth { get; set; }
-            ///// <summary>
-            ///// 账号主体
-            ///// </summary>
-            //public string CertifiedText { get; set; }
-            /// <summary>
-            /// 二维码链接
-            /// </summary>
-            public string QrCode { get; set; }
-            /// <summary>
-            /// 头像链接
-            /// </summary>
-            public string ProfilePicture { get; set; }
+            var builderKey = Builders<MediaKeywordMongo>.Filter;
+            var colKey = MongoDBHelper.Instance.GetMediaKeyword();
+            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+            var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
+            var builderLinkContent = Builders<WXLinkContentMongo>.Filter;
+            var colLinkContent = MongoDBHelper.Instance.GetWXLinkContent();
 
-            public string RecentArticleUrl { get; set; }
-        }
+            var builderKeyCate = Builders<MediaKeywordCategoryMongo>.Filter;
+            var colKeyCate = MongoDBHelper.Instance.GetMediaKeywordCategory();
+            var filterKeyCate = builderKeyCate.Eq(x => x.ProjectId, projectId) & builderKeyCate.Eq(x => x.Name, cateName);
+            var cateId = colKeyCate.Find(filterKeyCate).Project(x => x._id).FirstOrDefault();
 
-        List<string> Errors = new List<string> { "为了保护你的网络安全，请输入验证码", "用户您好，您的访问过于频繁，为确认本次访问为正常用户行为，需要您协助验证" };
-
-
-        /// <summary>
-        /// 搜索公众号
-        /// </summary>
-        /// <param name="keyword">搜索关键字</param>
-        /// <param name="page">第几页</param>
-        /// <returns></returns>
-        public OfficialAccount SearchOfficialAccount(string keyword, int page = 1)
-        {
-            List<OfficialAccount> accountList = new List<OfficialAccount>();
-
-            string requestUrl = string.Format("http://weixin.sogou.com/weixin?query={0}&_sug_type_=&_sug_=n&type=1&page={1}&ie=utf8", keyword, page);
-            string text = HttpHp.GetWithProxyIp(requestUrl, Errors);
-            HtmlDocument pageDoc = new HtmlDocument();
-            pageDoc.LoadHtml(text);
-            HtmlNodeCollection targetArea = pageDoc.DocumentNode.SelectNodes("//ul[@class='news-list2']/li");
-            if (targetArea != null)
+            var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
+            var filterKeyMap = builderKeyMap.Eq(x => x.CategoryId, cateId) & builderKeyMap.Eq(x => x.IsDel, false);
+            var keys = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(filterKeyMap).Project(x => new
             {
-                foreach (HtmlNode node in targetArea)
-                {
-                    try
-                    {
-                        OfficialAccount accountInfo = new OfficialAccount();
+                Id = x.KeywordId.ToString(),
+                Name = x.Keyword
+            }).ToList();
 
-                        //链接中包含了&amp; html编码符，要用htmdecode，不是urldecode
-                        accountInfo.AccountPageurl = WebUtility.HtmlDecode(node.SelectSingleNode("div/div[@class='img-box']/a").GetAttributeValue("href", ""));
-                        //accountInfo.ProfilePicture = node.SelectSingleNode("div/div[1]/a/img").InnerHtml;
-                        accountInfo.ProfilePicture = WebUtility.HtmlDecode(node.SelectSingleNode("div/div[@class='img-box']/a/img").GetAttributeValue("src", ""));
-                        accountInfo.Name = node.SelectSingleNode("div/div[2]/p[1]").InnerText.Trim().Replace("<!--red_beg-->", "").Replace("<!--red_end-->", "");
-                        accountInfo.WeChatId = node.SelectSingleNode("div/div[2]/p[2]/label").InnerText.Trim();
-                        accountInfo.QrCode = WebUtility.HtmlDecode(node.SelectSingleNode("div/div[3]/span/img").GetAttributeValue("src", ""));
-                        accountInfo.Introduction = node.SelectSingleNode("dl[1]/dd").InnerText.Trim().Replace("<!--red_beg-->", "").Replace("<!--red_end-->", "");
-                        //早期的账号认证和后期的认证显示不一样？，对比 bitsea 和 NUAA_1952 两个账号
-                        //现在改为包含该script的即认证了
-                        if (node.InnerText.Contains("document.write(authname('2'))"))
-                        {
-                            accountInfo.IsAuth = true;
-                        }
-                        else
-                        {
-                            accountInfo.IsAuth = false;
-                        }
-                        accountList.Add(accountInfo);
-                    }
-                    catch (Exception e)
-                    {
-                        CommonTools.Log(e.Message);
-                    }
-                }
+            keys = keys.DistinctBy(x => x.Name);
+            var filterLink = builderLinkMain.In(x => x.KeywordId, keys.Select(x => x.Id));
+            filterLink &= builderLinkMain.Gt(x => x.CreatedAt, new DateTime(2018, 12, 20));
+            var links = colLinkMain.Find(filterLink).SortByDescending(x => x.PostTime).Project(x => new
+            {
+                Id = x._id,
+                Tilte = x.Title,
+                PublishAt = x.PostTime,
+                KeywordId=x.KeywordId
+            }).ToList();
+            int delNum = links.Count - retainNum;
+            for (int i = links.Count - 1; links.Count - i <= delNum; i--)
+            {
+                colLinkMain.DeleteOne(builderLinkMain.Eq(x => x._id, links[i].Id));
+                colLinkContent.DeleteOne(builderLinkContent.Eq(x => x.LinkId, links[i].Id));
+                colKey.UpdateOne(builderKey.Eq(x => x._id, new ObjectId(links[i].KeywordId)), Builders<MediaKeywordMongo>.Update.Inc(x => x.WXLinkNum, -1));
+                CommonTools.Log("删除链接[{0}/{1}] - {2}".FormatStr(i - retainNum + 1, links.Count - retainNum, links[i].Tilte));
             }
-            return accountList.Find(x => x.Name == keyword || x.WeChatId == keyword);
         }
 
     }

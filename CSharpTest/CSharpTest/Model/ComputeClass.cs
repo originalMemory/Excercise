@@ -58,10 +58,11 @@ namespace CSharpTest.Model
     public class LinkStatus
     {
         public DateTime PublishTime { get; set; }
-        public string CategoryId { get; set; }
+        public ObjectId Id { get; set; }
         public string Title { get; set; }
+        public string Url { get; set; }
         public string Description { get; set; }
-        public string ProjectId { get; set; }
+        public int Type { get; set; }
     }
 
     /// <summary>

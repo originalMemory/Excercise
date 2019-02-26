@@ -11,7 +11,7 @@ namespace LaserTranslate
 {
     class Program
     {
-        static int LEN = 101;
+        static int LEN = 181;
         static void Main(string[] args)
         {
             var curDir=Directory.GetCurrentDirectory();
@@ -26,7 +26,7 @@ namespace LaserTranslate
                 string data = sr.ReadToEnd();
                 sr.Close();
                 fs.Close();
-                string startStr = "02 80 CE 00 B0 65 00";
+                string startStr = "02 80 6E 01 B0 B5 00";
                 //按指定要求分割文本
                 var dataList = Regex.Split(data,startStr).ToList();
                 if (dataList.Count == 0)
@@ -64,7 +64,7 @@ namespace LaserTranslate
                 }
                 for (int j = 0; j < LEN; j++)
                 {
-                    sw.Write((40 + j));
+                    sw.Write((100 + j));
                     for (int k = 0; k < result.Count; k++)
                     {
                         sw.Write(string.Format(",{0}", result[k][j]));

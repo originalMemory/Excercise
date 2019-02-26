@@ -82,6 +82,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="avoid.h" />
     <ClInclude Include="mytools.h" />
     <ClInclude Include="pid.h" />
     <ClInclude Include="sort.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="avoid.cpp" />
     <ClCompile Include="C++excercise.cpp" />
     <ClCompile Include="sort.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -130,13 +130,14 @@ namespace MyTools.CrawImg
             //获取图片链接
             string json = Regex.Match(respHtml, "JSON.parse.+;").Value;
             json = Regex.Unescape(Regex.Unescape(json));
-            MatchCollection urls = Regex.Matches(json, "\"path\":\"(?<url>.+?)/w650");
+            MatchCollection urls = Regex.Matches(json, "\"path\":\"(?<url>.+?)~tplv-banciyuan-w650.image");
             foreach (Match x in urls)
             {
                 string str;
                 str = x.Groups["url"].Value;
                 if (!string.IsNullOrEmpty(str))
                 {
+                    str = Regex.Replace(str, "p.-bcy.byteimg.com/img/banciyuan", "img-bcy-qn.pstatp.com");
                     img.Urls.Add(str);
                 }
             }

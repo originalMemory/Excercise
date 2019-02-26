@@ -45,17 +45,16 @@ void getPath(string dirPath, vector<string>& files, bool isRecur = false, int ty
 /// 合并不同文件夹，并按序号重命名文件
 /// </summary>
 /// <param name="dir_path">文件夹路径</param>
-void MergeDirFiles(string dir_path){
+void MergeDirFiles(string dirPath,int zeroNum){
 	vector<string> files;
 
-	getPath(dir_path, files, true);
+	getPath(dirPath, files, true);
 
 	char szDrive[_MAX_DRIVE];   //磁盘名
 	char szDir[_MAX_DIR];       //路径名
 	char szFname[_MAX_FNAME];   //文件名
 	char szExt[_MAX_EXT];       //后缀名
 	int num = 1;
-	int per = 1;
 	for (vector<string>::iterator iter = files.begin(); iter != files.end(); iter++)
 	{
 		cout << *iter << endl;
@@ -67,34 +66,18 @@ void MergeDirFiles(string dir_path){
 			|| strcmp(szExt, ".png") == 0 || strcmp(szExt, ".PNG") == 0 || strcmp(szExt, ".gif") == 0 || strcmp(szExt, ".GIF") == 0
 			|| strcmp(szExt, ".bmp") == 0 || strcmp(szExt, ".BMP") == 0 || strcmp(szExt, ".tif") == 0 || strcmp(szExt, ".TIF") == 0)
 		{
-			string newName;
-
-			switch (num)
+			string newName="";
+			int per = 0,tp=num;
+			while (tp!=0)
 			{
-			case 10:
-				per = 2;
-				break;
-			case 100:
-				per = 3;
-				break;
-			default:
-				break;
+				tp /= 10;
+				per++;
 			}
-
-			switch (per)
+			for (int i = per; i < zeroNum;i++)
 			{
-			case 1:
-				newName = "00" + to_string(num);
-				break;
-			case 2:
-				newName = "0" + to_string(num);
-				break;
-			case 3:
-				newName = to_string(num);
-				break;
-			default:
-				break;
+				newName += "0";
 			}
+			newName += to_string(num);
 
 			int j = 0;
 			while (szExt[j] != '\0')
@@ -102,7 +85,7 @@ void MergeDirFiles(string dir_path){
 				newName += szExt[j];
 				j++;
 			}
-			string new_path = dir_path + "\\" + newName;
+			string new_path = dirPath + "\\" + newName;
 			cout << new_path << endl;
 			num++;
 			MoveFile(old_path.c_str(), new_path.c_str());
@@ -124,4 +107,45 @@ void MergeDirFiles(string dir_path){
 
 
 	}
+}
+
+/// <summary>
+/// KMP算法匹配字符串
+/// </summary>
+/// <param name="str">源字符串</param>
+/// <param name="pattern">匹配字符串</param>
+/// <returns>匹配字符串首次出现的位置。无匹配返回-1，匹配字符串空返回0</returns>
+int kmp(string str, string pattern){
+	if (pattern == "")
+		return 0;
+	//计算next数组
+	vector<int> next(pattern.size(), 0);
+	int i = 1, j = 0;
+	while (i < pattern.size()){
+		if (pattern[i] == pattern[j])
+			next[i++] = ++j;
+		else if (j == 0)
+			next[i++] = j;
+		else
+			j = next[j - 1];
+	}
+
+	//通过next数组获取匹配串首次出现的位置
+	i = 0;
+	j = 0;
+	while (i < str.size() && str.size() - i >= pattern.size() - j){
+		while (j < pattern.size() && str[i] == pattern[j]){
+			i++;
+			j++;
+		}
+		if (j == pattern.size()){
+			return i - j;
+			j = next[j - 1];
+		}
+		else if (j == 0)
+			i++;
+		else
+			j = next[j - 1];
+	}
+	return -1;
 }

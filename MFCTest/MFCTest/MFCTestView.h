@@ -29,9 +29,6 @@
 #define MAXPACKET 812
 
 
-void RecordFuc();		//Seekur记录函数
-
-
 //seekur控制参数
 typedef struct SeekurPara{
 	double distance;	//距离
@@ -80,34 +77,31 @@ public:
 	//CEdit m_editLongitude;		//经度文本框
 	//CEdit m_editLatitude;		//纬度文本框
 	INewLineFeedbackPtr m_pNewLineFeedback;
-	bool isTracked;		//是否正在追踪
+	bool m_bTrack;		//是否正在追踪
 
 //成员对象
 protected:
-	CSerialPort serialPort_gps;		//GPS串口通信类
-	CSerialPort serialPort_laser;		//激光串口通信类
-	string gpsStr;		//获取到的完整的一句GPS语句
-	bool isLaserStart;	//是否开始写入激光数据
-	string laserBuf[MAXPACKET];	//获取到激光16进制数据缓冲
-	string laserStr;
-	int laserBufPos;	//当前激光缓冲数据位置
-	string laserCheckBuf[7];	//获取到激光16进制数据头缓冲
-	int laserCheckBufPos;	//当前激光缓冲数据位置
-	int laserDataLength;	//激光数据长度
-	double laserRange;		//激光角度范围
-	double laserRes;		//激光角度分辨率
-	
-	CWinThread* seekur_thread;		//Seekur线程句柄
-	CWinThread* record_thread;		//Seekur线程句柄
-	//CWinThread* track_thread;		//追踪线程句柄
+	CSerialPort m_csGps;		//GPS串口通信类
+	string m_sTpGps;		//获取到的完整的一句GPS语句
 	bool isGPSEnd;		//本轮GPS语句组是否已至最后
 	IPolylinePtr pPath;			//创建的路径
 	IElementPtr lastPointElement;	// GPS最新坐标(地图）
 	IPointPtr pSeekurPoint;	// GPS获取的Seekur最新坐标
+
+	CSerialPort m_csLaser;		//激光串口通信类
+	bool m_bLaserStartWrite;	//是否开始写入激光数据
+	int m_nLastLaserFirst = -1;	//两个指针的数据中的前半部分
+	int m_anLaserData[LEN180X1];	//解析后的激光扫描信息
+	int m_nLaserBufIdx;	//当前激光距离数据位置
+	int m＿nLaserCheckBufIdx;	//当前激光头部校验数据位置
+	int m_nLaserLen = 181;	//激光数据长度，两个8位（高位低位）合成16位包长
+	DWORD m_tLastCompute;	//激光上一次计算的时间
+	
+	CWinThread* seekur_thread;		//Seekur线程句柄
+	CWinThread* record_thread;		//记录线程句柄
 	CString pathLayerName;		//路径图层名称
 	bool isPathExist;	//是否已加载路径图层
 	ObstacleAvoid obsAvoid;		//避障行为类
-	bool isAvoid;	//是否是避障状态
 	string testStr;
 	double lastClock;		//上次计时时间，用以定时录入文件数据
 	CStdioFile dataFile;		//数据文件，记录运行中数据状态
@@ -118,7 +112,7 @@ private:
 	void OnTestMarkerStyle();
 	ISymbolPtr m_isymbol;
 	static UINT SeekurFuc(LPVOID lParam);		//Seekur控制线程函数
-	static UINT RecordFuc2(LPVOID lParam);		//Seekur控制线程函数
+	static UINT RecordFuc(LPVOID lParam);		//Seekur记录函数
 	
 	//void CreateShapeFile();
 	void ComputeTurnHeading();		//追踪函数
@@ -211,12 +205,9 @@ private:
 	void OnGPSAnalysis(string spData);
 	/*
 	描述：激光串口数据解析
-	参数：
-	@buf：16进制检测数据组
-	@len：数据长度
 	返回值：
 	*/
-	void OnLaserAnalysis(string *buf, int len);
+	void OnLaserAnalysis();
 
 public:
 	// Seekur的位置（x,y）
@@ -226,7 +217,7 @@ public:
 	afx_msg void OnBtnSeekurQuery();
 	afx_msg void OnBtnSeekurStop();
 	// Seekur加速度
-	CEdit m_editSeekurAccel;
+	CEdit m_editObsPos;
 	// gps速度(km/h)
 	CEdit m_editGPSSpeedKm;
 	// 旋转速度文本控件
