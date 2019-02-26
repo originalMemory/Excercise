@@ -87,3 +87,8 @@ PythonEx/hdf/FY4A_4000.hdr
 PythonEx/hdf/FY4A_4000.dat
 LaserTranslate/LaserTranslate/bin/
 LaserTranslate/LaserTranslate/obj/
+PythonEx/__pycache__/
+PythonEx/w2cData/
+PythonEx/error_word.txt
+PlanningPath/PlanningPath/bin/
+PlanningPath/PlanningPath/obj/
