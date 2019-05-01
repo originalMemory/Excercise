@@ -201,19 +201,19 @@ namespace CSharpTest.Helper
             return base.GetCollection<MediaKeywordMappingMongo>("MediaKeywordMapping");
         }
 
-        public IMongoCollection<WXLinkMainMongo> GetWXLinkMain()
+        public IMongoCollection<WxLinkMainMongo> GetWXLinkMain()
         {
-            return base.GetCollection<WXLinkMainMongo>("WXLinkMain");
+            return base.GetCollection<WxLinkMainMongo>("WXLinkMain");
         }
 
-        public IMongoCollection<WXLinkOtherMongo> GetWXLinkOther()
+        public IMongoCollection<WxLinkOtherMongo> GetWXLinkOther()
         {
-            return base.GetCollection<WXLinkOtherMongo>("WXLinkOther");
+            return base.GetCollection<WxLinkOtherMongo>("WXLinkOther");
         }
 
-        public IMongoCollection<WXLinkContentMongo> GetWXLinkContent()
+        public IMongoCollection<WxLinkContentMongo> GetWXLinkContent()
         {
-            return base.GetCollection<WXLinkContentMongo>("WXLinkContent");
+            return base.GetCollection<WxLinkContentMongo>("WXLinkContent");
         }
 
         public IMongoCollection<WXNameMongo> GetWXName()

@@ -13,7 +13,6 @@
 #define IDC_EDIT3                       1003
 #define IDC_BUTTON1                     1004
 #define IDC_EDIT4                       1005
-#define IDC_EDIT9                       1006
 #define IDC_EDIT10                      1007
 #define IDC_TOCCONTROL1                 1008
 #define IDC_BUTTON2                     1009
@@ -27,15 +26,11 @@
 #define IDC_CHECK1                      1017
 #define IDC_EDIT7                       1018
 #define IDC_EDIT8                       1019
-#define IDC_CHECK2                      1020
 #define IDC_EDIT11                      1021
 #define IDC_BUTTON4                     1022
-#define IDC_EDIT18                      1023
-#define IDC_EDIT19                      1024
 #define IDC_EDIT14                      1025
 #define IDC_EDIT15                      1026
 #define IDC_EDIT20                      1027
-#define IDC_BUTTON5                     1028
 #define IDC_BUTTON6                     1029
 #define IDC_EDIT21                      1030
 #define IDC_EDIT22                      1031

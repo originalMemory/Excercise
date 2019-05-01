@@ -154,6 +154,7 @@
     <Compile Include="Tools\MyTools.cs" />
     <Compile Include="Tools\VipMaTools.cs" />
     <Compile Include="Tools\WebApiInvoke.cs" />
+    <Compile Include="Tools\WongLongAPI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -111,13 +111,27 @@ UINT CMFCTestView::RecordFuc(LPVOID lParam){
 
 			//计算障碍物坐标
 			if (g_bAvoid){
-				double tp_x = 0, tp_y = 0;
-				//从极坐标转为Seekur为原点的北京54坐标
-				tp_x = g_cObsInfo.avoidDis*sin(g_cObsInfo.avoidAngle - heading);
-				tp_y = g_cObsInfo.avoidDis*cos(g_cObsInfo.avoidAngle - heading);
-				//修正原点为北京54真实原点
-				double obs_x = bj_x + tp_x;
-				double obs_y = bj_y + tp_y;
+				//从以Seekur为原点的极坐标转为北京54坐标
+				double dis_obs = g_cObsInfo.avoidDis / 1000.0;
+				double angle_obs = g_cObsInfo.avoidAngle*PI / 180;
+				double angle_seekur = 0.0;	//以Seekur正前方为Y轴，左方为X轴的坐标系和BJ54坐标系的夹角
+				if (heading <= 270)
+				{
+					angle_seekur = -(heading - 90);
+				}
+				else
+				{
+					angle_seekur = 90 + (360 - heading);
+				}
+				angle_seekur = (angle_seekur - 90) * PI / 180;
+
+				double tp_x = dis_obs*sin(angle_obs);
+				double tp_y = dis_obs*cos(angle_obs);
+				double dis_x = tp_x*cos(angle_seekur) + tp_y*sin(angle_seekur);
+				double dis_y = tp_y*cos(angle_seekur) + tp_x*sin(angle_seekur);
+				double obs_x = bj_x + dis_x;
+				double obs_y = bj_y + dis_y;
+
 				cTp.Format(_T("%lf,%lf,%d,%d,%d|%d|%d|%d,,"), obs_x, obs_y, g_cObsInfo.avoidDis, g_cObsInfo.avoidAngle, g_cObsInfo.leftAngle, g_cObsInfo.leftDis,
 					g_cObsInfo.rightAngle, g_cObsInfo.rightDis);
 				seekurFile.WriteString(cTp);
@@ -247,7 +261,6 @@ BEGIN_MESSAGE_MAP(CMFCTestView, CFormView)
 	ON_MESSAGE(WM_SEEKUR_RET, &CMFCTestView::OnSeekurCallback)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMFCTestView::OnBtnTrack)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMFCTestView::OnBtnPathAdd)
-	ON_BN_CLICKED(IDC_BUTTON5, &CMFCTestView::OnBtnSeekurQuery)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMFCTestView::OnBtnSeekurStop)
 END_MESSAGE_MAP()
 
@@ -294,16 +307,12 @@ void CMFCTestView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT7, m_editKdis);
 	DDX_Control(pDX, IDC_EDIT8, m_editKheading);
 	DDX_Control(pDX, IDC_BUTTON3, m_btnTrack);
-	DDX_Control(pDX, IDC_EDIT9, m_editGPSStaus);
-	DDX_Control(pDX, IDC_CHECK2, m_checkShowBJ54);
 	DDX_Control(pDX, IDC_EDIT11, m_editTranVel);
 	DDX_Control(pDX, IDC_BUTTON4, m_btnPathSelect);
 	DDX_Control(pDX, IDC_EDIT12, m_editSubHeading);
 	DDX_Control(pDX, IDC_EDIT13, m_editDis);
 	DDX_Control(pDX, IDC_EDIT17, m_editBJ54_x);
 	DDX_Control(pDX, IDC_EDIT16, m_editBJ54_y);
-	DDX_Control(pDX, IDC_EDIT18, m_editSeekurPose);
-	DDX_Control(pDX, IDC_EDIT19, m_editSeekurVal);
 	DDX_Control(pDX, IDC_EDIT20, m_editObsPos);
 	DDX_Control(pDX, IDC_EDIT21, m_editGPSSpeedKm);
 	DDX_Control(pDX, IDC_EDIT22, m_editRotVel);
@@ -352,7 +361,6 @@ void CMFCTestView::OnInitialUpdate()
 
 	m_editKdis.SetWindowTextW(_T("0.025"));
 	m_editKheading.SetWindowTextW(_T("0.5"));
-	m_checkShowBJ54.SetCheck(1);
 	m_editTranVel.SetWindowTextW(_T("500"));
 	m_editRotVel.SetWindowTextW(_T("1"));
 	m_bTrack = false;
@@ -676,9 +684,6 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		HRESULT hr1 = pGpsPoint.CreateInstance(CLSID_Point);
 		pGpsPoint->PutCoords(longitude,latitude);
 
-		// 刷新卫星状态
-		cTp.Format(_T("%d"), ((GGAInfo*)gpsInfo)->GPSStatus);
-		m_editGPSStaus.SetWindowText(cTp);
 		//wgc84转bj54
 		pBj54Point = geoToProj(pGpsPoint);
 		double x, y;
@@ -706,10 +711,13 @@ void CMFCTestView::OnGPSAnalysis(string spData)
 		if (pmarkerelem == NULL)
 			MessageBox(_T("画图元素创建错误"));
 		((IElementPtr)pmarkerelem)->put_Geometry(pgeomln);
-		if (lastPointElement != NULL){
-			pgracont->DeleteElement(lastPointElement);
+		if (lastSeekurElement != NULL){
+			pgracont->DeleteElement(lastSeekurElement);
 		}
-		lastPointElement = pmarkerelem;
+		if (lastObsElement != NULL){
+			pgracont->DeleteElement(lastObsElement);
+		}
+		lastSeekurElement = pmarkerelem;
 		pgracont->AddElement((IElementPtr)pmarkerelem, 0);
 		iActiveView->Refresh();
 	}
@@ -745,6 +753,10 @@ void CMFCTestView::OnLaserAnalysis(){
 	//if (isTracked)
 	if (true && (::GetTickCount() - m_tLastCompute>200))
 	{
+		IActiveViewPtr iActiveView;
+		m_ipMapControl->get_ActiveView(&iActiveView);
+		IGraphicsContainerPtr pgracont(iActiveView);
+
 		m_tLastCompute = ::GetTickCount();
 		bool isObs = obsAvoid.SetObstaclePosture(m_anLaserData, m_nLaserLen);
 		if (isObs)
@@ -768,9 +780,62 @@ void CMFCTestView::OnLaserAnalysis(){
 				pPara->heading = -turnHeading;
 				PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_MOVE, (UINT)pPara, 0);
 			}
+
+			//从以Seekur为原点的极坐标转为北京54坐标
+			double dis_obs = g_cObsInfo.avoidDis / 1000.0;
+			double angle_obs = g_cObsInfo.avoidAngle*PI / 180;
+			double angle_seekur = 0.0;	//以Seekur正前方为Y轴，左方为X轴的坐标系和BJ54坐标系的夹角
+			if (myGPSInfo.Heading <= 270)
+			{
+				angle_seekur = -(myGPSInfo.Heading - 90);
+			}
+			else
+			{
+				angle_seekur = 90 + (360 - myGPSInfo.Heading);
+			}
+			angle_seekur = (angle_seekur - 90) * PI / 180;
+
+			double tp_x = dis_obs*sin(angle_obs);
+			double tp_y = dis_obs*cos(angle_obs);
+			double dis_x = tp_x*cos(angle_seekur) + tp_y*sin(angle_seekur);
+			double dis_y = tp_y*cos(angle_seekur) + tp_x*sin(angle_seekur);
+			double obs_x = myGPSInfo.BJ54_X + dis_x;
+			double obs_y = myGPSInfo.BJ54_Y + dis_y;
+
+			IPointPtr pObsPoint;
+			HRESULT hr1 = pObsPoint.CreateInstance(CLSID_Point);
+			pObsPoint->PutCoords(obs_x, obs_y);
+			
+			
+			//画点
+			ISimpleMarkerSymbolPtr pMarkerSymbol(CLSID_SimpleMarkerSymbol);
+			pMarkerSymbol->put_Size(5);
+			IRgbColorPtr ipColor(CLSID_RgbColor);
+			ipColor->put_Red(96);
+			ipColor->put_Green(24);
+			ipColor->put_Blue(192);
+
+			pMarkerSymbol->put_Style(esriSimpleMarkerStyle::esriSMSCircle);
+			IGeometryPtr pgeomln(pObsPoint);
+
+			IMarkerElementPtr pmarkerelem(CLSID_MarkerElement);//创建element对象
+			if (pmarkerelem == NULL)
+				MessageBox(_T("画图元素创建错误"));
+			((IElementPtr)pmarkerelem)->put_Geometry(pgeomln);
+			if (lastObsElement != NULL){
+				pgracont->DeleteElement(lastObsElement);
+			}
+			lastObsElement = pmarkerelem;
+			pgracont->AddElement((IElementPtr)pmarkerelem, 0);
+			iActiveView->Refresh();
 		}
 		else
 		{
+			if (lastObsElement != NULL){
+				pgracont->DeleteElement(lastObsElement);
+				lastObsElement->Release();
+				lastObsElement = NULL;
+			}
 			m_editObsPos.SetWindowText(_T("0,0"));
 			g_bAvoid = false;
 		}
@@ -1309,10 +1374,10 @@ void CMFCTestView::AddCreateElement(IGeometryPtr pgeomln, IActiveViewPtr iactive
 	IMarkerSymbolPtr imarkerSymbol(m_isymbol);//用m_isymbol初始化imarkerSymbol，是symbol
 	pmarkerelem->put_Symbol(imarkerSymbol);//将symbol添加到element
 	((IElementPtr)pmarkerelem)->put_Geometry(pgeomln);
-	if (lastPointElement != NULL){
-		pgracont->DeleteElement(lastPointElement);
+	if (lastSeekurElement != NULL){
+		pgracont->DeleteElement(lastSeekurElement);
 	}
-	lastPointElement = pmarkerelem;
+	lastSeekurElement = pmarkerelem;
 	pgracont->AddElement((IElementPtr)pmarkerelem, 0);
 }
 
@@ -1548,17 +1613,6 @@ void CMFCTestView::OnBtnPathAdd()
 	cTp.Format(_T("%d,%s,%lf,%lf,%lf,%lf,%lf,%lf\n"), no, cTime, lon,lat, bjx,bjy,speed,hd);
 	dataFile.WriteString(cTp);
 	no++;*/
-}
-
-void CMFCTestView::OnBtnSeekurQuery()
-{
-	// TODO:  在此添加控件通知处理程序代码
-	//PostThreadMessage(seekur_thread->m_nThreadID, WM_SEEKUR_GET_DATA, 0, 0);
-	CString cTp;
-	cTp.Format(_T("%.3lf,%.3lf,%.3lf"), g_pRobot->getX(), g_pRobot->getY(), g_pRobot->getTh());
-	m_editSeekurPose.SetWindowTextW(cTp);
-	cTp.Format(_T("%.2lf,%.2lf"), g_pRobot->getVel(), g_pRobot->getRotVel());
-	m_editSeekurVal.SetWindowTextW(cTp);
 }
 
 

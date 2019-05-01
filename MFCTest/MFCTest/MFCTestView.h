@@ -85,7 +85,8 @@ protected:
 	string m_sTpGps;		//获取到的完整的一句GPS语句
 	bool isGPSEnd;		//本轮GPS语句组是否已至最后
 	IPolylinePtr pPath;			//创建的路径
-	IElementPtr lastPointElement;	// GPS最新坐标(地图）
+	IElementPtr lastSeekurElement;	// GPS最新坐标(地图）
+	IElementPtr lastObsElement;	// 障碍物最新坐标(地图）
 	IPointPtr pSeekurPoint;	// GPS获取的Seekur最新坐标
 
 	CSerialPort m_csLaser;		//激光串口通信类
@@ -159,10 +160,6 @@ private:
 	CEdit m_editGPSHeading;
 	// 追踪开始/停止按钮
 	CButton m_btnTrack;
-	// GPS状态指示位文本框
-	CEdit m_editGPSStaus;
-	// 是否转换北京54坐标
-	CButton m_checkShowBJ54;
 	// Seekur运动速度文本框
 	CEdit m_editTranVel;
 	// 追踪时的平移速度
@@ -210,10 +207,6 @@ private:
 	void OnLaserAnalysis();
 
 public:
-	// Seekur的位置（x,y）
-	CEdit m_editSeekurPose;
-	// Seekur自测速度
-	CEdit m_editSeekurVal;
 	afx_msg void OnBtnSeekurQuery();
 	afx_msg void OnBtnSeekurStop();
 	// Seekur加速度

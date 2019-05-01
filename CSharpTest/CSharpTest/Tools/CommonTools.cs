@@ -10,6 +10,8 @@ using MongoDB.Bson;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 using System.Configuration;
+using System.Security.Cryptography;
+using System.Web;
 using AISSystem;
 
 namespace CSharpTest.Tools
@@ -54,6 +56,62 @@ namespace CSharpTest.Tools
             if (content.Length > 2)
                 content = content.Substring(0, content.Length - 2);             //去除末尾换行
             return content;
+        }
+
+        /// <summary>
+        ///  获取时间戳，从1970年1月1日到现在的秒数
+        /// </summary>
+        public static int GetTimestamp()
+        {
+            var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1));
+            var cstName  = (int)timeSpan.TotalSeconds;
+            return cstName;
+        }
+
+        /// <summary>
+        /// unix时间戳转换成日期
+        /// </summary>
+        /// <param name="timestamp">时间戳（秒）</param>
+        /// <returns></returns>
+        public static DateTime UnixTimestampToDateTime(long timestamp)
+        {
+            var start = new DateTime(1970, 1, 1, 0, 0, 0);
+            return start.AddSeconds(timestamp);
+        }
+
+        /// <summary>
+        /// URL 编码
+        /// </summary>
+        public static string UrlEncoding(string para)
+        {
+            string str = HttpUtility.UrlEncode(para);
+            if (string.IsNullOrEmpty(str)) return null;
+
+            if (para.Contains("/"))
+            {
+                str = str.Replace("%2f", "/");
+            }
+
+            return !para.Equals(str) ? str.ToUpper() : str;
+        }
+
+
+        /// <summary>
+        /// 计算参数拼接后的MD5值
+        /// </summary>
+        public static string Md5Encoding(string para)
+        {
+            var md5      = MD5.Create();
+            var bytes    = Encoding.UTF8.GetBytes(para);
+            var md5Bytes = md5.ComputeHash(bytes);
+            // var s = Convert.ToBase64String(md5Bytes);
+            var s = string.Empty;
+            foreach (var b in md5Bytes)
+            {
+                s += b.ToString("X2");
+            }
+
+            return s.ToLower();
         }
 
         /// <summary>

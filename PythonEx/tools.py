@@ -5,6 +5,9 @@ import os
 import re
 import pymysql.cursors
 from openpyxl import load_workbook
+from urllib import request
+from urllib import parse
+import chardet
 
 def get_bool(str):
     '''
@@ -17,6 +20,29 @@ def get_bool(str):
     else:
         return True
 
+def get_html(url):
+    """
+    获取html页面
+    :param url:网页链接
+    :return: 解析过的网页源码
+    """
+
+    head = dict()
+    # 写入User Agent信息
+    head[
+        'User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
+                        'Chrome/27.0.1453.94 Safari/537.36'
+    # 创建Request对象
+    req = request.Request(url, headers=head)
+
+    # 传入创建好的Request对象
+    response = request.urlopen(req)
+
+    # 读取响应信息并解码
+    tp_html = response.read()
+    charset = chardet.detect(tp_html)
+    tp_html = tp_html.decode(charset['encoding'])
+    return tp_html
 
 # mysql配置参数
 config = {

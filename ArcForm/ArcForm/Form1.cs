@@ -342,64 +342,70 @@ namespace ArcForm
         double PI = 3.14159265358979323846;
         private void button2_Click(object sender, EventArgs e)
         {
-            IFeatureLayer layer = axMapControl1.get_Layer(0) as IFeatureLayer;
-            IFeatureClass pFeatCla = layer.FeatureClass;
-            IFeature pFeature = pFeatCla.GetFeature(0);
-            IGeometry pGeometry = pFeature.Shape;
-            IPolyline pPoly = pGeometry as IPolyline;
-            ISegmentCollection pSegCol = pGeometry as ISegmentCollection;
-            ILine pLine = pSegCol.get_Segment(0) as ILine;
+            //IFeatureLayer layer = axMapControl1.get_Layer(0) as IFeatureLayer;
+            //IFeatureClass pFeatCla = layer.FeatureClass;
+            //IFeature pFeature = pFeatCla.GetFeature(0);
+            //IGeometry pGeometry = pFeature.Shape;
+            //IPolyline pPoly = pGeometry as IPolyline;
+            //ISegmentCollection pSegCol = pGeometry as ISegmentCollection;
+            //ILine pLine = pSegCol.get_Segment(0) as ILine;
 
-            ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
-            IGeographicCoordinateSystem pGCS;
-            pGCS = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
-            IProjectedCoordinateSystem pPrj;
-            pPrj = spatialReferenceFactory.CreateProjectedCoordinateSystem((int)esriSRProjCS4Type.esriSRProjCS_Beijing1954_3_Degree_GK_Zone_38);
+            //ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
+            //IGeographicCoordinateSystem pGCS;
+            //pGCS = spatialReferenceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            //IProjectedCoordinateSystem pPrj;
+            //pPrj = spatialReferenceFactory.CreateProjectedCoordinateSystem((int)esriSRProjCS4Type.esriSRProjCS_Beijing1954_3_Degree_GK_Zone_38);
 
-            ILine pLine2 = new LineClass();
-            IPoint pPoint1 = new Point(); //已知点
-            IPoint pPoint2 = new PointClass();
-            //pPoint1.PutCoords(116.444976049068, 40.1795178557287);
-            //pPoint2.PutCoords(116.444961462922, 40.1790692418292);
-            pPoint1.PutCoords(38708252.36, 4452408.462);
-            pPoint2.PutCoords(38708252.49, 4452358.606);
-            pLine2.FromPoint = pPoint1;
-            pLine2.ToPoint = pPoint2;
-            //pLine2.SpatialReference = pGCS;
-            pLine2.SpatialReference = pPrj;
+            //ILine pLine2 = new LineClass();
+            //IPoint pPoint1 = new Point(); //已知点
+            //IPoint pPoint2 = new PointClass();
+            ////pPoint1.PutCoords(116.444976049068, 40.1795178557287);
+            ////pPoint2.PutCoords(116.444961462922, 40.1790692418292);
+            //pPoint1.PutCoords(38708252.36, 4452408.462);
+            //pPoint2.PutCoords(38708252.49, 4452358.606);
+            //pLine2.FromPoint = pPoint1;
+            //pLine2.ToPoint = pPoint2;
+            ////pLine2.SpatialReference = pGCS;
+            //pLine2.SpatialReference = pPrj;
 
+            IPoint pPoint = new PointClass();
+            pPoint.PutCoords(38708252.284221128, 4452389.4154710891);
+            MarkPoint(pPoint, GetRandomRGB());
+
+            //IPoint pPointObs = new PointClass();
+            //pPointObs.PutCoords(38708252.57, 4452390.31);
+            //MarkPoint(pPointObs, GetRandomRGB());
+
+
+            double alpha = 167.122182;
+            IPoint pSeekur = new Point();
+            pSeekur.PutCoords(38708253.16,4452390.215);
+            MarkPoint(pSeekur, GetRandomRGB());
+            if (alpha <= 270)
+            {
+                alpha = -(alpha - 90);
+            }
+            else
+            {
+                alpha = 90 + (360 - alpha);
+            }
+            textBox1.Text = alpha.ToString();
+            alpha = (alpha-90) * Math.PI / 180;
+
+            double dis = 1067 / 1000.0;
+            double angle = 38;
+            angle=angle*Math.PI/180;
+            double xTp = dis * Math.Cos(angle);
+            double yTp = dis * Math.Sin(angle);
+            IPoint pObs = new Point();
+            double x = xTp * Math.Cos(alpha) + yTp * Math.Sin(alpha);
+            double y = yTp * Math.Cos(alpha) - xTp * Math.Sin(alpha);
+            pObs.X = pSeekur.X + x;
+            pObs.Y = pSeekur.Y + y;
+            MarkPoint(pObs, GetRandomRGB());
             int df = 234;
-            //inPoint.X = pPoly.FromPoint.X + 5;
-            //inPoint.Y = pPoly.FromPoint.Y+2;
-            //IPoint outPoint = new PointClass(); //曲线上到输入点距离最小的点；
-            //double distAlongCurveFrom = 0; //曲线其实点到输出点部分的长度
-            //double distFromCurve = 0;//输出点到输入点的距离
-            //bool isRightSide = true;//输入点是否在曲线的右边
-            //pPoly.QueryPointAndDistance(esriSegmentExtension.esriNoExtension, inPoint, false, outPoint, ref distAlongCurveFrom, ref distFromCurve, ref isRightSide);
-            //double lineHeading = pLine.Angle * 180 / PI;
-            ////因为当前角度是以四象限X为起点的逆时针角度，对应的是地图东部
-            ////故需要转成以北为起点的顺时针角度
-            //if (lineHeading <= 90)
-            //{
-            //    //1、3、4象限
-            //    lineHeading = 90 - lineHeading;
-            //}
-            //else
-            //{
-            //    //2象限
-            //    lineHeading = 360 + (90 - lineHeading);
-            //}
-            //textBox1.Text = lineHeading.ToString();
+            
 
-            //double len = pPoly.Length;
-            //textBox2.Text = len.ToString();
-
-            //IPoint pStartPoint = new PointClass();
-            //pStartPoint.PutCoords(250, 300);
-            //IPoint pCenterPoint = new PointClass();
-            //pCenterPoint.PutCoords(300, 300);
-            //IPoint pEndPoint = new PointClass();
-            //pEndPoint.PutCoords(350, 300);
 
             //ICircularArc pCirArc = new CircularArcClass();
             ////pCirArc.PutCoords(pCenterPoint, pStartPoint, pEndPoint, esriArcOrientation.esriArcCounterClockwise);
@@ -529,6 +535,17 @@ namespace ArcForm
             pGraphicsContainer.AddElement(pElement, 0);
 
             axMapControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+
+        Random rd = new Random();
+        /// <summary>
+        /// 生成一个随机的RGB颜色
+        /// </summary>
+        /// <returns>RGB颜色</returns>
+        private IRgbColor GetRandomRGB()
+        {
+            int n = 256;
+            return GetRGB(rd.Next(0, n), rd.Next(0, n), rd.Next(0, n));
         }
 
         /// <summary>

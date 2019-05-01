@@ -2,11 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import re
-# import cv2 as cv
-# import tools
+from enum import Enum, unique
+from lxml import etree
+from urllib import request
+import ssl
+import chardet
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
 # import dwc_w2c
 from datetime import *
-import os,sys,shutil
+import os, sys, shutil
 
 
 # dir_path=r'F:\文档\MuMu共享文件夹\jpg'
@@ -32,16 +38,55 @@ import os,sys,shutil
 # print(datetime.today()+timedelta(hours=8))
 # print(datetime.date(2018, 1, 1))
 
-filepath=r'E:\无限，王座之下 连载至654.txt'
-newfile=open('E:\\newtext.txt','w+')
-with open(filepath,'r') as f:
-    while True:
-        line=f.readline()
-        if not line:
-            break
-        if re.match(r'\d{3}$',line):
-            print(line)
-            continue
-        newfile.write(line)
-newfile.close()
+@unique
+class ImagType(Enum):
+    Pixiv = 0
+    Yande = 1
+
+def get_html(url):
+    """
+    获取html页面
+    :param url:网页链接
+    :return: 解析过的网页源码
+    """
+
+    head = dict()
+    # 写入User Agent信息
+    head['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
+                        'Chrome/27.0.1453.94 Safari/537.36'
+    head['Accept-Language']='zh-CN'
+    # 创建Request对象
+    req = request.Request(url, headers=head)
+
+    # 传入创建好的Request对象
+    response = request.urlopen(req)
+
+    # 读取响应信息并解码
+    tp_html = response.read()
+    # charset = chardet.detect(tp_html)
+    tp_html = tp_html.decode('utf-8')
+    return tp_html
+
+# def sort_out_imginfo(dir, type):
+#     pattern_no=r'pixiv_(?<no>\d+?)_'
+#     nos=[]
+#     for root, dirs, files in os.walk(dir):
+#         for file in files:
+#             nos.append(re.search(pattern_no,file).group('no'))
+#             break
+#
+#     for no in nos:
+#         url="https://www.pixiv.net/member_illust.php?mode=medium&illust_id={}".format(no)
+#         html=tools.get_html(url)
+#         dfs=34
+
+url="https://www.pixiv.net/member_illust.php?mode=medium&illust_id=66353625"
+html=get_html(url)
+
+tree = etree.HTML(html)
+title = tree.xpath('//title/text()')[0]
+print(title)
+groups=re.search(r'】「(?P<desc>.*?)」.*?/「(?P<author>.*?)」.+?\s\[pixi',title).groups()
+name=groups['desc']
+author=groups['author']
 print('结束')

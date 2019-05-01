@@ -104,7 +104,7 @@ vector<string> evaluate(vector<string>&A, vector<string>& B){
 
 int main(int argc, char *argv[])
 {
-	//MergeDirFiles("C:\\下载\\绯月\\整理\\新建文件夹",3);
+	MergeDirFiles("C:\\下载\\绯月\\新建文件夹",3);
 	//Solution s;
 	//vector<int> data = { 100, 4, 200, 1, 3, 2 };
 	//vector <pair<int, int>> d2 = { { 5, 4 }, { 6, 4 }, { 6, 7 }, { 2, 3 } };
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	//auto res = s.maxEnvelopes(d2);
 	////cout << value[0][0] << endl;
 
-	ObstacleAvoid avoid;
+	/*ObstacleAvoid avoid;
 	avoid.Initialize(600, 45, 45);
 	int angle = -10;
 	int dis = 340;
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 		int rot = avoid.ComputeAvoidHeading(angle, dis);
 		cout << "距离:" << dis << "\t角度：" << angle << "\t转向角:" << rot << endl;
 		angle -= rot;
-	}
+	}*/
 	
 	system("pause");
 	return 0;

@@ -65,7 +65,7 @@ namespace CSharpTest.Tools
 
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+            var builderLinkMain = Builders<WxLinkMainMongo>.Filter;
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
 
             var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
@@ -221,8 +221,8 @@ namespace CSharpTest.Tools
             var filterKey = builderKey.In(x => x._id, keyObjIds);
             var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
 
-            var builderLink = Builders<WXLinkMainMongo>.Filter;
-            var WXlinks = new List<WXLinkMainMongo>();
+            var builderLink = Builders<WxLinkMainMongo>.Filter;
+            var WXlinks = new List<WxLinkMainMongo>();
 
             string filename = "微信5月数据.xls";
             string path = baseUrl + @"ExportFiles\" + filename;
@@ -389,7 +389,7 @@ namespace CSharpTest.Tools
 
             var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
             var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
-            var builderMainLink = Builders<WXLinkMainMongo>.Filter;
+            var builderMainLink = Builders<WxLinkMainMongo>.Filter;
             var colMainLink = MongoDBHelper.Instance.GetWXLinkMain();
             var colOtherLink = MongoDBHelper.Instance.GetWXLinkOther();
             var colConLink = MongoDBHelper.Instance.GetWXLinkContent();
@@ -435,7 +435,7 @@ namespace CSharpTest.Tools
                         CommonTools.Log("当前获取链接[{0}/{1}]\t耗时 - {2}s".FormatStr(nowLinkNum, topLinkNum, sw.Elapsed));
 
                         //sw.Restart();
-                        //var contentLinks = new List<WXLinkContentMongo>();
+                        //var contentLinks = new List<WxLinkContentMongo>();
                         //foreach (var x in tempLinks)
                         //{
                         //    CommonTools.Log("当前计算链接[{0}/{1}]\t标题 - {2}".FormatStr(computeNum, topLinkNum, x.Title));
@@ -445,7 +445,7 @@ namespace CSharpTest.Tools
                         //    sw2.Start();
                         //    string html = colLink.Find(filterHtml).Project(s => s.Html).FirstOrDefault();
                         //    sw2.Stop();
-                        //    var temp = new WXLinkContentMongo
+                        //    var temp = new WxLinkContentMongo
                         //    {
                         //        LinkId = x._id,
                         //        KeywordId = x.KeywordId,
@@ -544,7 +544,7 @@ namespace CSharpTest.Tools
 
                 var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
                 var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
-                var builderMainLink = Builders<WXLinkMainMongo>.Filter;
+                var builderMainLink = Builders<WxLinkMainMongo>.Filter;
                 var colMainLink = MongoDBHelper.Instance.GetWXLinkMain();
                 var builderName = Builders<WXNameMongo>.Filter;
                 var colName = MongoDBHelper.Instance.GetWXName();
@@ -765,7 +765,7 @@ namespace CSharpTest.Tools
         {
             var filterKey = Builders<MediaKeywordMongo>.Filter.Empty;
             var queryKey = MongoDBHelper.Instance.GetMediaKeyword().Find(filterKey).ToList();
-            var builderMainLink = Builders<WXLinkMainMongo>.Filter;
+            var builderMainLink = Builders<WxLinkMainMongo>.Filter;
             var colMainLink = MongoDBHelper.Instance.GetWXLinkMain();
             try
             {
@@ -2818,7 +2818,7 @@ namespace CSharpTest.Tools
             string appkey = "02b6f7c73e9d4814b79f4feb1";
             var proObjId = new ObjectId("5b0d4dc4f4b87d0c1c66f4f1");
             var keyObjIds = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(new QueryDocument { { "ProjectId", proObjId } }).Project(x => x.KeywordId.ToString()).ToList().Distinct().ToList();
-            var linkInfos = MongoDBHelper.Instance.GetWXLinkMain().Find(Builders<WXLinkMainMongo>.Filter.In(x => x.KeywordId, keyObjIds)).Project(x => new
+            var linkInfos = MongoDBHelper.Instance.GetWXLinkMain().Find(Builders<WxLinkMainMongo>.Filter.In(x => x.KeywordId, keyObjIds)).Project(x => new
             {
                 Id = x._id,
                 Account = x.Name,
@@ -2974,7 +2974,7 @@ namespace CSharpTest.Tools
                     }
 
                     //更新链接公众号Id
-                    var update = Builders<WXLinkMainMongo>.Update.Set(x => x.NameId, acccoutId);
+                    var update = Builders<WxLinkMainMongo>.Update.Set(x => x.NameId, acccoutId);
                     MongoDBHelper.Instance.GetWXLinkMain().UpdateOne(new QueryDocument { { "_id", link.Id } }, update);
                 }
             }
@@ -2987,7 +2987,7 @@ namespace CSharpTest.Tools
             var builderKey=Builders<MediaKeywordMappingMongo>.Filter;
             var filterKey = builderKey.Eq(x => x.ProjectId, proObjId) & builderKey.Eq(x => x.CategoryId, ObjectId.Empty) & builderKey.Eq(x => x.IsDel, false);
             var keyIds = MongoDBHelper.Instance.GetMediaKeywordMapping().Find(filterKey).Project(x => x.KeywordId.ToString()).ToList().Distinct().ToList();
-            var builderLink=Builders<WXLinkMainMongo>.Filter;
+            var builderLink=Builders<WxLinkMainMongo>.Filter;
             var colLink=MongoDBHelper.Instance.GetWXLinkMain();
             var links = colLink.Find(builderLink.In(x => x.KeywordId, keyIds)).Project(x => new
             {
@@ -3021,7 +3021,7 @@ namespace CSharpTest.Tools
                 {
                     delType = WXDelLinkType.Del;
                 }
-                var update = Builders<WXLinkMainMongo>.Update.Set(x => x.DelType, delType);
+                var update = Builders<WxLinkMainMongo>.Update.Set(x => x.DelType, delType);
                 var filterLink = builderLink.Eq(x => x._id, link.Id);
                 colLink.UpdateOne(filterLink, update);
                 CommonTools.Log("{0}/{1} - {2}".FormatStr(i, links.Count, delType));
@@ -3049,9 +3049,9 @@ namespace CSharpTest.Tools
                     Name = x.Keyword
                 }).ToList();
                 //获取当前分组所有链接
-                var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+                var builderLinkMain = Builders<WxLinkMainMongo>.Filter;
                 var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
-                var builderLinkContent = Builders<WXLinkContentMongo>.Filter;
+                var builderLinkContent = Builders<WxLinkContentMongo>.Filter;
                 var colLinkContent = MongoDBHelper.Instance.GetWXLinkContent();
                 var links = colLinkMain.Find(builderLinkMain.In(x => x.KeywordId, keys.Select(x => x.Id))).Project(x => new LinkInfo
                 {
@@ -3125,9 +3125,9 @@ namespace CSharpTest.Tools
 
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+            var builderLinkMain = Builders<WxLinkMainMongo>.Filter;
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
-            var builderLinkContent = Builders<WXLinkContentMongo>.Filter;
+            var builderLinkContent = Builders<WxLinkContentMongo>.Filter;
             var colLinkContent = MongoDBHelper.Instance.GetWXLinkContent();
             var builderCate = Builders<MediaKeywordCategoryMongo>.Filter;
 
@@ -3242,7 +3242,7 @@ namespace CSharpTest.Tools
         {
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+            var builderLinkMain = Builders<WxLinkMainMongo>.Filter;
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
 
             var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
@@ -3317,7 +3317,7 @@ namespace CSharpTest.Tools
                     #endregion
                     if (!string.IsNullOrEmpty(trueUrl))
                     {
-                        colLinkMain.UpdateOne(builderLinkMain.Eq(x => x._id, link.Id), Builders<WXLinkMainMongo>.Update.Set(x => x.Url, trueUrl));
+                        colLinkMain.UpdateOne(builderLinkMain.Eq(x => x._id, link.Id), Builders<WxLinkMainMongo>.Update.Set(x => x.Url, trueUrl));
                     }
                     else
                     {
@@ -3347,7 +3347,7 @@ namespace CSharpTest.Tools
 
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+            var builderLinkMain = Builders<WxLinkMainMongo>.Filter;
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
 
             var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
@@ -3395,7 +3395,7 @@ namespace CSharpTest.Tools
                     DelType = x.DelType,
                 }).ToList();
                 int i = 0;
-                var builderLinkContent = Builders<WXLinkContentMongo>.Filter;
+                var builderLinkContent = Builders<WxLinkContentMongo>.Filter;
                 var colLinkContent=MongoDBHelper.Instance.GetWXLinkContent();
                 foreach (var link in links)
                 {
@@ -3510,7 +3510,7 @@ namespace CSharpTest.Tools
             sw.WriteLine("关键词Id,关键词,链接Id,创建时间,链接标题,公众号,公众号呢称,公众号Id,是否更新公众号,链接状态,链接地址,是否更新链接地址,是否删除");
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+            var builderLinkMain = Builders<WxLinkMainMongo>.Filter;
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
 
             var builderKeyMap = Builders<MediaKeywordMappingMongo>.Filter;
@@ -3553,7 +3553,7 @@ namespace CSharpTest.Tools
                     PostAt=x.PostTime,
                 }).ToList();
                 int i = 0;
-                var builderLinkContent = Builders<WXLinkContentMongo>.Filter;
+                var builderLinkContent = Builders<WxLinkContentMongo>.Filter;
                 var colLinkContent = MongoDBHelper.Instance.GetWXLinkContent();
                 foreach (var link in links)
                 {
@@ -3610,7 +3610,7 @@ namespace CSharpTest.Tools
                     //{
                     //    filterLink = builderLinkMain.Eq(x => x._id, sameLinks[j].Id);
                     //    colLinkMain.DeleteOne(filterLink);
-                    //    MongoDBHelper.Instance.GetWXLinkContent().DeleteOne(Builders<WXLinkContentMongo>.Filter.Eq(x => x.LinkId, sameLinks[j].Id));
+                    //    MongoDBHelper.Instance.GetWXLinkContent().DeleteOne(Builders<WxLinkContentMongo>.Filter.Eq(x => x.LinkId, sameLinks[j].Id));
                     //}
 
                     
@@ -3721,9 +3721,9 @@ namespace CSharpTest.Tools
         {
             var builderKey = Builders<MediaKeywordMongo>.Filter;
             var colKey = MongoDBHelper.Instance.GetMediaKeyword();
-            var builderLinkMain = Builders<WXLinkMainMongo>.Filter;
+            var builderLinkMain = Builders<WxLinkMainMongo>.Filter;
             var colLinkMain = MongoDBHelper.Instance.GetWXLinkMain();
-            var builderLinkContent = Builders<WXLinkContentMongo>.Filter;
+            var builderLinkContent = Builders<WxLinkContentMongo>.Filter;
             var colLinkContent = MongoDBHelper.Instance.GetWXLinkContent();
 
             var builderKeyCate = Builders<MediaKeywordCategoryMongo>.Filter;
