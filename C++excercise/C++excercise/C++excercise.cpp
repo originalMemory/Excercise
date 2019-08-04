@@ -3,6 +3,8 @@
 #include "mytools.h"
 #include "avoid.h"
 
+#include <bitset>
+
 struct TreeNode {
 	int val;
 	TreeNode *left;
@@ -101,10 +103,29 @@ vector<string> evaluate(vector<string>&A, vector<string>& B){
 }
 
 
+void printByte(int n) {
+	cout << n << '\t' << bitset<sizeof(int)*8>(n) << endl;
+}
+
+int add(int a, int b) {
+	printByte(a);
+	printByte(b);
+	int c = a ^ b;
+	printByte(c);
+	int d = a & b<1;
+	printByte(d);
+	return c + d;
+}
+
+
+
 
 int main(int argc, char *argv[])
 {
-	MergeDirFiles("C:\\下载\\绯月\\新建文件夹",3);
+	// MergeDirFiles("D:\\[もみやま] ぱいドルマスター! [4K掃圖組]",3);
+
+	
+
 	//Solution s;
 	//vector<int> data = { 100, 4, 200, 1, 3, 2 };
 	//vector <pair<int, int>> d2 = { { 5, 4 }, { 6, 4 }, { 6, 7 }, { 2, 3 } };
@@ -130,7 +151,7 @@ int main(int argc, char *argv[])
 		cout << "距离:" << dis << "\t角度：" << angle << "\t转向角:" << rot << endl;
 		angle -= rot;
 	}*/
-	
+	cout << add(10, 1) << endl;
 	system("pause");
 	return 0;
 }

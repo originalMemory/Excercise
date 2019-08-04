@@ -71,16 +71,17 @@ namespace CSharpTest
 //            var ex = new List<string>() { "整理" };
 //            MyTools.SortDir(@"C:\下载\绯月", ex);
 
-            var query = new QueryDocument();
-            var ex = new List<String> {"祖娅纳惜百度百科", "祖娅纳惜现场"};
-            var bson = new BsonDocument();
-            bson.Add("$regex", new BsonRegularExpression("/娅纳惜/"));
-            bson.Add("$nin", new BsonArray(ex));
-//            query.Add("Keyword", bson);
-            query.Add("Keyword", "祖娅纳惜百度百科");
-            var col = MongoDBHelper.Instance.GetDnl_Keyword();
-            var r = col.Find(query).ToList();
-            r.ForEach(x=> Console.WriteLine(x.Keyword));
+////            var query = new QueryDocument();
+////            var ex = new List<String> {"祖娅纳惜百度百科", "祖娅纳惜现场"};
+////            var bson = new BsonDocument();
+////            bson.Add("$regex", new BsonRegularExpression("/娅纳惜/"));
+////            bson.Add("$nin", new BsonArray(ex));
+//////            query.Add("Keyword", bson);
+////            query.Add("Keyword", "祖娅纳惜百度百科");
+////            var col = MongoDBHelper.Instance.GetDnl_Keyword();
+////            var r = col.Find(query).ToList();
+//            r.ForEach(x=> Console.WriteLine(x.Keyword));
+        DnlTools.SplitBaiduData();
 
         //Console.WriteLine(str);
         Console.ReadKey();

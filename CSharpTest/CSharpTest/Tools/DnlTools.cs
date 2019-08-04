@@ -2269,7 +2269,7 @@ namespace CSharpTest.Tools
             while (usedNum < keyNum && page < pageEnd)
             {
                 //获取关键词ID
-                var tpKeyIds = colKey.Find(filterKey).SortBy(x => x.CreatedAt).Skip(page * pagesize).Limit(pagesize).Project(x => x._id).ToList();
+                var tpKeyIds = colKey.Find(filterKey).SortByDescending(x => x.CreatedAt).Skip(page * pagesize).Limit(pagesize).Project(x => x._id).ToList();
                 usedNum += tpKeyIds.Count;
                 page++;
                 CommonTools.Log("当前拆分关键词[{0}/{1}/{2}]".FormatStr(usedNum, pageEnd * pagesize, keyNum));
